@@ -1,0 +1,97 @@
+/* admin login css */
+
+.login_btn_div {
+  text-align: center;
+  padding-bottom: 40px !important;
+}
+
+.login_eye_icon {
+  opacity: 50% !important;
+  position: absolute;
+  margin-top: 20px !important;
+  margin-left: -38px !important;
+}
+
+.login_btn {
+  background: #eea23d !important;
+  border-radius: 73px !important;
+  padding: 10px 30px !important;
+  font-size: 16px !important;
+  font-weight: 600 !important;
+  color: #121212 !important;
+  font-family: "Bahnschrift" !important;
+  letter-spacing: 0.03em !important;
+}
+
+.login_forgot {
+  text-align: end;
+  display: block;
+  opacity: 60%;
+  margin-bottom: 20px;
+}
+
+.login_text_field {
+  width: 100%;
+  position: relative !important;
+}
+
+.login_input_div {
+  padding: 0px 50px;
+  margin-top: 40px;
+}
+
+.login_heading {
+  font-weight: 700;
+  font-size: 45px;
+  margin: 0px 0px 5px;
+  color: #000000;
+  padding-bottom: 12px;
+  text-align: center;
+  padding-top: 20px;
+}
+
+.login {
+  background-color: #fff;
+  width: 690px;
+  border-radius: 20px;
+}
+
+.login_back_img {
+  background-image: url(../../assets/images/yellow-bg.png);
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  padding: 13.2% 70px;
+}
+
+@media screen and (max-width: 1536px) and (min-width: 1440px) {
+  .login_back_img {
+    padding: 8% 80px;
+  }
+}
+
+@media screen and (max-width: 1440px) and (min-width: 1200px) {
+  .login_back_img {
+    padding: 7.8% 45px;
+  }
+
+  .login_btn_div {
+    margin-top: 25px;
+  }
+
+  .login_forgot {
+    font-size: 12px !important;
+  }
+
+  .login_btn {
+    padding: 8px 40px !important;
+  }
+
+  .login_heading {
+    font-size: 36px !important;
+  }
+
+  .login {
+    width: 460px;
+  }
+}

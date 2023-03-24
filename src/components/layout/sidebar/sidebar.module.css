@@ -1,0 +1,87 @@
+.sidebarMenu {
+  margin: 0px;
+  padding: 24px 0px 0px 16px;
+}
+
+.sidebarMenu li {
+  list-style: none;
+  padding: 5px 0px;
+  display: block;
+}
+
+.sidebarMenu li a {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  font-size: 16px;
+
+  font-weight: 400;
+  color: #121212;
+  font-family: "Poppins";
+  padding: 10px 16px;
+  white-space: nowrap;
+  position: relative;
+}
+
+.sidebarMenu li a .menuIcon {
+  display: inline-flex;
+  width: 30px;
+  align-items: center;
+}
+
+.sidebarMenu li a.active {
+  background: #d5e3f7;
+  border-radius: 27px 0px 0px 27px;
+  position: relative;
+  font-weight: 500;
+}
+
+.sidebarMenu li a.active:after {
+  content: "";
+  height: 100%;
+  position: absolute;
+  width: 4px;
+  right: 0px;
+  top: 0px;
+  background: #274593;
+}
+
+.sidebarMenu li a:hover {
+  background: #d5e3f7;
+  border-radius: 27px 0px 0px 27px;
+}
+
+.sidebarMenu li a:hover:after {
+  content: "";
+  height: 100%;
+  position: absolute;
+  width: 4px;
+  right: 0px;
+  top: 0px;
+  background: #d5e3f7;
+}
+.logout {
+  padding-left: 32px;
+  position: absolute;
+  bottom: 90px;
+  left: 0;
+  right: 0px;
+}
+
+.logout a {
+  color: #274593;
+  text-decoration-line: none;
+  font-size: 16px;
+  font-family: "Poppins";
+  font-weight: 400;
+}
+.logoutIcon {
+  display: inline-flex;
+  align-items: center;
+}
+.sidebarScroll {
+  height: calc(100vh - 120px);
+}
+.borderBottom {
+  border-bottom: 1px solid #ccc;
+}
