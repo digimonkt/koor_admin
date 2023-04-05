@@ -1,6 +1,6 @@
 import api from ".";
 import urlcat from "urlcat";
-export const manageJobData = async (limit, page, search, country) => {
+export const manageJobData = async ({ limit, page, search, country }) => {
   const response = await api.request({
     url: urlcat("/v1/admin/jobs", { limit, page, search, country }),
     method: "GET",

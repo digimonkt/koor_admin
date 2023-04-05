@@ -4,19 +4,29 @@ import { IconButton } from "@mui/material";
 import { Stack } from "@mui/system";
 import Layout from "../layout";
 import { activeInactiveJob, deleteJob, manageJobData } from "@api/jobs";
-
+import DialogBox from "@components/dialogBox";
+import DeleteCard from "@components/deleteCard";
+import { useDispatch } from "react-redux";
+import { setErrorToast, setSuccessToast } from "@redux/slice/toast";
+import { setLoading } from "@redux/slice/jobsAndTenders";
 function ManageJobsComponent() {
+  const dispatch = useDispatch();
   const [jobTable, setJobTable] = useState([]);
   const [totalCount, setTotalCount] = useState(0);
   const [pages, setPages] = useState(1);
   const [limit, setLimit] = useState(10);
+  const [deleting, setDeleting] = useState("");
   const manageJobList = async (keyword, countrySearch) => {
+    dispatch(setLoading(true));
     const page = pages;
     const search = keyword || "";
     const country = countrySearch || "";
-    const response = await manageJobData(limit, page, search, country);
+    const response = await manageJobData({ limit, page, search, country });
     if (response.remote === "success") {
       const formateData = formattedData(response.data.results);
+      if (!formateData.length) {
+        dispatch(setLoading(false));
+      }
       setJobTable(formateData);
       const totalCounts = Math.ceil(response.data.count / limit);
       setTotalCount(totalCounts);
@@ -24,12 +34,17 @@ function ManageJobsComponent() {
       console.log(response.error);
     }
   };
+  useEffect(() => {
+    if (jobTable.length) {
+      dispatch(setLoading(false));
+    }
+  }, [jobTable]);
 
   useEffect(() => {
     manageJobList();
   }, [pages, limit]);
 
-  function getPage(event, page) {
+  function getPage(_, page) {
     setPages(page);
   }
 
@@ -40,7 +55,7 @@ function ManageJobsComponent() {
         no: index + 1,
         id: item.job_id,
         jobTitle: item.title,
-        company: "PATELLAE INTERNATIONAL PTE LTD",
+        company: item.user,
         location: `${item.city.title},${item.country.title}`,
         action: item.status,
       };
@@ -58,7 +73,6 @@ function ManageJobsComponent() {
     {
       field: "id",
       headerName: "ID",
-
       sortable: true,
     },
     {
@@ -103,7 +117,7 @@ function ManageJobsComponent() {
             </IconButton>
 
             <IconButton
-              onClick={(e) => {
+              onClick={() => {
                 handleHoldJob(
                   item,
                   item.row.action === "active" ? "inActive" : "active"
@@ -122,7 +136,7 @@ function ManageJobsComponent() {
             </IconButton>
 
             <IconButton
-              onClick={(e) => handleDeleteJob(item)}
+              onClick={() => setDeleting(item.row.ids)}
               sx={{
                 "&.MuiIconButton-root": {
                   background: "#D5E3F7",
@@ -144,16 +158,18 @@ function ManageJobsComponent() {
     window.open("/manage-jobs", "_blank");
   };
 
-  const handleDeleteJob = async (item) => {
-    const id = item.row.ids;
-    const response = await deleteJob(id);
+  const handleDelete = async () => {
+    const response = await deleteJob(deleting);
     if (response.remote === "success") {
-      const newJobTable = jobTable.filter((job) => job.ids !== item.id);
-      const formateData = formattedData(newJobTable);
-      setJobTable(formateData);
+      const newJobTable = jobTable.filter((job) => job.ids !== deleting);
+      setJobTable(newJobTable);
+      setDeleting("");
+      dispatch(setSuccessToast("Job Delete SuccessFully"));
     } else {
+      dispatch(setErrorToast("Something went wrong"));
       console.log(response.error);
     }
+    setDeleting("");
   };
 
   const searchJobs = (e) => {
@@ -228,6 +244,14 @@ function ManageJobsComponent() {
           ),
         }}
       />
+      <DialogBox open={!!deleting} handleClose={() => setDeleting("")}>
+        <DeleteCard
+          title="Delete Job"
+          content="Are you sure you want to delete job?"
+          handleCancel={() => setDeleting("")}
+          handleDelete={handleDelete}
+        />
+      </DialogBox>
     </>
   );
 }

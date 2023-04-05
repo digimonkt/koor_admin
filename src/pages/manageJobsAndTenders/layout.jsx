@@ -36,12 +36,14 @@ function Layout({
   limitProps,
 }) {
   const dispatch = useDispatch();
+  const { loading } = useSelector((state) => state.jobsAndTenders);
   const { countries } = useSelector((state) => state.choice);
   useEffect(() => {
     if (!countries.data.length) {
       dispatch(getCountries());
     }
   }, []);
+
   return (
     <>
       <Stack
@@ -83,6 +85,7 @@ function Layout({
             rows={rows || []}
             columns={columns || []}
             limitProps={limitProps}
+            loader={loading}
           />
         </CardContent>
       </Card>

@@ -4,3 +4,10 @@ export const USER_ROLES = Object.freeze({
   vendor: "vendor",
   admin: "admin",
 });
+
+export const MESSAGE_TYPE = {
+  error: "error",
+  success: "success",
+  warning: "warning",
+  null: "",
+};

@@ -3,12 +3,18 @@ import { SVG } from "@assets/svg";
 import { IconButton, Stack } from "@mui/material";
 import Layout from "../layout";
 import { manageCandidate } from "@api/candidate";
-import { deleteUser } from "@api/employers";
-
+import { activeInactiveUser, deleteUser } from "@api/employers";
+import DialogBox from "@components/dialogBox";
+import DeleteCard from "@components/deleteCard";
+import { useDispatch } from "react-redux";
+import { setErrorToast, setSuccessToast } from "@redux/slice/toast";
 function ManageCandidatesComponent() {
+  const dispatch = useDispatch();
   const [candidateTable, setCandidateTable] = useState([]);
   const [pages, setPages] = useState(1);
   const [limit, setLimit] = useState(10);
+  const [deleting, setDeleting] = useState("");
+  const [loading, setLoading] = useState(false);
   const [totalCount, setTotalCount] = useState(0);
   const candidateList = async (keyword, countrySearch) => {
     const page = pages;
@@ -40,20 +46,6 @@ function ManageCandidatesComponent() {
     });
     return newData;
   }
-
-  const handleDeleteCandidate = async (item) => {
-    const id = item.row.ids;
-    const response = await deleteUser(id);
-    if (response.remote === "success") {
-      const newEmployerTable = candidateTable.filter(
-        (emp) => emp.ids !== item.id
-      );
-      const formateData = formattedData(newEmployerTable);
-      setCandidateTable(formateData);
-    } else {
-      console.log(response.error);
-    }
-  };
 
   const columns = [
     {
@@ -91,19 +83,19 @@ function ManageCandidatesComponent() {
           <Stack direction="row" spacing={1} alignItems="center">
             <>
               <IconButton
+                onClick={() => {
+                  activeDeactiveUser(item);
+                }}
                 sx={{
                   "&.MuiIconButton-root": {
-                    // background: isChecked ? "#D42929" : "#D5E3F7",
-                    background: "#D5E3F7",
+                    background: item.row.action ? "#D5E3F7" : "#D42929",
                   },
-
                   width: 30,
                   height: 30,
                   color: "#274593",
                 }}
               >
-                {/* {isChecked ? <SVG.ToggleOnIcon /> : <SVG.ToggleOffIcon />} */}
-                <SVG.ToggleOffIcon />
+                {item.row.action ? <SVG.ToggleOffIcon /> : <SVG.ToggleOnIcon />}
               </IconButton>
             </>
 
@@ -121,7 +113,7 @@ function ManageCandidatesComponent() {
               <SVG.EyeIcon />
             </IconButton>
             <IconButton
-              onClick={(e) => handleDeleteCandidate(item)}
+              onClick={() => setDeleting(item.row.ids)}
               sx={{
                 "&.MuiIconButton-root": {
                   background: "#D5E3F7",
@@ -155,6 +147,38 @@ function ManageCandidatesComponent() {
 
   const handleClickEyes = () => {
     window.open("/manage-candidates", "_blank");
+  };
+
+  const activeDeactiveUser = async (item) => {
+    const id = item.row.ids;
+    const response = await activeInactiveUser(id);
+    if (response.remote === "success") {
+      const update = [...candidateTable].map((i) => {
+        if (i.ids === item.row.ids) {
+          i.action = !i.action;
+        }
+        return i;
+      });
+      setCandidateTable(update);
+    } else {
+      console.log(response.error);
+    }
+  };
+
+  const handleDelete = async () => {
+    setLoading(false);
+    const response = await deleteUser(deleting);
+    if (response.remote === "success") {
+      const newEmployerTable = candidateTable.filter(
+        (emp) => emp.ids !== deleting
+      );
+      setCandidateTable(newEmployerTable);
+      setDeleting("");
+      dispatch(setSuccessToast("Job Delete SuccessFully"));
+    } else {
+      dispatch(setErrorToast("Something went wrong"));
+      console.log(response.error);
+    }
   };
 
   useEffect(() => {
@@ -193,6 +217,16 @@ function ManageCandidatesComponent() {
           ),
         }}
       />
+
+      <DialogBox open={!!deleting} handleClose={() => setDeleting("")}>
+        <DeleteCard
+          title="Delete Job"
+          content="Are you sure you want to delete job?"
+          handleCancel={() => setDeleting("")}
+          handleDelete={handleDelete}
+          loading={loading}
+        />
+      </DialogBox>
     </>
   );
 }

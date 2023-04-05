@@ -3,12 +3,17 @@ import { SVG } from "@assets/svg";
 import { IconButton, Stack } from "@mui/material";
 import Layout from "../layout";
 import { activeInactiveUser, deleteUser, manageEmployer } from "@api/employers";
-
+import DialogBox from "@components/dialogBox";
+import DeleteCard from "@components/deleteCard";
+import { useDispatch } from "react-redux";
+import { setErrorToast, setSuccessToast } from "@redux/slice/toast";
 function ManageEmployerComponent() {
+  const dispatch = useDispatch();
   const [employerTable, setEmployerTable] = useState([]);
   const [pages, setPages] = useState(1);
   const [limit, setLimit] = useState(10);
-  // const [isChecked, setIsChecked] = useState(false);
+  const [deleting, setDeleting] = useState("");
+  const [loading, setLoading] = useState(false);
   const [totalCount, setTotalCount] = useState(0);
   const employerList = async (keyword, countrySearch) => {
     const page = pages;
@@ -37,27 +42,13 @@ function ManageEmployerComponent() {
         id: index + 1,
         name: item.name,
         email: item.email,
-        mobilenumber: item.mobile_number,
+        mobileNumber: item.mobile_number,
         action: item.is_active,
       };
       return payload;
     });
     return newData;
   }
-
-  const handleDeleteEmployer = async (item) => {
-    const id = item.row.ids;
-    const response = await deleteUser(id);
-    if (response.remote === "success") {
-      const newEmployerTable = employerTable.filter(
-        (emp) => emp.ids !== item.id
-      );
-      const formateData = formattedData(newEmployerTable);
-      setEmployerTable(formateData);
-    } else {
-      console.log(response.error);
-    }
-  };
 
   const columns = [
     {
@@ -81,7 +72,7 @@ function ManageEmployerComponent() {
       width: 180,
     },
     {
-      field: "mobilenumber",
+      field: "mobileNumber",
       headerName: "Mobile number",
       sortable: true,
       width: 180,
@@ -95,21 +86,19 @@ function ManageEmployerComponent() {
           <Stack direction="row" spacing={1} alignItems="center">
             <>
               <IconButton
-                onClick={(e) => {
-                  activeDeactiveUser(e, item);
+                onClick={() => {
+                  activeDeactiveUser(item);
                 }}
                 sx={{
                   "&.MuiIconButton-root": {
-                    // background: isChecked ? "#D42929" : "#D5E3F7",
-                    background: "#D5E3F7",
+                    background: item.row.action ? "#D5E3F7" : "#D42929",
                   },
                   width: 30,
                   height: 30,
                   color: "#274593",
                 }}
               >
-                {/* {isChecked ? <SVG.ToggleOnIcon /> : <SVG.ToggleOffIcon />} */}
-                <SVG.ToggleOffIcon />
+                {item.row.action ? <SVG.ToggleOffIcon /> : <SVG.ToggleOnIcon />}
               </IconButton>
             </>
 
@@ -127,7 +116,7 @@ function ManageEmployerComponent() {
               <SVG.EyeIcon />
             </IconButton>
             <IconButton
-              onClick={(e) => handleDeleteEmployer(item)}
+              onClick={() => setDeleting(item.row.ids)}
               sx={{
                 "&.MuiIconButton-root": {
                   background: "#D5E3F7",
@@ -163,23 +152,37 @@ function ManageEmployerComponent() {
     employerList("", countrySearch);
   };
 
-  const activeDeactiveUser = async (item, action) => {
+  const activeDeactiveUser = async (item) => {
     const id = item.row.ids;
     const response = await activeInactiveUser(id);
     if (response.remote === "success") {
       const update = [...employerTable].map((i) => {
         if (i.ids === item.row.ids) {
-          i.action = action;
+          i.action = !i.action;
         }
         return i;
       });
       setEmployerTable(update);
-      console.log(response.data);
     } else {
       console.log(response.error);
     }
   };
 
+  const handleDelete = async () => {
+    setLoading(false);
+    const response = await deleteUser(deleting);
+    if (response.remote === "success") {
+      const newEmployerTable = employerTable.filter(
+        (emp) => emp.ids !== deleting
+      );
+      setEmployerTable(newEmployerTable);
+      setDeleting("");
+      dispatch(setSuccessToast("Job Delete SuccessFully"));
+    } else {
+      dispatch(setErrorToast("Something went wrong"));
+      console.log(response.error);
+    }
+  };
   useEffect(() => {
     employerList();
   }, [pages, limit]);
@@ -216,6 +219,16 @@ function ManageEmployerComponent() {
           ),
         }}
       />
+
+      <DialogBox open={!!deleting} handleClose={() => setDeleting("")}>
+        <DeleteCard
+          title="Delete Job"
+          content="Are you sure you want to delete job?"
+          handleCancel={() => setDeleting("")}
+          handleDelete={handleDelete}
+          loading={loading}
+        />
+      </DialogBox>
     </>
   );
 }
