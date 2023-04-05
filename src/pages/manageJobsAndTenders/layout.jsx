@@ -2,7 +2,9 @@ import DataTable from "@components/dataTable";
 import TableFilter from "@components/tableFilter";
 import { Card, CardContent, Pagination } from "@mui/material";
 import { Stack, styled } from "@mui/system";
-import React from "react";
+import { getCountries } from "@redux/slice/choices";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 const TablePagination = styled(Pagination)(() => ({
   " &.MuiPagination-root .MuiPaginationItem-root": {
     minWidth: "36px",
@@ -28,7 +30,18 @@ function Layout({
   selectProps,
   searchProps,
   job,
+  totalCount,
+  handlePageChange,
+  page,
+  limitProps,
 }) {
+  const dispatch = useDispatch();
+  const { countries } = useSelector((state) => state.choice);
+  useEffect(() => {
+    if (!countries.data.length) {
+      dispatch(getCountries());
+    }
+  }, []);
   return (
     <>
       <Stack
@@ -41,7 +54,13 @@ function Layout({
           csvProps={{ ...(csvProps || {}) }}
           jobProps={{ ...(jobProps || {}) }}
           searchProps={{ ...(searchProps || {}) }}
-          selectProps={{ ...(selectProps || {}) }}
+          selectProps={{
+            ...(selectProps || {}),
+            options: countries.data.map((country) => ({
+              value: country.title,
+              label: country.title,
+            })),
+          }}
           job={job}
         />
       </Stack>
@@ -63,14 +82,17 @@ function Layout({
           <DataTable
             rows={rows || []}
             columns={columns || []}
-            limitProps={{
-              value: 10,
-            }}
+            limitProps={limitProps}
           />
         </CardContent>
       </Card>
       <div className="pagination-custom">
-        <TablePagination count={10} shape="rounded" />
+        <TablePagination
+          count={totalCount || 0}
+          page={page}
+          onChange={handlePageChange}
+          shape="rounded"
+        />
       </div>
     </>
   );
