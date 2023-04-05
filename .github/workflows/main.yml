@@ -1,0 +1,33 @@
+name: React
+
+on:
+  push:
+    branches: ["master"]
+
+jobs:
+  React-koor:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+
+        uses: actions/checkout@v3
+
+      - name: Deployment
+
+        uses: appleboy/ssh-action@master
+
+        with:
+          host: 203.190.153.20
+
+          key: ${{ secrets.SSH_PRIVATE_KEY }}
+
+          username: user
+
+          port: 22
+
+          script: |
+            cd /home/user/koor/admin_koor/ 
+            git pull origin master
+            yarn build
+            pm2 restart 54
