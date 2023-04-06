@@ -6,7 +6,7 @@ import Layout from "../layout";
 import { activeInactiveJob, deleteJob, manageJobData } from "@api/jobs";
 import DialogBox from "@components/dialogBox";
 import DeleteCard from "@components/card/deleteCard";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setErrorToast, setSuccessToast } from "@redux/slice/toast";
 import { setLoading } from "@redux/slice/jobsAndTenders";
 import env from "@utils/validateEnv";
@@ -14,6 +14,7 @@ import { useDebounce } from "usehooks-ts";
 import { transformJobAPIResponse } from "@api/transform/choices";
 function ManageJobsComponent() {
   const dispatch = useDispatch();
+  const { countries } = useSelector((state) => state.choice);
   const [jobTable, setJobTable] = useState([]);
   const [totalCount, setTotalCount] = useState(0);
   const [pages, setPages] = useState(1);
@@ -21,6 +22,7 @@ function ManageJobsComponent() {
   const [deleting, setDeleting] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
   const debouncedSearchSkillValue = useDebounce(searchTerm, 500);
+  const [country, setCountry] = useState({});
 
   const columns = [
     {
@@ -112,12 +114,16 @@ function ManageJobsComponent() {
     },
   ];
 
-  const manageJobList = async (keyword, countrySearch) => {
+  const manageJobList = async () => {
     dispatch(setLoading(true));
     const page = pages;
-    const search = keyword || "";
-    const country = countrySearch || "";
-    const response = await manageJobData({ limit, page, search, country });
+    const search = debouncedSearchSkillValue || "";
+    const response = await manageJobData({
+      limit,
+      page,
+      search,
+      country: country.title,
+    });
     if (response.remote === "success") {
       const formateData = transformJobAPIResponse(response.data.results);
       if (!formateData.length) {
@@ -154,26 +160,21 @@ function ManageJobsComponent() {
     setDeleting("");
   };
 
-  const searchJobs = () => {
-    setSearchTerm("");
-    const keyword = searchTerm;
-    manageJobList(keyword, "");
-  };
-
   const filterJobs = (e) => {
-    const countrySearch = e.target.value;
-    manageJobList("", countrySearch);
+    const countryId = e.target.value;
+    const country = countries.data.find((country) => country.id === countryId);
+    setCountry(country);
   };
 
   const handleHoldJob = async (item, action) => {
     const id = item.row.id;
     const response = await activeInactiveJob(id);
     if (response.remote === "success") {
-      const update = [...jobTable].map((i) => {
-        if (i.id === item.row.id) {
-          i.action = action;
+      const update = [...jobTable].map((job) => {
+        if (job.id === item.row.id) {
+          job.action = action;
         }
-        return i;
+        return job;
       });
       setJobTable(update);
     } else {
@@ -182,21 +183,14 @@ function ManageJobsComponent() {
   };
 
   useEffect(() => {
-    manageJobList();
-  }, [pages, limit]);
-
-  useEffect(() => {
-    if (debouncedSearchSkillValue) {
-      searchJobs();
-    }
-  }, [debouncedSearchSkillValue]);
-
-  useEffect(() => {
     if (jobTable.length) {
       dispatch(setLoading(false));
     }
   }, [jobTable]);
 
+  useEffect(() => {
+    manageJobList();
+  }, [country, debouncedSearchSkillValue, pages, limit]);
   return (
     <>
       <Layout
@@ -210,7 +204,10 @@ function ManageJobsComponent() {
           placeholder: "Search Jobs",
           onChange: (e) => setSearchTerm(e.target.value),
         }}
-        selectProps={{ onChange: (e) => filterJobs(e) }}
+        selectProps={{
+          onChange: (e) => filterJobs(e),
+          value: country.id || "",
+        }}
         limitProps={{
           value: limit,
           options: [

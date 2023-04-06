@@ -59,7 +59,7 @@ function Layout({
           selectProps={{
             ...(selectProps || {}),
             options: countries.data.map((country) => ({
-              value: country.title,
+              value: country.id,
               label: country.title,
             })),
           }}
