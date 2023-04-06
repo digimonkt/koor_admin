@@ -9,6 +9,8 @@ import DeleteCard from "@components/deleteCard";
 import { useDispatch } from "react-redux";
 import { setErrorToast, setSuccessToast } from "@redux/slice/toast";
 import { setLoading } from "@redux/slice/jobsAndTenders";
+import env from "@utils/validateEnv";
+import { useDebounce } from "usehooks-ts";
 function ManageJobsComponent() {
   const dispatch = useDispatch();
   const [jobTable, setJobTable] = useState([]);
@@ -16,53 +18,8 @@ function ManageJobsComponent() {
   const [pages, setPages] = useState(1);
   const [limit, setLimit] = useState(10);
   const [deleting, setDeleting] = useState("");
-  const manageJobList = async (keyword, countrySearch) => {
-    dispatch(setLoading(true));
-    const page = pages;
-    const search = keyword || "";
-    const country = countrySearch || "";
-    const response = await manageJobData({ limit, page, search, country });
-    if (response.remote === "success") {
-      const formateData = formattedData(response.data.results);
-      if (!formateData.length) {
-        dispatch(setLoading(false));
-      }
-      setJobTable(formateData);
-      const totalCounts = Math.ceil(response.data.count / limit);
-      setTotalCount(totalCounts);
-    } else {
-      console.log(response.error);
-    }
-  };
-  useEffect(() => {
-    if (jobTable.length) {
-      dispatch(setLoading(false));
-    }
-  }, [jobTable]);
-
-  useEffect(() => {
-    manageJobList();
-  }, [pages, limit]);
-
-  function getPage(_, page) {
-    setPages(page);
-  }
-
-  function formattedData(apiData) {
-    const newData = apiData.map((item, index) => {
-      const payload = {
-        ids: item.id,
-        no: index + 1,
-        id: item.job_id,
-        jobTitle: item.title,
-        company: item.user,
-        location: `${item.city.title},${item.country.title}`,
-        action: item.status,
-      };
-      return payload;
-    });
-    return newData;
-  }
+  const [searchTerm, setSearchTerm] = useState("");
+  const debouncedSearchSkillValue = useDebounce(searchTerm, 500);
 
   const columns = [
     {
@@ -102,7 +59,7 @@ function ManageJobsComponent() {
         return (
           <Stack direction="row" spacing={1} alignItems="center">
             <IconButton
-              onClick={handleClickEyes}
+              onClick={() => handleRedirectDetails(item.row.ids)}
               sx={{
                 "&.MuiIconButton-root": {
                   background: "#D5E3F7",
@@ -154,8 +111,48 @@ function ManageJobsComponent() {
     },
   ];
 
-  const handleClickEyes = () => {
-    window.open("/manage-jobs", "_blank");
+  const manageJobList = async (keyword, countrySearch) => {
+    dispatch(setLoading(true));
+    const page = pages;
+    const search = keyword || "";
+    const country = countrySearch || "";
+    const response = await manageJobData({ limit, page, search, country });
+    if (response.remote === "success") {
+      const formateData = formattedData(response.data.results);
+      if (!formateData.length) {
+        dispatch(setLoading(false));
+      }
+      setJobTable(formateData);
+      const totalCounts = Math.ceil(response.data.count / limit);
+      setTotalCount(totalCounts);
+    } else {
+      console.log(response.error);
+    }
+  };
+
+  function getPage(_, page) {
+    setPages(page);
+  }
+
+  function formattedData(apiData) {
+    const newData = apiData.map((item, index) => {
+      const payload = {
+        ids: item.id,
+        no: index + 1,
+        id: item.job_id,
+        jobTitle: item.title,
+        company: item.user,
+        location: `${item.city.title},${item.country.title}`,
+        action: item.status,
+      };
+      return payload;
+    });
+    return newData;
+  }
+
+  const handleRedirectDetails = (item) => {
+    const url = `${env.REACT_APP_REDIRECT_URL}/jobs/details/${item}`;
+    window.open(url, "_blank");
   };
 
   const handleDelete = async () => {
@@ -172,8 +169,9 @@ function ManageJobsComponent() {
     setDeleting("");
   };
 
-  const searchJobs = (e) => {
-    const keyword = e.target.value;
+  const searchJobs = () => {
+    setSearchTerm("");
+    const keyword = searchTerm;
     manageJobList(keyword, "");
   };
 
@@ -198,7 +196,21 @@ function ManageJobsComponent() {
     }
   };
 
-  useEffect(() => {}, [jobTable]);
+  useEffect(() => {
+    manageJobList();
+  }, [pages, limit]);
+
+  useEffect(() => {
+    if (debouncedSearchSkillValue) {
+      searchJobs();
+    }
+  }, [debouncedSearchSkillValue]);
+
+  useEffect(() => {
+    if (jobTable.length) {
+      dispatch(setLoading(false));
+    }
+  }, [jobTable]);
 
   return (
     <>
@@ -211,7 +223,7 @@ function ManageJobsComponent() {
         page={pages}
         searchProps={{
           placeholder: "Search Jobs",
-          onChange: (e) => searchJobs(e),
+          onChange: (e) => setSearchTerm(e.target.value),
         }}
         selectProps={{ onChange: (e) => filterJobs(e) }}
         limitProps={{

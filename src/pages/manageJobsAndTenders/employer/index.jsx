@@ -103,7 +103,6 @@ function ManageEmployerComponent() {
             </>
 
             <IconButton
-              onClick={handleClickEyes}
               sx={{
                 "&.MuiIconButton-root": {
                   background: "#D5E3F7",
@@ -133,10 +132,6 @@ function ManageEmployerComponent() {
       },
     },
   ];
-
-  const handleClickEyes = () => {
-    window.open("/manage-employers", "_blank");
-  };
 
   const searchJobs = (e) => {
     const keyword = e.target.value;

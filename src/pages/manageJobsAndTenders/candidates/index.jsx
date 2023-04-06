@@ -100,7 +100,6 @@ function ManageCandidatesComponent() {
             </>
 
             <IconButton
-              onClick={handleClickEyes}
               sx={{
                 "&.MuiIconButton-root": {
                   background: "#D5E3F7",
@@ -143,10 +142,6 @@ function ManageCandidatesComponent() {
   const filterJobs = (e) => {
     const countrySearch = e.target.value;
     candidateList("", countrySearch);
-  };
-
-  const handleClickEyes = () => {
-    window.open("/manage-candidates", "_blank");
   };
 
   const activeDeactiveUser = async (item) => {

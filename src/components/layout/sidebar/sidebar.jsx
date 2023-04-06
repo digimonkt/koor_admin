@@ -22,7 +22,7 @@ function Sidebar() {
         <PerfectScrollbar component="div">
           <ul className={`${styles.sidebarMenu}`}>
             {MENU_ITEM.map((item, index) => (
-              <React.Fragment key={index}>
+              <React.Fragment key={item.id}>
                 <li className={`${item.menuBorder}`}>
                   <Link
                     to={item.url}
