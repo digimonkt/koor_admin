@@ -5,12 +5,13 @@ import { Stack } from "@mui/system";
 import Layout from "../layout";
 import { activeInactiveJob, deleteJob, manageJobData } from "@api/jobs";
 import DialogBox from "@components/dialogBox";
-import DeleteCard from "@components/deleteCard";
+import DeleteCard from "@components/card/deleteCard";
 import { useDispatch } from "react-redux";
 import { setErrorToast, setSuccessToast } from "@redux/slice/toast";
 import { setLoading } from "@redux/slice/jobsAndTenders";
 import env from "@utils/validateEnv";
 import { useDebounce } from "usehooks-ts";
+import { transformJobAPIResponse } from "@api/transform/choices";
 function ManageJobsComponent() {
   const dispatch = useDispatch();
   const [jobTable, setJobTable] = useState([]);
@@ -28,7 +29,7 @@ function ManageJobsComponent() {
       sortable: true,
     },
     {
-      field: "id",
+      field: "jobId",
       headerName: "ID",
       sortable: true,
     },
@@ -59,7 +60,7 @@ function ManageJobsComponent() {
         return (
           <Stack direction="row" spacing={1} alignItems="center">
             <IconButton
-              onClick={() => handleRedirectDetails(item.row.ids)}
+              onClick={() => handleRedirectDetails(item.row.id)}
               sx={{
                 "&.MuiIconButton-root": {
                   background: "#D5E3F7",
@@ -93,7 +94,7 @@ function ManageJobsComponent() {
             </IconButton>
 
             <IconButton
-              onClick={() => setDeleting(item.row.ids)}
+              onClick={() => setDeleting(item.row.id)}
               sx={{
                 "&.MuiIconButton-root": {
                   background: "#D5E3F7",
@@ -118,7 +119,7 @@ function ManageJobsComponent() {
     const country = countrySearch || "";
     const response = await manageJobData({ limit, page, search, country });
     if (response.remote === "success") {
-      const formateData = formattedData(response.data.results);
+      const formateData = transformJobAPIResponse(response.data.results);
       if (!formateData.length) {
         dispatch(setLoading(false));
       }
@@ -134,22 +135,6 @@ function ManageJobsComponent() {
     setPages(page);
   }
 
-  function formattedData(apiData) {
-    const newData = apiData.map((item, index) => {
-      const payload = {
-        ids: item.id,
-        no: index + 1,
-        id: item.job_id,
-        jobTitle: item.title,
-        company: item.user,
-        location: `${item.city.title},${item.country.title}`,
-        action: item.status,
-      };
-      return payload;
-    });
-    return newData;
-  }
-
   const handleRedirectDetails = (item) => {
     const url = `${env.REACT_APP_REDIRECT_URL}/jobs/details/${item}`;
     window.open(url, "_blank");
@@ -158,7 +143,7 @@ function ManageJobsComponent() {
   const handleDelete = async () => {
     const response = await deleteJob(deleting);
     if (response.remote === "success") {
-      const newJobTable = jobTable.filter((job) => job.ids !== deleting);
+      const newJobTable = jobTable.filter((job) => job.id !== deleting);
       setJobTable(newJobTable);
       setDeleting("");
       dispatch(setSuccessToast("Job Delete SuccessFully"));
@@ -181,11 +166,11 @@ function ManageJobsComponent() {
   };
 
   const handleHoldJob = async (item, action) => {
-    const id = item.row.ids;
+    const id = item.row.id;
     const response = await activeInactiveJob(id);
     if (response.remote === "success") {
       const update = [...jobTable].map((i) => {
-        if (i.ids === item.row.ids) {
+        if (i.id === item.row.id) {
           i.action = action;
         }
         return i;

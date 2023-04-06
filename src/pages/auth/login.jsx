@@ -3,7 +3,7 @@ import { LabeledInput } from "@components/input";
 import { Button } from "@mui/material";
 import styles from "./auth.module.css";
 import { useFormik } from "formik";
-import { AdminLogin } from "@api/auth";
+import { adminLogin } from "@api/auth";
 import { validateLoginForm } from "./validator";
 import { ErrorMessage } from "@components/caption";
 import Loader from "@components/loader";
@@ -30,7 +30,7 @@ function LoginComponent() {
         password: values.password,
         role: USER_ROLES.admin,
       };
-      const response = await AdminLogin(payload);
+      const response = await adminLogin(payload);
       if (response.remote === "success") {
         setIsLoading(false);
         dispatch(setIsLoggedIn(true));

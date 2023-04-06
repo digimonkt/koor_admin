@@ -5,47 +5,21 @@ import Layout from "../layout";
 import { manageCandidate } from "@api/candidate";
 import { activeInactiveUser, deleteUser } from "@api/employers";
 import DialogBox from "@components/dialogBox";
-import DeleteCard from "@components/deleteCard";
+import DeleteCard from "@components/card/deleteCard";
 import { useDispatch } from "react-redux";
 import { setErrorToast, setSuccessToast } from "@redux/slice/toast";
+import { setLoading } from "@redux/slice/jobsAndTenders";
+import { useDebounce } from "usehooks-ts";
+import { transformCandidatesAPIResponse } from "@api/transform/choices";
 function ManageCandidatesComponent() {
   const dispatch = useDispatch();
   const [candidateTable, setCandidateTable] = useState([]);
   const [pages, setPages] = useState(1);
   const [limit, setLimit] = useState(10);
   const [deleting, setDeleting] = useState("");
-  const [loading, setLoading] = useState(false);
   const [totalCount, setTotalCount] = useState(0);
-  const candidateList = async (keyword, countrySearch) => {
-    const page = pages;
-    const search = keyword || "";
-    const country = countrySearch || "";
-    const response = await manageCandidate(limit, page, search, country);
-    if (response.remote === "success") {
-      const formateData = formattedData(response.data.results);
-      setCandidateTable(formateData);
-      const totalCounts = Math.ceil(response.data.count / limit);
-      setTotalCount(totalCounts);
-    } else {
-      console.log(response.error);
-    }
-  };
-
-  function formattedData(apiData) {
-    const newData = apiData.map((item, index) => {
-      const payload = {
-        ids: item.id,
-        no: index + 1,
-        id: index + 1,
-        name: item.name,
-        email: item.email,
-        mobilenumber: item.mobile_number,
-        action: item.is_active,
-      };
-      return payload;
-    });
-    return newData;
-  }
+  const [searchTerm, setSearchTerm] = useState("");
+  const debouncedSearchSkillValue = useDebounce(searchTerm, 500);
 
   const columns = [
     {
@@ -69,7 +43,7 @@ function ManageCandidatesComponent() {
       width: 180,
     },
     {
-      field: "mobilenumber",
+      field: "mobileNumber",
       headerName: "Mobile number",
       sortable: true,
       width: 180,
@@ -84,7 +58,7 @@ function ManageCandidatesComponent() {
             <>
               <IconButton
                 onClick={() => {
-                  activeDeactiveUser(item);
+                  activeDeActiveUser(item);
                 }}
                 sx={{
                   "&.MuiIconButton-root": {
@@ -112,7 +86,7 @@ function ManageCandidatesComponent() {
               <SVG.EyeIcon />
             </IconButton>
             <IconButton
-              onClick={() => setDeleting(item.row.ids)}
+              onClick={() => setDeleting(item.row.id)}
               sx={{
                 "&.MuiIconButton-root": {
                   background: "#D5E3F7",
@@ -130,12 +104,31 @@ function ManageCandidatesComponent() {
     },
   ];
 
-  function getPage(event, page) {
+  const candidateList = async (keyword, countrySearch) => {
+    dispatch(setLoading(true));
+    const page = pages;
+    const search = keyword || "";
+    const country = countrySearch || "";
+    const response = await manageCandidate(limit, page, search, country);
+    if (response.remote === "success") {
+      const formateData = transformCandidatesAPIResponse(response.data.results);
+      if (!formateData.length) {
+        dispatch(setLoading(false));
+      }
+      setCandidateTable(formateData);
+      const totalCounts = Math.ceil(response.data.count / limit);
+      setTotalCount(totalCounts);
+    } else {
+      console.log(response.error);
+    }
+  };
+
+  function getPage(_, page) {
     setPages(page);
   }
 
-  const searchJobs = (e) => {
-    const keyword = e.target.value;
+  const searchJobs = () => {
+    const keyword = searchTerm;
     candidateList(keyword, "");
   };
 
@@ -144,12 +137,12 @@ function ManageCandidatesComponent() {
     candidateList("", countrySearch);
   };
 
-  const activeDeactiveUser = async (item) => {
-    const id = item.row.ids;
+  const activeDeActiveUser = async (item) => {
+    const id = item.row.id;
     const response = await activeInactiveUser(id);
     if (response.remote === "success") {
       const update = [...candidateTable].map((i) => {
-        if (i.ids === item.row.ids) {
+        if (i.id === item.row.id) {
           i.action = !i.action;
         }
         return i;
@@ -165,7 +158,7 @@ function ManageCandidatesComponent() {
     const response = await deleteUser(deleting);
     if (response.remote === "success") {
       const newEmployerTable = candidateTable.filter(
-        (emp) => emp.ids !== deleting
+        (emp) => emp.id !== deleting
       );
       setCandidateTable(newEmployerTable);
       setDeleting("");
@@ -179,6 +172,18 @@ function ManageCandidatesComponent() {
   useEffect(() => {
     candidateList();
   }, [pages, limit]);
+
+  useEffect(() => {
+    if (candidateTable.length) {
+      dispatch(setLoading(false));
+    }
+  }, [candidateTable]);
+
+  useEffect(() => {
+    if (debouncedSearchSkillValue) {
+      searchJobs();
+    }
+  }, [debouncedSearchSkillValue]);
   return (
     <>
       <Layout
@@ -189,7 +194,7 @@ function ManageCandidatesComponent() {
         page={pages}
         searchProps={{
           placeholder: "Search Candidates",
-          onChange: (e) => searchJobs(e),
+          onChange: (e) => setSearchTerm(e.target.value),
         }}
         selectProps={{ onChange: (e) => filterJobs(e) }}
         limitProps={{
@@ -219,7 +224,6 @@ function ManageCandidatesComponent() {
           content="Are you sure you want to delete job?"
           handleCancel={() => setDeleting("")}
           handleDelete={handleDelete}
-          loading={loading}
         />
       </DialogBox>
     </>

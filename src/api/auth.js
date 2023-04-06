@@ -1,6 +1,6 @@
 import api from ".";
 
-export const AdminLogin = async (data) => {
+export const adminLogin = async (data) => {
   const response = await api.request({
     url: "/v1/users/session",
     method: "POST",

@@ -4,51 +4,21 @@ import { IconButton, Stack } from "@mui/material";
 import Layout from "../layout";
 import { activeInactiveUser, deleteUser, manageEmployer } from "@api/employers";
 import DialogBox from "@components/dialogBox";
-import DeleteCard from "@components/deleteCard";
+import DeleteCard from "@components/card/deleteCard";
 import { useDispatch } from "react-redux";
 import { setErrorToast, setSuccessToast } from "@redux/slice/toast";
+import { setLoading } from "@redux/slice/jobsAndTenders";
+import { useDebounce } from "usehooks-ts";
+import { transformEmployerAPIResponse } from "@api/transform/choices";
 function ManageEmployerComponent() {
   const dispatch = useDispatch();
   const [employerTable, setEmployerTable] = useState([]);
   const [pages, setPages] = useState(1);
   const [limit, setLimit] = useState(10);
   const [deleting, setDeleting] = useState("");
-  const [loading, setLoading] = useState(false);
   const [totalCount, setTotalCount] = useState(0);
-  const employerList = async (keyword, countrySearch) => {
-    const page = pages;
-    const search = keyword || "";
-    const country = countrySearch || "";
-    const response = await manageEmployer(limit, page, search, country);
-    if (response.remote === "success") {
-      const formateData = formattedData(response.data.results);
-      setEmployerTable(formateData);
-      const totalCounts = Math.ceil(response.data.count / limit);
-      setTotalCount(totalCounts);
-    } else {
-      console.log(response.error);
-    }
-  };
-
-  useEffect(() => {
-    employerList();
-  }, []);
-
-  function formattedData(apiData) {
-    const newData = apiData.map((item, index) => {
-      const payload = {
-        ids: item.id,
-        no: index + 1,
-        id: index + 1,
-        name: item.name,
-        email: item.email,
-        mobileNumber: item.mobile_number,
-        action: item.is_active,
-      };
-      return payload;
-    });
-    return newData;
-  }
+  const [searchTerm, setSearchTerm] = useState("");
+  const debouncedSearchSkillValue = useDebounce(searchTerm, 500);
 
   const columns = [
     {
@@ -87,7 +57,7 @@ function ManageEmployerComponent() {
             <>
               <IconButton
                 onClick={() => {
-                  activeDeactiveUser(item);
+                  activeDeActiveUser(item);
                 }}
                 sx={{
                   "&.MuiIconButton-root": {
@@ -133,12 +103,31 @@ function ManageEmployerComponent() {
     },
   ];
 
-  const searchJobs = (e) => {
-    const keyword = e.target.value;
+  const employerList = async (keyword, countrySearch) => {
+    dispatch(setLoading(true));
+    const page = pages;
+    const search = keyword || "";
+    const country = countrySearch || "";
+    const response = await manageEmployer(limit, page, search, country);
+    if (response.remote === "success") {
+      const formateData = transformEmployerAPIResponse(response.data.results);
+      if (!formateData.length) {
+        dispatch(setLoading(false));
+      }
+      setEmployerTable(formateData);
+      const totalCounts = Math.ceil(response.data.count / limit);
+      setTotalCount(totalCounts);
+    } else {
+      console.log(response.error);
+    }
+  };
+
+  const searchJobs = () => {
+    const keyword = searchTerm;
     employerList(keyword, "");
   };
 
-  function getPage(event, page) {
+  function getPage(_, page) {
     setPages(page);
   }
 
@@ -147,7 +136,7 @@ function ManageEmployerComponent() {
     employerList("", countrySearch);
   };
 
-  const activeDeactiveUser = async (item) => {
+  const activeDeActiveUser = async (item) => {
     const id = item.row.ids;
     const response = await activeInactiveUser(id);
     if (response.remote === "success") {
@@ -164,7 +153,6 @@ function ManageEmployerComponent() {
   };
 
   const handleDelete = async () => {
-    setLoading(false);
     const response = await deleteUser(deleting);
     if (response.remote === "success") {
       const newEmployerTable = employerTable.filter(
@@ -178,9 +166,26 @@ function ManageEmployerComponent() {
       console.log(response.error);
     }
   };
+
   useEffect(() => {
     employerList();
   }, [pages, limit]);
+
+  useEffect(() => {
+    employerList();
+  }, []);
+
+  useEffect(() => {
+    if (employerTable.length) {
+      dispatch(setLoading(false));
+    }
+  }, [employerTable]);
+
+  useEffect(() => {
+    if (debouncedSearchSkillValue) {
+      searchJobs();
+    }
+  }, [debouncedSearchSkillValue]);
   return (
     <>
       <Layout
@@ -191,7 +196,7 @@ function ManageEmployerComponent() {
         page={pages}
         searchProps={{
           placeholder: "Search Employers",
-          onChange: (e) => searchJobs(e),
+          onChange: (e) => setSearchTerm(e.target.value),
         }}
         selectProps={{ onChange: (e) => filterJobs(e) }}
         limitProps={{
@@ -221,7 +226,6 @@ function ManageEmployerComponent() {
           content="Are you sure you want to delete job?"
           handleCancel={() => setDeleting("")}
           handleDelete={handleDelete}
-          loading={loading}
         />
       </DialogBox>
     </>

@@ -3,7 +3,13 @@ import Loader from "@components/loader";
 import { Grid, Stack } from "@mui/material";
 import React from "react";
 
-function DeleteCard({ title, content, handleDelete, handleCancel, loading }) {
+function DeleteCardComponent({
+  title,
+  content,
+  handleDelete,
+  handleCancel,
+  loading,
+}) {
   return (
     <div>
       <h1 className="headding">{title}</h1>
@@ -50,4 +56,4 @@ function DeleteCard({ title, content, handleDelete, handleCancel, loading }) {
   );
 }
 
-export default DeleteCard;
+export default DeleteCardComponent;
