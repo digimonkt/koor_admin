@@ -29,5 +29,6 @@ jobs:
           script: |
             cd /home/user/koor/admin_koor/ 
             git pull origin master
-            yarn build
-            pm2 restart 54
+            npm install
+            npm run build
+            pm2 restart 56
