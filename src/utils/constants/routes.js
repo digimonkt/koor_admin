@@ -1,5 +1,6 @@
 import { Login } from "@pages/auth";
 import {
+  Dashboard,
   ManageCandidate,
   ManageEmployer,
   ManageJobs,
@@ -9,6 +10,11 @@ import {
 export const PUBLIC_ROUTE = [];
 
 export const AUTHENTICATED_ROUTE = [
+  {
+    id: "manage-jobs",
+    path: "/dashboard",
+    element: Dashboard,
+  },
   {
     id: "manage-jobs",
     path: "/manage-jobs",

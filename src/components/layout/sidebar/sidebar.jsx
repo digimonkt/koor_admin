@@ -1,12 +1,13 @@
 import PerfectScrollbar from "react-perfect-scrollbar";
 import { Box, Drawer, IconButton, Stack } from "@mui/material";
 import React from "react";
-import { Link, Navigate, Route, Routes, useLocation } from "react-router-dom";
+import { Link, Route, Routes, useLocation } from "react-router-dom";
 import { MENU_ITEM } from "./navigation";
 import { SVG } from "@assets/svg";
 import MenuOpenIcon from "@mui/icons-material/MenuOpen";
 import styles from "./sidebar.module.css";
 import { AUTHENTICATED_ROUTE } from "@utils/constants/routes";
+import { AuthenticatedRoute } from "@utils/routes";
 
 const drawerWidth = 300;
 function Sidebar() {
@@ -21,7 +22,7 @@ function Sidebar() {
         <PerfectScrollbar component="div">
           <ul className={`${styles.sidebarMenu}`}>
             {MENU_ITEM.map((item, index) => (
-              <React.Fragment key={index}>
+              <React.Fragment key={item.id}>
                 <li className={`${item.menuBorder}`}>
                   <Link
                     to={item.url}
@@ -140,16 +141,19 @@ function Sidebar() {
 
         <Routes>
           {AUTHENTICATED_ROUTE.map((route, index) => {
-            console.log({ route });
             return (
               <Route
                 path={route.path}
-                element={<route.element />}
+                element={
+                  <AuthenticatedRoute redirectURL="/">
+                    <route.element />
+                  </AuthenticatedRoute>
+                }
                 key={index}
               />
             );
           })}
-          <Route path="/" element={<Navigate to="/dashboard" />} />
+          {/* <Route path="/" element={<Navigate to="/dashboard" />} /> */}
         </Routes>
       </Box>
     </Box>

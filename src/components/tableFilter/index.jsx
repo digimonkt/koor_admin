@@ -10,13 +10,7 @@ function TableFilter({ searchProps, selectProps, csvProps, jobProps, job }) {
         widthInput="100%"
         {...searchProps}
       />
-      <SelectInput
-        placeholder="Location"
-        options={[]}
-        search
-        value=""
-        {...selectProps}
-      />
+      <SelectInput placeholder="Location" value="" search {...selectProps} />
       <div className="w-100">
         <SolidButton
           sx={{
@@ -32,7 +26,6 @@ function TableFilter({ searchProps, selectProps, csvProps, jobProps, job }) {
             "&:hover": {
               background: "#f7f7f7",
               borderColor: "#f7f7f7",
-              //   color: hoverColor,
             },
           }}
           {...csvProps}

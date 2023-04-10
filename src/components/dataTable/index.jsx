@@ -3,7 +3,7 @@ import { FormControl, Stack } from "@mui/material";
 import React from "react";
 import { StyledDataGrid } from "./style";
 
-function DataTable({ rows, columns, limitProps }) {
+function DataTable({ rows, columns, limitProps, loader }) {
   return (
     <>
       <div style={{ width: "100%", height: "500px", marginBottom: "30px" }}>
@@ -11,6 +11,7 @@ function DataTable({ rows, columns, limitProps }) {
           className="scrolltable"
           rows={rows}
           columns={columns}
+          loading={loader}
           disableHeight={false}
           disableColumnSelector={false}
           getRowClassName={(params) =>
