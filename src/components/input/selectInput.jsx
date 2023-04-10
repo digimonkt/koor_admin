@@ -64,7 +64,6 @@ function SelectInputComponent({
         ""
       )}
       <FormControl
-        // className={`iconsize-select ${className} `}
         sx={{
           width,
           "&.MuiSelect-select": {

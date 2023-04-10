@@ -26,7 +26,6 @@ function TableFilter({ searchProps, selectProps, csvProps, jobProps, job }) {
             "&:hover": {
               background: "#f7f7f7",
               borderColor: "#f7f7f7",
-              //   color: hoverColor,
             },
           }}
           {...csvProps}
