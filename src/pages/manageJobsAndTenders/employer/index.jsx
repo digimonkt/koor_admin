@@ -5,19 +5,21 @@ import Layout from "../layout";
 import { activeInactiveUser, deleteUser, manageEmployer } from "@api/employers";
 import DialogBox from "@components/dialogBox";
 import DeleteCard from "@components/card/deleteCard";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setErrorToast, setSuccessToast } from "@redux/slice/toast";
 import { setLoading } from "@redux/slice/jobsAndTenders";
 import { useDebounce } from "usehooks-ts";
 import { transformEmployerAPIResponse } from "@api/transform/choices";
 function ManageEmployerComponent() {
   const dispatch = useDispatch();
+  const { countries } = useSelector((state) => state.choice);
   const [employerTable, setEmployerTable] = useState([]);
   const [pages, setPages] = useState(1);
   const [limit, setLimit] = useState(10);
   const [deleting, setDeleting] = useState("");
   const [totalCount, setTotalCount] = useState(0);
   const [searchTerm, setSearchTerm] = useState("");
+  const [country, setCountry] = useState({});
   const debouncedSearchSkillValue = useDebounce(searchTerm, 500);
 
   const columns = [
@@ -85,7 +87,7 @@ function ManageEmployerComponent() {
               <SVG.EyeIcon />
             </IconButton>
             <IconButton
-              onClick={() => setDeleting(item.row.ids)}
+              onClick={() => setDeleting(item.row.id)}
               sx={{
                 "&.MuiIconButton-root": {
                   background: "#D5E3F7",
@@ -103,12 +105,16 @@ function ManageEmployerComponent() {
     },
   ];
 
-  const employerList = async (keyword, countrySearch) => {
+  const employerList = async () => {
     dispatch(setLoading(true));
     const page = pages;
-    const search = keyword || "";
-    const country = countrySearch || "";
-    const response = await manageEmployer(limit, page, search, country);
+    const search = debouncedSearchSkillValue || "";
+    const response = await manageEmployer({
+      limit,
+      page,
+      search,
+      country: country.title,
+    });
     if (response.remote === "success") {
       const formateData = transformEmployerAPIResponse(response.data.results);
       if (!formateData.length) {
@@ -122,26 +128,22 @@ function ManageEmployerComponent() {
     }
   };
 
-  const searchJobs = () => {
-    const keyword = searchTerm;
-    employerList(keyword, "");
-  };
-
   function getPage(_, page) {
     setPages(page);
   }
 
-  const filterJobs = (e) => {
-    const countrySearch = e.target.value;
-    employerList("", countrySearch);
+  const filterJobsCountry = (e) => {
+    const countryId = e.target.value;
+    const country = countries.data.find((country) => country.id === countryId);
+    setCountry(country);
   };
 
   const activeDeActiveUser = async (item) => {
-    const id = item.row.ids;
+    const id = item.row.id;
     const response = await activeInactiveUser(id);
     if (response.remote === "success") {
       const update = [...employerTable].map((i) => {
-        if (i.ids === item.row.ids) {
+        if (i.id === item.row.id) {
           i.action = !i.action;
         }
         return i;
@@ -156,7 +158,7 @@ function ManageEmployerComponent() {
     const response = await deleteUser(deleting);
     if (response.remote === "success") {
       const newEmployerTable = employerTable.filter(
-        (emp) => emp.ids !== deleting
+        (emp) => emp.id !== deleting
       );
       setEmployerTable(newEmployerTable);
       setDeleting("");
@@ -168,24 +170,14 @@ function ManageEmployerComponent() {
   };
 
   useEffect(() => {
-    employerList();
-  }, [pages, limit]);
-
-  useEffect(() => {
-    employerList();
-  }, []);
-
-  useEffect(() => {
     if (employerTable.length) {
       dispatch(setLoading(false));
     }
   }, [employerTable]);
 
   useEffect(() => {
-    if (debouncedSearchSkillValue) {
-      searchJobs();
-    }
-  }, [debouncedSearchSkillValue]);
+    employerList();
+  }, [country, debouncedSearchSkillValue, pages, limit]);
   return (
     <>
       <Layout
@@ -198,7 +190,10 @@ function ManageEmployerComponent() {
           placeholder: "Search Employers",
           onChange: (e) => setSearchTerm(e.target.value),
         }}
-        selectProps={{ onChange: (e) => filterJobs(e) }}
+        selectProps={{
+          onChange: (e) => filterJobsCountry(e),
+          value: country.id || "",
+        }}
         limitProps={{
           value: limit,
           options: [

@@ -6,22 +6,6 @@ const initialState = {
     loading: false,
     data: [],
   },
-  currency_code: {
-    loading: false,
-    data: [],
-  },
-  country_code: {
-    loading: false,
-    data: [],
-  },
-  iso_code2: {
-    loading: false,
-    data: [],
-  },
-  iso_code3: {
-    loading: false,
-    data: [],
-  },
 };
 
 export const getCountries = createAsyncThunk(

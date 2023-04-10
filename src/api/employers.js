@@ -1,7 +1,7 @@
 import api from ".";
 import urlcat from "urlcat";
 
-export const manageEmployer = async (limit, page, search, country) => {
+export const manageEmployer = async ({ limit, page, search, country }) => {
   const response = await api.request({
     url: urlcat("/v1/admin/employer", { limit, page, search, country }),
     method: "GET",

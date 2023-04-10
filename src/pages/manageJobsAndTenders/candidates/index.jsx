@@ -6,19 +6,21 @@ import { manageCandidate } from "@api/candidate";
 import { activeInactiveUser, deleteUser } from "@api/employers";
 import DialogBox from "@components/dialogBox";
 import DeleteCard from "@components/card/deleteCard";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { setErrorToast, setSuccessToast } from "@redux/slice/toast";
 import { setLoading } from "@redux/slice/jobsAndTenders";
 import { useDebounce } from "usehooks-ts";
 import { transformCandidatesAPIResponse } from "@api/transform/choices";
 function ManageCandidatesComponent() {
   const dispatch = useDispatch();
+  const { countries } = useSelector((state) => state.choice);
   const [candidateTable, setCandidateTable] = useState([]);
   const [pages, setPages] = useState(1);
   const [limit, setLimit] = useState(10);
   const [deleting, setDeleting] = useState("");
   const [totalCount, setTotalCount] = useState(0);
   const [searchTerm, setSearchTerm] = useState("");
+  const [country, setCountry] = useState({});
   const debouncedSearchSkillValue = useDebounce(searchTerm, 500);
 
   const columns = [
@@ -104,12 +106,16 @@ function ManageCandidatesComponent() {
     },
   ];
 
-  const candidateList = async (keyword, countrySearch) => {
+  const candidateList = async () => {
     dispatch(setLoading(true));
     const page = pages;
-    const search = keyword || "";
-    const country = countrySearch || "";
-    const response = await manageCandidate(limit, page, search, country);
+    const search = debouncedSearchSkillValue || "";
+    const response = await manageCandidate({
+      limit,
+      page,
+      search,
+      country: country.title,
+    });
     if (response.remote === "success") {
       const formateData = transformCandidatesAPIResponse(response.data.results);
       if (!formateData.length) {
@@ -127,14 +133,10 @@ function ManageCandidatesComponent() {
     setPages(page);
   }
 
-  const searchJobs = () => {
-    const keyword = searchTerm;
-    candidateList(keyword, "");
-  };
-
-  const filterJobs = (e) => {
-    const countrySearch = e.target.value;
-    candidateList("", countrySearch);
+  const filterJobsCountry = (e) => {
+    const countryId = e.target.value;
+    const country = countries.data.find((country) => country.id === countryId);
+    setCountry(country);
   };
 
   const activeDeActiveUser = async (item) => {
@@ -170,20 +172,14 @@ function ManageCandidatesComponent() {
   };
 
   useEffect(() => {
-    candidateList();
-  }, [pages, limit]);
-
-  useEffect(() => {
     if (candidateTable.length) {
       dispatch(setLoading(false));
     }
   }, [candidateTable]);
 
   useEffect(() => {
-    if (debouncedSearchSkillValue) {
-      searchJobs();
-    }
-  }, [debouncedSearchSkillValue]);
+    candidateList();
+  }, [country, debouncedSearchSkillValue, pages, limit]);
   return (
     <>
       <Layout
@@ -196,7 +192,10 @@ function ManageCandidatesComponent() {
           placeholder: "Search Candidates",
           onChange: (e) => setSearchTerm(e.target.value),
         }}
-        selectProps={{ onChange: (e) => filterJobs(e) }}
+        selectProps={{
+          onChange: (e) => filterJobsCountry(e),
+          value: country.id || "",
+        }}
         limitProps={{
           value: limit,
           options: [

@@ -160,7 +160,7 @@ function ManageJobsComponent() {
     setDeleting("");
   };
 
-  const filterJobs = (e) => {
+  const filterJobsCountry = (e) => {
     const countryId = e.target.value;
     const country = countries.data.find((country) => country.id === countryId);
     setCountry(country);
@@ -205,7 +205,7 @@ function ManageJobsComponent() {
           onChange: (e) => setSearchTerm(e.target.value),
         }}
         selectProps={{
-          onChange: (e) => filterJobs(e),
+          onChange: (e) => filterJobsCountry(e),
           value: country.id || "",
         }}
         limitProps={{
