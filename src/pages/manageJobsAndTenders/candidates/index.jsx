@@ -171,6 +171,11 @@ function ManageCandidatesComponent() {
     }
   };
 
+  const resetFilterCandidate = () => {
+    setSearchTerm("");
+    setCountry({});
+  };
+
   useEffect(() => {
     if (candidateTable.length) {
       dispatch(setLoading(false));
@@ -215,8 +220,16 @@ function ManageCandidatesComponent() {
             </>
           ),
         }}
+        jobProps={{
+          title: (
+            <div onClick={() => resetFilterCandidate()}>
+              <span className="d-inline-flex align-items-center me-2"></span>{" "}
+              Reset Filter
+            </div>
+          ),
+        }}
+        job
       />
-
       <DialogBox open={!!deleting} handleClose={() => setDeleting("")}>
         <DeleteCard
           title="Delete Job"

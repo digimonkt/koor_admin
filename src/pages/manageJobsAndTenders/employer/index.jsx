@@ -169,6 +169,11 @@ function ManageEmployerComponent() {
     }
   };
 
+  const resetFilterEmployer = () => {
+    setSearchTerm("");
+    setCountry({});
+  };
+
   useEffect(() => {
     if (employerTable.length) {
       dispatch(setLoading(false));
@@ -189,6 +194,7 @@ function ManageEmployerComponent() {
         searchProps={{
           placeholder: "Search Employers",
           onChange: (e) => setSearchTerm(e.target.value),
+          value: searchTerm,
         }}
         selectProps={{
           onChange: (e) => filterJobsCountry(e),
@@ -213,6 +219,15 @@ function ManageEmployerComponent() {
             </>
           ),
         }}
+        jobProps={{
+          title: (
+            <div onClick={() => resetFilterEmployer()}>
+              <span className="d-inline-flex align-items-center me-2"></span>{" "}
+              Reset Filter
+            </div>
+          ),
+        }}
+        job
       />
 
       <DialogBox open={!!deleting} handleClose={() => setDeleting("")}>

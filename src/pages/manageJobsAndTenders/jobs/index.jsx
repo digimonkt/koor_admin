@@ -182,6 +182,11 @@ function ManageJobsComponent() {
     }
   };
 
+  const resetFilterJob = () => {
+    setSearchTerm("");
+    setCountry({});
+  };
+
   useEffect(() => {
     if (jobTable.length) {
       dispatch(setLoading(false));
@@ -191,6 +196,7 @@ function ManageJobsComponent() {
   useEffect(() => {
     manageJobList();
   }, [country, debouncedSearchSkillValue, pages, limit]);
+
   return (
     <>
       <Layout
@@ -203,6 +209,7 @@ function ManageJobsComponent() {
         searchProps={{
           placeholder: "Search Jobs",
           onChange: (e) => setSearchTerm(e.target.value),
+          value: searchTerm,
         }}
         selectProps={{
           onChange: (e) => filterJobsCountry(e),
@@ -229,12 +236,10 @@ function ManageJobsComponent() {
         }}
         jobProps={{
           title: (
-            <>
-              <span className="d-inline-flex align-items-center me-2">
-                <SVG.ExportIcon />
-              </span>{" "}
-              Post new job
-            </>
+            <div onClick={() => resetFilterJob()}>
+              <span className="d-inline-flex align-items-center me-2"></span>{" "}
+              Reset Filter
+            </div>
           ),
         }}
       />
