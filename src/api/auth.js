@@ -8,3 +8,12 @@ export const adminLogin = async (data) => {
   });
   return response;
 };
+
+export const ChangeAdminPassword = async (data) => {
+  const response = await api.request({
+    url: "/v1/admin/change-password",
+    method: "PATCH",
+    data,
+  });
+  return response;
+};

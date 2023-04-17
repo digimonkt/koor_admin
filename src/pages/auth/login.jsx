@@ -13,7 +13,6 @@ import { useDispatch } from "react-redux";
 import { setIsLoggedIn, setRole } from "@redux/slice/user";
 function LoginComponent() {
   const dispatch = useDispatch();
-
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const formik = useFormik({

@@ -938,7 +938,7 @@ hr {
 
   color: #121212;
 }
-.descrition h1 {
+.description h1 {
   font-family: "Poppins";
   font-style: normal;
   font-weight: 600;
@@ -951,7 +951,7 @@ hr {
   margin: 0px 0px 10px 0px;
 }
 
-.descrition p {
+.description p {
   font-family: "Poppins";
   font-style: normal;
   font-weight: 400;
@@ -964,7 +964,7 @@ hr {
   margin: 0px;
 }
 
-.descrition {
+.description {
   margin-bottom: 16px;
 }
 .textdes {
