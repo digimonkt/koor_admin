@@ -196,6 +196,7 @@ function ManageCandidatesComponent() {
         searchProps={{
           placeholder: "Search Candidates",
           onChange: (e) => setSearchTerm(e.target.value),
+          value: searchTerm,
         }}
         selectProps={{
           onChange: (e) => filterJobsCountry(e),

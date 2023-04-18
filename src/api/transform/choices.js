@@ -31,3 +31,11 @@ export const transformCandidatesAPIResponse = (data) => {
     action: data.is_active,
   }));
 };
+
+export const transformOptionsResponse = (data) => {
+  return data.map((data, index) => ({
+    id: data.id,
+    no: index + 1,
+    name: data.title,
+  }));
+};

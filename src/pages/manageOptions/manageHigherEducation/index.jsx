@@ -26,36 +26,6 @@ function manageHigherEducation() {
       renderCell: (item) => {
         return (
           <Stack direction="row" spacing={1} alignItems="center">
-            <>
-              <IconButton
-                // onClick={() => {
-                //   activeDeActiveUser(item);
-                // }}
-                sx={{
-                  "&.MuiIconButton-root": {
-                    background: item.row.action ? "#D5E3F7" : "#D42929",
-                  },
-                  width: 30,
-                  height: 30,
-                  color: "#274593",
-                }}
-              >
-                {item.row.action ? <SVG.ToggleOffIcon /> : <SVG.ToggleOnIcon />}
-              </IconButton>
-            </>
-
-            <IconButton
-              sx={{
-                "&.MuiIconButton-root": {
-                  background: "#D5E3F7",
-                },
-                width: 30,
-                height: 30,
-                color: "#274593",
-              }}
-            >
-              <SVG.EyeIcon />
-            </IconButton>
             <IconButton
               // onClick={() => setDeleting(item.row.id)}
               sx={{
@@ -74,6 +44,7 @@ function manageHigherEducation() {
       },
     },
   ];
+
   const rows = [
     {
       action: true,
@@ -82,6 +53,24 @@ function manageHigherEducation() {
       no: 1,
     },
   ];
+
+  // const eductionList = async () => {
+  //   dispatch(setLoading(true));
+  //   const page = pages;
+  //   const search = debouncedSearchSkillValue || "";
+  //   const response = await manageCategoryApi({ limit, page, search });
+  //   if (response.remote === "success") {
+  //     const formateData = transformOptionsResponse(response.data.results);
+  //     if (!formateData.length) {
+  //       dispatch(setLoading(false));
+  //     }
+  //     setCategoryTable(formateData);
+  //     const totalCounts = Math.ceil(response.data.count / limit);
+  //     setTotalCount(totalCounts);
+  //   } else {
+  //     console.log(response.error);
+  //   }
+  // };
   return (
     <>
       <Layout

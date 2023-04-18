@@ -2,6 +2,7 @@ import DataTable from "@components/dataTable";
 import OptionsFilter from "@components/optionsFilter";
 import { Card, CardContent, Pagination } from "@mui/material";
 import { Stack, styled } from "@mui/system";
+import { useSelector } from "react-redux";
 const TablePagination = styled(Pagination)(() => ({
   " &.MuiPagination-root .MuiPaginationItem-root": {
     minWidth: "36px",
@@ -30,6 +31,8 @@ function Layout({
   inputProps,
   optionsProps,
 }) {
+  const { loading } = useSelector((state) => state.jobsAndTenders);
+
   return (
     <>
       <Stack
@@ -63,6 +66,8 @@ function Layout({
             rows={rows || []}
             columns={columns || []}
             limitProps={limitProps}
+            getRowId={(rows) => rows.id || Math.random()}
+            loader={loading}
           />
         </CardContent>
       </Card>
