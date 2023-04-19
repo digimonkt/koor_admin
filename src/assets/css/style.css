@@ -938,7 +938,7 @@ hr {
 
   color: #121212;
 }
-.descrition h1 {
+.description h1 {
   font-family: "Poppins";
   font-style: normal;
   font-weight: 600;
@@ -951,7 +951,7 @@ hr {
   margin: 0px 0px 10px 0px;
 }
 
-.descrition p {
+.description p {
   font-family: "Poppins";
   font-style: normal;
   font-weight: 400;
@@ -964,7 +964,7 @@ hr {
   margin: 0px;
 }
 
-.descrition {
+.description {
   margin-bottom: 16px;
 }
 .textdes {
@@ -1515,7 +1515,7 @@ span.count {
   border-radius: 8px;
 }
 .sidebar-scroll {
-  height: calc(100vh - 353px);
+  height: calc(100vh - 135px);
 }
 body {
   padding: 0px !important;
@@ -1686,4 +1686,10 @@ input.employersearch {
 .close_icon_circle svg{
 color: red;
 margin-left: 5px;
+}
+.save_btn{
+  display: flex;
+  justify-content: space-between;
+  width: 145px;
+  align-items: center;
 }

@@ -1,0 +1,12 @@
+import ManageSettingsComponent from "./manageSettings";
+import ManageUserRightsComponent from "./manageUserRights";
+import ManagePrivacyPolicyComponent from "./managePrivacyPolicy";
+import ManageSkillsComponent from "./manageSkills";
+import ManageCategoryComponent from "./manageCategory";
+import ManageHigherEducationComponent from "./manageHigherEducation";
+export const ManageSettings = ManageSettingsComponent;
+export const ManageUserRights = ManageUserRightsComponent;
+export const ManagePrivacyPolicy = ManagePrivacyPolicyComponent;
+export const ManageSkills = ManageSkillsComponent;
+export const ManageCategory = ManageCategoryComponent;
+export const manageHigherEducation = ManageHigherEducationComponent;

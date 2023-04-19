@@ -38,6 +38,7 @@ function Layout({
   const dispatch = useDispatch();
   const { loading } = useSelector((state) => state.jobsAndTenders);
   const { countries } = useSelector((state) => state.choice);
+
   useEffect(() => {
     if (!countries.data.length) {
       dispatch(getCountries());
