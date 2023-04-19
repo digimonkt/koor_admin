@@ -51,10 +51,27 @@ export const deleteCategoryApi = async (jobCategoryId) => {
   return response;
 };
 
-export const manageEducation = async ({ limit, page, search, country }) => {
+export const manageEducationApi = async ({ limit, page, search, country }) => {
   const response = await api.request({
-    url: urlcat("/v1/admin/job-category", { limit, page, search, country }),
+    url: urlcat("/v1/admin/education-level", { limit, page, search, country }),
     method: "GET",
+  });
+  return response;
+};
+
+export const addEducationApi = async (data) => {
+  const response = await api.request({
+    url: urlcat("/v1/admin/education-level"),
+    method: "POST",
+    data,
+  });
+  return response;
+};
+
+export const deleteEducationApi = async (educationLevelId) => {
+  const response = await api.request({
+    url: urlcat("/v1/admin/education-level", educationLevelId),
+    method: "DELETE",
   });
   return response;
 };
