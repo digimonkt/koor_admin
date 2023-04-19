@@ -10,6 +10,8 @@ import { MESSAGE_TYPE } from "@utils/enum";
 import { resetToast } from "@redux/slice/toast";
 import { setIsLoggedIn } from "@redux/slice/user";
 import { globalLocalStorage } from "@utils/localStorage";
+import "react-perfect-scrollbar/dist/css/styles.css";
+
 function App() {
   const dispatch = useDispatch();
   const {

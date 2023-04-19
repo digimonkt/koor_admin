@@ -1515,7 +1515,7 @@ span.count {
   border-radius: 8px;
 }
 .sidebar-scroll {
-  height: calc(100vh - 353px);
+  height: calc(100vh - 135px);
 }
 body {
   padding: 0px !important;
