@@ -11,7 +11,7 @@ import { ReactComponent as PrivacyPolicy } from "./privacypolicy.svg";
 import { ReactComponent as UserManagement } from "./user_manage.svg";
 import { ReactComponent as Settings } from "./settings.svg";
 import { ReactComponent as LogOut } from "./logout.svg";
-import { ReactComponent as CeaditIcon } from "./creaditicon.svg";
+import { ReactComponent as CreditIcon } from "./creaditicon.svg";
 import { ReactComponent as ClockIcon } from "./clock.svg";
 import { ReactComponent as GroupUser } from "./group-user.svg";
 import { ReactComponent as WorkIcon } from "./workicon.svg";
@@ -69,7 +69,7 @@ export const SVG = {
   UserManagement,
   Settings,
   LogOut,
-  CeaditIcon,
+  CreditIcon,
   ClockIcon,
   GroupUser,
   WorkIcon,
