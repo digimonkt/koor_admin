@@ -78,7 +78,7 @@ export const MENU_ITEM = [
   {
     id: "13",
     icon: <SVG.Settings />,
-    page: "Manage Settings",
+    page: "Settings",
     url: "/settings",
   },
 ];

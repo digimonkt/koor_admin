@@ -1687,3 +1687,9 @@ input.employersearch {
 color: red;
 margin-left: 5px;
 }
+.save_btn{
+  display: flex;
+  justify-content: space-between;
+  width: 145px;
+  align-items: center;
+}

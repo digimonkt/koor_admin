@@ -53,7 +53,7 @@ const ChangePassword = () => {
             <label>Create new password</label>
 
             <LabeledInput
-              placeholder="*******************"
+              placeholder="New Password"
               type="password"
               className={`${styles.formControl}`}
               {...formik.getFieldProps("newPassword")}
@@ -66,7 +66,7 @@ const ChangePassword = () => {
             <label>Repeat new password</label>
 
             <LabeledInput
-              placeholder="confirm password"
+              placeholder="Confirm password"
               type="password"
               className={`${styles.formControl}`}
               {...formik.getFieldProps("confirmPassword")}
@@ -80,8 +80,8 @@ const ChangePassword = () => {
           <div className={`${styles.showButton}`}>
             <OutlinedButton
               title={
-                <div>
-                  <div>
+                <div className="save_btn">
+                  <div style={{ marginTop: "6px" }}>
                     <SVG.PriorityIcon />
                   </div>
                   <div>SAVE PASSWORD</div>
