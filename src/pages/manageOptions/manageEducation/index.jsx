@@ -9,12 +9,14 @@ import { transformOptionsResponse } from "@api/transform/choices";
 import {
   addEducationApi,
   deleteEducationApi,
+  editEducationApi,
   manageEducationApi,
 } from "@api/manageoptions";
 import { setErrorToast, setSuccessToast } from "@redux/slice/toast";
 import DialogBox from "@components/dialogBox";
 import DeleteCard from "@components/card/deleteCard";
-function manageHigherEducation() {
+import { EditCard } from "@components/card";
+function manageEducation() {
   const dispatch = useDispatch();
   const [educationTable, setEducationTable] = useState([]);
   const [pages, setPages] = useState(1);
@@ -22,6 +24,8 @@ function manageHigherEducation() {
   const [totalCount, setTotalCount] = useState(0);
   const [addEducation, setAddEducation] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
+  const [editEducation, setEditEducation] = useState("");
+  const [editEducationValue, setEditEducationValue] = useState("");
   const [deleteEducation, setDeleteEducation] = useState("");
   const debouncedSearchSkillValue = useDebounce(searchTerm, 500);
   const columns = [
@@ -59,6 +63,20 @@ function manageHigherEducation() {
               }}
             >
               <SVG.DeleteIcon />
+            </IconButton>
+
+            <IconButton
+              onClick={() => handleEdit(item.row)}
+              sx={{
+                "&.MuiIconButton-root": {
+                  background: "#D5E3F7",
+                },
+                width: 30,
+                height: 30,
+                color: "#274593",
+              }}
+            >
+              <SVG.EditIcon />
             </IconButton>
           </Stack>
         );
@@ -112,6 +130,26 @@ function manageHigherEducation() {
     }
   };
 
+  const handleUpdate = async () => {
+    const payload = {
+      title: editEducationValue,
+    };
+
+    const response = await editEducationApi(editEducation, payload);
+    if (response.remote === "success") {
+      eductionList();
+      setEditEducation("");
+      dispatch(setSuccessToast(response.data.message));
+    } else {
+      dispatch(setErrorToast(response.error.errors.title));
+    }
+  };
+
+  const handleEdit = async (item) => {
+    setEditEducation(item.id);
+    setEditEducationValue(item.name);
+  };
+
   useEffect(() => {
     eductionList();
   }, [debouncedSearchSkillValue, pages, limit]);
@@ -146,13 +184,13 @@ function manageHigherEducation() {
         totalCount={totalCount}
         handlePageChange={getPage}
         searchProps={{
-          placeholder: "Search Higher Education",
+          placeholder: "Search  Education",
           onChange: (e) => setSearchTerm(e.target.value),
           value: searchTerm,
         }}
         inputProps={{
           type: "text",
-          placeholder: "Add Higher Education",
+          placeholder: "Add  Education",
           onChange: (e) => setAddEducation(e.target.value),
           value: addEducation,
         }}
@@ -169,7 +207,7 @@ function manageHigherEducation() {
           title: (
             <div onClick={addEducationFunction}>
               <span className="d-inline-flex align-items-center me-2"></span>{" "}
-              Add Higher Education
+              Add Education
             </div>
           ),
         }}
@@ -186,8 +224,21 @@ function manageHigherEducation() {
           handleDelete={handleDelete}
         />
       </DialogBox>
+
+      <DialogBox
+        open={!!editEducation}
+        handleClose={() => setEditEducation("")}
+      >
+        <EditCard
+          title="Edit Category"
+          handleCancel={() => setEditEducation("")}
+          setEditValue={setEditEducationValue}
+          editValue={editEducationValue}
+          handleUpdate={handleUpdate}
+        />
+      </DialogBox>
     </>
   );
 }
 
-export default manageHigherEducation;
+export default manageEducation;

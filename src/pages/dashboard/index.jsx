@@ -7,10 +7,11 @@ import Donut from "./dount/Donut";
 import { getUserCountApi } from "@api/dashboard";
 const DashboardComponent = () => {
   const [userList, setUserList] = useState([]);
-  const [totalUsers, setTotalUsers] = useState("");
-  const [jobSeekersCount, setJobSeekersCount] = useState("");
-  const [employersCount, setEmployersCount] = useState("");
-  const [vendorsCount, setVendorsCount] = useState("");
+  const [totalUsers, setTotalUsers] = useState(0);
+  const [jobSeekersCount, setJobSeekersCount] = useState(0);
+  const [employersCount, setEmployersCount] = useState(0);
+  const [vendorsCount, setVendorsCount] = useState(10);
+  const [seriesData, setSeriesData] = useState([]);
 
   const userCount = async () => {
     const response = await getUserCountApi();
@@ -42,7 +43,11 @@ const DashboardComponent = () => {
       setVendorsCount(response.data.vendors);
       setJobSeekersCount(response.data.job_seekers);
       setEmployersCount(response.data.employers);
-      console.log(response.data);
+      setSeriesData([
+        response.data.vendors,
+        response.data.job_seekers,
+        response.data.employers,
+      ]);
     } else {
       console.log(response.error);
     }
@@ -56,7 +61,6 @@ const DashboardComponent = () => {
   useEffect(() => {
     userCount();
   }, []);
-
   return (
     <Fragment>
       <div className="main-admin">
@@ -95,37 +99,39 @@ const DashboardComponent = () => {
                   },
                 }}
               >
-                <Donut
-                  title="Koor users"
-                  total={totalUsers}
-                  user="Total users"
-                  series={[70, 70, 70]}
-                  colors={["#4267B2", "#4CAF50", "#FFA500"]}
-                  content={
-                    <>
-                      <li>
-                        <b>{jobSeekersCount}</b> – JobSeekers{" "}
-                        <small>
-                          ({getPercentage(jobSeekersCount, totalUsers)}% )
-                        </small>
-                      </li>
-                      <li>
-                        <b>{employersCount}</b> – Employers{" "}
-                        <small>
-                          {" "}
-                          ({getPercentage(employersCount, totalUsers)}% )
-                        </small>
-                      </li>
-                      <li>
-                        <b>{vendorsCount}</b> – Vendors{" "}
-                        <small>
-                          {" "}
-                          ({getPercentage(vendorsCount, totalUsers)}% )
-                        </small>
-                      </li>
-                    </>
-                  }
-                />
+                {seriesData.length > 0 && (
+                  <Donut
+                    title="Koor users"
+                    total={totalUsers}
+                    user="Total users"
+                    series={seriesData}
+                    colors={["#4267B2", "#4CAF50", "#FFA500"]}
+                    content={
+                      <>
+                        <li>
+                          <b>{jobSeekersCount}</b> – JobSeekers{" "}
+                          <small>
+                            ({getPercentage(jobSeekersCount, totalUsers)}% )
+                          </small>
+                        </li>
+                        <li>
+                          <b>{employersCount}</b> – Employers{" "}
+                          <small>
+                            {" "}
+                            ({getPercentage(employersCount, totalUsers)}% )
+                          </small>
+                        </li>
+                        <li>
+                          <b>{vendorsCount}</b> – Vendors{" "}
+                          <small>
+                            {" "}
+                            ({getPercentage(vendorsCount, totalUsers)}% )
+                          </small>
+                        </li>
+                      </>
+                    }
+                  />
+                )}
               </CardContent>
             </Card>
           </Grid>

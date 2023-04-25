@@ -187,6 +187,19 @@ function ManageJobsComponent() {
     setCountry({});
   };
 
+  const downloadJobCSV = async () => {
+    const action = "download";
+    const response = await manageJobData({ action });
+    if (response.remote === "success") {
+      window.open(
+        process.env.REACT_APP_BACKEND_URL + response.data.url,
+        "_blank"
+      );
+    } else {
+      console.log(response.error);
+    }
+  };
+
   useEffect(() => {
     if (jobTable.length) {
       dispatch(setLoading(false));
@@ -226,12 +239,12 @@ function ManageJobsComponent() {
         }}
         csvProps={{
           title: (
-            <>
+            <div onClick={() => downloadJobCSV()}>
               <span className="d-inline-flex align-items-center me-2">
                 <SVG.ExportIcon />
               </span>
               Export CSV
-            </>
+            </div>
           ),
         }}
         jobProps={{

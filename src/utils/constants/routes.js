@@ -12,7 +12,7 @@ import {
   ManageUserRights,
   ManagePrivacyPolicy,
   ManageCategory,
-  manageHigherEducation,
+  manageEducation,
 } from "@pages/manageOptions";
 
 export const PUBLIC_ROUTE = [];
@@ -64,9 +64,9 @@ export const AUTHENTICATED_ROUTE = [
     element: ManageCategory,
   },
   {
-    id: "manage-higher-education",
-    path: "/manage-higher-education",
-    element: manageHigherEducation,
+    id: "manage-education",
+    path: "/manage-education",
+    element: manageEducation,
   },
   {
     id: "manage-settings",

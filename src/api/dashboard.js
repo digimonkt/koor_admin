@@ -8,3 +8,11 @@ export const getUserCountApi = async () => {
   });
   return response;
 };
+
+export const getDashboardApi = async (period) => {
+  const response = await api.request({
+    url: urlcat("/v1/admin/dashboard", { period }),
+    method: "GET",
+  });
+  return response;
+};

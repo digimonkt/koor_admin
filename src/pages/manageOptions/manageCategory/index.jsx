@@ -10,10 +10,12 @@ import DeleteCard from "@components/card/deleteCard";
 import {
   addCategoryApi,
   deleteCategoryApi,
+  editCategoryApi,
   manageCategoryApi,
 } from "@api/manageoptions";
 import { transformOptionsResponse } from "@api/transform/choices";
 import { useDebounce } from "usehooks-ts";
+import { EditCard } from "@components/card";
 function ManageCategoryComponent() {
   const dispatch = useDispatch();
   const [categoryTable, setCategoryTable] = useState([]);
@@ -23,6 +25,8 @@ function ManageCategoryComponent() {
   const [addCategory, setAddCategory] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [deleteCategory, setDeleteCategory] = useState("");
+  const [editCategory, setEditCategory] = useState("");
+  const [editCategoryValue, setCategoryValue] = useState("");
   const debouncedSearchSkillValue = useDebounce(searchTerm, 500);
 
   const columns = [
@@ -60,6 +64,20 @@ function ManageCategoryComponent() {
               }}
             >
               <SVG.DeleteIcon />
+            </IconButton>
+
+            <IconButton
+              onClick={() => handleEdit(item.row)}
+              sx={{
+                "&.MuiIconButton-root": {
+                  background: "#D5E3F7",
+                },
+                width: 30,
+                height: 30,
+                color: "#274593",
+              }}
+            >
+              <SVG.EditIcon />
             </IconButton>
           </Stack>
         );
@@ -113,6 +131,25 @@ function ManageCategoryComponent() {
     }
   };
 
+  const handleEdit = async (item) => {
+    setEditCategory(item.id);
+    setCategoryValue(item.name);
+  };
+
+  const handleUpdate = async () => {
+    const payload = {
+      title: editCategoryValue,
+    };
+
+    const response = await editCategoryApi(editCategory, payload);
+    if (response.remote === "success") {
+      categoryList();
+      setEditCategory("");
+      dispatch(setSuccessToast(response.data.message));
+    } else {
+      dispatch(setErrorToast(response.error.errors.title));
+    }
+  };
   useEffect(() => {
     categoryList();
   }, [debouncedSearchSkillValue, pages, limit]);
@@ -184,6 +221,16 @@ function ManageCategoryComponent() {
           content="Are you sure you want to delete Category?"
           handleCancel={() => setDeleteCategory("")}
           handleDelete={handleDelete}
+        />
+      </DialogBox>
+
+      <DialogBox open={!!editCategory} handleClose={() => setEditCategory("")}>
+        <EditCard
+          title="Edit Category"
+          handleCancel={() => setEditCategory("")}
+          setEditValue={setCategoryValue}
+          editValue={editCategoryValue}
+          handleUpdate={handleUpdate}
         />
       </DialogBox>
     </>

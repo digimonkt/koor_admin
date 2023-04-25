@@ -47,8 +47,8 @@ export const MENU_ITEM = [
   {
     id: "8",
     icon: <SVG.FinancialTools />,
-    page: "Manage higher education",
-    url: "/manage-higher-education",
+    page: "Manage  education",
+    url: "/manage-education",
   },
   {
     id: "9",

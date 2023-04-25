@@ -75,3 +75,30 @@ export const deleteEducationApi = async (educationLevelId) => {
   });
   return response;
 };
+
+export const editSkillApi = async (skillId, data) => {
+  const response = await api.request({
+    url: urlcat("/v1/admin/skills", skillId),
+    method: "PUT",
+    data,
+  });
+  return response;
+};
+
+export const editCategoryApi = async (jobCategoryId, data) => {
+  const response = await api.request({
+    url: urlcat("/v1/admin/job-category", jobCategoryId),
+    method: "PUT",
+    data,
+  });
+  return response;
+};
+
+export const editEducationApi = async (educationLevelId, data) => {
+  const response = await api.request({
+    url: urlcat("/v1/admin/education-level", educationLevelId),
+    method: "PUT",
+    data,
+  });
+  return response;
+};

@@ -32,6 +32,7 @@ const Donut = ({ title, total, user, series, colors, content }) => {
   const handleChange = (event) => {
     setIsSelect(event.target.value);
   };
+
   const [state] = React.useState({
     series,
     options: {
@@ -41,7 +42,7 @@ const Donut = ({ title, total, user, series, colors, content }) => {
       dataLabels: {
         enabled: false,
       },
-      // labels: ["blue", "green", "orange"],
+      labels: ["Vendors", "JobSeekers", "Employers"],
       plotOptions: {
         pie: {
           donut: {
@@ -81,6 +82,7 @@ const Donut = ({ title, total, user, series, colors, content }) => {
       ],
     },
   });
+
   return (
     <div className={`${styles.chartContent}`}>
       <Stack

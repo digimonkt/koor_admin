@@ -4,6 +4,7 @@ import { SVG } from "@assets/svg";
 import { IconButton, Stack } from "@mui/material";
 import { useDispatch } from "react-redux";
 import {
+  editSkillApi,
   createSkillApi,
   manageSkillApi,
   skillDeleteApi,
@@ -13,6 +14,7 @@ import { transformOptionsResponse } from "@api/transform/choices";
 import DialogBox from "@components/dialogBox";
 import { setErrorToast, setSuccessToast } from "@redux/slice/toast";
 import DeleteCard from "@components/card/deleteCard";
+import EditCard from "@components/card/editCard";
 import { useDebounce } from "usehooks-ts";
 function ManageSkillsComponent() {
   const dispatch = useDispatch();
@@ -20,6 +22,8 @@ function ManageSkillsComponent() {
   const [pages, setPages] = useState(1);
   const [limit, setLimit] = useState(10);
   const [addSkill, setAddSkill] = useState("");
+  const [editSkill, setEditSkill] = useState("");
+  const [editSkillValue, setEditSkillValue] = useState("");
   const [totalCount, setTotalCount] = useState(0);
   const [deleteSkill, setDeleteSkill] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
@@ -61,6 +65,20 @@ function ManageSkillsComponent() {
             >
               <SVG.DeleteIcon />
             </IconButton>
+
+            <IconButton
+              onClick={() => handleEdit(item.row)}
+              sx={{
+                "&.MuiIconButton-root": {
+                  background: "#D5E3F7",
+                },
+                width: 30,
+                height: 30,
+                color: "#274593",
+              }}
+            >
+              <SVG.EditIcon />
+            </IconButton>
           </Stack>
         );
       },
@@ -70,7 +88,6 @@ function ManageSkillsComponent() {
   const skillsList = async () => {
     dispatch(setLoading(true));
     const page = pages;
-    console.log(page);
     const search = debouncedSearchSkillValue || "";
     const response = await manageSkillApi({ limit, page, search });
     if (response.remote === "success") {
@@ -126,6 +143,25 @@ function ManageSkillsComponent() {
     }
   };
 
+  const handleEdit = async (item) => {
+    setEditSkill(item.id);
+    setEditSkillValue(item.name);
+  };
+
+  const handleUpdate = async () => {
+    const payload = {
+      title: editSkillValue,
+    };
+    const response = await editSkillApi(editSkill, payload);
+    if (response.remote === "success") {
+      skillsList();
+      setEditSkill("");
+      dispatch(setSuccessToast(response.data.message));
+    } else {
+      dispatch(setErrorToast(response.error.errors.title));
+    }
+  };
+
   useEffect(() => {
     skillsList();
   }, [debouncedSearchSkillValue, pages, limit]);
@@ -172,13 +208,22 @@ function ManageSkillsComponent() {
           ),
         }}
       />
-
       <DialogBox open={!!deleteSkill} handleClose={() => setDeleteSkill("")}>
         <DeleteCard
           title="Delete Skill"
           content="Are you sure you want to delete Skill?"
           handleCancel={() => setDeleteSkill("")}
           handleDelete={handleDelete}
+        />
+      </DialogBox>
+
+      <DialogBox open={!!editSkill} handleClose={() => setEditSkill("")}>
+        <EditCard
+          title="Edit Skill"
+          handleCancel={() => setEditSkill("")}
+          setEditValue={setEditSkillValue}
+          editValue={editSkillValue}
+          handleUpdate={handleUpdate}
         />
       </DialogBox>
     </>

@@ -174,6 +174,18 @@ function ManageEmployerComponent() {
     setCountry({});
   };
 
+  const downloadEmployerCSV = async () => {
+    const action = "download";
+    const response = await manageEmployer({ action });
+    if (response.remote === "success") {
+      window.open(
+        process.env.REACT_APP_BACKEND_URL + response.data.url,
+        "_blank"
+      );
+    } else {
+      console.log(response.error);
+    }
+  };
   useEffect(() => {
     if (employerTable.length) {
       dispatch(setLoading(false));
@@ -211,12 +223,12 @@ function ManageEmployerComponent() {
         }}
         csvProps={{
           title: (
-            <>
+            <div onClick={() => downloadEmployerCSV()}>
               <span className="d-inline-flex align-items-center me-2">
                 <SVG.ExportIcon />
               </span>
               Export CSV
-            </>
+            </div>
           ),
         }}
         jobProps={{

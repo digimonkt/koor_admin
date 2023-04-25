@@ -1,9 +1,10 @@
 import { FormControl, MenuItem, Select, Stack } from "@mui/material";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ReactApexChart from "react-apexcharts";
 import { styled } from "@mui/material/styles";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import styles from "../dount/styles.module.css";
+import { getDashboardApi } from "@api/dashboard";
 export const SelectBox = styled(Select)`
   & .MuiSelect-select {
     background: #f0f0f0;
@@ -28,11 +29,19 @@ export const SelectBox = styled(Select)`
 `;
 
 const ColumChart = () => {
-  const [isSelect, setIsSelect] = useState("");
+  const [isSelect, setIsSelect] = useState("this week");
+  const [isApplication, setIsApplication] = useState("");
+  const employerDetails = async () => {
+    const response = await getDashboardApi(isSelect);
+    if (response.remote === "success") {
+      setIsApplication(response.data.jobs);
+    }
+  };
 
   const handleChange = (event) => {
     setIsSelect(event.target.value);
   };
+
   const [state] = React.useState({
     series: [
       {
@@ -176,6 +185,10 @@ const ColumChart = () => {
       },
     },
   });
+
+  useEffect(() => {
+    employerDetails();
+  }, [handleChange]);
   return (
     <>
       <div className={`${styles.chartContent}`}>
@@ -204,26 +217,26 @@ const ColumChart = () => {
               IconComponent={KeyboardArrowUpIcon}
               displayEmpty
             >
-              <MenuItem value="">This Week</MenuItem>
-              <MenuItem value={20}>Last Month</MenuItem>
-              <MenuItem value={30}>year</MenuItem>
+              <MenuItem value="this week">This Week</MenuItem>
+              <MenuItem value="last month">Last Month</MenuItem>
+              <MenuItem value="this year">This year</MenuItem>
             </SelectBox>
           </FormControl>
         </Stack>
         <Stack direction="row" spacing={5} sx={{ marginBottom: "55px" }}>
           <div className={`${styles.views}`}>
             <span
-              className={`${styles.blueview}`}
+              className={`${styles.blueView}`}
               style={{ borderColor: "#274593" }}
             ></span>
             <b>345 </b>views
           </div>
           <div className={`${styles.views}`}>
             <span
-              className={`${styles.blueview}`}
+              className={`${styles.blueView}`}
               style={{ borderColor: "#4CAF50" }}
             ></span>
-            <b>75 </b>Applications
+            <b>{isApplication} </b>Applications
           </div>
         </Stack>
         <ReactApexChart
