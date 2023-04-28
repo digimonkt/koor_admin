@@ -47,36 +47,72 @@ export const MENU_ITEM = [
   {
     id: "8",
     icon: <SVG.FinancialTools />,
-    page: "Manage higher education",
-    url: "/manage-higher-education",
+    page: "Manage  education",
+    url: "/manage-education",
   },
+
   {
     id: "9",
+    icon: <SVG.FinancialTools />,
+    page: "Manage  country",
+    url: "/manage-country",
+  },
+
+  {
+    id: "10",
+    icon: <SVG.FinancialTools />,
+    page: "Manage  city",
+    url: "/manage-city",
+  },
+
+  {
+    id: "11",
+    icon: <SVG.FinancialTools />,
+    page: "Manage job seeker category",
+    url: "/manage-job-seeker-category",
+  },
+
+  {
+    id: "12",
+    icon: <SVG.FinancialTools />,
+    page: "Manage job sub category",
+    url: "/manage-job-sub-category",
+  },
+
+  {
+    id: "13",
+    icon: <SVG.FinancialTools />,
+    page: "Manage language",
+    url: "/manage-language",
+  },
+
+  {
+    id: "14",
     icon: <SVG.Report />,
     page: "Reports",
     url: "/reports",
   },
   {
-    id: "10",
+    id: "15",
     icon: <SVG.UserRole />,
     page: "User rights",
     url: "/user-rights",
   },
   {
-    id: "11",
+    id: "16",
     icon: <SVG.PrivacyPolicy />,
     page: "Privacy policy",
     url: "/privacy-policy",
     menuBorder: styles.borderBottom,
   },
   {
-    id: "12",
+    id: "17",
     icon: <SVG.UserManagement />,
     page: "User management",
     url: "/user-management",
   },
   {
-    id: "13",
+    id: "17",
     icon: <SVG.Settings />,
     page: "Settings",
     url: "/settings",

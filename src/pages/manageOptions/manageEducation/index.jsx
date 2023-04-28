@@ -3,32 +3,31 @@ import Layout from "../layout";
 import { SVG } from "@assets/svg";
 import { IconButton, Stack } from "@mui/material";
 import { useDispatch } from "react-redux";
-import {
-  editSkillApi,
-  createSkillApi,
-  manageSkillApi,
-  skillDeleteApi,
-} from "@api/manageoptions";
 import { setLoading } from "@redux/slice/jobsAndTenders";
-import { transformOptionsResponse } from "@api/transform/choices";
-import DialogBox from "@components/dialogBox";
-import { setErrorToast, setSuccessToast } from "@redux/slice/toast";
-import DeleteCard from "@components/card/deleteCard";
-import EditCard from "@components/card/editCard";
 import { useDebounce } from "usehooks-ts";
-function ManageSkillsComponent() {
+import { transformOptionsResponse } from "@api/transform/choices";
+import {
+  addEducationApi,
+  deleteEducationApi,
+  editEducationApi,
+  manageEducationApi,
+} from "@api/manageoptions";
+import { setErrorToast, setSuccessToast } from "@redux/slice/toast";
+import DialogBox from "@components/dialogBox";
+import DeleteCard from "@components/card/deleteCard";
+import { EditCard } from "@components/card";
+function manageEducation() {
   const dispatch = useDispatch();
-  const [skillsTable, setSkillsTable] = useState([]);
+  const [educationTable, setEducationTable] = useState([]);
   const [pages, setPages] = useState(1);
   const [limit, setLimit] = useState(10);
-  const [addSkill, setAddSkill] = useState("");
-  const [editSkill, setEditSkill] = useState("");
-  const [editSkillValue, setEditSkillValue] = useState("");
   const [totalCount, setTotalCount] = useState(0);
-  const [deleteSkill, setDeleteSkill] = useState("");
+  const [addEducation, setAddEducation] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
-  const debouncedSearchSkillValue = useDebounce(searchTerm, 500);
-
+  const [editEducation, setEditEducation] = useState("");
+  const [editEducationValue, setEditEducationValue] = useState("");
+  const [deleteEducation, setDeleteEducation] = useState("");
+  const debouncedSearchEducationValue = useDebounce(searchTerm, 500);
   const columns = [
     {
       id: "1",
@@ -38,11 +37,11 @@ function ManageSkillsComponent() {
     },
 
     {
-      id: "3",
       field: "name",
       headerName: "Name",
-      width: 180,
       sortable: true,
+      width: 180,
+      id: "3",
     },
 
     {
@@ -53,7 +52,7 @@ function ManageSkillsComponent() {
         return (
           <Stack direction="row" spacing={1} alignItems="center">
             <IconButton
-              onClick={() => setDeleteSkill(item.row.id)}
+              onClick={() => setDeleteEducation(item.row.id)}
               sx={{
                 "&.MuiIconButton-root": {
                   background: "#D5E3F7",
@@ -85,17 +84,17 @@ function ManageSkillsComponent() {
     },
   ];
 
-  const skillsList = async () => {
+  const eductionList = async () => {
     dispatch(setLoading(true));
     const page = pages;
-    const search = debouncedSearchSkillValue || "";
-    const response = await manageSkillApi({ limit, page, search });
+    const search = debouncedSearchEducationValue || "";
+    const response = await manageEducationApi({ limit, page, search });
     if (response.remote === "success") {
       const formateData = transformOptionsResponse(response.data.results);
       if (!formateData.length) {
         dispatch(setLoading(false));
       }
-      setSkillsTable(formateData);
+      setEducationTable(formateData);
       const totalCounts = Math.ceil(response.data.count / limit);
       setTotalCount(totalCounts);
     } else {
@@ -103,37 +102,71 @@ function ManageSkillsComponent() {
     }
   };
 
-  const addSkillFunction = async () => {
+  function getPage(_, page) {
+    setPages(page);
+  }
+
+  const addEducationFunction = async () => {
     const payload = {
-      title: addSkill,
+      title: addEducation,
     };
-    const response = await createSkillApi(payload);
+
+    const response = await addEducationApi(payload);
     if (response.remote === "success") {
-      const temp = [...skillsTable];
+      const temp = [...educationTable];
       temp.push({
         id: response.data.data.id,
         no: temp.length + 1,
         name: response.data.data.title,
       });
-      setSkillsTable([...temp]);
-      setAddSkill("");
-      dispatch(setSuccessToast("Add Category SuccessFully"));
+      setEducationTable([...temp]);
+      setAddEducation("");
+      dispatch(setSuccessToast("Add Education SuccessFully"));
     } else {
       console.log(response.error);
       dispatch(setErrorToast("Something went wrong"));
     }
   };
-  function getPage(_, page) {
-    setPages(page);
-  }
+
+  const handleUpdate = async () => {
+    const payload = {
+      title: editEducationValue,
+    };
+
+    const response = await editEducationApi(editEducation, payload);
+    if (response.remote === "success") {
+      eductionList();
+      setEditEducation("");
+      dispatch(setSuccessToast(response.data.message));
+    } else {
+      dispatch(setErrorToast(response.error.errors.title));
+    }
+  };
+
+  const handleEdit = async (item) => {
+    setEditEducation(item.id);
+    setEditEducationValue(item.name);
+  };
+
+  useEffect(() => {
+    eductionList();
+  }, [debouncedSearchEducationValue, pages, limit]);
+
+  useEffect(() => {
+    if (educationTable.length) {
+      dispatch(setLoading(false));
+    }
+  }, [educationTable]);
 
   const handleDelete = async () => {
     setLoading(false);
-    const response = await skillDeleteApi(deleteSkill);
+    const response = await deleteEducationApi(deleteEducation);
     if (response.remote === "success") {
-      const newSkillTable = skillsTable.filter((emp) => emp.id !== deleteSkill);
-      setSkillsTable(newSkillTable);
-      setDeleteSkill("");
+      const newCategoryTable = educationTable.filter(
+        (emp) => emp.id !== deleteEducation
+      );
+      setEducationTable(newCategoryTable);
+      setDeleteEducation("");
       dispatch(setSuccessToast("Delete Skill SuccessFully"));
     } else {
       dispatch(setErrorToast("Something went wrong"));
@@ -141,52 +174,23 @@ function ManageSkillsComponent() {
     }
   };
 
-  const handleEdit = async (item) => {
-    setEditSkill(item.id);
-    setEditSkillValue(item.name);
-  };
-
-  const handleUpdate = async () => {
-    const payload = {
-      title: editSkillValue,
-    };
-    const response = await editSkillApi(editSkill, payload);
-    if (response.remote === "success") {
-      skillsList();
-      setEditSkill("");
-      dispatch(setSuccessToast(response.data.message));
-    } else {
-      dispatch(setErrorToast(response.error.errors.title));
-    }
-  };
-
-  useEffect(() => {
-    skillsList();
-  }, [debouncedSearchSkillValue, pages, limit]);
-
-  useEffect(() => {
-    if (skillsTable.length) {
-      dispatch(setLoading(false));
-    }
-  }, [skillsTable]);
-
   return (
     <>
       <Layout
-        rows={skillsTable}
+        rows={educationTable}
         columns={columns}
         totalCount={totalCount}
         handlePageChange={getPage}
         searchProps={{
-          placeholder: "Search Skills",
+          placeholder: "Search  Education",
           onChange: (e) => setSearchTerm(e.target.value),
           value: searchTerm,
         }}
         inputProps={{
           type: "text",
-          placeholder: "Add Skill",
-          onChange: (e) => setAddSkill(e.target.value),
-          value: addSkill,
+          placeholder: "Add  Education",
+          onChange: (e) => setAddEducation(e.target.value),
+          value: addEducation,
         }}
         limitProps={{
           value: limit,
@@ -199,28 +203,35 @@ function ManageSkillsComponent() {
         }}
         optionsProps={{
           title: (
-            <div onClick={addSkillFunction}>
+            <div onClick={addEducationFunction}>
               <span className="d-inline-flex align-items-center me-2"></span>{" "}
-              Add Skill
+              Add Education
             </div>
           ),
         }}
       />
-      <DialogBox open={!!deleteSkill} handleClose={() => setDeleteSkill("")}>
+
+      <DialogBox
+        open={!!deleteEducation}
+        handleClose={() => setDeleteEducation("")}
+      >
         <DeleteCard
-          title="Delete Skill"
-          content="Are you sure you want to delete Skill?"
-          handleCancel={() => setDeleteSkill("")}
+          title="Delete Category"
+          content="Are you sure you want to delete Category?"
+          handleCancel={() => setDeleteEducation("")}
           handleDelete={handleDelete}
         />
       </DialogBox>
 
-      <DialogBox open={!!editSkill} handleClose={() => setEditSkill("")}>
+      <DialogBox
+        open={!!editEducation}
+        handleClose={() => setEditEducation("")}
+      >
         <EditCard
-          title="Edit Skill"
-          handleCancel={() => setEditSkill("")}
-          setEditValue={setEditSkillValue}
-          editValue={editSkillValue}
+          title="Edit Category"
+          handleCancel={() => setEditEducation("")}
+          setEditValue={setEditEducationValue}
+          editValue={editEducationValue}
           handleUpdate={handleUpdate}
         />
       </DialogBox>
@@ -228,4 +239,4 @@ function ManageSkillsComponent() {
   );
 }
 
-export default ManageSkillsComponent;
+export default manageEducation;

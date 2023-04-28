@@ -36,7 +36,6 @@ function LoginComponent() {
         dispatch(setRole(USER_ROLES.admin));
         navigate("/dashboard");
       } else {
-        console.log(response);
         formik.setErrors({ password: "Invalid Credentials" });
       }
     },

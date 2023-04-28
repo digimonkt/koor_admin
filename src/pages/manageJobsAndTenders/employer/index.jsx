@@ -20,7 +20,7 @@ function ManageEmployerComponent() {
   const [totalCount, setTotalCount] = useState(0);
   const [searchTerm, setSearchTerm] = useState("");
   const [country, setCountry] = useState({});
-  const debouncedSearchSkillValue = useDebounce(searchTerm, 500);
+  const debouncedSearchEmployerValue = useDebounce(searchTerm, 500);
 
   const columns = [
     {
@@ -108,7 +108,7 @@ function ManageEmployerComponent() {
   const employerList = async () => {
     dispatch(setLoading(true));
     const page = pages;
-    const search = debouncedSearchSkillValue || "";
+    const search = debouncedSearchEmployerValue || "";
     const response = await manageEmployer({
       limit,
       page,
@@ -174,6 +174,18 @@ function ManageEmployerComponent() {
     setCountry({});
   };
 
+  const downloadEmployerCSV = async () => {
+    const action = "download";
+    const response = await manageEmployer({ action });
+    if (response.remote === "success") {
+      window.open(
+        process.env.REACT_APP_BACKEND_URL + response.data.url,
+        "_blank"
+      );
+    } else {
+      console.log(response.error);
+    }
+  };
   useEffect(() => {
     if (employerTable.length) {
       dispatch(setLoading(false));
@@ -182,7 +194,7 @@ function ManageEmployerComponent() {
 
   useEffect(() => {
     employerList();
-  }, [country, debouncedSearchSkillValue, pages, limit]);
+  }, [country, debouncedSearchEmployerValue, pages, limit]);
   return (
     <>
       <Layout
@@ -211,12 +223,12 @@ function ManageEmployerComponent() {
         }}
         csvProps={{
           title: (
-            <>
+            <div onClick={() => downloadEmployerCSV()}>
               <span className="d-inline-flex align-items-center me-2">
                 <SVG.ExportIcon />
               </span>
               Export CSV
-            </>
+            </div>
           ),
         }}
         jobProps={{

@@ -1,15 +1,53 @@
 import React from "react";
 import { SolidButton } from "@components/button";
 import { SearchInput, LabeledInput } from "@components/input";
-const OptionsFilter = ({ searchProps, inputProps, optionsProps }) => {
+import SelectWithSearch from "@components/input/selectWithsearch";
+
+const OptionsFilter = ({
+  searchProps,
+  inputProps,
+  optionsProps,
+  selectProps,
+  country,
+  selectPropsCities,
+  city,
+  selectPropsCountry,
+}) => {
   return (
     <>
-      <SearchInput
-        placeholder="Search skills"
-        widthInput="100%"
-        {...searchProps}
-      />
-      <LabeledInput placeholder="skill Level" type="text" {...inputProps} />
+      <div>
+        {country ? (
+          <>
+            <SelectWithSearch title="Select Country" {...selectPropsCountry} />
+          </>
+        ) : city ? (
+          <div>
+            <SelectWithSearch
+              title="Select Country"
+              value=""
+              {...selectProps}
+            />
+            <SelectWithSearch
+              title="Select City"
+              value=""
+              {...selectPropsCities}
+            />
+          </div>
+        ) : (
+          <div>
+            <SearchInput
+              placeholder="Search skills"
+              widthInput="100%"
+              {...searchProps}
+            />
+            <LabeledInput
+              placeholder="skill Level"
+              type="text"
+              {...inputProps}
+            />
+          </div>
+        )}
+      </div>
       <SolidButton
         sx={{
           background: "#fff",

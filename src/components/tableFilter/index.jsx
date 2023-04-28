@@ -1,6 +1,6 @@
+import React from "react";
 import { SolidButton } from "@components/button";
 import { SearchInput, SelectInput } from "@components/input";
-import React from "react";
 
 function TableFilter({ searchProps, selectProps, csvProps, jobProps, job }) {
   return (

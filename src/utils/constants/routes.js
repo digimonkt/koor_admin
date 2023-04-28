@@ -12,8 +12,13 @@ import {
   ManageUserRights,
   ManagePrivacyPolicy,
   ManageCategory,
-  manageHigherEducation,
+  manageEducation,
+  ManageJobSeekerCategory,
+  ManageJobSeekerSubCategory,
+  ManageLanguage,
 } from "@pages/manageOptions";
+import ManageCity from "@pages/manageOptions/manageCity";
+import ManageCountry from "@pages/manageOptions/manageCountry";
 
 export const PUBLIC_ROUTE = [];
 
@@ -64,14 +69,42 @@ export const AUTHENTICATED_ROUTE = [
     element: ManageCategory,
   },
   {
-    id: "manage-higher-education",
-    path: "/manage-higher-education",
-    element: manageHigherEducation,
+    id: "manage-education",
+    path: "/manage-education",
+    element: manageEducation,
   },
   {
     id: "manage-settings",
     path: "/settings",
     element: ManageSettings,
+  },
+  {
+    id: "manage-country",
+    path: "/manage-country",
+    element: ManageCountry,
+  },
+  {
+    id: "manage-city",
+    path: "/manage-city",
+    element: ManageCity,
+  },
+
+  {
+    id: "manage-job-seeker-category",
+    path: "/manage-job-seeker-category",
+    element: ManageJobSeekerCategory,
+  },
+
+  {
+    id: "manage-job-sub-category",
+    path: "/manage-job-sub-category",
+    element: ManageJobSeekerSubCategory,
+  },
+
+  {
+    id: "manage-language",
+    path: "/manage-language",
+    element: ManageLanguage,
   },
 ];
 

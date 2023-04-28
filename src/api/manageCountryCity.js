@@ -1,18 +1,19 @@
 import api from ".";
 import urlcat from "urlcat";
 
-export const getUserCountApi = async () => {
+export const getWorldCountryApi = async () => {
   const response = await api.request({
-    url: urlcat("/v1/admin/users-count"),
+    url: urlcat("/v1/admin/world-country"),
     method: "GET",
   });
   return response;
 };
 
-export const getDashboardApi = async (period) => {
+export const addCountriesApi = async (data) => {
   const response = await api.request({
-    url: urlcat("/v1/admin/dashboard", { period }),
-    method: "GET",
+    url: "/v1/admin/country",
+    method: "POST",
+    data,
   });
   return response;
 };
