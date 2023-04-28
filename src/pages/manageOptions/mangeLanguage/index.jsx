@@ -119,7 +119,6 @@ function ManageLanguage() {
         no: temp.length + 1,
         name: response.data.data.title,
       });
-      console.log({ temp });
       setLanguageTable([...temp]);
       setAddLanguage("");
       dispatch(setSuccessToast("Add language SuccessFully"));
