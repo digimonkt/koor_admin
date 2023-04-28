@@ -102,3 +102,69 @@ export const editEducationApi = async (educationLevelId, data) => {
   });
   return response;
 };
+
+export const getJobSeekerCategoryApi = async ({ limit, page, search }) => {
+  const response = await api.request({
+    url: urlcat("/v1/admin/job-seeker-category", { limit, page, search }),
+    method: "GET",
+  });
+  return response;
+};
+
+export const addJobSeekerCategoryApi = async (data) => {
+  const response = await api.request({
+    url: urlcat("/v1/admin/job-seeker-category"),
+    method: "POST",
+    data,
+  });
+  return response;
+};
+
+export const editJobSeekerCategoryApi = async (jobSeekerCategoryId) => {
+  const response = await api.request({
+    url: urlcat("/v1/admin/job-seeker-category", jobSeekerCategoryId),
+    method: "PUT",
+  });
+  return response;
+};
+
+export const deleteJobSeekerCategoryApi = async (jobSeekerCategoryId) => {
+  const response = await api.request({
+    url: urlcat("/v1/admin/job-seeker-category", jobSeekerCategoryId),
+    method: "DELETE",
+  });
+  return response;
+};
+
+export const getLanguageApi = async ({ limit, page, search }) => {
+  const response = await api.request({
+    url: urlcat("/v1/admin/language", { limit, page, search }),
+    method: "GET",
+  });
+  return response;
+};
+
+export const addLanguageApi = async (data) => {
+  const response = await api.request({
+    url: urlcat("/v1/admin/language"),
+    method: "POST",
+    data,
+  });
+  return response;
+};
+
+export const editLanguageApi = async (jobSeekerCategoryId) => {
+  const response = await api.request({
+    url: urlcat("/v1/admin/language", jobSeekerCategoryId),
+    method: "PUT",
+  });
+  return response;
+};
+
+export const deleteLanguageApi = async (jobSeekerCategoryId) => {
+  const response = await api.request({
+    url: urlcat("/v1/admin/language", jobSeekerCategoryId),
+    method: "DELETE",
+  });
+  return response;
+};

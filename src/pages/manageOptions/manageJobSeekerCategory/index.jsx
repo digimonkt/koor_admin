@@ -7,27 +7,28 @@ import { setLoading } from "@redux/slice/jobsAndTenders";
 import { useDebounce } from "usehooks-ts";
 import { transformOptionsResponse } from "@api/transform/choices";
 import {
-  addEducationApi,
-  deleteEducationApi,
-  editEducationApi,
-  manageEducationApi,
+  addJobSeekerCategoryApi,
+  deleteJobSeekerCategoryApi,
+  editJobSeekerCategoryApi,
+  getJobSeekerCategoryApi,
 } from "@api/manageoptions";
 import { setErrorToast, setSuccessToast } from "@redux/slice/toast";
 import DialogBox from "@components/dialogBox";
 import DeleteCard from "@components/card/deleteCard";
 import { EditCard } from "@components/card";
-function manageEducation() {
+function manageJobSeekerCategory() {
   const dispatch = useDispatch();
-  const [educationTable, setEducationTable] = useState([]);
+  const [JobSeekerCategoryTable, setJobSeekerCategoryTable] = useState([]);
   const [pages, setPages] = useState(1);
   const [limit, setLimit] = useState(10);
   const [totalCount, setTotalCount] = useState(0);
-  const [addEducation, setAddEducation] = useState([]);
+  const [addJobSeekerCategory, setAddJobSeekerCategory] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
-  const [editEducation, setEditEducation] = useState("");
-  const [editEducationValue, setEditEducationValue] = useState("");
-  const [deleteEducation, setDeleteEducation] = useState("");
-  const debouncedSearchEducationValue = useDebounce(searchTerm, 500);
+  const [editJobSeekerCategory, setEditJobSeekerCategory] = useState("");
+  const [editJobSeekerCategoryValue, setEditJobSeekerCategoryValue] =
+    useState("");
+  const [deleteJobSeekerCategory, setDeleteJobSeekerCategory] = useState("");
+  const debouncedSearchCategoryValue = useDebounce(searchTerm, 500);
   const columns = [
     {
       id: "1",
@@ -52,7 +53,7 @@ function manageEducation() {
         return (
           <Stack direction="row" spacing={1} alignItems="center">
             <IconButton
-              onClick={() => setDeleteEducation(item.row.id)}
+              onClick={() => setDeleteJobSeekerCategory(item.row.id)}
               sx={{
                 "&.MuiIconButton-root": {
                   background: "#D5E3F7",
@@ -84,17 +85,17 @@ function manageEducation() {
     },
   ];
 
-  const eductionList = async () => {
+  const jobSeekerCategoryList = async () => {
     dispatch(setLoading(true));
     const page = pages;
-    const search = debouncedSearchEducationValue || "";
-    const response = await manageEducationApi({ limit, page, search });
+    const search = debouncedSearchCategoryValue || "";
+    const response = await getJobSeekerCategoryApi({ limit, page, search });
     if (response.remote === "success") {
       const formateData = transformOptionsResponse(response.data.results);
       if (!formateData.length) {
         dispatch(setLoading(false));
       }
-      setEducationTable(formateData);
+      setJobSeekerCategoryTable(formateData);
       const totalCounts = Math.ceil(response.data.count / limit);
       setTotalCount(totalCounts);
     } else {
@@ -106,22 +107,23 @@ function manageEducation() {
     setPages(page);
   }
 
-  const addEducationFunction = async () => {
+  const addJobSeekerCategoryFunction = async () => {
     const payload = {
-      title: addEducation,
+      title: addJobSeekerCategory,
     };
 
-    const response = await addEducationApi(payload);
+    const response = await addJobSeekerCategoryApi(payload);
     if (response.remote === "success") {
-      const temp = [...educationTable];
+      const temp = [...JobSeekerCategoryTable];
       temp.push({
-        id: response.data.data.id,
+        id: response.data.id,
         no: temp.length + 1,
-        name: response.data.data.title,
+        name: response.data.title,
+        category: response.data.category,
       });
-      setEducationTable([...temp]);
-      setAddEducation("");
-      dispatch(setSuccessToast("Add Education SuccessFully"));
+      setJobSeekerCategoryTable([...temp]);
+      setAddJobSeekerCategory("");
+      dispatch(setSuccessToast("Add Job Seeker Category SuccessFully"));
     } else {
       console.log(response.error);
       dispatch(setErrorToast("Something went wrong"));
@@ -130,13 +132,16 @@ function manageEducation() {
 
   const handleUpdate = async () => {
     const payload = {
-      title: editEducationValue,
+      title: editJobSeekerCategoryValue,
     };
 
-    const response = await editEducationApi(editEducation, payload);
+    const response = await editJobSeekerCategoryApi(
+      editJobSeekerCategory,
+      payload
+    );
     if (response.remote === "success") {
-      eductionList();
-      setEditEducation("");
+      jobSeekerCategoryList();
+      setEditJobSeekerCategory("");
       dispatch(setSuccessToast(response.data.message));
     } else {
       dispatch(setErrorToast(response.error.errors.title));
@@ -144,53 +149,53 @@ function manageEducation() {
   };
 
   const handleEdit = async (item) => {
-    setEditEducation(item.id);
-    setEditEducationValue(item.name);
+    setEditJobSeekerCategory(item.id);
+    setEditJobSeekerCategoryValue(item.name);
   };
-
-  useEffect(() => {
-    eductionList();
-  }, [debouncedSearchEducationValue, pages, limit]);
-
-  useEffect(() => {
-    if (educationTable.length) {
-      dispatch(setLoading(false));
-    }
-  }, [educationTable]);
 
   const handleDelete = async () => {
     setLoading(false);
-    const response = await deleteEducationApi(deleteEducation);
+    const response = await deleteJobSeekerCategoryApi(deleteJobSeekerCategory);
     if (response.remote === "success") {
-      const newCategoryTable = educationTable.filter(
-        (emp) => emp.id !== deleteEducation
+      const newJobSeekerTable = JobSeekerCategoryTable.filter(
+        (emp) => emp.id !== deleteJobSeekerCategory
       );
-      setEducationTable(newCategoryTable);
-      setDeleteEducation("");
-      dispatch(setSuccessToast("Delete Skill SuccessFully"));
+      setJobSeekerCategoryTable(newJobSeekerTable);
+      setDeleteJobSeekerCategory("");
+      dispatch(setSuccessToast("Delete Job Seeker Category SuccessFully"));
     } else {
       dispatch(setErrorToast("Something went wrong"));
       console.log(response.error);
     }
   };
 
+  useEffect(() => {
+    jobSeekerCategoryList();
+  }, [debouncedSearchCategoryValue, pages, limit]);
+
+  useEffect(() => {
+    if (JobSeekerCategoryTable.length) {
+      dispatch(setLoading(false));
+    }
+  }, [JobSeekerCategoryTable]);
+
   return (
     <>
       <Layout
-        rows={educationTable}
+        rows={JobSeekerCategoryTable}
         columns={columns}
         totalCount={totalCount}
         handlePageChange={getPage}
         searchProps={{
-          placeholder: "Search  Education",
+          placeholder: "Search JobSeeker Category",
           onChange: (e) => setSearchTerm(e.target.value),
           value: searchTerm,
         }}
         inputProps={{
           type: "text",
-          placeholder: "Add  Education",
-          onChange: (e) => setAddEducation(e.target.value),
-          value: addEducation,
+          placeholder: "Add  job Seeker Category",
+          onChange: (e) => setAddJobSeekerCategory(e.target.value),
+          value: addJobSeekerCategory,
         }}
         limitProps={{
           value: limit,
@@ -203,35 +208,35 @@ function manageEducation() {
         }}
         optionsProps={{
           title: (
-            <div onClick={addEducationFunction}>
+            <div onClick={addJobSeekerCategoryFunction}>
               <span className="d-inline-flex align-items-center me-2"></span>{" "}
-              Add Education
+              Add Job Seeker Category
             </div>
           ),
         }}
       />
 
       <DialogBox
-        open={!!deleteEducation}
-        handleClose={() => setDeleteEducation("")}
+        open={!!deleteJobSeekerCategory}
+        handleClose={() => setDeleteJobSeekerCategory("")}
       >
         <DeleteCard
-          title="Delete Category"
+          title="Delete job Seeker Category"
           content="Are you sure you want to delete Category?"
-          handleCancel={() => setDeleteEducation("")}
+          handleCancel={() => setDeleteJobSeekerCategory("")}
           handleDelete={handleDelete}
         />
       </DialogBox>
 
       <DialogBox
-        open={!!editEducation}
-        handleClose={() => setEditEducation("")}
+        open={!!editJobSeekerCategory}
+        handleClose={() => setEditJobSeekerCategory("")}
       >
         <EditCard
-          title="Edit Category"
-          handleCancel={() => setEditEducation("")}
-          setEditValue={setEditEducationValue}
-          editValue={editEducationValue}
+          title="Edit Job Seeker Category"
+          handleCancel={() => setEditJobSeekerCategory("")}
+          setEditValue={setEditJobSeekerCategoryValue}
+          editValue={editJobSeekerCategoryValue}
           handleUpdate={handleUpdate}
         />
       </DialogBox>
@@ -239,4 +244,4 @@ function manageEducation() {
   );
 }
 
-export default manageEducation;
+export default manageJobSeekerCategory;

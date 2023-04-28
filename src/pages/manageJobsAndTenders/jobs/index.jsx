@@ -21,7 +21,7 @@ function ManageJobsComponent() {
   const [limit, setLimit] = useState(10);
   const [deleting, setDeleting] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
-  const debouncedSearchSkillValue = useDebounce(searchTerm, 500);
+  const debouncedSearchJobsValue = useDebounce(searchTerm, 500);
   const [country, setCountry] = useState({});
 
   const columns = [
@@ -117,7 +117,7 @@ function ManageJobsComponent() {
   const manageJobList = async () => {
     dispatch(setLoading(true));
     const page = pages;
-    const search = debouncedSearchSkillValue || "";
+    const search = debouncedSearchJobsValue || "";
     const response = await manageJobData({
       limit,
       page,
@@ -208,7 +208,7 @@ function ManageJobsComponent() {
 
   useEffect(() => {
     manageJobList();
-  }, [country, debouncedSearchSkillValue, pages, limit]);
+  }, [country, debouncedSearchJobsValue, pages, limit]);
 
   return (
     <>

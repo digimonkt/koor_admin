@@ -1,8 +1,11 @@
+import React, { useState, useEffect } from "react";
 import DataTable from "@components/dataTable";
 import OptionsFilter from "@components/optionsFilter";
 import { Card, CardContent, Pagination } from "@mui/material";
 import { Stack, styled } from "@mui/system";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { getCountries } from "@redux/slice/choices";
+
 const TablePagination = styled(Pagination)(() => ({
   " &.MuiPagination-root .MuiPaginationItem-root": {
     minWidth: "36px",
@@ -30,8 +33,27 @@ function Layout({
   limitProps,
   inputProps,
   optionsProps,
+  selectProps,
+  country,
+  city,
+  countryName,
+  selectPropsCountry,
 }) {
   const { loading } = useSelector((state) => state.jobsAndTenders);
+  const { countries } = useSelector((state) => state.choice);
+  const [countryList, setCountryList] = useState([]);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    if (!countries.data.length) {
+      dispatch(getCountries());
+    }
+  }, []);
+
+  useEffect(() => {
+    if (countryName) {
+      setCountryList(countryName);
+    }
+  }, [countryName]);
 
   return (
     <>
@@ -45,6 +67,30 @@ function Layout({
           optionsProps={{ ...(optionsProps || {}) }}
           inputProps={{ ...(inputProps || {}) }}
           searchProps={{ ...(searchProps || {}) }}
+          selectProps={{
+            ...(selectProps || {}),
+            options: countries.data.map((country) => ({
+              value: country.id,
+              label: country.title,
+            })),
+          }}
+          selectPropsCountry={{
+            ...(selectPropsCountry || {}),
+            options: countryList.map((country) => ({
+              value: country.id,
+              label: country.title,
+              ...country,
+            })),
+          }}
+          selectPropsCities={{
+            ...(selectProps || {}),
+            options: countries.data.map((country) => ({
+              value: country.id,
+              label: country.title,
+            })),
+          }}
+          country={country}
+          city={city}
         />
       </Stack>
       <Card

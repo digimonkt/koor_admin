@@ -27,7 +27,7 @@ function ManageCategoryComponent() {
   const [deleteCategory, setDeleteCategory] = useState("");
   const [editCategory, setEditCategory] = useState("");
   const [editCategoryValue, setCategoryValue] = useState("");
-  const debouncedSearchSkillValue = useDebounce(searchTerm, 500);
+  const debouncedSearchCategoryValue = useDebounce(searchTerm, 500);
 
   const columns = [
     {
@@ -88,7 +88,7 @@ function ManageCategoryComponent() {
   const categoryList = async () => {
     dispatch(setLoading(true));
     const page = pages;
-    const search = debouncedSearchSkillValue || "";
+    const search = debouncedSearchCategoryValue || "";
     const response = await manageCategoryApi({ limit, page, search });
     if (response.remote === "success") {
       const formateData = transformOptionsResponse(response.data.results);
@@ -116,11 +116,9 @@ function ManageCategoryComponent() {
     if (response.remote === "success") {
       const temp = [...categoryTable];
       temp.push({
-        ...response.data.data,
         id: response.data.data.id,
         no: temp.length + 1,
         name: response.data.data.title,
-        title: addCategory,
       });
       setCategoryTable([...temp]);
       setAddCategory("");
@@ -152,7 +150,7 @@ function ManageCategoryComponent() {
   };
   useEffect(() => {
     categoryList();
-  }, [debouncedSearchSkillValue, pages, limit]);
+  }, [debouncedSearchCategoryValue, pages, limit]);
 
   useEffect(() => {
     if (categoryTable.length) {

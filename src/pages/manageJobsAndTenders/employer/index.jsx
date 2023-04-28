@@ -20,7 +20,7 @@ function ManageEmployerComponent() {
   const [totalCount, setTotalCount] = useState(0);
   const [searchTerm, setSearchTerm] = useState("");
   const [country, setCountry] = useState({});
-  const debouncedSearchSkillValue = useDebounce(searchTerm, 500);
+  const debouncedSearchEmployerValue = useDebounce(searchTerm, 500);
 
   const columns = [
     {
@@ -108,7 +108,7 @@ function ManageEmployerComponent() {
   const employerList = async () => {
     dispatch(setLoading(true));
     const page = pages;
-    const search = debouncedSearchSkillValue || "";
+    const search = debouncedSearchEmployerValue || "";
     const response = await manageEmployer({
       limit,
       page,
@@ -194,7 +194,7 @@ function ManageEmployerComponent() {
 
   useEffect(() => {
     employerList();
-  }, [country, debouncedSearchSkillValue, pages, limit]);
+  }, [country, debouncedSearchEmployerValue, pages, limit]);
   return (
     <>
       <Layout

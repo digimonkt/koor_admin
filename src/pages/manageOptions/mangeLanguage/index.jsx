@@ -3,32 +3,31 @@ import Layout from "../layout";
 import { SVG } from "@assets/svg";
 import { IconButton, Stack } from "@mui/material";
 import { useDispatch } from "react-redux";
-import {
-  editSkillApi,
-  createSkillApi,
-  manageSkillApi,
-  skillDeleteApi,
-} from "@api/manageoptions";
 import { setLoading } from "@redux/slice/jobsAndTenders";
-import { transformOptionsResponse } from "@api/transform/choices";
-import DialogBox from "@components/dialogBox";
-import { setErrorToast, setSuccessToast } from "@redux/slice/toast";
-import DeleteCard from "@components/card/deleteCard";
-import EditCard from "@components/card/editCard";
 import { useDebounce } from "usehooks-ts";
-function ManageSkillsComponent() {
+import { transformOptionsResponse } from "@api/transform/choices";
+import {
+  addLanguageApi,
+  deleteLanguageApi,
+  editLanguageApi,
+  getLanguageApi,
+} from "@api/manageoptions";
+import { setErrorToast, setSuccessToast } from "@redux/slice/toast";
+import DialogBox from "@components/dialogBox";
+import DeleteCard from "@components/card/deleteCard";
+import { EditCard } from "@components/card";
+function ManageLanguage() {
   const dispatch = useDispatch();
-  const [skillsTable, setSkillsTable] = useState([]);
+  const [languageTable, setLanguageTable] = useState([]);
   const [pages, setPages] = useState(1);
   const [limit, setLimit] = useState(10);
-  const [addSkill, setAddSkill] = useState("");
-  const [editSkill, setEditSkill] = useState("");
-  const [editSkillValue, setEditSkillValue] = useState("");
   const [totalCount, setTotalCount] = useState(0);
-  const [deleteSkill, setDeleteSkill] = useState("");
+  const [addLanguage, setAddLanguage] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
-  const debouncedSearchSkillValue = useDebounce(searchTerm, 500);
-
+  const [editLanguage, setEditLanguage] = useState("");
+  const [editLanguageValue, setEditLanguageValue] = useState("");
+  const [deleteLanguage, setDeleteLanguage] = useState("");
+  const debouncedSearchLanguageValue = useDebounce(searchTerm, 500);
   const columns = [
     {
       id: "1",
@@ -38,11 +37,11 @@ function ManageSkillsComponent() {
     },
 
     {
-      id: "3",
       field: "name",
       headerName: "Name",
-      width: 180,
       sortable: true,
+      width: 180,
+      id: "3",
     },
 
     {
@@ -53,7 +52,7 @@ function ManageSkillsComponent() {
         return (
           <Stack direction="row" spacing={1} alignItems="center">
             <IconButton
-              onClick={() => setDeleteSkill(item.row.id)}
+              onClick={() => setDeleteLanguage(item.row.id)}
               sx={{
                 "&.MuiIconButton-root": {
                   background: "#D5E3F7",
@@ -85,17 +84,17 @@ function ManageSkillsComponent() {
     },
   ];
 
-  const skillsList = async () => {
+  const languageList = async () => {
     dispatch(setLoading(true));
     const page = pages;
-    const search = debouncedSearchSkillValue || "";
-    const response = await manageSkillApi({ limit, page, search });
+    const search = debouncedSearchLanguageValue || "";
+    const response = await getLanguageApi({ limit, page, search });
     if (response.remote === "success") {
       const formateData = transformOptionsResponse(response.data.results);
       if (!formateData.length) {
         dispatch(setLoading(false));
       }
-      setSkillsTable(formateData);
+      setLanguageTable(formateData);
       const totalCounts = Math.ceil(response.data.count / limit);
       setTotalCount(totalCounts);
     } else {
@@ -103,90 +102,96 @@ function ManageSkillsComponent() {
     }
   };
 
-  const addSkillFunction = async () => {
+  function getPage(_, page) {
+    setPages(page);
+  }
+
+  const addLanguageFunction = async () => {
     const payload = {
-      title: addSkill,
+      title: addLanguage,
     };
-    const response = await createSkillApi(payload);
+
+    const response = await addLanguageApi(payload);
     if (response.remote === "success") {
-      const temp = [...skillsTable];
+      const temp = [...languageTable];
       temp.push({
         id: response.data.data.id,
         no: temp.length + 1,
         name: response.data.data.title,
       });
-      setSkillsTable([...temp]);
-      setAddSkill("");
-      dispatch(setSuccessToast("Add Category SuccessFully"));
+      console.log({ temp });
+      setLanguageTable([...temp]);
+      setAddLanguage("");
+      dispatch(setSuccessToast("Add language SuccessFully"));
     } else {
       console.log(response.error);
       dispatch(setErrorToast("Something went wrong"));
     }
-  };
-  function getPage(_, page) {
-    setPages(page);
-  }
-
-  const handleDelete = async () => {
-    setLoading(false);
-    const response = await skillDeleteApi(deleteSkill);
-    if (response.remote === "success") {
-      const newSkillTable = skillsTable.filter((emp) => emp.id !== deleteSkill);
-      setSkillsTable(newSkillTable);
-      setDeleteSkill("");
-      dispatch(setSuccessToast("Delete Skill SuccessFully"));
-    } else {
-      dispatch(setErrorToast("Something went wrong"));
-      console.log(response.error);
-    }
-  };
-
-  const handleEdit = async (item) => {
-    setEditSkill(item.id);
-    setEditSkillValue(item.name);
   };
 
   const handleUpdate = async () => {
     const payload = {
-      title: editSkillValue,
+      title: editLanguageValue,
     };
-    const response = await editSkillApi(editSkill, payload);
+
+    const response = await editLanguageApi(editLanguage, payload);
     if (response.remote === "success") {
-      skillsList();
-      setEditSkill("");
+      languageList();
+      setEditLanguage("");
       dispatch(setSuccessToast(response.data.message));
     } else {
       dispatch(setErrorToast(response.error.errors.title));
     }
   };
 
-  useEffect(() => {
-    skillsList();
-  }, [debouncedSearchSkillValue, pages, limit]);
+  const handleEdit = async (item) => {
+    setEditLanguage(item.id);
+    setEditLanguageValue(item.name);
+  };
+
+  const handleDelete = async () => {
+    setLoading(false);
+    const response = await deleteLanguageApi(deleteLanguage);
+    if (response.remote === "success") {
+      const newLanguageTable = languageTable.filter(
+        (emp) => emp.id !== deleteLanguage
+      );
+      setLanguageTable(newLanguageTable);
+      setDeleteLanguage("");
+      dispatch(setSuccessToast("Delete Language SuccessFully"));
+    } else {
+      dispatch(setErrorToast("Something went wrong"));
+      console.log(response.error);
+    }
+  };
 
   useEffect(() => {
-    if (skillsTable.length) {
+    languageList();
+  }, [debouncedSearchLanguageValue, pages, limit]);
+
+  useEffect(() => {
+    if (languageTable.length) {
       dispatch(setLoading(false));
     }
-  }, [skillsTable]);
+  }, [languageTable]);
 
   return (
     <>
       <Layout
-        rows={skillsTable}
+        rows={languageTable}
         columns={columns}
         totalCount={totalCount}
         handlePageChange={getPage}
         searchProps={{
-          placeholder: "Search Skills",
+          placeholder: "Search Language ",
           onChange: (e) => setSearchTerm(e.target.value),
           value: searchTerm,
         }}
         inputProps={{
           type: "text",
-          placeholder: "Add Skill",
-          onChange: (e) => setAddSkill(e.target.value),
-          value: addSkill,
+          placeholder: "Add  Language ",
+          onChange: (e) => setAddLanguage(e.target.value),
+          value: addLanguage,
         }}
         limitProps={{
           value: limit,
@@ -199,28 +204,32 @@ function ManageSkillsComponent() {
         }}
         optionsProps={{
           title: (
-            <div onClick={addSkillFunction}>
+            <div onClick={addLanguageFunction}>
               <span className="d-inline-flex align-items-center me-2"></span>{" "}
-              Add Skill
+              Add language
             </div>
           ),
         }}
       />
-      <DialogBox open={!!deleteSkill} handleClose={() => setDeleteSkill("")}>
+
+      <DialogBox
+        open={!!deleteLanguage}
+        handleClose={() => setDeleteLanguage("")}
+      >
         <DeleteCard
-          title="Delete Skill"
-          content="Are you sure you want to delete Skill?"
-          handleCancel={() => setDeleteSkill("")}
+          title="Delete Language"
+          content="Are you sure you want to delete Language?"
+          handleCancel={() => setDeleteLanguage("")}
           handleDelete={handleDelete}
         />
       </DialogBox>
 
-      <DialogBox open={!!editSkill} handleClose={() => setEditSkill("")}>
+      <DialogBox open={!!editLanguage} handleClose={() => setEditLanguage("")}>
         <EditCard
-          title="Edit Skill"
-          handleCancel={() => setEditSkill("")}
-          setEditValue={setEditSkillValue}
-          editValue={editSkillValue}
+          title="Edit Language"
+          handleCancel={() => setEditLanguage("")}
+          setEditValue={setEditLanguageValue}
+          editValue={editLanguageValue}
           handleUpdate={handleUpdate}
         />
       </DialogBox>
@@ -228,4 +237,4 @@ function ManageSkillsComponent() {
   );
 }
 
-export default ManageSkillsComponent;
+export default ManageLanguage;
