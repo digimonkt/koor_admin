@@ -15,39 +15,32 @@ const OptionsFilter = ({
 }) => {
   return (
     <>
-      <div>
-        {country ? (
-          <>
-            <SelectWithSearch title="Select Country" {...selectPropsCountry} />
-          </>
-        ) : city ? (
-          <div>
-            <SelectWithSearch
-              title="Select Country"
-              value=""
-              {...selectProps}
-            />
-            <SelectWithSearch
-              title="Select City"
-              value=""
-              {...selectPropsCities}
-            />
-          </div>
-        ) : (
-          <div>
-            <SearchInput
-              placeholder="Search skills"
-              widthInput="100%"
-              {...searchProps}
-            />
-            <LabeledInput
-              placeholder="skill Level"
-              type="text"
-              {...inputProps}
-            />
-          </div>
-        )}
-      </div>
+      {country ? (
+        <SelectWithSearch title="Select Country" {...selectPropsCountry} />
+      ) : city ? (
+        <div>
+          <SelectWithSearch title="Select Country" value="" {...selectProps} />
+          <SelectWithSearch
+            title="Select City"
+            value=""
+            {...selectPropsCities}
+          />
+        </div>
+      ) : (
+        <div
+          style={{
+            display: "flex",
+          }}
+        >
+          <SearchInput
+            placeholder="Search skills"
+            widthInput="100%"
+            {...searchProps}
+          />
+          <LabeledInput placeholder="skill Level" type="text" {...inputProps} />
+        </div>
+      )}
+
       <SolidButton
         sx={{
           background: "#fff",

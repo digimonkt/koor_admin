@@ -159,7 +159,6 @@ function ManageCategoryComponent() {
   }, [categoryTable]);
 
   const handleDelete = async () => {
-    setLoading(false);
     const response = await deleteCategoryApi(deleteCategory);
     if (response.remote === "success") {
       const newCategoryTable = categoryTable.filter(

@@ -17,3 +17,11 @@ export const addCountriesApi = async (data) => {
   });
   return response;
 };
+
+export const deleteCountriesApi = async (countryId) => {
+  const response = await api.request({
+    url: urlcat("/v1/admin/country", countryId),
+    method: "DELETE",
+  });
+  return response;
+};
