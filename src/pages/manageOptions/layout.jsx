@@ -36,12 +36,13 @@ function Layout({
   selectProps,
   country,
   city,
-  countryName,
+  dropDownValue,
   selectPropsCountry,
+  SubCategory,
 }) {
   const { loading } = useSelector((state) => state.jobsAndTenders);
   const { countries } = useSelector((state) => state.choice);
-  const [countryList, setCountryList] = useState([]);
+  const [dropDownList, setDropDownList] = useState([]);
   const dispatch = useDispatch();
   useEffect(() => {
     if (!countries.data.length) {
@@ -50,10 +51,10 @@ function Layout({
   }, []);
 
   useEffect(() => {
-    if (countryName) {
-      setCountryList(countryName);
+    if (dropDownValue) {
+      setDropDownList(dropDownValue);
     }
-  }, [countryName]);
+  }, [dropDownValue]);
 
   return (
     <>
@@ -76,7 +77,7 @@ function Layout({
           }}
           selectPropsCountry={{
             ...(selectPropsCountry || {}),
-            options: countryList.map((country) => ({
+            options: dropDownList.map((country) => ({
               value: country.id,
               label: country.title,
               ...country,
@@ -91,6 +92,7 @@ function Layout({
           }}
           country={country}
           city={city}
+          SubCategory={SubCategory}
         />
       </Stack>
       <Card

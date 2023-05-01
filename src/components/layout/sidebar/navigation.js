@@ -41,8 +41,8 @@ export const MENU_ITEM = [
   {
     id: "7",
     icon: <SVG.FinancialTools />,
-    page: "Manage category",
-    url: "/manage-category",
+    page: "Manage job category",
+    url: "/manage-job-category",
   },
   {
     id: "8",
@@ -112,7 +112,7 @@ export const MENU_ITEM = [
     url: "/user-management",
   },
   {
-    id: "17",
+    id: "18",
     icon: <SVG.Settings />,
     page: "Settings",
     url: "/settings",

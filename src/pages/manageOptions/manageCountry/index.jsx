@@ -6,7 +6,11 @@ import { IconButton, Stack } from "@mui/material";
 import { SVG } from "@assets/svg";
 import { useSelector, useDispatch } from "react-redux";
 import { transformOptionsResponse } from "@api/transform/choices";
-import { addCountriesApi, getWorldCountryApi } from "@api/manageCountryCity";
+import {
+  addCountriesApi,
+  deleteCountriesApi,
+  getWorldCountryApi,
+} from "@api/manageCountryCity";
 import { setErrorToast, setSuccessToast } from "@redux/slice/toast";
 
 const ManageCountry = () => {
@@ -25,7 +29,7 @@ const ManageCountry = () => {
       headerName: "Name",
       sortable: true,
       width: 180,
-      id: "3",
+      id: "2",
     },
 
     {
@@ -36,7 +40,7 @@ const ManageCountry = () => {
         return (
           <Stack direction="row" spacing={1} alignItems="center">
             <IconButton
-              //   onClick={() => setDeleteEducation(item.row.id)}
+              onClick={() => setDeleteCountry(item.row.id)}
               sx={{
                 "&.MuiIconButton-root": {
                   background: "#D5E3F7",
@@ -56,8 +60,9 @@ const ManageCountry = () => {
 
   const { countries } = useSelector((state) => state.choice);
   const [country, setCountry] = useState({});
-  const [countryValue, setCountryValue] = useState({});
+  const [countryValue, setCountryValue] = useState([]);
   const [countryName, setCountryName] = useState([]);
+  const [deleteCountry, setDeleteCountry] = useState("");
 
   function getCountries() {
     const formateData = transformOptionsResponse(countries.data);
@@ -81,12 +86,33 @@ const ManageCountry = () => {
     };
     const response = await addCountriesApi(payload);
     if (response.remote === "success") {
+      const temp = [...countryValue];
+      temp.push({
+        id: response.data.data.id || Math.random(),
+        no: temp.length + 1,
+        name: response.data.data.title,
+      });
+      setCountryValue([...temp]);
       dispatch(setSuccessToast("Add Country SuccessFully"));
-      getCountries();
     } else {
       dispatch(setErrorToast("Something went wrong"));
     }
   }
+
+  const handleDelete = async () => {
+    const response = await deleteCountriesApi(deleteCountry);
+    if (response.remote === "success") {
+      const newCountryTable = countryValue.filter(
+        (emp) => emp.id !== deleteCountry
+      );
+      setCountryValue(newCountryTable);
+      setDeleteCountry("");
+      dispatch(setSuccessToast("Delete Skill SuccessFully"));
+    } else {
+      dispatch(setErrorToast("Something went wrong"));
+      console.log(response.error);
+    }
+  };
 
   useEffect(() => {
     getCountries();
@@ -106,7 +132,7 @@ const ManageCountry = () => {
             setCountry(value);
           },
         }}
-        countryName={countryName}
+        dropDownValue={countryName}
         limitProps={{
           value: 15,
           options: [
@@ -127,14 +153,14 @@ const ManageCountry = () => {
       />
 
       <DialogBox
-      //   open={!!deleteEducation}
-      //   handleClose={() => setDeleteEducation("")}
+        open={!!deleteCountry}
+        handleClose={() => setDeleteCountry("")}
       >
         <DeleteCard
           title="Delete Category"
           content="Are you sure you want to delete Category?"
-          // handleCancel={() => setDeleteEducation("")}
-          // handleDelete={handleDelete}
+          handleCancel={() => setDeleteCountry("")}
+          handleDelete={handleDelete}
         />
       </DialogBox>
     </>

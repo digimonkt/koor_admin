@@ -12,42 +12,50 @@ const OptionsFilter = ({
   selectPropsCities,
   city,
   selectPropsCountry,
+  SubCategory,
 }) => {
   return (
     <>
-      <div>
-        {country ? (
-          <>
-            <SelectWithSearch title="Select Country" {...selectPropsCountry} />
-          </>
-        ) : city ? (
-          <div>
-            <SelectWithSearch
-              title="Select Country"
-              value=""
-              {...selectProps}
-            />
-            <SelectWithSearch
-              title="Select City"
-              value=""
-              {...selectPropsCities}
-            />
-          </div>
-        ) : (
-          <div>
-            <SearchInput
-              placeholder="Search skills"
-              widthInput="100%"
-              {...searchProps}
-            />
-            <LabeledInput
-              placeholder="skill Level"
-              type="text"
-              {...inputProps}
-            />
-          </div>
-        )}
-      </div>
+      {country ? (
+        <SelectWithSearch title="Select Country" {...selectPropsCountry} />
+      ) : city ? (
+        <div>
+          <SelectWithSearch title="Select Country" value="" {...selectProps} />
+          <SelectWithSearch
+            title="Select City"
+            value=""
+            {...selectPropsCities}
+          />
+        </div>
+      ) : SubCategory ? (
+        <div
+          style={{
+            display: "flex",
+          }}
+        >
+          <SearchInput
+            placeholder="Search skills"
+            widthInput="100%"
+            {...searchProps}
+          />
+          <SelectWithSearch title="Select  Category" {...selectPropsCountry} />
+          <LabeledInput placeholder="skill Level" type="text" {...inputProps} />
+        </div>
+      ) : (
+        <div
+          style={{
+            display: "flex",
+          }}
+        >
+          <SearchInput
+            placeholder="Search skills"
+            widthInput="100%"
+            {...searchProps}
+          />
+          <LabeledInput placeholder="skill Level" type="text" {...inputProps} />
+        </div>
+      )}
+
       <SolidButton
         sx={{
           background: "#fff",
