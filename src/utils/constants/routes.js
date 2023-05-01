@@ -64,8 +64,8 @@ export const AUTHENTICATED_ROUTE = [
     element: ManageSkills,
   },
   {
-    id: "manage-category",
-    path: "/manage-category",
+    id: "manage-job-category",
+    path: "/manage-job-category",
     element: ManageCategory,
   },
   {

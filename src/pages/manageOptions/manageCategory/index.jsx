@@ -116,7 +116,7 @@ function ManageCategoryComponent() {
     if (response.remote === "success") {
       const temp = [...categoryTable];
       temp.push({
-        id: response.data.data.id,
+        id: response.data.data.id || Math.random(),
         no: temp.length + 1,
         name: response.data.data.title,
       });

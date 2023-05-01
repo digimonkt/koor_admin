@@ -12,6 +12,7 @@ const OptionsFilter = ({
   selectPropsCities,
   city,
   selectPropsCountry,
+  SubCategory,
 }) => {
   return (
     <>
@@ -25,6 +26,20 @@ const OptionsFilter = ({
             value=""
             {...selectPropsCities}
           />
+        </div>
+      ) : SubCategory ? (
+        <div
+          style={{
+            display: "flex",
+          }}
+        >
+          <SearchInput
+            placeholder="Search skills"
+            widthInput="100%"
+            {...searchProps}
+          />
+          <SelectWithSearch title="Select  Category" {...selectPropsCountry} />
+          <LabeledInput placeholder="skill Level" type="text" {...inputProps} />
         </div>
       ) : (
         <div

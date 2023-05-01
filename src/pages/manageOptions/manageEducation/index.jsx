@@ -115,7 +115,7 @@ function manageEducation() {
     if (response.remote === "success") {
       const temp = [...educationTable];
       temp.push({
-        id: response.data.data.id,
+        id: response.data.data.id || Math.random(),
         no: temp.length + 1,
         name: response.data.data.title,
       });
@@ -126,6 +126,11 @@ function manageEducation() {
       console.log(response.error);
       dispatch(setErrorToast("Something went wrong"));
     }
+  };
+
+  const handleEdit = async (item) => {
+    setEditEducation(item.id);
+    setEditEducationValue(item.name);
   };
 
   const handleUpdate = async () => {
@@ -143,21 +148,6 @@ function manageEducation() {
     }
   };
 
-  const handleEdit = async (item) => {
-    setEditEducation(item.id);
-    setEditEducationValue(item.name);
-  };
-
-  useEffect(() => {
-    eductionList();
-  }, [debouncedSearchEducationValue, pages, limit]);
-
-  useEffect(() => {
-    if (educationTable.length) {
-      dispatch(setLoading(false));
-    }
-  }, [educationTable]);
-
   const handleDelete = async () => {
     setLoading(false);
     const response = await deleteEducationApi(deleteEducation);
@@ -173,6 +163,16 @@ function manageEducation() {
       console.log(response.error);
     }
   };
+
+  useEffect(() => {
+    eductionList();
+  }, [debouncedSearchEducationValue, pages, limit]);
+
+  useEffect(() => {
+    if (educationTable.length) {
+      dispatch(setLoading(false));
+    }
+  }, [educationTable]);
 
   return (
     <>

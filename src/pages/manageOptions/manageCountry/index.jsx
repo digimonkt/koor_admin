@@ -29,7 +29,7 @@ const ManageCountry = () => {
       headerName: "Name",
       sortable: true,
       width: 180,
-      id: "3",
+      id: "2",
     },
 
     {
@@ -60,7 +60,7 @@ const ManageCountry = () => {
 
   const { countries } = useSelector((state) => state.choice);
   const [country, setCountry] = useState({});
-  const [countryValue, setCountryValue] = useState({});
+  const [countryValue, setCountryValue] = useState([]);
   const [countryName, setCountryName] = useState([]);
   const [deleteCountry, setDeleteCountry] = useState("");
 
@@ -88,7 +88,7 @@ const ManageCountry = () => {
     if (response.remote === "success") {
       const temp = [...countryValue];
       temp.push({
-        id: response.data.data.id,
+        id: response.data.data.id || Math.random(),
         no: temp.length + 1,
         name: response.data.data.title,
       });
@@ -132,7 +132,7 @@ const ManageCountry = () => {
             setCountry(value);
           },
         }}
-        countryName={countryName}
+        dropDownValue={countryName}
         limitProps={{
           value: 15,
           options: [

@@ -115,7 +115,7 @@ function ManageLanguage() {
     if (response.remote === "success") {
       const temp = [...languageTable];
       temp.push({
-        id: response.data.data.id,
+        id: response.data.data.id || Math.random(),
         no: temp.length + 1,
         name: response.data.data.title,
       });

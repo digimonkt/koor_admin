@@ -29,8 +29,9 @@ export const SelectBox = styled(Select)`
 `;
 
 const ColumChart = () => {
-  const [isSelect, setIsSelect] = useState("this week");
-  const [isApplication, setIsApplication] = useState("");
+  const [isSelect, setIsSelect] = useState("this_week");
+  const [isApplication, setIsApplication] = useState([]);
+
   const employerDetails = async () => {
     const response = await getDashboardApi(isSelect);
     if (response.remote === "success") {
@@ -217,9 +218,9 @@ const ColumChart = () => {
               IconComponent={KeyboardArrowUpIcon}
               displayEmpty
             >
-              <MenuItem value="this week">This Week</MenuItem>
-              <MenuItem value="last month">Last Month</MenuItem>
-              <MenuItem value="this year">This year</MenuItem>
+              <MenuItem value="this_week">This Week</MenuItem>
+              <MenuItem value="last_month">Last Month</MenuItem>
+              <MenuItem value="this_year">This year</MenuItem>
             </SelectBox>
           </FormControl>
         </Stack>

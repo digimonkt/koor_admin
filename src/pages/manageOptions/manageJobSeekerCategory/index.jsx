@@ -116,7 +116,7 @@ function manageJobSeekerCategory() {
     if (response.remote === "success") {
       const temp = [...JobSeekerCategoryTable];
       temp.push({
-        id: response.data.id,
+        id: response.data.id || Math.random(),
         no: temp.length + 1,
         name: response.data.title,
         category: response.data.category,

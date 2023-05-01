@@ -111,12 +111,14 @@ function ManageSkillsComponent() {
     if (response.remote === "success") {
       const temp = [...skillsTable];
       temp.push({
-        id: response.data.data.id,
+        id: response.data.data.id || Math.random(),
         no: temp.length + 1,
         name: response.data.data.title,
       });
+
       setSkillsTable([...temp]);
       setAddSkill("");
+
       dispatch(setSuccessToast("Add Category SuccessFully"));
     } else {
       console.log(response.error);
