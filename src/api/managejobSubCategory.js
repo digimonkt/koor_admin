@@ -29,7 +29,10 @@ export const addSubCategoryApi = async (data) => {
 
 export const deleteSubCategoryApi = async (jobSubCategoryId) => {
   const response = await api.request({
-    url: urlcat("/v1/admin/job-sub-category", jobSubCategoryId),
+    url: urlcat(
+      "/v1/admin/job-sub-category/:jobSubCategoryId",
+      jobSubCategoryId
+    ),
     method: "DELETE",
   });
   return response;
@@ -37,7 +40,9 @@ export const deleteSubCategoryApi = async (jobSubCategoryId) => {
 
 export const editSubCategoryApi = async (jobSubCategoryId, data) => {
   const response = await api.request({
-    url: urlcat("/v1/admin/job-sub-category", jobSubCategoryId),
+    url: urlcat("/v1/admin/job-sub-category/:jobSubCategoryId", {
+      jobSubCategoryId,
+    }),
     method: "PUT",
     data,
   });

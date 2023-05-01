@@ -20,7 +20,7 @@ export const addCountriesApi = async (data) => {
 
 export const deleteCountriesApi = async (countryId) => {
   const response = await api.request({
-    url: urlcat("/v1/admin/country", countryId),
+    url: urlcat("/v1/admin/country/:countryId", { countryId }),
     method: "DELETE",
   });
   return response;
