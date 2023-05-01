@@ -89,7 +89,7 @@ export const editSkillApi = async (skillId, data) => {
 
 export const editCategoryApi = async (jobCategoryId, data) => {
   const response = await api.request({
-    url: urlcat("/v1/admin/job-category/:jobCategoryId", jobCategoryId),
+    url: urlcat("/v1/admin/job-category/:jobCategoryId", { jobCategoryId }),
     method: "PUT",
     data,
   });
@@ -163,7 +163,9 @@ export const addLanguageApi = async (data) => {
 
 export const editLanguageApi = async (jobSeekerCategoryId) => {
   const response = await api.request({
-    url: urlcat("/v1/admin/language/:jobSeekerCategoryId", jobSeekerCategoryId),
+    url: urlcat("/v1/admin/language/:jobSeekerCategoryId", {
+      jobSeekerCategoryId,
+    }),
     method: "PUT",
   });
   return response;
