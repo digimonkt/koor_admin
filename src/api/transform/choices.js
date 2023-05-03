@@ -49,3 +49,13 @@ export const transformSubCategoryResponse = (data) => {
     categoryId: data.category.id,
   }));
 };
+
+export const transformCityResponse = (data) => {
+  return data.map((data, index) => ({
+    id: data.id,
+    no: index + 1,
+    city: data.title,
+    country: data.country.title,
+    countryId: data.country.id,
+  }));
+};

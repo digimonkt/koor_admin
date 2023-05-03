@@ -20,11 +20,12 @@ const OptionsFilter = ({
         <SelectWithSearch title="Select Country" {...selectPropsCountry} />
       ) : city ? (
         <div>
-          <SelectWithSearch title="Select Country" value="" {...selectProps} />
-          <SelectWithSearch
-            title="Select City"
-            value=""
-            {...selectPropsCities}
+          <SelectWithSearch title="Select Country" {...selectPropsCountry} />
+          <SelectWithSearch title="Select City" {...selectPropsCities} />
+          <SearchInput
+            placeholder="Search skills"
+            widthInput="100%"
+            {...searchProps}
           />
         </div>
       ) : SubCategory ? (
