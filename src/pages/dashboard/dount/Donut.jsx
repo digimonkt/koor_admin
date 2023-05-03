@@ -4,6 +4,7 @@ import { styled } from "@mui/material/styles";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { FormControl, Grid, MenuItem, Select, Stack } from "@mui/material";
 import styles from "./styles.module.css";
+
 export const SelectBox = styled(Select)`
   & .MuiSelect-select {
     background: #f0f0f0;
@@ -26,7 +27,9 @@ export const SelectBox = styled(Select)`
     display: none;
   }
 `;
+
 const Donut = ({ title, total, user, series, colors, content }) => {
+  console.log(series);
   const [isSelect, setIsSelect] = useState("");
 
   const handleChange = (event) => {

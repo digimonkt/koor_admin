@@ -38,23 +38,31 @@ function Layout({
   city,
   dropDownValue,
   selectPropsCountry,
+  selectPropsCities,
   SubCategory,
+  cityValue,
 }) {
   const { loading } = useSelector((state) => state.jobsAndTenders);
   const { countries } = useSelector((state) => state.choice);
   const [dropDownList, setDropDownList] = useState([]);
+  const [cityValueList, setCityValueList] = useState([]);
   const dispatch = useDispatch();
   useEffect(() => {
     if (!countries.data.length) {
       dispatch(getCountries());
     }
   }, []);
-
   useEffect(() => {
     if (dropDownValue) {
       setDropDownList(dropDownValue);
     }
   }, [dropDownValue]);
+
+  useEffect(() => {
+    if (cityValue) {
+      setCityValueList(cityValue);
+    }
+  }, [cityValue]);
 
   return (
     <>
@@ -84,10 +92,11 @@ function Layout({
             })),
           }}
           selectPropsCities={{
-            ...(selectProps || {}),
-            options: countries.data.map((country) => ({
-              value: country.id,
-              label: country.title,
+            ...(selectPropsCities || {}),
+            options: cityValueList.map((city) => ({
+              value: city.id,
+              label: city.title,
+              ...city,
             })),
           }}
           country={country}

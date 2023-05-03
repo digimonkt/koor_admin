@@ -11,6 +11,7 @@ import { setErrorToast, setSuccessToast } from "@redux/slice/toast";
 import { setLoading } from "@redux/slice/jobsAndTenders";
 import { useDebounce } from "usehooks-ts";
 import { transformCandidatesAPIResponse } from "@api/transform/choices";
+import env from "@utils/validateEnv";
 function ManageCandidatesComponent() {
   const dispatch = useDispatch();
   const { countries } = useSelector((state) => state.choice);
@@ -76,6 +77,7 @@ function ManageCandidatesComponent() {
             </>
 
             <IconButton
+              onClick={() => handleRedirectDetails(item.row.id)}
               sx={{
                 "&.MuiIconButton-root": {
                   background: "#D5E3F7",
@@ -105,6 +107,11 @@ function ManageCandidatesComponent() {
       },
     },
   ];
+
+  const handleRedirectDetails = (item) => {
+    const url = `${env.REACT_APP_REDIRECT_URL}/job-seeker/${item}/profile`;
+    window.open(url, "_blank");
+  };
 
   const candidateList = async () => {
     dispatch(setLoading(true));

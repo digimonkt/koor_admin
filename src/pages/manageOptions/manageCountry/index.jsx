@@ -118,13 +118,13 @@ const ManageCountry = () => {
     getCountries();
     getWorldCountry();
   }, [countries]);
-
   return (
     <>
       <Layout
         country
         rows={countryValue}
         columns={columns}
+        dropDownValue={countryName}
         // totalCount={totalCount}
         // handlePageChange={getPage}
         selectPropsCountry={{
@@ -132,7 +132,6 @@ const ManageCountry = () => {
             setCountry(value);
           },
         }}
-        dropDownValue={countryName}
         limitProps={{
           value: 15,
           options: [
