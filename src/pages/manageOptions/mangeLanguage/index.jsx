@@ -1,34 +1,33 @@
 import React, { useState, useEffect } from "react";
 import Layout from "../layout";
+import { SVG } from "@assets/svg";
+import { IconButton, Stack } from "@mui/material";
 import { useDispatch } from "react-redux";
 import { setLoading } from "@redux/slice/jobsAndTenders";
-import { SVG } from "@assets/svg";
+import { useDebounce } from "usehooks-ts";
+import { transformOptionsResponse } from "@api/transform/choices";
+import {
+  addLanguageApi,
+  deleteLanguageApi,
+  editLanguageApi,
+  getLanguageApi,
+} from "@api/manageoptions";
 import { setErrorToast, setSuccessToast } from "@redux/slice/toast";
-import { IconButton, Stack } from "@mui/material";
 import DialogBox from "@components/dialogBox";
 import DeleteCard from "@components/card/deleteCard";
-import {
-  addCategoryApi,
-  deleteCategoryApi,
-  editCategoryApi,
-  manageCategoryApi,
-} from "@api/manageoptions";
-import { transformOptionsResponse } from "@api/transform/choices";
-import { useDebounce } from "usehooks-ts";
 import { EditCard } from "@components/card";
-function ManageCategoryComponent() {
+function ManageLanguage() {
   const dispatch = useDispatch();
-  const [categoryTable, setCategoryTable] = useState([]);
+  const [languageTable, setLanguageTable] = useState([]);
   const [pages, setPages] = useState(1);
   const [limit, setLimit] = useState(10);
   const [totalCount, setTotalCount] = useState(0);
-  const [addCategory, setAddCategory] = useState([]);
+  const [addLanguage, setAddLanguage] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
-  const [deleteCategory, setDeleteCategory] = useState("");
-  const [editCategory, setEditCategory] = useState("");
-  const [editCategoryValue, setCategoryValue] = useState("");
-  const debouncedSearchCategoryValue = useDebounce(searchTerm, 500);
-
+  const [editLanguage, setEditLanguage] = useState("");
+  const [editLanguageValue, setEditLanguageValue] = useState("");
+  const [deleteLanguage, setDeleteLanguage] = useState("");
+  const debouncedSearchLanguageValue = useDebounce(searchTerm, 500);
   const columns = [
     {
       id: "1",
@@ -53,7 +52,7 @@ function ManageCategoryComponent() {
         return (
           <Stack direction="row" spacing={1} alignItems="center">
             <IconButton
-              onClick={() => setDeleteCategory(item.row.id)}
+              onClick={() => setDeleteLanguage(item.row.id)}
               sx={{
                 "&.MuiIconButton-root": {
                   background: "#D5E3F7",
@@ -85,17 +84,17 @@ function ManageCategoryComponent() {
     },
   ];
 
-  const categoryList = async () => {
+  const languageList = async () => {
     dispatch(setLoading(true));
     const page = pages;
-    const search = debouncedSearchCategoryValue || "";
-    const response = await manageCategoryApi({ limit, page, search });
+    const search = debouncedSearchLanguageValue || "";
+    const response = await getLanguageApi({ limit, page, search });
     if (response.remote === "success") {
       const formateData = transformOptionsResponse(response.data.results);
       if (!formateData.length) {
         dispatch(setLoading(false));
       }
-      setCategoryTable(formateData);
+      setLanguageTable(formateData);
       const totalCounts = Math.ceil(response.data.count / limit);
       setTotalCount(totalCounts);
     } else {
@@ -107,89 +106,91 @@ function ManageCategoryComponent() {
     setPages(page);
   }
 
-  const addCategoryFunction = async () => {
+  const addLanguageFunction = async () => {
     const payload = {
-      title: addCategory,
+      title: addLanguage,
     };
 
-    const response = await addCategoryApi(payload);
+    const response = await addLanguageApi(payload);
     if (response.remote === "success") {
-      const temp = [...categoryTable];
+      const temp = [...languageTable];
       temp.push({
         id: response.data.data.id || Math.random(),
         no: temp.length + 1,
         name: response.data.data.title,
       });
-      setCategoryTable([...temp]);
-      setAddCategory("");
-      dispatch(setSuccessToast("Add Category SuccessFully"));
+      setLanguageTable([...temp]);
+      setAddLanguage("");
+      dispatch(setSuccessToast("Add language SuccessFully"));
     } else {
       console.log(response.error);
       dispatch(setErrorToast("Something went wrong"));
     }
   };
 
-  const handleEdit = async (item) => {
-    setEditCategory(item.id);
-    setCategoryValue(item.name);
-  };
-
   const handleUpdate = async () => {
     const payload = {
-      title: editCategoryValue,
+      title: editLanguageValue,
     };
 
-    const response = await editCategoryApi(editCategory, payload);
+    const response = await editLanguageApi(editLanguage, payload);
     if (response.remote === "success") {
-      categoryList();
-      setEditCategory("");
+      languageList();
+      setEditLanguage("");
       dispatch(setSuccessToast(response.data.message));
     } else {
       dispatch(setErrorToast(response.error.errors.title));
     }
   };
-  useEffect(() => {
-    categoryList();
-  }, [debouncedSearchCategoryValue, pages, limit]);
 
-  useEffect(() => {
-    if (categoryTable.length) {
-      dispatch(setLoading(false));
-    }
-  }, [categoryTable]);
+  const handleEdit = async (item) => {
+    setEditLanguage(item.id);
+    setEditLanguageValue(item.name);
+  };
 
   const handleDelete = async () => {
-    const response = await deleteCategoryApi(deleteCategory);
+    setLoading(false);
+    const response = await deleteLanguageApi(deleteLanguage);
     if (response.remote === "success") {
-      const newCategoryTable = categoryTable.filter(
-        (emp) => emp.id !== deleteCategory
+      const newLanguageTable = languageTable.filter(
+        (emp) => emp.id !== deleteLanguage
       );
-      setCategoryTable(newCategoryTable);
-      setDeleteCategory("");
-      dispatch(setSuccessToast("Delete Skill SuccessFully"));
+      setLanguageTable(newLanguageTable);
+      setDeleteLanguage("");
+      dispatch(setSuccessToast("Delete Language SuccessFully"));
     } else {
       dispatch(setErrorToast("Something went wrong"));
       console.log(response.error);
     }
   };
 
+  useEffect(() => {
+    languageList();
+  }, [debouncedSearchLanguageValue, pages, limit]);
+
+  useEffect(() => {
+    if (languageTable.length) {
+      dispatch(setLoading(false));
+    }
+  }, [languageTable]);
+
   return (
     <>
       <Layout
-        rows={categoryTable}
+        rows={languageTable}
         columns={columns}
         totalCount={totalCount}
         handlePageChange={getPage}
         searchProps={{
-          placeholder: "Search Category",
+          placeholder: "Search Language ",
           onChange: (e) => setSearchTerm(e.target.value),
           value: searchTerm,
         }}
         inputProps={{
           type: "text",
-          placeholder: "Add Category",
-          onChange: (e) => setAddCategory(e.target.value),
-          value: addCategory,
+          placeholder: "Add  Language ",
+          onChange: (e) => setAddLanguage(e.target.value),
+          value: addLanguage,
         }}
         limitProps={{
           value: limit,
@@ -202,31 +203,32 @@ function ManageCategoryComponent() {
         }}
         optionsProps={{
           title: (
-            <div onClick={addCategoryFunction}>
+            <div onClick={addLanguageFunction}>
               <span className="d-inline-flex align-items-center me-2"></span>{" "}
-              Add Category
+              Add language
             </div>
           ),
         }}
       />
+
       <DialogBox
-        open={!!deleteCategory}
-        handleClose={() => setDeleteCategory("")}
+        open={!!deleteLanguage}
+        handleClose={() => setDeleteLanguage("")}
       >
         <DeleteCard
-          title="Delete Category"
-          content="Are you sure you want to delete Category?"
-          handleCancel={() => setDeleteCategory("")}
+          title="Delete Language"
+          content="Are you sure you want to delete Language?"
+          handleCancel={() => setDeleteLanguage("")}
           handleDelete={handleDelete}
         />
       </DialogBox>
 
-      <DialogBox open={!!editCategory} handleClose={() => setEditCategory("")}>
+      <DialogBox open={!!editLanguage} handleClose={() => setEditLanguage("")}>
         <EditCard
-          title="Edit Category"
-          handleCancel={() => setEditCategory("")}
-          setEditValue={setCategoryValue}
-          editValue={editCategoryValue}
+          title="Edit Language"
+          handleCancel={() => setEditLanguage("")}
+          setEditValue={setEditLanguageValue}
+          editValue={editLanguageValue}
           handleUpdate={handleUpdate}
         />
       </DialogBox>
@@ -234,4 +236,4 @@ function ManageCategoryComponent() {
   );
 }
 
-export default ManageCategoryComponent;
+export default ManageLanguage;

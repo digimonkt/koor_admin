@@ -1,32 +1,66 @@
-import React, { Fragment } from "react";
+import React, { Fragment, useEffect, useState } from "react";
 import styles from "./styles.module.css";
 import { Card, CardContent, Grid, Stack } from "@mui/material";
 import { SVG } from "../../../src/assets/svg";
 import ColumChart from "./columChart/ColumChart";
 import Donut from "./dount/Donut";
+import { getUserCountApi } from "@api/dashboard";
 const DashboardComponent = () => {
-  const userList = [
-    {
-      icon: <SVG.CeaditIcon />,
-      title: "352 371",
-      subtitile: "active users",
-    },
-    {
-      icon: <SVG.ClockIcon />,
-      title: "143 344",
-      subtitile: "visitors today",
-    },
-    {
-      icon: <SVG.WorkIcon />,
-      title: "50 021",
-      subtitile: "active posts",
-    },
-    {
-      icon: <SVG.GroupUser />,
-      title: "345",
-      subtitile: "jobs posted",
-    },
-  ];
+  const [userList, setUserList] = useState([]);
+  const [totalUsers, setTotalUsers] = useState(0);
+  const [jobSeekersCount, setJobSeekersCount] = useState(0);
+  const [employersCount, setEmployersCount] = useState(0);
+  const [vendorsCount, setVendorsCount] = useState(10);
+  const [seriesData, setSeriesData] = useState([]);
+
+  const userCount = async () => {
+    const response = await getUserCountApi();
+    if (response.remote === "success") {
+      const NewUserList = [
+        {
+          icon: <SVG.CreditIcon />,
+          title: response.data.active_jobs,
+          subtitle: "active users",
+        },
+        {
+          icon: <SVG.ClockIcon />,
+          title: "143 344",
+          subtitle: "visitors today",
+        },
+        {
+          icon: <SVG.WorkIcon />,
+          title: response.data.active_user,
+          subtitle: "active posts",
+        },
+        {
+          icon: <SVG.GroupUser />,
+          title: response.data.employers,
+          subtitle: "jobs posted",
+        },
+      ];
+      setUserList(NewUserList);
+      setTotalUsers(response.data.total_user);
+      setVendorsCount(response.data.vendors);
+      setJobSeekersCount(response.data.job_seekers);
+      setEmployersCount(response.data.employers);
+      setSeriesData([
+        response.data.vendors,
+        response.data.job_seekers,
+        response.data.employers,
+      ]);
+    } else {
+      console.log(response.error);
+    }
+  };
+
+  function getPercentage(userCount, totalUser) {
+    const result = (userCount / totalUser) * 100;
+    return result.toFixed(2);
+  }
+
+  useEffect(() => {
+    userCount();
+  }, []);
   return (
     <Fragment>
       <div className="main-admin">
@@ -42,7 +76,7 @@ const DashboardComponent = () => {
                 {item.icon}
                 <div className={`${styles.user}`}>
                   <h2>{item.title}</h2>
-                  <p>{item.subtitile}</p>
+                  <p>{item.subtitle}</p>
                 </div>
               </Stack>
             </Grid>
@@ -65,26 +99,39 @@ const DashboardComponent = () => {
                   },
                 }}
               >
-                <Donut
-                  title="Koor users"
-                  total="1 934 300"
-                  user="Total users"
-                  series={[70, 70, 70]}
-                  colors={["#4267B2", "#4CAF50", "#FFA500"]}
-                  content={
-                    <>
-                      <li>
-                        <b>780 183</b> – Jobseekers <small>(40%)</small>
-                      </li>
-                      <li>
-                        <b>664 152</b> – Employers <small>(34%)</small>
-                      </li>
-                      <li>
-                        <b>507 004</b> – Vendors <small>(26%)</small>
-                      </li>
-                    </>
-                  }
-                />
+                {seriesData.length > 0 && (
+                  <Donut
+                    title="Koor users"
+                    total={totalUsers}
+                    user="Total users"
+                    series={seriesData}
+                    colors={["#4267B2", "#4CAF50", "#FFA500"]}
+                    content={
+                      <>
+                        <li>
+                          <b>{jobSeekersCount}</b> – JobSeekers{" "}
+                          <small>
+                            ({getPercentage(jobSeekersCount, totalUsers)}% )
+                          </small>
+                        </li>
+                        <li>
+                          <b>{employersCount}</b> – Employers{" "}
+                          <small>
+                            {" "}
+                            ({getPercentage(employersCount, totalUsers)}% )
+                          </small>
+                        </li>
+                        <li>
+                          <b>{vendorsCount}</b> – Vendors{" "}
+                          <small>
+                            {" "}
+                            ({getPercentage(vendorsCount, totalUsers)}% )
+                          </small>
+                        </li>
+                      </>
+                    }
+                  />
+                )}
               </CardContent>
             </Card>
           </Grid>

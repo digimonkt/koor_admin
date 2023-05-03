@@ -1,34 +1,34 @@
 import React, { useState, useEffect } from "react";
 import Layout from "../layout";
+import { SVG } from "@assets/svg";
+import { IconButton, Stack } from "@mui/material";
 import { useDispatch } from "react-redux";
 import { setLoading } from "@redux/slice/jobsAndTenders";
-import { SVG } from "@assets/svg";
+import { useDebounce } from "usehooks-ts";
+import { transformOptionsResponse } from "@api/transform/choices";
+import {
+  addJobSeekerCategoryApi,
+  deleteJobSeekerCategoryApi,
+  editJobSeekerCategoryApi,
+  getJobSeekerCategoryApi,
+} from "@api/manageoptions";
 import { setErrorToast, setSuccessToast } from "@redux/slice/toast";
-import { IconButton, Stack } from "@mui/material";
 import DialogBox from "@components/dialogBox";
 import DeleteCard from "@components/card/deleteCard";
-import {
-  addCategoryApi,
-  deleteCategoryApi,
-  editCategoryApi,
-  manageCategoryApi,
-} from "@api/manageoptions";
-import { transformOptionsResponse } from "@api/transform/choices";
-import { useDebounce } from "usehooks-ts";
 import { EditCard } from "@components/card";
-function ManageCategoryComponent() {
+function manageJobSeekerCategory() {
   const dispatch = useDispatch();
-  const [categoryTable, setCategoryTable] = useState([]);
+  const [JobSeekerCategoryTable, setJobSeekerCategoryTable] = useState([]);
   const [pages, setPages] = useState(1);
   const [limit, setLimit] = useState(10);
   const [totalCount, setTotalCount] = useState(0);
-  const [addCategory, setAddCategory] = useState([]);
+  const [addJobSeekerCategory, setAddJobSeekerCategory] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
-  const [deleteCategory, setDeleteCategory] = useState("");
-  const [editCategory, setEditCategory] = useState("");
-  const [editCategoryValue, setCategoryValue] = useState("");
+  const [editJobSeekerCategory, setEditJobSeekerCategory] = useState("");
+  const [editJobSeekerCategoryValue, setEditJobSeekerCategoryValue] =
+    useState("");
+  const [deleteJobSeekerCategory, setDeleteJobSeekerCategory] = useState("");
   const debouncedSearchCategoryValue = useDebounce(searchTerm, 500);
-
   const columns = [
     {
       id: "1",
@@ -53,7 +53,7 @@ function ManageCategoryComponent() {
         return (
           <Stack direction="row" spacing={1} alignItems="center">
             <IconButton
-              onClick={() => setDeleteCategory(item.row.id)}
+              onClick={() => setDeleteJobSeekerCategory(item.row.id)}
               sx={{
                 "&.MuiIconButton-root": {
                   background: "#D5E3F7",
@@ -85,17 +85,17 @@ function ManageCategoryComponent() {
     },
   ];
 
-  const categoryList = async () => {
+  const jobSeekerCategoryList = async () => {
     dispatch(setLoading(true));
     const page = pages;
     const search = debouncedSearchCategoryValue || "";
-    const response = await manageCategoryApi({ limit, page, search });
+    const response = await getJobSeekerCategoryApi({ limit, page, search });
     if (response.remote === "success") {
       const formateData = transformOptionsResponse(response.data.results);
       if (!formateData.length) {
         dispatch(setLoading(false));
       }
-      setCategoryTable(formateData);
+      setJobSeekerCategoryTable(formateData);
       const totalCounts = Math.ceil(response.data.count / limit);
       setTotalCount(totalCounts);
     } else {
@@ -107,89 +107,95 @@ function ManageCategoryComponent() {
     setPages(page);
   }
 
-  const addCategoryFunction = async () => {
+  const addJobSeekerCategoryFunction = async () => {
     const payload = {
-      title: addCategory,
+      title: addJobSeekerCategory,
     };
 
-    const response = await addCategoryApi(payload);
+    const response = await addJobSeekerCategoryApi(payload);
     if (response.remote === "success") {
-      const temp = [...categoryTable];
+      const temp = [...JobSeekerCategoryTable];
       temp.push({
-        id: response.data.data.id || Math.random(),
+        id: response.data.id || Math.random(),
         no: temp.length + 1,
-        name: response.data.data.title,
+        name: response.data.title,
+        category: response.data.category,
       });
-      setCategoryTable([...temp]);
-      setAddCategory("");
-      dispatch(setSuccessToast("Add Category SuccessFully"));
+      setJobSeekerCategoryTable([...temp]);
+      setAddJobSeekerCategory("");
+      dispatch(setSuccessToast("Add Job Seeker Category SuccessFully"));
     } else {
       console.log(response.error);
       dispatch(setErrorToast("Something went wrong"));
     }
   };
 
-  const handleEdit = async (item) => {
-    setEditCategory(item.id);
-    setCategoryValue(item.name);
-  };
-
   const handleUpdate = async () => {
     const payload = {
-      title: editCategoryValue,
+      title: editJobSeekerCategoryValue,
     };
 
-    const response = await editCategoryApi(editCategory, payload);
+    const response = await editJobSeekerCategoryApi(
+      editJobSeekerCategory,
+      payload
+    );
     if (response.remote === "success") {
-      categoryList();
-      setEditCategory("");
+      jobSeekerCategoryList();
+      setEditJobSeekerCategory("");
       dispatch(setSuccessToast(response.data.message));
     } else {
       dispatch(setErrorToast(response.error.errors.title));
     }
   };
-  useEffect(() => {
-    categoryList();
-  }, [debouncedSearchCategoryValue, pages, limit]);
 
-  useEffect(() => {
-    if (categoryTable.length) {
-      dispatch(setLoading(false));
-    }
-  }, [categoryTable]);
+  const handleEdit = async (item) => {
+    setEditJobSeekerCategory(item.id);
+    setEditJobSeekerCategoryValue(item.name);
+  };
 
   const handleDelete = async () => {
-    const response = await deleteCategoryApi(deleteCategory);
+    setLoading(false);
+    const response = await deleteJobSeekerCategoryApi(deleteJobSeekerCategory);
     if (response.remote === "success") {
-      const newCategoryTable = categoryTable.filter(
-        (emp) => emp.id !== deleteCategory
+      const newJobSeekerTable = JobSeekerCategoryTable.filter(
+        (emp) => emp.id !== deleteJobSeekerCategory
       );
-      setCategoryTable(newCategoryTable);
-      setDeleteCategory("");
-      dispatch(setSuccessToast("Delete Skill SuccessFully"));
+      setJobSeekerCategoryTable(newJobSeekerTable);
+      setDeleteJobSeekerCategory("");
+      dispatch(setSuccessToast("Delete Job Seeker Category SuccessFully"));
     } else {
       dispatch(setErrorToast("Something went wrong"));
       console.log(response.error);
     }
   };
 
+  useEffect(() => {
+    jobSeekerCategoryList();
+  }, [debouncedSearchCategoryValue, pages, limit]);
+
+  useEffect(() => {
+    if (JobSeekerCategoryTable.length) {
+      dispatch(setLoading(false));
+    }
+  }, [JobSeekerCategoryTable]);
+
   return (
     <>
       <Layout
-        rows={categoryTable}
+        rows={JobSeekerCategoryTable}
         columns={columns}
         totalCount={totalCount}
         handlePageChange={getPage}
         searchProps={{
-          placeholder: "Search Category",
+          placeholder: "Search JobSeeker Category",
           onChange: (e) => setSearchTerm(e.target.value),
           value: searchTerm,
         }}
         inputProps={{
           type: "text",
-          placeholder: "Add Category",
-          onChange: (e) => setAddCategory(e.target.value),
-          value: addCategory,
+          placeholder: "Add  job Seeker Category",
+          onChange: (e) => setAddJobSeekerCategory(e.target.value),
+          value: addJobSeekerCategory,
         }}
         limitProps={{
           value: limit,
@@ -202,31 +208,35 @@ function ManageCategoryComponent() {
         }}
         optionsProps={{
           title: (
-            <div onClick={addCategoryFunction}>
+            <div onClick={addJobSeekerCategoryFunction}>
               <span className="d-inline-flex align-items-center me-2"></span>{" "}
-              Add Category
+              Add Job Seeker Category
             </div>
           ),
         }}
       />
+
       <DialogBox
-        open={!!deleteCategory}
-        handleClose={() => setDeleteCategory("")}
+        open={!!deleteJobSeekerCategory}
+        handleClose={() => setDeleteJobSeekerCategory("")}
       >
         <DeleteCard
-          title="Delete Category"
+          title="Delete job Seeker Category"
           content="Are you sure you want to delete Category?"
-          handleCancel={() => setDeleteCategory("")}
+          handleCancel={() => setDeleteJobSeekerCategory("")}
           handleDelete={handleDelete}
         />
       </DialogBox>
 
-      <DialogBox open={!!editCategory} handleClose={() => setEditCategory("")}>
+      <DialogBox
+        open={!!editJobSeekerCategory}
+        handleClose={() => setEditJobSeekerCategory("")}
+      >
         <EditCard
-          title="Edit Category"
-          handleCancel={() => setEditCategory("")}
-          setEditValue={setCategoryValue}
-          editValue={editCategoryValue}
+          title="Edit Job Seeker Category"
+          handleCancel={() => setEditJobSeekerCategory("")}
+          setEditValue={setEditJobSeekerCategoryValue}
+          editValue={editJobSeekerCategoryValue}
           handleUpdate={handleUpdate}
         />
       </DialogBox>
@@ -234,4 +244,4 @@ function ManageCategoryComponent() {
   );
 }
 
-export default ManageCategoryComponent;
+export default manageJobSeekerCategory;

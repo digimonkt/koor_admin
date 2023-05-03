@@ -39,3 +39,23 @@ export const transformOptionsResponse = (data) => {
     name: data.title,
   }));
 };
+
+export const transformSubCategoryResponse = (data) => {
+  return data.map((data, index) => ({
+    id: data.id,
+    no: index + 1,
+    name: data.title,
+    category: data.category.title,
+    categoryId: data.category.id,
+  }));
+};
+
+export const transformCityResponse = (data) => {
+  return data.map((data, index) => ({
+    id: data.id,
+    no: index + 1,
+    city: data.title,
+    country: data.country.title,
+    countryId: data.country.id,
+  }));
+};

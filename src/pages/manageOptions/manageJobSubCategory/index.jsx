@@ -7,28 +7,31 @@ import { setErrorToast, setSuccessToast } from "@redux/slice/toast";
 import { IconButton, Stack } from "@mui/material";
 import DialogBox from "@components/dialogBox";
 import DeleteCard from "@components/card/deleteCard";
-import {
-  addCategoryApi,
-  deleteCategoryApi,
-  editCategoryApi,
-  manageCategoryApi,
-} from "@api/manageoptions";
-import { transformOptionsResponse } from "@api/transform/choices";
+import { transformSubCategoryResponse } from "@api/transform/choices";
 import { useDebounce } from "usehooks-ts";
 import { EditCard } from "@components/card";
-function ManageCategoryComponent() {
+import {
+  addSubCategoryApi,
+  deleteSubCategoryApi,
+  editSubCategoryApi,
+  getJobSubCategoryApi,
+} from "@api/managejobSubCategory";
+import { manageCategoryApi } from "@api/manageoptions";
+function ManageJobSubCategory() {
   const dispatch = useDispatch();
   const [categoryTable, setCategoryTable] = useState([]);
   const [pages, setPages] = useState(1);
   const [limit, setLimit] = useState(10);
   const [totalCount, setTotalCount] = useState(0);
   const [addCategory, setAddCategory] = useState([]);
+  const [countryId, seCountryId] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [deleteCategory, setDeleteCategory] = useState("");
   const [editCategory, setEditCategory] = useState("");
-  const [editCategoryValue, setCategoryValue] = useState("");
+  const [categoryValue, setCategoryValue] = useState("");
+  const [subCategoryId, setSubCategoryId] = useState("");
   const debouncedSearchCategoryValue = useDebounce(searchTerm, 500);
-
+  const [jobCategoryList, setJobCategoryList] = useState([]);
   const columns = [
     {
       id: "1",
@@ -39,7 +42,15 @@ function ManageCategoryComponent() {
 
     {
       field: "name",
-      headerName: "Name",
+      headerName: "Sub Category",
+      sortable: true,
+      width: 180,
+      id: "2",
+    },
+
+    {
+      field: "category",
+      headerName: "Category",
       sortable: true,
       width: 180,
       id: "3",
@@ -89,9 +100,9 @@ function ManageCategoryComponent() {
     dispatch(setLoading(true));
     const page = pages;
     const search = debouncedSearchCategoryValue || "";
-    const response = await manageCategoryApi({ limit, page, search });
+    const response = await getJobSubCategoryApi({ limit, page, search });
     if (response.remote === "success") {
-      const formateData = transformOptionsResponse(response.data.results);
+      const formateData = transformSubCategoryResponse(response.data.results);
       if (!formateData.length) {
         dispatch(setLoading(false));
       }
@@ -106,19 +117,21 @@ function ManageCategoryComponent() {
   function getPage(_, page) {
     setPages(page);
   }
-
-  const addCategoryFunction = async () => {
+  const addSubCategoryFunction = async () => {
     const payload = {
       title: addCategory,
+      category: countryId.id,
     };
 
-    const response = await addCategoryApi(payload);
+    const response = await addSubCategoryApi(payload);
     if (response.remote === "success") {
       const temp = [...categoryTable];
       temp.push({
         id: response.data.data.id || Math.random(),
         no: temp.length + 1,
         name: response.data.data.title,
+        category: "",
+        categoryId: response.data.data.category,
       });
       setCategoryTable([...temp]);
       setAddCategory("");
@@ -132,14 +145,15 @@ function ManageCategoryComponent() {
   const handleEdit = async (item) => {
     setEditCategory(item.id);
     setCategoryValue(item.name);
+    setSubCategoryId(item.categoryId);
   };
 
   const handleUpdate = async () => {
     const payload = {
-      title: editCategoryValue,
+      title: categoryValue,
+      category: subCategoryId,
     };
-
-    const response = await editCategoryApi(editCategory, payload);
+    const response = await editSubCategoryApi(editCategory, payload);
     if (response.remote === "success") {
       categoryList();
       setEditCategory("");
@@ -148,18 +162,9 @@ function ManageCategoryComponent() {
       dispatch(setErrorToast(response.error.errors.title));
     }
   };
-  useEffect(() => {
-    categoryList();
-  }, [debouncedSearchCategoryValue, pages, limit]);
-
-  useEffect(() => {
-    if (categoryTable.length) {
-      dispatch(setLoading(false));
-    }
-  }, [categoryTable]);
 
   const handleDelete = async () => {
-    const response = await deleteCategoryApi(deleteCategory);
+    const response = await deleteSubCategoryApi(deleteCategory);
     if (response.remote === "success") {
       const newCategoryTable = categoryTable.filter(
         (emp) => emp.id !== deleteCategory
@@ -173,21 +178,50 @@ function ManageCategoryComponent() {
     }
   };
 
+  const getCategoryList = async () => {
+    const limit = 1000;
+    const response = await manageCategoryApi({ limit });
+    if (response.remote === "success") {
+      setJobCategoryList(response.data.results);
+    } else {
+      console.log(response.error);
+    }
+  };
+
+  useEffect(() => {
+    getCategoryList();
+  }, []);
+
+  useEffect(() => {
+    categoryList();
+  }, [debouncedSearchCategoryValue, pages, limit]);
+
+  useEffect(() => {
+    if (categoryTable.length) {
+      dispatch(setLoading(false));
+    }
+  }, [categoryTable]);
   return (
     <>
       <Layout
+        SubCategory
         rows={categoryTable}
         columns={columns}
         totalCount={totalCount}
         handlePageChange={getPage}
         searchProps={{
-          placeholder: "Search Category",
+          placeholder: "Search Sub Category",
           onChange: (e) => setSearchTerm(e.target.value),
           value: searchTerm,
         }}
+        selectPropsCountry={{
+          onChange: (_, value) => {
+            seCountryId(value);
+          },
+        }}
         inputProps={{
           type: "text",
-          placeholder: "Add Category",
+          placeholder: "Add Sub Category",
           onChange: (e) => setAddCategory(e.target.value),
           value: addCategory,
         }}
@@ -200,11 +234,12 @@ function ManageCategoryComponent() {
           ],
           onChange: (e) => setLimit(e.target.value),
         }}
+        dropDownValue={jobCategoryList}
         optionsProps={{
           title: (
-            <div onClick={addCategoryFunction}>
+            <div onClick={addSubCategoryFunction}>
               <span className="d-inline-flex align-items-center me-2"></span>{" "}
-              Add Category
+              Add Sub Category
             </div>
           ),
         }}
@@ -226,7 +261,7 @@ function ManageCategoryComponent() {
           title="Edit Category"
           handleCancel={() => setEditCategory("")}
           setEditValue={setCategoryValue}
-          editValue={editCategoryValue}
+          editValue={categoryValue}
           handleUpdate={handleUpdate}
         />
       </DialogBox>
@@ -234,4 +269,4 @@ function ManageCategoryComponent() {
   );
 }
 
-export default ManageCategoryComponent;
+export default ManageJobSubCategory;

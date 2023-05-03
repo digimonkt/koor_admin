@@ -1,8 +1,11 @@
+import React, { useState, useEffect } from "react";
 import DataTable from "@components/dataTable";
 import OptionsFilter from "@components/optionsFilter";
 import { Card, CardContent, Pagination } from "@mui/material";
 import { Stack, styled } from "@mui/system";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
+import { getCountries } from "@redux/slice/choices";
+
 const TablePagination = styled(Pagination)(() => ({
   " &.MuiPagination-root .MuiPaginationItem-root": {
     minWidth: "36px",
@@ -30,8 +33,36 @@ function Layout({
   limitProps,
   inputProps,
   optionsProps,
+  selectProps,
+  country,
+  city,
+  dropDownValue,
+  selectPropsCountry,
+  selectPropsCities,
+  SubCategory,
+  cityValue,
 }) {
   const { loading } = useSelector((state) => state.jobsAndTenders);
+  const { countries } = useSelector((state) => state.choice);
+  const [dropDownList, setDropDownList] = useState([]);
+  const [cityValueList, setCityValueList] = useState([]);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    if (!countries.data.length) {
+      dispatch(getCountries());
+    }
+  }, []);
+  useEffect(() => {
+    if (dropDownValue) {
+      setDropDownList(dropDownValue);
+    }
+  }, [dropDownValue]);
+
+  useEffect(() => {
+    if (cityValue) {
+      setCityValueList(cityValue);
+    }
+  }, [cityValue]);
 
   return (
     <>
@@ -45,6 +76,32 @@ function Layout({
           optionsProps={{ ...(optionsProps || {}) }}
           inputProps={{ ...(inputProps || {}) }}
           searchProps={{ ...(searchProps || {}) }}
+          selectProps={{
+            ...(selectProps || {}),
+            options: countries.data.map((country) => ({
+              value: country.id,
+              label: country.title,
+            })),
+          }}
+          selectPropsCountry={{
+            ...(selectPropsCountry || {}),
+            options: dropDownList.map((country) => ({
+              value: country.id,
+              label: country.title,
+              ...country,
+            })),
+          }}
+          selectPropsCities={{
+            ...(selectPropsCities || {}),
+            options: cityValueList.map((city) => ({
+              value: city.id,
+              label: city.title,
+              ...city,
+            })),
+          }}
+          country={country}
+          city={city}
+          SubCategory={SubCategory}
         />
       </Stack>
       <Card
