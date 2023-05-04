@@ -38,11 +38,11 @@ export const getCityApi = async ({ limit, page, search }) => {
   return response;
 };
 
-export const getWorldCityApi = async ({ limit, countryId }) => {
+export const getWorldCityApi = async ({ countryName, search }) => {
   const response = await api.request({
     url: urlcat("/v1/admin/world-city", {
-      countryId,
-      limit,
+      countryName,
+      search,
     }),
     method: "GET",
   });

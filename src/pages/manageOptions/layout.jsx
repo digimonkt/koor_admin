@@ -63,7 +63,6 @@ function Layout({
       setCityValueList(cityValue);
     }
   }, [cityValue]);
-
   return (
     <>
       <Stack

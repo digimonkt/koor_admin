@@ -1693,3 +1693,10 @@ margin-left: 5px;
   width: 145px;
   align-items: center;
 }
+
+.textEditor{
+  margin-top: 50px;
+  display: flex;
+  justify-content: center;
+  padding-bottom: 30px;
+}

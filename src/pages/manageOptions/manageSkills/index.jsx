@@ -119,12 +119,13 @@ function ManageSkillsComponent() {
       setSkillsTable([...temp]);
       setAddSkill("");
 
-      dispatch(setSuccessToast("Add Category SuccessFully"));
+      dispatch(setSuccessToast("Add Skill SuccessFully"));
     } else {
       console.log(response.error);
       dispatch(setErrorToast("Something went wrong"));
     }
   };
+
   function getPage(_, page) {
     setPages(page);
   }
@@ -152,6 +153,7 @@ function ManageSkillsComponent() {
     const payload = {
       title: editSkillValue,
     };
+
     const response = await editSkillApi(editSkill, payload);
     if (response.remote === "success") {
       skillsList();
