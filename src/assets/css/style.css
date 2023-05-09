@@ -1519,7 +1519,7 @@ span.count {
 }
 body {
   padding: 0px !important;
-  overflow-y: auto !important;
+  overflow-y: hidden !important;
 }
 @media (min-width: 1536px) {
   .MuiContainer-root {
@@ -1699,4 +1699,9 @@ margin-left: 5px;
   display: flex;
   justify-content: center;
   padding-bottom: 30px;
+}
+
+.accordion-class .MuiAccordionSummary-content{
+  display: flex;
+  justify-content: space-between;
 }

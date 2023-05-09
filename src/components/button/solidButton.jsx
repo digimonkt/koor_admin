@@ -1,13 +1,6 @@
 import { Button } from "@mui/material";
 
-function SolidButtonComponent({
-  className,
-  title,
-  onClick,
-  isBlueButton,
-  color,
-  ...rest
-}) {
+function SolidButtonComponent({ title, color, ...rest }) {
   return (
     <Button
       variant="outlined"
