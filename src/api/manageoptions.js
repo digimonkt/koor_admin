@@ -26,9 +26,9 @@ export const skillDeleteApi = async (skillId) => {
   return response;
 };
 
-export const manageCategoryApi = async ({ limit, page, search, country }) => {
+export const manageCategoryApi = async () => {
   const response = await api.request({
-    url: urlcat("/v1/admin/job-category", { limit, page, search, country }),
+    url: urlcat("/v1/admin/job-category"),
     method: "GET",
   });
   return response;
@@ -178,5 +178,42 @@ export const deleteLanguageApi = async (jobSeekerCategoryId) => {
     }),
     method: "DELETE",
   });
+  return response;
+};
+
+export const manageTenderApi = async ({ limit, page, search, country }) => {
+  const response = await api.request({
+    url: urlcat("/v1/admin/tender-category", { limit, page, search, country }),
+    method: "GET",
+  });
+  return response;
+};
+
+export const createTenderApi = async (data) => {
+  const response = await api.request({
+    url: urlcat("/v1/admin/tender-category"),
+    method: "POST",
+    data,
+  });
+  return response;
+};
+
+export const tenderDeleteApi = async (tenderCategoryId) => {
+  const response = await api.request({
+    url: urlcat("/v1/admin/tender-category/:tenderCategoryId", {
+      tenderCategoryId,
+    }),
+    method: "DELETE",
+  });
+  return response;
+};
+
+export const editTenderApi = async (skillId, data) => {
+  const response = alert("This Api is under process");
+  // const response = await api.request({
+  //   url: urlcat("/v1/admin/skills/:skillId", { skillId }),
+  //   method: "PUT",
+  //   data,
+  // });
   return response;
 };

@@ -23,6 +23,7 @@ const TablePagination = styled(Pagination)(() => ({
     display: "none",
   },
 }));
+
 function Layout({
   rows,
   columns,
@@ -63,7 +64,6 @@ function Layout({
       setCityValueList(cityValue);
     }
   }, [cityValue]);
-
   return (
     <>
       <Stack
@@ -76,13 +76,13 @@ function Layout({
           optionsProps={{ ...(optionsProps || {}) }}
           inputProps={{ ...(inputProps || {}) }}
           searchProps={{ ...(searchProps || {}) }}
-          selectProps={{
-            ...(selectProps || {}),
-            options: countries.data.map((country) => ({
-              value: country.id,
-              label: country.title,
-            })),
-          }}
+          // selectProps={{
+          //   ...(selectProps || {}),
+          //   options: countries.data.map((country) => ({
+          //     value: country.id,
+          //     label: country.title,
+          //   })),
+          // }}
           selectPropsCountry={{
             ...(selectPropsCountry || {}),
             options: dropDownList.map((country) => ({

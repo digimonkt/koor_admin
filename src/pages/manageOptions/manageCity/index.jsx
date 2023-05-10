@@ -11,9 +11,9 @@ import {
   deleteCitiesApi,
   getCityApi,
   getWorldCityApi,
-  getWorldCountryApi,
+  // getWorldCountryApi,
 } from "@api/manageCountryCity";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useDebounce } from "usehooks-ts";
 import { transformCityResponse } from "@api/transform/choices";
 
@@ -24,19 +24,19 @@ const ManageCity = () => {
   const [pages, setPages] = useState(1);
   const [limit, setLimit] = useState(10);
   const [searchTerm, setSearchTerm] = useState("");
-  const [countryValue, setCountryValue] = useState([]);
+  // const [countryValue, setCountryValue] = useState([]);
   const [cityValue, setCityValue] = useState([]);
   const [cityData, setCityData] = useState({});
   const [deleteCity, setDeleteCity] = useState("");
   const debouncedSearchCategoryValue = useDebounce(searchTerm, 500);
-  // const { countries } = useSelector((state) => state.choice);
+  const { countries } = useSelector((state) => state.choice);
 
   async function getCountries() {
     // setCountryValue(countries.data);
-    const response = await getWorldCountryApi();
-    if (response.remote === "success") {
-      setCountryValue(response.data);
-    }
+    // const response = await getWorldCountryApi();
+    // if (response.remote === "success") {
+    //   setCountryValue(response.data);
+    // }
   }
   useEffect(() => {
     getCountries();
@@ -46,7 +46,7 @@ const ManageCity = () => {
     const response = await deleteCitiesApi(deleteCity);
     if (response.remote === "success") {
       const newCountryTable = cityTable.filter((emp) => emp.id !== deleteCity);
-      setCountryValue(newCountryTable);
+      setCityTable(newCountryTable);
       setDeleteCity("");
       dispatch(setSuccessToast("Delete Skill SuccessFully"));
     } else {
@@ -133,9 +133,8 @@ const ManageCity = () => {
   }
 
   const getCityList = async (value) => {
-    const countryId = value.id;
-    const limit = 500;
-    const response = await getWorldCityApi({ limit, countryId });
+    const countryName = value.title;
+    const response = await getWorldCityApi({ countryName });
     if (response.remote === "success") {
       setCityValue(response.data.results);
     }
@@ -160,6 +159,14 @@ const ManageCity = () => {
       dispatch(setErrorToast("Something went wrong"));
     }
   }
+
+  const searchCity = async (_, search) => {
+    const response = await getWorldCityApi({ search });
+    if (response.remote === "success") {
+      setCityValue(response.data.results);
+      setCityData(search);
+    }
+  };
   return (
     <>
       <Layout
@@ -167,7 +174,7 @@ const ManageCity = () => {
         rows={cityTable}
         columns={columns}
         totalCount={totalCount}
-        dropDownValue={countryValue}
+        dropDownValue={countries.data}
         cityValue={cityValue}
         handlePageChange={getPage}
         searchProps={{
@@ -182,9 +189,10 @@ const ManageCity = () => {
           onChange: (_, value) => getCityList(value),
         }}
         selectPropsCities={{
-          onChange: (_, value) => {
-            setCityData(value);
-          },
+          // onChange: (_, value) => {
+          //   setCityData(value);
+          // },
+          onChange: (_, value) => searchCity(_, value),
         }}
         limitProps={{
           value: limit,

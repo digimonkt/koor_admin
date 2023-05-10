@@ -29,7 +29,6 @@ export const SelectBox = styled(Select)`
 `;
 
 const Donut = ({ title, total, user, series, colors, content }) => {
-  console.log(series);
   const [isSelect, setIsSelect] = useState("");
 
   const handleChange = (event) => {

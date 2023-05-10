@@ -48,6 +48,9 @@ const ManageUserRightsComponent = () => {
     }
   };
 
+  const onCancelHandle = () => {
+    setActiveEditor(false);
+  };
   useEffect(() => {
     getUserData();
   }, []);
@@ -66,6 +69,7 @@ const ManageUserRightsComponent = () => {
             handleUpdate={handleUpdate}
             handleEditValue={handleEditValue}
             value={value}
+            onCancelHandle={onCancelHandle}
           />
         ) : (
           <CardContent
@@ -81,6 +85,7 @@ const ManageUserRightsComponent = () => {
                 spacing={2}
                 justifyContent="space-between"
                 alignItems="center"
+                sx={{ float: "right" }}
               >
                 <div onClick={() => handleEdit()}>
                   <OutlinedButton

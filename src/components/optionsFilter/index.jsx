@@ -7,7 +7,6 @@ const OptionsFilter = ({
   searchProps,
   inputProps,
   optionsProps,
-  selectProps,
   country,
   selectPropsCities,
   city,

@@ -58,26 +58,26 @@ export const MENU_ITEM = [
     url: "/manage-country",
   },
 
-  {
-    id: "10",
-    icon: <SVG.FinancialTools />,
-    page: "Manage  city",
-    url: "/manage-city",
-  },
+  // {
+  //   id: "10",
+  //   icon: <SVG.FinancialTools />,
+  //   page: "Manage  city",
+  //   url: "/manage-city",
+  // },
 
-  {
-    id: "11",
-    icon: <SVG.FinancialTools />,
-    page: "Manage job seeker category",
-    url: "/manage-job-seeker-category",
-  },
+  // {
+  //   id: "11",
+  //   icon: <SVG.FinancialTools />,
+  //   page: "Manage job seeker category",
+  //   url: "/manage-job-seeker-category",
+  // },
 
-  {
-    id: "12",
-    icon: <SVG.FinancialTools />,
-    page: "Manage job sub category",
-    url: "/manage-job-sub-category",
-  },
+  // {
+  //   id: "12",
+  //   icon: <SVG.FinancialTools />,
+  //   page: "Manage job sub category",
+  //   url: "/manage-job-sub-category",
+  // },
 
   {
     id: "13",

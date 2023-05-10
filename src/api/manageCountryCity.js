@@ -26,23 +26,19 @@ export const deleteCountriesApi = async (countryId) => {
   return response;
 };
 
-export const getCityApi = async ({ limit, page, search }) => {
+export const getCityApi = async (data) => {
   const response = await api.request({
-    url: urlcat("/v1/admin/city", {
-      limit,
-      page,
-      search,
-    }),
+    url: urlcat("/v1/admin/city", data),
     method: "GET",
   });
   return response;
 };
 
-export const getWorldCityApi = async ({ limit, countryId }) => {
+export const getWorldCityApi = async ({ countryName, search }) => {
   const response = await api.request({
     url: urlcat("/v1/admin/world-city", {
-      countryId,
-      limit,
+      countryName,
+      search,
     }),
     method: "GET",
   });

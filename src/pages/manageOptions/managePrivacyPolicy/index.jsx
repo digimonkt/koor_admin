@@ -48,6 +48,11 @@ const ManagePrivacyPolicyComponent = () => {
       console.log(response.error);
     }
   };
+
+  const onCancelHandle = () => {
+    setActiveEditor(false);
+  };
+
   useEffect(() => {
     getPrivacyData();
   }, []);
@@ -66,6 +71,7 @@ const ManagePrivacyPolicyComponent = () => {
             handleUpdate={handleUpdate}
             handleEditValue={handleEditValue}
             value={value}
+            onCancelHandle={onCancelHandle}
           />
         ) : (
           <CardContent
@@ -81,6 +87,7 @@ const ManagePrivacyPolicyComponent = () => {
                 spacing={2}
                 justifyContent="space-between"
                 alignItems="center"
+                sx={{ float: "right" }}
               >
                 <OutlinedButton
                   title={
