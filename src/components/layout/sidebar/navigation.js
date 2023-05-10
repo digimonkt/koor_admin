@@ -65,12 +65,12 @@ export const MENU_ITEM = [
   //   url: "/manage-city",
   // },
 
-  {
-    id: "11",
-    icon: <SVG.FinancialTools />,
-    page: "Manage job seeker category",
-    url: "/manage-job-seeker-category",
-  },
+  // {
+  //   id: "11",
+  //   icon: <SVG.FinancialTools />,
+  //   page: "Manage job seeker category",
+  //   url: "/manage-job-seeker-category",
+  // },
 
   // {
   //   id: "12",
