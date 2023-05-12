@@ -26,9 +26,9 @@ export const skillDeleteApi = async (skillId) => {
   return response;
 };
 
-export const manageCategoryApi = async () => {
+export const manageCategoryApi = async (search) => {
   const response = await api.request({
-    url: urlcat("/v1/admin/job-category"),
+    url: urlcat("/v1/admin/job-category", { search }),
     method: "GET",
   });
   return response;
@@ -183,7 +183,7 @@ export const deleteLanguageApi = async (jobSeekerCategoryId) => {
 
 export const manageTenderApi = async ({ limit, page, search, country }) => {
   const response = await api.request({
-    url: urlcat("/v1/admin/tender-category", { limit, page, search, country }),
+    url: urlcat("/v1/admin/tender", { limit, page, search, country }),
     method: "GET",
   });
   return response;

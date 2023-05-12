@@ -27,8 +27,8 @@ const initialState = {
 // counties
 export const getCountries = createAsyncThunk(
   "choices/getCountries",
-  async (_, { rejectWithValue }) => {
-    const res = await getCountriesName();
+  async (search, { rejectWithValue }) => {
+    const res = await getCountriesName(search);
     if (res.remote === "success") {
       return res.data.results;
     } else {
@@ -54,8 +54,8 @@ export const getCitiesByCountry = createAsyncThunk(
 // categories
 export const getCategories = createAsyncThunk(
   "choices/getCategories",
-  async (_, { rejectWithValue }) => {
-    const res = await manageCategoryApi();
+  async (search, { rejectWithValue }) => {
+    const res = await manageCategoryApi(search);
     if (res.remote === "success") {
       return res.data.results;
     } else {
@@ -83,6 +83,22 @@ export const getSubCategories = createAsyncThunk(
 export const choiceSlice = createSlice({
   name: "choice",
   initialState,
+  reducers: {
+    addCountry: (state, action) => {
+      const newCountries = [action.payload, ...state.countries.data];
+      state.countries = {
+        loading: false,
+        data: newCountries,
+      };
+    },
+    addCategories: (state, action) => {
+      const newCategory = [action.payload, ...state.categories.data];
+      state.categories = {
+        loading: false,
+        data: newCategory,
+      };
+    },
+  },
   extraReducers: (builder) => {
     //  Countries
     builder.addCase(getCountries.fulfilled, (state, action) => {
@@ -173,5 +189,5 @@ export const choiceSlice = createSlice({
     });
   },
 });
-
+export const { addCountry, addCategories } = choiceSlice.actions;
 export default choiceSlice.reducer;

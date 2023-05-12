@@ -1,21 +1,19 @@
 import React from "react";
-
 import { LabeledInput, SearchInput } from "@components/input";
 import { SolidButton } from "@components/button";
 import { Stack } from "@mui/material";
 import SelectWithSearch from "@components/input/selectWithsearch";
 
 const Layout = ({
-  row,
-  category,
   children,
   title,
-  searchTitle,
+  searchProps,
   addBtnTitle,
   onAddItems,
   countryInput,
+  selectList,
+  addItems,
 }) => {
-  const options = [{ label: "title" }];
   return (
     <>
       <Stack
@@ -24,13 +22,12 @@ const Layout = ({
         alignItems={{ xs: "start", sm: "center" }}
         sx={{ marginBottom: 2.5 }}
       >
-        <SearchInput placeholder={searchTitle} widthInput="100%" />
+        <SearchInput widthInput="100%" {...searchProps} />
         {countryInput ? (
-          <SelectWithSearch options={options} title={title} />
+          <SelectWithSearch title={title} {...selectList} />
         ) : (
-          <LabeledInput placeholder={title} />
+          <LabeledInput {...addItems} />
         )}
-
         <SolidButton
           align="right"
           sx={{

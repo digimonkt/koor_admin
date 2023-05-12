@@ -1,3 +1,4 @@
+import React from "react";
 import {
   AccordionDetails,
   AccordionSummary,
@@ -6,14 +7,26 @@ import {
   Typography,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import React from "react";
 import { SVG } from "@assets/svg";
 
 function Accordion({ title, onOpen, handleDelete, handleEdit, children }) {
+  const accordionProps = {
+    sx: {
+      pointerEvents: "none",
+    },
+    expandIcon: (
+      <ExpandMoreIcon
+        onClick={onOpen}
+        sx={{
+          pointerEvents: "auto",
+        }}
+      />
+    ),
+  };
   return (
     <MUIAccordion>
       <AccordionSummary
-        expandIcon={<ExpandMoreIcon onClick={onOpen} />}
+        {...accordionProps}
         aria-controls="panel1a-content"
         id="panel1a-header"
         className="accordion-class"
@@ -52,6 +65,7 @@ function Accordion({ title, onOpen, handleDelete, handleEdit, children }) {
           </IconButton>
         )}
       </AccordionSummary>
+
       <AccordionDetails>{children}</AccordionDetails>
     </MUIAccordion>
   );
