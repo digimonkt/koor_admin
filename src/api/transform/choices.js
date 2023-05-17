@@ -27,6 +27,7 @@ export const transformCandidatesAPIResponse = (data) => {
     no: index + 1,
     name: data.name,
     email: data.email,
+    role: data.role,
     mobileNumber: data.mobile_number,
     action: data.is_active,
   }));

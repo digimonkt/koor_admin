@@ -12,6 +12,7 @@ import { setLoading } from "@redux/slice/jobsAndTenders";
 import { useDebounce } from "usehooks-ts";
 import { transformCandidatesAPIResponse } from "@api/transform/choices";
 import env from "@utils/validateEnv";
+import { USER_ROLES } from "@utils/enum";
 function ManageCandidatesComponent() {
   const dispatch = useDispatch();
   const { countries } = useSelector((state) => state.choice);
@@ -31,6 +32,12 @@ function ManageCandidatesComponent() {
       headerName: "No",
       sortable: true,
     },
+    {
+      id: "A1",
+      field: "role",
+      headerName: "Role",
+      sortable: true,
+    },
 
     {
       field: "name",
@@ -39,6 +46,7 @@ function ManageCandidatesComponent() {
       width: 180,
       id: "3",
     },
+
     {
       field: "email",
       headerName: "Email",
@@ -77,7 +85,7 @@ function ManageCandidatesComponent() {
             </>
 
             <IconButton
-              onClick={() => handleRedirectDetails(item.row.id)}
+              onClick={() => handleRedirectDetails(item.row.id, item.row.role)}
               sx={{
                 "&.MuiIconButton-root": {
                   background: "#D5E3F7",
@@ -108,9 +116,14 @@ function ManageCandidatesComponent() {
     },
   ];
 
-  const handleRedirectDetails = (item) => {
-    const url = `${env.REACT_APP_REDIRECT_URL}/job-seeker/${item}/profile`;
-    window.open(url, "_blank");
+  const handleRedirectDetails = (item, role) => {
+    if (role === USER_ROLES.vendor) {
+      const url = `${env.REACT_APP_REDIRECT_URL}/vendor/${item}/profile`;
+      window.open(url, "_blank");
+    } else if (role === USER_ROLES.jobSeeker) {
+      const url = `${env.REACT_APP_REDIRECT_URL}/job-seeker/${item}/profile`;
+      window.open(url, "_blank");
+    }
   };
 
   const candidateList = async () => {

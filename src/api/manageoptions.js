@@ -228,7 +228,7 @@ export const tagDeleteApi = async (tagId) => {
 
 export const createTagApi = async (data) => {
   const response = await api.request({
-    url: urlcat("/v1/admin/Tag"),
+    url: urlcat("/v1/admin/tag"),
     method: "POST",
     data,
   });
@@ -237,7 +237,7 @@ export const createTagApi = async (data) => {
 
 export const editTagApi = async (tagId, data) => {
   const response = await api.request({
-    url: urlcat("/v1/admin/skills/:skillId", { tagId }),
+    url: urlcat("/v1/admin/tag/:tagId", { tagId }),
     method: "PUT",
     data,
   });

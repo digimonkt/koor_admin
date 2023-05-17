@@ -120,7 +120,7 @@ function ManageTag() {
       setSkillsTable([...temp]);
       setAddSkill("");
 
-      dispatch(setSuccessToast("Add Skill SuccessFully"));
+      dispatch(setSuccessToast("Add Tag SuccessFully"));
     } else {
       console.log(response.error);
       dispatch(setErrorToast("Something went wrong"));
@@ -183,13 +183,13 @@ function ManageTag() {
         totalCount={totalCount}
         handlePageChange={getPage}
         searchProps={{
-          placeholder: "Search Skills",
+          placeholder: "Search Tags",
           onChange: (e) => setSearchTerm(e.target.value),
           value: searchTerm,
         }}
         inputProps={{
           type: "text",
-          placeholder: "Add Skill",
+          placeholder: "Add Tag",
           onChange: (e) => setAddSkill(e.target.value),
           value: addSkill,
         }}
@@ -206,7 +206,7 @@ function ManageTag() {
           title: (
             <div onClick={addSkillFunction}>
               <span className="d-inline-flex align-items-center me-2"></span>{" "}
-              Add Skill
+              Add Tag
             </div>
           ),
         }}
