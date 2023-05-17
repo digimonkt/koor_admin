@@ -5,7 +5,7 @@ import { IconButton, Stack } from "@mui/material";
 import { useDispatch } from "react-redux";
 import { setLoading } from "@redux/slice/jobsAndTenders";
 import { useDebounce } from "usehooks-ts";
-import { transformOptionsResponse } from "@api/transform/choices";
+import { transformSkillResponse } from "@api/transform/choices";
 import {
   addLanguageApi,
   deleteLanguageApi,
@@ -90,7 +90,7 @@ function ManageLanguage() {
     const search = debouncedSearchLanguageValue || "";
     const response = await getLanguageApi({ limit, page, search });
     if (response.remote === "success") {
-      const formateData = transformOptionsResponse(response.data.results);
+      const formateData = transformSkillResponse(response.data.results);
       if (!formateData.length) {
         dispatch(setLoading(false));
       }
