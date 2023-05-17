@@ -8,13 +8,11 @@ import { validateLoginForm } from "./validator";
 import { ErrorMessage } from "@components/caption";
 import Loader from "@components/loader";
 import { USER_ROLES } from "@utils/enum";
-import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import { setIsLoggedIn, setRole } from "@redux/slice/user";
 function LoginComponent() {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const [isLoading, setIsLoading] = useState(false);
+  const [loading, setIsLoading] = useState(false);
   const formik = useFormik({
     initialValues: {
       email: "",
@@ -31,11 +29,11 @@ function LoginComponent() {
       };
       const response = await adminLogin(payload);
       if (response.remote === "success") {
-        setIsLoading(false);
         dispatch(setIsLoggedIn(true));
         dispatch(setRole(USER_ROLES.admin));
-        navigate("/dashboard");
+        setIsLoading(false);
       } else {
+        setIsLoading(false);
         formik.setErrors({ password: "Invalid Credentials" });
       }
     },
@@ -68,12 +66,12 @@ function LoginComponent() {
 
               <div className={styles.login_btn_div}>
                 <Button
-                  title={isLoading ? <Loader isLoading={isLoading} /> : "Login"}
+                  title="Login"
                   type="submit"
                   className={styles.login_btn}
                   onClick={() => formik.handleSubmit()}
                 >
-                  Login
+                  {loading ? <Loader loading={loading} /> : "Login"}
                 </Button>
               </div>
             </div>

@@ -84,6 +84,7 @@ function Sidebar() {
         >
           {drawer}
         </Drawer>
+
         <Drawer
           variant="permanent"
           sx={{
@@ -115,6 +116,7 @@ function Sidebar() {
           </div>
         </Drawer>
       </Box>
+
       <Box
         component="main"
         sx={{
@@ -122,6 +124,8 @@ function Sidebar() {
           padding: {
             xs: 1.875,
             lg: 5,
+            overflowY: "scroll",
+            height: "100vh",
           },
           width: { sm: `calc(100% - ${drawerWidth}px)` },
           background: "#E5E5E5",

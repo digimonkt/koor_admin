@@ -23,6 +23,7 @@ const TablePagination = styled(Pagination)(() => ({
     display: "none",
   },
 }));
+
 function Layout({
   rows,
   columns,
@@ -41,6 +42,7 @@ function Layout({
   selectPropsCities,
   SubCategory,
   cityValue,
+  tender,
 }) {
   const { loading } = useSelector((state) => state.jobsAndTenders);
   const { countries } = useSelector((state) => state.choice);
@@ -63,7 +65,6 @@ function Layout({
       setCityValueList(cityValue);
     }
   }, [cityValue]);
-
   return (
     <>
       <Stack
@@ -76,13 +77,6 @@ function Layout({
           optionsProps={{ ...(optionsProps || {}) }}
           inputProps={{ ...(inputProps || {}) }}
           searchProps={{ ...(searchProps || {}) }}
-          selectProps={{
-            ...(selectProps || {}),
-            options: countries.data.map((country) => ({
-              value: country.id,
-              label: country.title,
-            })),
-          }}
           selectPropsCountry={{
             ...(selectPropsCountry || {}),
             options: dropDownList.map((country) => ({
@@ -102,6 +96,7 @@ function Layout({
           country={country}
           city={city}
           SubCategory={SubCategory}
+          tender={tender}
         />
       </Stack>
       <Card

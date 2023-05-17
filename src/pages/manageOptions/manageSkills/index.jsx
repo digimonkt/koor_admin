@@ -10,7 +10,7 @@ import {
   skillDeleteApi,
 } from "@api/manageoptions";
 import { setLoading } from "@redux/slice/jobsAndTenders";
-import { transformOptionsResponse } from "@api/transform/choices";
+import { transformSkillResponse } from "@api/transform/choices";
 import DialogBox from "@components/dialogBox";
 import { setErrorToast, setSuccessToast } from "@redux/slice/toast";
 import DeleteCard from "@components/card/deleteCard";
@@ -91,7 +91,7 @@ function ManageSkillsComponent() {
     const search = debouncedSearchSkillValue || "";
     const response = await manageSkillApi({ limit, page, search });
     if (response.remote === "success") {
-      const formateData = transformOptionsResponse(response.data.results);
+      const formateData = transformSkillResponse(response.data.results);
       if (!formateData.length) {
         dispatch(setLoading(false));
       }
@@ -119,12 +119,13 @@ function ManageSkillsComponent() {
       setSkillsTable([...temp]);
       setAddSkill("");
 
-      dispatch(setSuccessToast("Add Category SuccessFully"));
+      dispatch(setSuccessToast("Add Skill SuccessFully"));
     } else {
       console.log(response.error);
       dispatch(setErrorToast("Something went wrong"));
     }
   };
+
   function getPage(_, page) {
     setPages(page);
   }
@@ -152,6 +153,7 @@ function ManageSkillsComponent() {
     const payload = {
       title: editSkillValue,
     };
+
     const response = await editSkillApi(editSkill, payload);
     if (response.remote === "success") {
       skillsList();

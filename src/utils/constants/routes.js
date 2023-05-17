@@ -13,11 +13,11 @@ import {
   ManagePrivacyPolicy,
   ManageCategory,
   manageEducation,
-  ManageJobSeekerCategory,
-  ManageJobSeekerSubCategory,
   ManageLanguage,
+  manageSector,
+  manageTag,
+  manageOpportunity,
 } from "@pages/manageOptions";
-import ManageCity from "@pages/manageOptions/manageCity";
 import ManageCountry from "@pages/manageOptions/manageCountry";
 
 export const PUBLIC_ROUTE = [];
@@ -83,22 +83,23 @@ export const AUTHENTICATED_ROUTE = [
     path: "/manage-country",
     element: ManageCountry,
   },
+
   {
-    id: "manage-city",
-    path: "/manage-city",
-    element: ManageCity,
+    id: "manage-sector",
+    path: "/manage-sector",
+    element: manageSector,
   },
 
   {
-    id: "manage-job-seeker-category",
-    path: "/manage-job-seeker-category",
-    element: ManageJobSeekerCategory,
+    id: "manage-tag",
+    path: "/manage-tag",
+    element: manageTag,
   },
 
   {
-    id: "manage-job-sub-category",
-    path: "/manage-job-sub-category",
-    element: ManageJobSeekerSubCategory,
+    id: "manage-opportunity",
+    path: "/manage-opportunity",
+    element: manageOpportunity,
   },
 
   {

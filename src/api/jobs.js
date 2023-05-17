@@ -30,9 +30,9 @@ export const activeInactiveJob = async (jobId) => {
   return response;
 };
 
-export const getCountriesName = async () => {
+export const getCountriesName = async ({ search, limit, page }) => {
   const response = await api.request({
-    url: "/v1/admin/country",
+    url: urlcat("/v1/admin/country", { search, limit, page }),
     method: "GET",
   });
   return response;
