@@ -4,10 +4,10 @@ import { SVG } from "@assets/svg";
 import { IconButton, Stack } from "@mui/material";
 import { useDispatch } from "react-redux";
 import {
+  createSectorApi,
   editSkillApi,
-  createSkillApi,
-  manageSkillApi,
-  skillDeleteApi,
+  manageSectorApi,
+  sectorDeleteApi,
 } from "@api/manageoptions";
 import { setLoading } from "@redux/slice/jobsAndTenders";
 import { transformSkillResponse } from "@api/transform/choices";
@@ -16,7 +16,7 @@ import { setErrorToast, setSuccessToast } from "@redux/slice/toast";
 import DeleteCard from "@components/card/deleteCard";
 import EditCard from "@components/card/editCard";
 import { useDebounce } from "usehooks-ts";
-function ManageSkillsComponent() {
+function ManageSector() {
   const dispatch = useDispatch();
   const [skillsTable, setSkillsTable] = useState([]);
   const [pages, setPages] = useState(1);
@@ -66,7 +66,7 @@ function ManageSkillsComponent() {
               <SVG.DeleteIcon />
             </IconButton>
 
-            <IconButton
+            {/* <IconButton
               onClick={() => handleEdit(item.row)}
               sx={{
                 "&.MuiIconButton-root": {
@@ -78,7 +78,7 @@ function ManageSkillsComponent() {
               }}
             >
               <SVG.EditIcon />
-            </IconButton>
+            </IconButton> */}
           </Stack>
         );
       },
@@ -89,7 +89,7 @@ function ManageSkillsComponent() {
     dispatch(setLoading(true));
     const page = pages;
     const search = debouncedSearchSkillValue || "";
-    const response = await manageSkillApi({ limit, page, search });
+    const response = await manageSectorApi({ limit, page, search });
     if (response.remote === "success") {
       const formateData = transformSkillResponse(response.data.results);
       if (!formateData.length) {
@@ -107,7 +107,7 @@ function ManageSkillsComponent() {
     const payload = {
       title: addSkill,
     };
-    const response = await createSkillApi(payload);
+    const response = await createSectorApi(payload);
     if (response.remote === "success") {
       const temp = [...skillsTable];
       temp.push({
@@ -118,8 +118,7 @@ function ManageSkillsComponent() {
 
       setSkillsTable([...temp]);
       setAddSkill("");
-
-      dispatch(setSuccessToast("Add Skill SuccessFully"));
+      dispatch(setSuccessToast("Add Sector SuccessFully"));
     } else {
       console.log(response.error);
       dispatch(setErrorToast("Something went wrong"));
@@ -132,7 +131,7 @@ function ManageSkillsComponent() {
 
   const handleDelete = async () => {
     setLoading(false);
-    const response = await skillDeleteApi(deleteSkill);
+    const response = await sectorDeleteApi(deleteSkill);
     if (response.remote === "success") {
       const newSkillTable = skillsTable.filter((emp) => emp.id !== deleteSkill);
       setSkillsTable(newSkillTable);
@@ -144,10 +143,10 @@ function ManageSkillsComponent() {
     }
   };
 
-  const handleEdit = async (item) => {
-    setEditSkill(item.id);
-    setEditSkillValue(item.name);
-  };
+  //   const handleEdit = async (item) => {
+  //     setEditSkill(item.id);
+  //     setEditSkillValue(item.name);
+  //   };
 
   const handleUpdate = async () => {
     const payload = {
@@ -182,13 +181,13 @@ function ManageSkillsComponent() {
         totalCount={totalCount}
         handlePageChange={getPage}
         searchProps={{
-          placeholder: "Search Skills",
+          placeholder: "Search Sector",
           onChange: (e) => setSearchTerm(e.target.value),
           value: searchTerm,
         }}
         inputProps={{
           type: "text",
-          placeholder: "Add Skill",
+          placeholder: "Add Sector",
           onChange: (e) => setAddSkill(e.target.value),
           value: addSkill,
         }}
@@ -205,7 +204,7 @@ function ManageSkillsComponent() {
           title: (
             <div onClick={addSkillFunction}>
               <span className="d-inline-flex align-items-center me-2"></span>{" "}
-              Add Skill
+              Add Sector
             </div>
           ),
         }}
@@ -232,4 +231,4 @@ function ManageSkillsComponent() {
   );
 }
 
-export default ManageSkillsComponent;
+export default ManageSector;

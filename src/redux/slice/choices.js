@@ -27,10 +27,10 @@ const initialState = {
 // counties
 export const getCountries = createAsyncThunk(
   "choices/getCountries",
-  async (search, { rejectWithValue }) => {
-    const res = await getCountriesName(search);
+  async (payload, { rejectWithValue }) => {
+    const res = await getCountriesName({ ...payload });
     if (res.remote === "success") {
-      return res.data.results;
+      return res.data;
     } else {
       return rejectWithValue(res.error);
     }
@@ -54,10 +54,10 @@ export const getCitiesByCountry = createAsyncThunk(
 // categories
 export const getCategories = createAsyncThunk(
   "choices/getCategories",
-  async (search, { rejectWithValue }) => {
-    const res = await manageCategoryApi(search);
+  async (payload, { rejectWithValue }) => {
+    const res = await manageCategoryApi({ ...payload });
     if (res.remote === "success") {
-      return res.data.results;
+      return res.data;
     } else {
       return rejectWithValue(res.error);
     }
@@ -98,13 +98,33 @@ export const choiceSlice = createSlice({
         data: newCategory,
       };
     },
+    removeCategory: (state, action) => {
+      const newCategory = state.categories.data.filter((cate) => {
+        return cate.id !== action.payload.id;
+      });
+      state.categories = {
+        loading: false,
+        data: newCategory,
+      };
+    },
+
+    removeCountry: (state, action) => {
+      const newCountry = state.countries.data.filter((cate) => {
+        return cate.id !== action.payload.id;
+      });
+      state.country = {
+        loading: false,
+        data: newCountry,
+      };
+    },
   },
   extraReducers: (builder) => {
     //  Countries
     builder.addCase(getCountries.fulfilled, (state, action) => {
       state.countries = {
         loading: false,
-        data: action.payload,
+        data: action.payload.results,
+        count: action.payload.count,
       };
     });
     builder.addCase(getCountries.pending, (state) => {
@@ -148,7 +168,8 @@ export const choiceSlice = createSlice({
     builder.addCase(getCategories.fulfilled, (state, action) => {
       state.categories = {
         loading: false,
-        data: action.payload,
+        data: action.payload.results,
+        count: action.payload.count,
       };
     });
     builder.addCase(getCategories.pending, (state) => {
@@ -189,5 +210,6 @@ export const choiceSlice = createSlice({
     });
   },
 });
-export const { addCountry, addCategories } = choiceSlice.actions;
+export const { addCountry, addCategories, removeCategory, removeCountry } =
+  choiceSlice.actions;
 export default choiceSlice.reducer;

@@ -65,3 +65,11 @@ export const transformCityResponse = (data) => {
     countryId: data.country.id,
   }));
 };
+
+export const transformSkillResponse = (data) => {
+  return data.map((data, index) => ({
+    id: data.id,
+    no: index + 1,
+    name: data.title,
+  }));
+};

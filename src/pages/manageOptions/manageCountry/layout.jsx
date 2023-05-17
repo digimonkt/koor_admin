@@ -1,8 +1,27 @@
 import React from "react";
-import { LabeledInput, SearchInput } from "@components/input";
+import { LabeledInput, SearchInput, SelectInput } from "@components/input";
 import { SolidButton } from "@components/button";
-import { Stack } from "@mui/material";
+import { FormControl, Pagination, Stack } from "@mui/material";
 import SelectWithSearch from "@components/input/selectWithsearch";
+import styled from "@emotion/styled";
+
+const TablePagination = styled(Pagination)(() => ({
+  " &.MuiPagination-root .MuiPaginationItem-root": {
+    minWidth: "36px",
+    fontFamily: "Bahnschrift",
+    fontSize: "16px",
+    color: "#000",
+    fontWeight: "400",
+  },
+  " &.MuiPagination-root .MuiPaginationItem-root.Mui-selected": {
+    background: "#fff",
+    borderRadius: "5px",
+    boxShadow: "0px 2px 6px rgba(0, 0, 0, 0.15)",
+  },
+  " &.MuiPagination-root .MuiPaginationItem-root .MuiPaginationItem-icon": {
+    display: "none",
+  },
+}));
 
 const Layout = ({
   children,
@@ -13,6 +32,10 @@ const Layout = ({
   countryInput,
   selectList,
   addItems,
+  limitProps,
+  totalCount,
+  page,
+  handlePageChange,
 }) => {
   return (
     <>
@@ -47,6 +70,35 @@ const Layout = ({
         />
       </Stack>
       {children}
+      <div className="peritemview">
+        <Stack direction="row" spacing={2} alignItems="center">
+          <span>Items per page:</span>{" "}
+          <FormControl
+            sx={{
+              "&.MuiSelect-select": {
+                fontFamily: "Poppins",
+                fontSize: "16px",
+              },
+            }}
+            size="small"
+          >
+            <SelectInput
+              options={[
+                { label: 5, value: 5 },
+                { label: 10, value: 10 },
+                { label: 15, value: 15 },
+              ]}
+              {...(limitProps || {})}
+            />
+          </FormControl>
+          <TablePagination
+            count={totalCount || 0}
+            page={page}
+            onChange={handlePageChange}
+            shape="rounded"
+          />
+        </Stack>
+      </div>
     </>
   );
 };

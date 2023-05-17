@@ -131,7 +131,6 @@ function ManageTendersComponent() {
     const response = await manageTenderApi({ limit, page, search });
     if (response.remote === "success") {
       const formateData = transformOptionsResponse(response.data.results);
-      console.log(formateData);
       if (!formateData.length) {
         dispatch(setLoading(false));
       }
@@ -154,7 +153,6 @@ function ManageTendersComponent() {
     const response = await createTenderApi(payload);
     if (response.remote === "success") {
       const temp = [...tenderTable];
-      console.log(response.data);
       temp.push({
         id: response.data.id || Math.random(),
         no: temp.length + 1,

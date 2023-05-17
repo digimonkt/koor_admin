@@ -32,38 +32,45 @@ function Accordion({ title, onOpen, handleDelete, handleEdit, children }) {
         className="accordion-class"
       >
         <Typography>{title}</Typography>
-        {handleDelete && (
-          <IconButton
-            sx={{
-              "&.MuiIconButton-root": {
-                background: "#D5E3F7",
-              },
-              width: 30,
-              height: 30,
-              marginRight: "16px",
-              color: "#274593",
-            }}
-            onClick={handleDelete}
-          >
-            <SVG.DeleteIcon />
-          </IconButton>
-        )}
-        {handleEdit && (
-          <IconButton
-            sx={{
-              "&.MuiIconButton-root": {
-                background: "#D5E3F7",
-              },
-              width: 30,
-              height: 30,
-              marginRight: "16px",
-              color: "#274593",
-            }}
-            onClick={handleEdit}
-          >
-            <SVG.DeleteIcon />
-          </IconButton>
-        )}
+        <div>
+          {handleDelete && (
+            <IconButton
+              onClick={() => {
+                handleDelete();
+              }}
+              sx={{
+                "&.MuiIconButton-root": {
+                  background: "#D5E3F7",
+                },
+                pointerEvents: "auto",
+                width: 30,
+                height: 30,
+                marginRight: "16px",
+                color: "#274593",
+              }}
+            >
+              <SVG.DeleteIcon />
+            </IconButton>
+          )}
+          {handleEdit && (
+            <IconButton
+              sx={{
+                "&.MuiIconButton-root": {
+                  background: "#D5E3F7",
+                },
+                pointerEvents: "auto",
+
+                width: 30,
+                height: 30,
+                marginRight: "16px",
+                color: "#274593",
+              }}
+              onClick={handleEdit}
+            >
+              <SVG.EditIcon />
+            </IconButton>
+          )}
+        </div>
       </AccordionSummary>
 
       <AccordionDetails>{children}</AccordionDetails>

@@ -1,8 +1,9 @@
 import api from ".";
 import urlcat from "urlcat";
-export const getJobSubCategoryApi = async (categoryId) => {
+
+export const getJobSubCategoryApi = async ({ limit, page, search }) => {
   const response = await api.request({
-    url: urlcat("/v1/admin/job-sub-category", categoryId),
+    url: urlcat("/v1/admin/job-sub-category", { limit, page, search }),
     method: "GET",
   });
   return response;
