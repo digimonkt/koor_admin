@@ -1,33 +1,34 @@
 import React, { useState, useEffect } from "react";
 import Layout from "../layout";
-import { useDispatch } from "react-redux";
-import { setLoading } from "@redux/slice/jobsAndTenders";
 import { SVG } from "@assets/svg";
-import { setErrorToast, setSuccessToast } from "@redux/slice/toast";
 import { IconButton, Stack } from "@mui/material";
+import { useDispatch } from "react-redux";
+
+import { setLoading } from "@redux/slice/jobsAndTenders";
+import { transformSkillResponse } from "@api/transform/choices";
 import DialogBox from "@components/dialogBox";
+import { setErrorToast, setSuccessToast } from "@redux/slice/toast";
 import DeleteCard from "@components/card/deleteCard";
-import {
-  addCategoryApi,
-  deleteCategoryApi,
-  editCategoryApi,
-  manageCategoryApi,
-} from "@api/manageoptions";
-import { transformOptionsResponse } from "@api/transform/choices";
+import EditCard from "@components/card/editCard";
 import { useDebounce } from "usehooks-ts";
-import { EditCard } from "@components/card";
-function ManageCategoryComponent() {
+import {
+  createTagApi,
+  editTagApi,
+  manageTagApi,
+  tagDeleteApi,
+} from "@api/manageoptions";
+function ManageTag() {
   const dispatch = useDispatch();
-  const [categoryTable, setCategoryTable] = useState([]);
+  const [skillsTable, setSkillsTable] = useState([]);
   const [pages, setPages] = useState(1);
   const [limit, setLimit] = useState(10);
+  const [addSkill, setAddSkill] = useState("");
+  const [editSkill, setEditSkill] = useState("");
+  const [editSkillValue, setEditSkillValue] = useState("");
   const [totalCount, setTotalCount] = useState(0);
-  const [addCategory, setAddCategory] = useState([]);
+  const [deleteSkill, setDeleteSkill] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
-  const [deleteCategory, setDeleteCategory] = useState("");
-  const [editCategory, setEditCategory] = useState("");
-  const [editCategoryValue, setCategoryValue] = useState("");
-  const debouncedSearchCategoryValue = useDebounce(searchTerm, 500);
+  const debouncedSearchSkillValue = useDebounce(searchTerm, 500);
 
   const columns = [
     {
@@ -38,11 +39,11 @@ function ManageCategoryComponent() {
     },
 
     {
+      id: "3",
       field: "name",
       headerName: "Name",
-      sortable: true,
       width: 180,
-      id: "3",
+      sortable: true,
     },
 
     {
@@ -53,7 +54,7 @@ function ManageCategoryComponent() {
         return (
           <Stack direction="row" spacing={1} alignItems="center">
             <IconButton
-              onClick={() => setDeleteCategory(item.row.id)}
+              onClick={() => setDeleteSkill(item.row.id)}
               sx={{
                 "&.MuiIconButton-root": {
                   background: "#D5E3F7",
@@ -85,17 +86,17 @@ function ManageCategoryComponent() {
     },
   ];
 
-  const categoryList = async () => {
+  const skillsList = async () => {
     dispatch(setLoading(true));
     const page = pages;
-    const search = debouncedSearchCategoryValue || "";
-    const response = await manageCategoryApi({ limit, page, search });
+    const search = debouncedSearchSkillValue || "";
+    const response = await manageTagApi({ limit, page, search });
     if (response.remote === "success") {
-      const formateData = transformOptionsResponse(response.data.results);
+      const formateData = transformSkillResponse(response.data.results);
       if (!formateData.length) {
         dispatch(setLoading(false));
       }
-      setCategoryTable(formateData);
+      setSkillsTable(formateData);
       const totalCounts = Math.ceil(response.data.count / limit);
       setTotalCount(totalCounts);
     } else {
@@ -103,69 +104,40 @@ function ManageCategoryComponent() {
     }
   };
 
-  function getPage(_, page) {
-    setPages(page);
-  }
-
-  const addCategoryFunction = async () => {
+  const addSkillFunction = async () => {
     const payload = {
-      title: addCategory,
+      title: addSkill,
     };
-
-    const response = await addCategoryApi(payload);
+    const response = await createTagApi(payload);
     if (response.remote === "success") {
-      const temp = [...categoryTable];
+      const temp = [...skillsTable];
       temp.push({
         id: response.data.data.id || Math.random(),
         no: temp.length + 1,
         name: response.data.data.title,
       });
-      setCategoryTable([...temp]);
-      setAddCategory("");
-      dispatch(setSuccessToast("Add Category SuccessFully"));
+
+      setSkillsTable([...temp]);
+      setAddSkill("");
+
+      dispatch(setSuccessToast("Add Skill SuccessFully"));
     } else {
       console.log(response.error);
       dispatch(setErrorToast("Something went wrong"));
     }
   };
 
-  const handleEdit = async (item) => {
-    setEditCategory(item.id);
-    setCategoryValue(item.name);
-  };
-
-  const handleUpdate = async () => {
-    const payload = {
-      title: editCategoryValue,
-    };
-
-    const response = await editCategoryApi(editCategory, payload);
-    if (response.remote === "success") {
-      categoryList();
-      setEditCategory("");
-      dispatch(setSuccessToast(response.data.message));
-    } else {
-      dispatch(setErrorToast(response.error.errors.title));
-    }
-  };
-  useEffect(() => {
-    categoryList();
-  }, [debouncedSearchCategoryValue, pages, limit]);
-
-  useEffect(() => {
-    if (categoryTable.length) {
-      dispatch(setLoading(false));
-    }
-  }, [categoryTable]);
+  function getPage(_, page) {
+    setPages(page);
+  }
 
   const handleDelete = async () => {
-    const response = await deleteCategoryApi(deleteCategory);
+    setLoading(false);
+    const response = await tagDeleteApi(deleteSkill);
     if (response.remote === "success") {
-      const newCategoryTable = categoryTable.filter(
-        (emp) => emp.id !== deleteCategory
-      );
-      setCategoryTable(newCategoryTable);
-      setDeleteCategory("");
+      const newSkillTable = skillsTable.filter((emp) => emp.id !== deleteSkill);
+      setSkillsTable(newSkillTable);
+      setDeleteSkill("");
       dispatch(setSuccessToast("Delete Skill SuccessFully"));
     } else {
       dispatch(setErrorToast("Something went wrong"));
@@ -173,23 +145,53 @@ function ManageCategoryComponent() {
     }
   };
 
+  const handleEdit = async (item) => {
+    setEditSkill(item.id);
+    setEditSkillValue(item.name);
+  };
+
+  const handleUpdate = async () => {
+    const payload = {
+      title: editSkillValue,
+    };
+
+    const response = await editTagApi(editSkill, payload);
+    if (response.remote === "success") {
+      skillsList();
+      setEditSkill("");
+      dispatch(setSuccessToast(response.data.message));
+    } else {
+      dispatch(setErrorToast(response.error.errors.title));
+    }
+  };
+
+  useEffect(() => {
+    skillsList();
+  }, [debouncedSearchSkillValue, pages, limit]);
+
+  useEffect(() => {
+    if (skillsTable.length) {
+      dispatch(setLoading(false));
+    }
+  }, [skillsTable]);
+
   return (
     <>
       <Layout
-        rows={categoryTable}
+        rows={skillsTable}
         columns={columns}
         totalCount={totalCount}
         handlePageChange={getPage}
         searchProps={{
-          placeholder: "Search Category",
+          placeholder: "Search Skills",
           onChange: (e) => setSearchTerm(e.target.value),
           value: searchTerm,
         }}
         inputProps={{
           type: "text",
-          placeholder: "Add Category",
-          onChange: (e) => setAddCategory(e.target.value),
-          value: addCategory,
+          placeholder: "Add Skill",
+          onChange: (e) => setAddSkill(e.target.value),
+          value: addSkill,
         }}
         limitProps={{
           value: limit,
@@ -202,31 +204,28 @@ function ManageCategoryComponent() {
         }}
         optionsProps={{
           title: (
-            <div onClick={addCategoryFunction}>
+            <div onClick={addSkillFunction}>
               <span className="d-inline-flex align-items-center me-2"></span>{" "}
-              Add Category
+              Add Skill
             </div>
           ),
         }}
       />
-      <DialogBox
-        open={!!deleteCategory}
-        handleClose={() => setDeleteCategory("")}
-      >
+      <DialogBox open={!!deleteSkill} handleClose={() => setDeleteSkill("")}>
         <DeleteCard
-          title="Delete Category"
-          content="Are you sure you want to delete Category?"
-          handleCancel={() => setDeleteCategory("")}
+          title="Delete Skill"
+          content="Are you sure you want to delete Skill?"
+          handleCancel={() => setDeleteSkill("")}
           handleDelete={handleDelete}
         />
       </DialogBox>
 
-      <DialogBox open={!!editCategory} handleClose={() => setEditCategory("")}>
+      <DialogBox open={!!editSkill} handleClose={() => setEditSkill("")}>
         <EditCard
-          title="Edit Category"
-          handleCancel={() => setEditCategory("")}
-          setEditValue={setCategoryValue}
-          editValue={editCategoryValue}
+          title="Edit Skill"
+          handleCancel={() => setEditSkill("")}
+          setEditValue={setEditSkillValue}
+          editValue={editSkillValue}
           handleUpdate={handleUpdate}
         />
       </DialogBox>
@@ -234,4 +233,4 @@ function ManageCategoryComponent() {
   );
 }
 
-export default ManageCategoryComponent;
+export default ManageTag;

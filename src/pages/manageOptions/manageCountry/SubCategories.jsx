@@ -4,7 +4,7 @@ import { SVG } from "@assets/svg";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
-const SubCategories = ({ countryId }) => {
+const SubCategories = ({ countryId, handleDeleteSub, handleEditSub }) => {
   const { cities } = useSelector((state) => state.choice);
   const [rows, setRows] = useState([]);
   const columns = [
@@ -18,9 +18,14 @@ const SubCategories = ({ countryId }) => {
       rows.push({
         name: newCity.title,
         action: (
-          <IconButton onClick={() => console.log(newCity.id)}>
-            <SVG.DeleteIcon />
-          </IconButton>
+          <>
+            <IconButton onClick={() => handleEditSub(newCity)}>
+              <SVG.EditIcon />
+            </IconButton>
+            <IconButton onClick={() => handleDeleteSub(newCity.id)}>
+              <SVG.DeleteIcon />
+            </IconButton>
+          </>
         ),
       });
     });

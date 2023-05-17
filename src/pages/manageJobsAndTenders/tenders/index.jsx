@@ -40,8 +40,45 @@ function ManageTendersComponent() {
     },
     {
       id: "2",
-      field: "name",
-      headerName: "Name",
+      field: "tender_id",
+      headerName: "Tender id",
+      width: "220",
+      sortable: true,
+    },
+    {
+      id: "3",
+      field: "title",
+      headerName: "Title",
+      width: "220",
+      sortable: true,
+    },
+
+    {
+      id: "4",
+      field: "tender_type",
+      headerName: "Tender Type",
+      width: "220",
+      sortable: true,
+    },
+    {
+      id: "5",
+      field: "sector",
+      headerName: "Sector",
+      width: "220",
+      sortable: true,
+    },
+    {
+      id: "6",
+      field: "city",
+      headerName: "City",
+      width: "220",
+      sortable: true,
+    },
+
+    {
+      id: "7",
+      field: "country",
+      headerName: "Country",
       width: "220",
       sortable: true,
     },
@@ -60,13 +97,12 @@ function ManageTendersComponent() {
                 "&.MuiIconButton-root": {
                   background: "#D5E3F7",
                 },
-
                 width: 30,
                 height: 30,
                 color: "#274593",
               }}
             >
-              <SVG.EditIcon />
+              <SVG.ToggleOffIcon />
             </IconButton>
 
             <IconButton
@@ -117,7 +153,6 @@ function ManageTendersComponent() {
     const response = await createTenderApi(payload);
     if (response.remote === "success") {
       const temp = [...tenderTable];
-      console.log(response.data);
       temp.push({
         id: response.data.id || Math.random(),
         no: temp.length + 1,
@@ -178,6 +213,7 @@ function ManageTendersComponent() {
   return (
     <>
       <Layout
+        tender
         rows={tenderTable}
         columns={columns}
         totalCount={totalCount}
@@ -187,12 +223,12 @@ function ManageTendersComponent() {
           onChange: (e) => setSearchTerm(e.target.value),
           value: searchTerm,
         }}
-        inputProps={{
-          type: "text",
-          placeholder: "Add Tender",
-          onChange: (e) => setAddTender(e.target.value),
-          value: addTender,
-        }}
+        // inputProps={{
+        //   type: "text",
+        //   placeholder: "Add Tender",
+        //   onChange: (e) => setAddTender(e.target.value),
+        //   value: addTender,
+        // }}
         limitProps={{
           value: limit,
           options: [

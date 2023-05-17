@@ -3,12 +3,6 @@ import Layout from "../layout";
 import { SVG } from "@assets/svg";
 import { IconButton, Stack } from "@mui/material";
 import { useDispatch } from "react-redux";
-import {
-  editSkillApi,
-  createSkillApi,
-  manageSkillApi,
-  skillDeleteApi,
-} from "@api/manageoptions";
 import { setLoading } from "@redux/slice/jobsAndTenders";
 import { transformSkillResponse } from "@api/transform/choices";
 import DialogBox from "@components/dialogBox";
@@ -16,7 +10,13 @@ import { setErrorToast, setSuccessToast } from "@redux/slice/toast";
 import DeleteCard from "@components/card/deleteCard";
 import EditCard from "@components/card/editCard";
 import { useDebounce } from "usehooks-ts";
-function ManageSkillsComponent() {
+import {
+  createOpportunityApi,
+  editOpportunityApi,
+  manageOpportunityApi,
+  opportunityDeleteApi,
+} from "@api/manageoptions";
+function ManageOpportunity() {
   const dispatch = useDispatch();
   const [skillsTable, setSkillsTable] = useState([]);
   const [pages, setPages] = useState(1);
@@ -89,7 +89,7 @@ function ManageSkillsComponent() {
     dispatch(setLoading(true));
     const page = pages;
     const search = debouncedSearchSkillValue || "";
-    const response = await manageSkillApi({ limit, page, search });
+    const response = await manageOpportunityApi({ limit, page, search });
     if (response.remote === "success") {
       const formateData = transformSkillResponse(response.data.results);
       if (!formateData.length) {
@@ -107,7 +107,7 @@ function ManageSkillsComponent() {
     const payload = {
       title: addSkill,
     };
-    const response = await createSkillApi(payload);
+    const response = await createOpportunityApi(payload);
     if (response.remote === "success") {
       const temp = [...skillsTable];
       temp.push({
@@ -119,7 +119,7 @@ function ManageSkillsComponent() {
       setSkillsTable([...temp]);
       setAddSkill("");
 
-      dispatch(setSuccessToast("Add Skill SuccessFully"));
+      dispatch(setSuccessToast("Add Opportunity SuccessFully"));
     } else {
       console.log(response.error);
       dispatch(setErrorToast("Something went wrong"));
@@ -132,12 +132,12 @@ function ManageSkillsComponent() {
 
   const handleDelete = async () => {
     setLoading(false);
-    const response = await skillDeleteApi(deleteSkill);
+    const response = await opportunityDeleteApi(deleteSkill);
     if (response.remote === "success") {
       const newSkillTable = skillsTable.filter((emp) => emp.id !== deleteSkill);
       setSkillsTable(newSkillTable);
       setDeleteSkill("");
-      dispatch(setSuccessToast("Delete Skill SuccessFully"));
+      dispatch(setSuccessToast("Delete Opportunity SuccessFully"));
     } else {
       dispatch(setErrorToast("Something went wrong"));
       console.log(response.error);
@@ -154,7 +154,7 @@ function ManageSkillsComponent() {
       title: editSkillValue,
     };
 
-    const response = await editSkillApi(editSkill, payload);
+    const response = await editOpportunityApi(editSkill, payload);
     if (response.remote === "success") {
       skillsList();
       setEditSkill("");
@@ -182,13 +182,13 @@ function ManageSkillsComponent() {
         totalCount={totalCount}
         handlePageChange={getPage}
         searchProps={{
-          placeholder: "Search Skills",
+          placeholder: "Search Opportunity",
           onChange: (e) => setSearchTerm(e.target.value),
           value: searchTerm,
         }}
         inputProps={{
           type: "text",
-          placeholder: "Add Skill",
+          placeholder: "Add Opportunity",
           onChange: (e) => setAddSkill(e.target.value),
           value: addSkill,
         }}
@@ -205,15 +205,15 @@ function ManageSkillsComponent() {
           title: (
             <div onClick={addSkillFunction}>
               <span className="d-inline-flex align-items-center me-2"></span>{" "}
-              Add Skill
+              Add Opportunity
             </div>
           ),
         }}
       />
       <DialogBox open={!!deleteSkill} handleClose={() => setDeleteSkill("")}>
         <DeleteCard
-          title="Delete Skill"
-          content="Are you sure you want to delete Skill?"
+          title="Delete Opportunity"
+          content="Are you sure you want to delete Opportunity?"
           handleCancel={() => setDeleteSkill("")}
           handleDelete={handleDelete}
         />
@@ -221,7 +221,7 @@ function ManageSkillsComponent() {
 
       <DialogBox open={!!editSkill} handleClose={() => setEditSkill("")}>
         <EditCard
-          title="Edit Skill"
+          title="Edit Opportunity"
           handleCancel={() => setEditSkill("")}
           setEditValue={setEditSkillValue}
           editValue={editSkillValue}
@@ -232,4 +232,4 @@ function ManageSkillsComponent() {
   );
 }
 
-export default ManageSkillsComponent;
+export default ManageOpportunity;

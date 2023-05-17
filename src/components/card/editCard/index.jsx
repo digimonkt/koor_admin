@@ -27,7 +27,7 @@ function EditCardComponent({
           justifyContent="space-between"
         >
           <LabeledInput
-            placeholder="Edit Skill"
+            // placeholder="Edit Skill"
             type="text"
             onChange={(e) => inputValue(e)}
             value={editValue}

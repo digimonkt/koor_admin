@@ -4,6 +4,7 @@ import { IconButton, Stack } from "@mui/material";
 import Layout from "../layout";
 import { activeInactiveUser, deleteUser, manageEmployer } from "@api/employers";
 import DialogBox from "@components/dialogBox";
+import env from "@utils/validateEnv";
 import DeleteCard from "@components/card/deleteCard";
 import { useDispatch, useSelector } from "react-redux";
 import { setErrorToast, setSuccessToast } from "@redux/slice/toast";
@@ -75,6 +76,7 @@ function ManageEmployerComponent() {
             </>
 
             <IconButton
+              onClick={() => handleRedirectDetails(item.row.id)}
               sx={{
                 "&.MuiIconButton-root": {
                   background: "#D5E3F7",
@@ -104,6 +106,11 @@ function ManageEmployerComponent() {
       },
     },
   ];
+
+  const handleRedirectDetails = (item) => {
+    const url = `${env.REACT_APP_REDIRECT_URL}/employer/${item}/profile`;
+    window.open(url, "_blank");
+  };
 
   const employerList = async () => {
     dispatch(setLoading(true));
@@ -186,6 +193,7 @@ function ManageEmployerComponent() {
       console.log(response.error);
     }
   };
+
   useEffect(() => {
     if (employerTable.length) {
       dispatch(setLoading(false));

@@ -36,7 +36,13 @@ export const transformOptionsResponse = (data) => {
   return data.map((data, index) => ({
     id: data.id,
     no: index + 1,
-    name: data.title,
+    tender_id: data.tender_id,
+    title: data.title,
+    tender_type: data.tender_type.title,
+    sector: data.sector.title,
+    city: data.city.title,
+    country: data.country.title,
+    status: data.status,
   }));
 };
 
@@ -57,5 +63,13 @@ export const transformCityResponse = (data) => {
     city: data.title,
     country: data.country.title,
     countryId: data.country.id,
+  }));
+};
+
+export const transformSkillResponse = (data) => {
+  return data.map((data, index) => ({
+    id: data.id,
+    no: index + 1,
+    name: data.title,
   }));
 };

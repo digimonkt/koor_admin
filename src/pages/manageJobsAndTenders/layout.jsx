@@ -22,6 +22,7 @@ const TablePagination = styled(Pagination)(() => ({
     display: "none",
   },
 }));
+
 function Layout({
   rows,
   columns,
@@ -88,16 +89,16 @@ function Layout({
             limitProps={limitProps}
             loader={loading}
           />
+          <div className="pagination-custom">
+            <TablePagination
+              count={totalCount || 0}
+              page={page}
+              onChange={handlePageChange}
+              shape="rounded"
+            />
+          </div>
         </CardContent>
       </Card>
-      <div className="pagination-custom">
-        <TablePagination
-          count={totalCount || 0}
-          page={page}
-          onChange={handlePageChange}
-          shape="rounded"
-        />
-      </div>
     </>
   );
 }

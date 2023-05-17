@@ -80,39 +80,60 @@ export const MENU_ITEM = [
   // },
 
   {
+    id: "11",
+    icon: <SVG.FinancialTools />,
+    page: "Manage Sector",
+    url: "/manage-sector",
+  },
+
+  {
+    id: "12",
+    icon: <SVG.FinancialTools />,
+    page: "Manage Tag",
+    url: "/manage-tag",
+  },
+
+  {
     id: "13",
+    icon: <SVG.FinancialTools />,
+    page: "Manage Opportunity",
+    url: "/manage-opportunity",
+  },
+
+  {
+    id: "14",
     icon: <SVG.FinancialTools />,
     page: "Manage language",
     url: "/manage-language",
   },
 
   {
-    id: "14",
+    id: "15",
     icon: <SVG.Report />,
     page: "Reports",
     url: "/reports",
   },
   {
-    id: "15",
+    id: "16",
     icon: <SVG.UserRole />,
     page: "User rights",
     url: "/user-rights",
   },
   {
-    id: "16",
+    id: "17",
     icon: <SVG.PrivacyPolicy />,
     page: "Privacy policy",
     url: "/privacy-policy",
     menuBorder: styles.borderBottom,
   },
   {
-    id: "17",
+    id: "18",
     icon: <SVG.UserManagement />,
     page: "User management",
     url: "/user-management",
   },
   {
-    id: "18",
+    id: "19",
     icon: <SVG.Settings />,
     page: "Settings",
     url: "/settings",
