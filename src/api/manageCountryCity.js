@@ -34,7 +34,7 @@ export const getCityApi = async (data) => {
   return response;
 };
 
-export const getWorldCityApi = async ({ countryName, search }) => {
+export const getWorldCityApi = async (countryName, search) => {
   const response = await api.request({
     url: urlcat("/v1/admin/world-city", {
       countryName,

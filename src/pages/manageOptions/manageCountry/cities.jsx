@@ -4,7 +4,7 @@ import { SVG } from "@assets/svg";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
-const SubCategories = ({ countryId, handleDeleteSub, handleEditSub }) => {
+const Cities = ({ countryId, handleDeleteSub, handleEditSub }) => {
   const { cities } = useSelector((state) => state.choice);
   const [rows, setRows] = useState([]);
   const columns = [
@@ -19,10 +19,7 @@ const SubCategories = ({ countryId, handleDeleteSub, handleEditSub }) => {
         name: newCity.title,
         action: (
           <>
-            <IconButton onClick={() => handleEditSub(newCity)}>
-              <SVG.EditIcon />
-            </IconButton>
-            <IconButton onClick={() => handleDeleteSub(newCity.id)}>
+            <IconButton onClick={() => handleDeleteSub(newCity)}>
               <SVG.DeleteIcon />
             </IconButton>
           </>
@@ -33,4 +30,4 @@ const SubCategories = ({ countryId, handleDeleteSub, handleEditSub }) => {
   }, [cities.data[countryId]]);
   return <Table columns={columns} rows={rows} />;
 };
-export default SubCategories;
+export default Cities;
