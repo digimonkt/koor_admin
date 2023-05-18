@@ -21,7 +21,7 @@ const initialState = {
 
   subCategories: {
     loading: false,
-    data: [],
+    data: {},
   },
 };
 // counties
@@ -98,6 +98,20 @@ export const choiceSlice = createSlice({
         data: newCategory,
       };
     },
+
+    addSubCategories: (state, action) => {
+      const newSubCategory = [
+        action.payload,
+        ...(state.subCategories.data[action.payload.categoryId] || []),
+      ];
+      state.subCategories = {
+        loading: false,
+        data: {
+          ...state.subCategories.data,
+          [action.payload.categoryId]: [...newSubCategory],
+        },
+      };
+    },
     removeCategory: (state, action) => {
       const newCategory = state.categories.data.filter((cate) => {
         return cate.id !== action.payload.id;
@@ -108,13 +122,43 @@ export const choiceSlice = createSlice({
       };
     },
 
+    removeSubCategory: (state, action) => {
+      const newSubCategory = (
+        state.subCategories.data[action.payload.categoryId] || []
+      ).filter((cate) => {
+        return cate.id !== action.payload.id;
+      });
+      state.subCategories = {
+        loading: false,
+        data: {
+          ...state.subCategories.data,
+          [action.payload.categoryId]: [...newSubCategory],
+        },
+      };
+    },
+
     removeCountry: (state, action) => {
       const newCountry = state.countries.data.filter((cate) => {
         return cate.id !== action.payload.id;
       });
-      state.country = {
+      state.countries = {
         loading: false,
         data: newCountry,
+      };
+    },
+
+    removeCity: (state, action) => {
+      const newCity = (
+        state.cities.data[action.payload.countryId] || []
+      ).filter((cate) => {
+        return cate.id !== action.payload.id;
+      });
+      state.cities = {
+        loading: false,
+        data: {
+          ...state.subCategories.data,
+          [action.payload.categoryId]: [...newCity],
+        },
       };
     },
   },
@@ -186,7 +230,7 @@ export const choiceSlice = createSlice({
     });
     //  SubCategories
     builder.addCase(getSubCategories.fulfilled, (state, action) => {
-      state.cities = {
+      state.subCategories = {
         loading: false,
         data: {
           ...(state.subCategories.data || {}),
@@ -210,6 +254,13 @@ export const choiceSlice = createSlice({
     });
   },
 });
-export const { addCountry, addCategories, removeCategory, removeCountry } =
-  choiceSlice.actions;
+export const {
+  addCountry,
+  addCategories,
+  removeCategory,
+  removeCountry,
+  addSubCategories,
+  removeSubCategory,
+  removeCity,
+} = choiceSlice.actions;
 export default choiceSlice.reducer;

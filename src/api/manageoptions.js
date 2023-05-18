@@ -124,12 +124,13 @@ export const addLanguageApi = async (data) => {
   return response;
 };
 
-export const editLanguageApi = async (jobSeekerCategoryId) => {
+export const editLanguageApi = async (languageId, data) => {
   const response = await api.request({
-    url: urlcat("/v1/admin/language/:jobSeekerCategoryId", {
-      jobSeekerCategoryId,
+    url: urlcat("/v1/admin/language/:languageId", {
+      languageId,
     }),
     method: "PUT",
+    data,
   });
   return response;
 };
@@ -203,6 +204,15 @@ export const createSectorApi = async (data) => {
   const response = await api.request({
     url: urlcat("/v1/admin/sector"),
     method: "POST",
+    data,
+  });
+  return response;
+};
+
+export const editSectorApi = async (sectorId, data) => {
+  const response = await api.request({
+    url: urlcat("/v1/admin/sector/:sectorId", { sectorId }),
+    method: "PUT",
     data,
   });
   return response;
