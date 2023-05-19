@@ -19,6 +19,7 @@ import {
   manageOpportunity,
 } from "@pages/manageOptions";
 import ManageCountry from "@pages/manageOptions/manageCountry";
+import ManageTenderCategory from "@pages/manageOptions/manageTenderCategory";
 
 export const PUBLIC_ROUTE = [];
 
@@ -63,6 +64,13 @@ export const AUTHENTICATED_ROUTE = [
     path: "/manage-skills",
     element: ManageSkills,
   },
+
+  {
+    id: "manage-tender-category",
+    path: "/manage-tender-category",
+    element: ManageTenderCategory,
+  },
+
   {
     id: "manage-job-category",
     path: "/manage-job-category",

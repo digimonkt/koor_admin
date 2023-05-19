@@ -6,7 +6,6 @@ import { useSelector } from "react-redux";
 
 const SubCategories = ({ countryId, handleDeleteSub, handleEditSub }) => {
   const { subCategories } = useSelector((state) => state.choice);
-  // console.log({ subCategories });
   const [rows, setRows] = useState([]);
   const columns = [
     { title: "Name", key: "name" },

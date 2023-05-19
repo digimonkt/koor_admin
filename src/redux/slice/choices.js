@@ -91,6 +91,21 @@ export const choiceSlice = createSlice({
         data: newCountries,
       };
     },
+
+    addCity: (state, action) => {
+      const newCity = [
+        action.payload,
+        ...(state.cities.data[action.payload.countryId] || []),
+      ];
+      state.cities = {
+        loading: false,
+        data: {
+          ...state.cities.data,
+          [action.payload.countryId]: [...newCity],
+        },
+      };
+    },
+
     addCategories: (state, action) => {
       const newCategory = [action.payload, ...state.categories.data];
       state.categories = {
@@ -156,8 +171,8 @@ export const choiceSlice = createSlice({
       state.cities = {
         loading: false,
         data: {
-          ...state.subCategories.data,
-          [action.payload.categoryId]: [...newCity],
+          ...state.cities.data,
+          [action.payload.countryId]: [...newCity],
         },
       };
     },
@@ -262,5 +277,6 @@ export const {
   addSubCategories,
   removeSubCategory,
   removeCity,
+  addCity,
 } = choiceSlice.actions;
 export default choiceSlice.reducer;

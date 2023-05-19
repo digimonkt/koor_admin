@@ -4,7 +4,7 @@ import { SVG } from "@assets/svg";
 import React, { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
 
-const Cities = ({ countryId, handleDeleteSub, handleEditSub }) => {
+const Cities = ({ countryId, handleDeleteSub }) => {
   const { cities } = useSelector((state) => state.choice);
   const [rows, setRows] = useState([]);
   const columns = [

@@ -33,6 +33,12 @@ export const MENU_ITEM = [
     menuBorder: styles.borderBottom,
   },
   {
+    id: "6A",
+    icon: <SVG.FinancialTools />,
+    page: "Manage tender category",
+    url: "/manage-tender-category",
+  },
+  {
     id: "6",
     icon: <SVG.FinancialTools />,
     page: "Manage skills",
@@ -57,27 +63,6 @@ export const MENU_ITEM = [
     page: "Manage  country",
     url: "/manage-country",
   },
-
-  // {
-  //   id: "10",
-  //   icon: <SVG.FinancialTools />,
-  //   page: "Manage  city",
-  //   url: "/manage-city",
-  // },
-
-  // {
-  //   id: "11",
-  //   icon: <SVG.FinancialTools />,
-  //   page: "Manage job seeker category",
-  //   url: "/manage-job-seeker-category",
-  // },
-
-  // {
-  //   id: "12",
-  //   icon: <SVG.FinancialTools />,
-  //   page: "Manage job sub category",
-  //   url: "/manage-job-sub-category",
-  // },
 
   {
     id: "11",
