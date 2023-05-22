@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import TableContainer from "@mui/material/TableContainer";
 import Paper from "@mui/material/Paper";
 import {
+  addCity,
   addCountry,
   getCitiesByCountry,
   getCountries,
@@ -40,8 +41,9 @@ const ManageCountry = () => {
   const [totalCount, setTotalCount] = useState(0);
   const [deleting, setDeleting] = useState("");
   const [citesDeleting, setCitesDeleting] = useState("");
-
+  const [countryId, setCountryId] = useState("");
   const handleSelectCountry = (country) => {
+    setCountryId(country.title);
     const id = country.id;
     const countryName = country.title;
     dispatch(getCitiesByCountry({ countryId: id }));
@@ -87,8 +89,8 @@ const ManageCountry = () => {
     }
   };
 
-  const getWorldCities = async (countryName) => {
-    const response = await getWorldCityApi(countryName);
+  const getWorldCities = async (countryName, search) => {
+    const response = await getWorldCityApi(countryName, search);
     if (response.remote === "success") {
       setCityName(response.data.results);
     }
@@ -117,9 +119,10 @@ const ManageCountry = () => {
     const response = await addCityApi(payload);
     if (response.remote === "success") {
       dispatch(
-        addCountry({
+        addCity({
           id: response.data.data.id,
           title: payload.title,
+          countryId: response.data.data.country,
         })
       );
       dispatch(setSuccessToast("Add Country SuccessFully"));
@@ -150,6 +153,10 @@ const ManageCountry = () => {
     }
   };
 
+  async function getDataCity(value) {
+    getWorldCities(countryId, value);
+  }
+
   useEffect(() => {
     const payload = {
       search: searchTerm,
@@ -171,6 +178,7 @@ const ManageCountry = () => {
       dispatch(getCountries());
     }
   }, []);
+
   return (
     <>
       <Layout
@@ -212,8 +220,9 @@ const ManageCountry = () => {
             handleDelete={() => setDeleting(country.id)}
           >
             <SelectWithSearch
-              title={"add city"}
+              title={"Add city"}
               onChange={(_, value) => setSelectCityValue(value)}
+              onKeyPress={(e) => getDataCity(e.target.value)}
               options={cityName.map((cities) => ({
                 value: cities.id,
                 label: cities.title,
@@ -234,7 +243,7 @@ const ManageCountry = () => {
                   borderColor: "#f7f7f7",
                 },
               }}
-              title={"Add Country"}
+              title={"Add City"}
               onClick={addCities}
             />
             <TableContainer component={Paper}>

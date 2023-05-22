@@ -134,7 +134,7 @@ const ManageCategoryComponent = () => {
       dispatch(
         removeSubCategory({
           id: subCategoryDeleting.id,
-          categoryId: subCategoryDeleting.categoryId,
+          categoryId: subCategoryDeleting.category.id,
         })
       );
       setSubCategoryDeleting("");
@@ -150,7 +150,7 @@ const ManageCategoryComponent = () => {
   };
 
   const handleEditSub = async (subcategory) => {
-    setEditCategoryId(subcategory.category.id);
+    setEditCategoryId(subcategory.categoryId);
     setSubCategoryEdit(subcategory.id);
     setSubCategoryEditValue(subcategory.title);
   };
@@ -160,6 +160,7 @@ const ManageCategoryComponent = () => {
       title: subCategoryEditValue,
       category: editCategoryId,
     };
+
     const response = await editSubCategoryApi(subCategoryEdit, payload);
     if (response.remote === "success") {
       setSubCategoryEdit("");

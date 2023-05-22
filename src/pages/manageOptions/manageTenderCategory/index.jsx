@@ -3,31 +3,32 @@ import Layout from "../layout";
 import { SVG } from "@assets/svg";
 import { IconButton, Stack } from "@mui/material";
 import { useDispatch } from "react-redux";
-import { setLoading } from "@redux/slice/jobsAndTenders";
-import { useDebounce } from "usehooks-ts";
-import { transformSkillResponse } from "@api/transform/choices";
 import {
-  addEducationApi,
-  deleteEducationApi,
-  editEducationApi,
-  manageEducationApi,
+  createTenderCategoryApi,
+  editTenderCategoryApi,
+  manageTenderCategoryApi,
+  tenderCategoryDeleteApi,
 } from "@api/manageoptions";
-import { setErrorToast, setSuccessToast } from "@redux/slice/toast";
+import { setLoading } from "@redux/slice/jobsAndTenders";
+import { transformSkillResponse } from "@api/transform/choices";
 import DialogBox from "@components/dialogBox";
+import { setErrorToast, setSuccessToast } from "@redux/slice/toast";
 import DeleteCard from "@components/card/deleteCard";
-import { EditCard } from "@components/card";
-function manageEducation() {
+import EditCard from "@components/card/editCard";
+import { useDebounce } from "usehooks-ts";
+function ManageTender() {
   const dispatch = useDispatch();
-  const [educationTable, setEducationTable] = useState([]);
+  const [tenderCategoryTable, setTenderCategoryTable] = useState([]);
   const [pages, setPages] = useState(1);
   const [limit, setLimit] = useState(10);
+  const [addTenderCategory, setAddTenderCategory] = useState("");
+  const [editTenderCategory, setEditTenderCategory] = useState("");
+  const [editTenderValue, setEditTenderValue] = useState("");
   const [totalCount, setTotalCount] = useState(0);
-  const [addEducation, setAddEducation] = useState([]);
+  const [deleteTenderCategory, setDeleteTenderCategory] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
-  const [editEducation, setEditEducation] = useState("");
-  const [editEducationValue, setEditEducationValue] = useState("");
-  const [deleteEducation, setDeleteEducation] = useState("");
-  const debouncedSearchEducationValue = useDebounce(searchTerm, 500);
+  const debouncedSearchTenderCategoryValue = useDebounce(searchTerm, 500);
+
   const columns = [
     {
       id: "1",
@@ -37,11 +38,11 @@ function manageEducation() {
     },
 
     {
+      id: "3",
       field: "name",
       headerName: "Name",
-      sortable: true,
       width: 180,
-      id: "3",
+      sortable: true,
     },
 
     {
@@ -52,7 +53,7 @@ function manageEducation() {
         return (
           <Stack direction="row" spacing={1} alignItems="center">
             <IconButton
-              onClick={() => setDeleteEducation(item.row.id)}
+              onClick={() => setDeleteTenderCategory(item.row.id)}
               sx={{
                 "&.MuiIconButton-root": {
                   background: "#D5E3F7",
@@ -84,17 +85,17 @@ function manageEducation() {
     },
   ];
 
-  const eductionList = async () => {
+  const tenderCategoryList = async () => {
     dispatch(setLoading(true));
     const page = pages;
-    const search = debouncedSearchEducationValue || "";
-    const response = await manageEducationApi({ limit, page, search });
+    const search = debouncedSearchTenderCategoryValue || "";
+    const response = await manageTenderCategoryApi({ limit, page, search });
     if (response.remote === "success") {
       const formateData = transformSkillResponse(response.data.results);
       if (!formateData.length) {
         dispatch(setLoading(false));
       }
-      setEducationTable(formateData);
+      setTenderCategoryTable(formateData);
       const totalCounts = Math.ceil(response.data.count / limit);
       setTotalCount(totalCounts);
     } else {
@@ -102,95 +103,96 @@ function manageEducation() {
     }
   };
 
-  function getPage(_, page) {
-    setPages(page);
-  }
-
-  const addEducationFunction = async () => {
+  const addTenderCategoryFunction = async () => {
     const payload = {
-      title: addEducation,
+      title: addTenderCategory,
     };
-
-    const response = await addEducationApi(payload);
+    const response = await createTenderCategoryApi(payload);
     if (response.remote === "success") {
-      const temp = [...educationTable];
+      const temp = [...tenderCategoryTable];
       temp.push({
-        id: response.data.data.id || Math.random(),
+        id: response.data.id || Math.random(),
         no: temp.length + 1,
-        name: response.data.data.title,
+        name: response.data.title,
       });
-      setEducationTable([...temp]);
-      setAddEducation("");
-      dispatch(setSuccessToast("Add Education SuccessFully"));
+
+      setTenderCategoryTable([...temp]);
+      setAddTenderCategory("");
+
+      dispatch(setSuccessToast("Add Tender Category SuccessFully"));
     } else {
       console.log(response.error);
       dispatch(setErrorToast("Something went wrong"));
     }
   };
 
+  function getPage(_, page) {
+    setPages(page);
+  }
+
+  const handleDelete = async () => {
+    setLoading(false);
+    const response = await tenderCategoryDeleteApi(deleteTenderCategory);
+    if (response.remote === "success") {
+      const newSkillTable = tenderCategoryTable.filter(
+        (emp) => emp.id !== deleteTenderCategory
+      );
+      setTenderCategoryTable(newSkillTable);
+      setDeleteTenderCategory("");
+      dispatch(setSuccessToast("Delete Tender Category SuccessFully"));
+    } else {
+      dispatch(setErrorToast("Something went wrong"));
+      console.log(response.error);
+    }
+  };
+
   const handleEdit = async (item) => {
-    setEditEducation(item.id);
-    setEditEducationValue(item.name);
+    setEditTenderCategory(item.id);
+    setEditTenderValue(item.name);
   };
 
   const handleUpdate = async () => {
     const payload = {
-      title: editEducationValue,
+      title: editTenderValue,
     };
 
-    const response = await editEducationApi(editEducation, payload);
+    const response = await editTenderCategoryApi(editTenderCategory, payload);
     if (response.remote === "success") {
-      eductionList();
-      setEditEducation("");
+      tenderCategoryList();
+      setEditTenderCategory("");
       dispatch(setSuccessToast(response.data.message));
     } else {
       dispatch(setErrorToast(response.error.errors.title));
     }
   };
 
-  const handleDelete = async () => {
-    setLoading(false);
-    const response = await deleteEducationApi(deleteEducation);
-    if (response.remote === "success") {
-      const newCategoryTable = educationTable.filter(
-        (emp) => emp.id !== deleteEducation
-      );
-      setEducationTable(newCategoryTable);
-      setDeleteEducation("");
-      dispatch(setSuccessToast("Delete Skill SuccessFully"));
-    } else {
-      dispatch(setErrorToast("Something went wrong"));
-      console.log(response.error);
-    }
-  };
+  useEffect(() => {
+    tenderCategoryList();
+  }, [debouncedSearchTenderCategoryValue, pages, limit]);
 
   useEffect(() => {
-    eductionList();
-  }, [debouncedSearchEducationValue, pages, limit]);
-
-  useEffect(() => {
-    if (educationTable.length) {
+    if (tenderCategoryTable.length) {
       dispatch(setLoading(false));
     }
-  }, [educationTable]);
+  }, [tenderCategoryTable]);
 
   return (
     <>
       <Layout
-        rows={educationTable}
+        rows={tenderCategoryTable}
         columns={columns}
         totalCount={totalCount}
         handlePageChange={getPage}
         searchProps={{
-          placeholder: "Search  Education",
+          placeholder: "Search Tender Category",
           onChange: (e) => setSearchTerm(e.target.value),
           value: searchTerm,
         }}
         inputProps={{
           type: "text",
-          placeholder: "Add  Education",
-          onChange: (e) => setAddEducation(e.target.value),
-          value: addEducation,
+          placeholder: "Add Tender Category",
+          onChange: (e) => setAddTenderCategory(e.target.value),
+          value: addTenderCategory,
         }}
         limitProps={{
           value: limit,
@@ -203,35 +205,34 @@ function manageEducation() {
         }}
         optionsProps={{
           title: (
-            <div onClick={addEducationFunction}>
+            <div onClick={addTenderCategoryFunction}>
               <span className="d-inline-flex align-items-center me-2"></span>{" "}
-              Add Education
+              Add Tender Category
             </div>
           ),
         }}
       />
-
       <DialogBox
-        open={!!deleteEducation}
-        handleClose={() => setDeleteEducation("")}
+        open={!!deleteTenderCategory}
+        handleClose={() => setDeleteTenderCategory("")}
       >
         <DeleteCard
-          title="Delete Category"
-          content="Are you sure you want to delete Category?"
-          handleCancel={() => setDeleteEducation("")}
+          title="Delete Tender Category"
+          content="Are you sure you want to delete Tender Category?"
+          handleCancel={() => setDeleteTenderCategory("")}
           handleDelete={handleDelete}
         />
       </DialogBox>
 
       <DialogBox
-        open={!!editEducation}
-        handleClose={() => setEditEducation("")}
+        open={!!editTenderCategory}
+        handleClose={() => setEditTenderCategory("")}
       >
         <EditCard
-          title="Edit Category"
-          handleCancel={() => setEditEducation("")}
-          setEditValue={setEditEducationValue}
-          editValue={editEducationValue}
+          title="Edit Skill"
+          handleCancel={() => setEditTenderCategory("")}
+          setEditValue={setEditTenderValue}
+          editValue={editTenderValue}
           handleUpdate={handleUpdate}
         />
       </DialogBox>
@@ -239,4 +240,4 @@ function manageEducation() {
   );
 }
 
-export default manageEducation;
+export default ManageTender;

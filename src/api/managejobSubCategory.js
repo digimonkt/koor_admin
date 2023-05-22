@@ -24,7 +24,6 @@ export const addSubCategoryApi = async (data) => {
 };
 
 export const deleteSubCategoryApi = async (jobSubCategoryId) => {
-  console.log({ jobSubCategoryId });
   const response = await api.request({
     url: urlcat("/v1/admin/job-sub-category/:jobSubCategoryId", {
       jobSubCategoryId,
