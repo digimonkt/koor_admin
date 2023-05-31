@@ -9,7 +9,8 @@ import ManageSectorComponent from "./manageSector";
 import ManageTagComponent from "./manageTag";
 import ManageLanguageComponent from "./mangeLanguage";
 import ManageOpportunity from "./manageOpportunity";
-
+import ManageTenderCategory from "./manageTenderCategory";
+import NewPostResource from "./manageSettings/postNewResources";
 export const ManageSettings = ManageSettingsComponent;
 export const ManageUserRights = ManageUserRightsComponent;
 export const ManagePrivacyPolicy = ManagePrivacyPolicyComponent;
@@ -21,3 +22,5 @@ export const manageSector = ManageSectorComponent;
 export const manageTag = ManageTagComponent;
 export const ManageLanguage = ManageLanguageComponent;
 export const manageOpportunity = ManageOpportunity;
+export const manageTenderCategory = ManageTenderCategory;
+export const newPostResource = NewPostResource;

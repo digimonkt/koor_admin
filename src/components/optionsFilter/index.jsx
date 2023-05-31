@@ -1,19 +1,8 @@
 import React from "react";
 import { SolidButton } from "@components/button";
 import { SearchInput, LabeledInput } from "@components/input";
-import SelectWithSearch from "@components/input/selectWithsearch";
 
-const OptionsFilter = ({
-  searchProps,
-  inputProps,
-  optionsProps,
-  country,
-  selectPropsCities,
-  city,
-  selectPropsCountry,
-  SubCategory,
-  tender,
-}) => {
+const OptionsFilter = ({ searchProps, inputProps, optionsProps, tender }) => {
   return (
     <>
       {tender ? (
@@ -23,62 +12,17 @@ const OptionsFilter = ({
           {...searchProps}
         />
       ) : (
-        <>
-          {country ? (
-            <SelectWithSearch title="Select Country" {...selectPropsCountry} />
-          ) : city ? (
-            <div>
-              <SelectWithSearch
-                title="Select Country"
-                {...selectPropsCountry}
-              />
-              <SelectWithSearch title="Select City" {...selectPropsCities} />
-              <SearchInput
-                placeholder="Search skills"
-                widthInput="100%"
-                {...searchProps}
-              />
-            </div>
-          ) : SubCategory ? (
-            <div
-              style={{
-                display: "flex",
-              }}
-            >
-              <SearchInput
-                placeholder="Search skills"
-                widthInput="100%"
-                {...searchProps}
-              />
-              <SelectWithSearch
-                title="Select  Category"
-                {...selectPropsCountry}
-              />
-              <LabeledInput
-                placeholder="skill Level"
-                type="text"
-                {...inputProps}
-              />
-            </div>
-          ) : (
-            <div
-              style={{
-                display: "flex",
-              }}
-            >
-              <SearchInput
-                placeholder="Search skills"
-                widthInput="100%"
-                {...searchProps}
-              />
-              <LabeledInput
-                placeholder="skill Level"
-                type="text"
-                {...inputProps}
-              />
-            </div>
-          )}
-
+        <div
+          style={{
+            display: "flex",
+          }}
+        >
+          <SearchInput
+            placeholder="Search skills"
+            widthInput="100%"
+            {...searchProps}
+          />
+          <LabeledInput placeholder="skill Level" type="text" {...inputProps} />
           <SolidButton
             sx={{
               background: "#fff",
@@ -96,7 +40,7 @@ const OptionsFilter = ({
             }}
             {...optionsProps}
           />
-        </>
+        </div>
       )}
     </>
   );

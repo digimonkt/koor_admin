@@ -5,7 +5,7 @@ import { IconButton, Stack } from "@mui/material";
 import { useDispatch } from "react-redux";
 import {
   createSectorApi,
-  editSkillApi,
+  editSectorApi,
   manageSectorApi,
   sectorDeleteApi,
 } from "@api/manageoptions";
@@ -66,7 +66,7 @@ function ManageSector() {
               <SVG.DeleteIcon />
             </IconButton>
 
-            {/* <IconButton
+            <IconButton
               onClick={() => handleEdit(item.row)}
               sx={{
                 "&.MuiIconButton-root": {
@@ -78,7 +78,7 @@ function ManageSector() {
               }}
             >
               <SVG.EditIcon />
-            </IconButton> */}
+            </IconButton>
           </Stack>
         );
       },
@@ -143,17 +143,17 @@ function ManageSector() {
     }
   };
 
-  //   const handleEdit = async (item) => {
-  //     setEditSkill(item.id);
-  //     setEditSkillValue(item.name);
-  //   };
+  const handleEdit = async (item) => {
+    setEditSkill(item.id);
+    setEditSkillValue(item.name);
+  };
 
   const handleUpdate = async () => {
     const payload = {
       title: editSkillValue,
     };
 
-    const response = await editSkillApi(editSkill, payload);
+    const response = await editSectorApi(editSkill, payload);
     if (response.remote === "success") {
       skillsList();
       setEditSkill("");
@@ -220,7 +220,7 @@ function ManageSector() {
 
       <DialogBox open={!!editSkill} handleClose={() => setEditSkill("")}>
         <EditCard
-          title="Edit Skill"
+          title="Edit Sector"
           handleCancel={() => setEditSkill("")}
           setEditValue={setEditSkillValue}
           editValue={editSkillValue}

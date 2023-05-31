@@ -74,3 +74,12 @@ export const transformSkillResponse = (data) => {
     name: data.title,
   }));
 };
+
+export const transformResourcesResponse = (data) => {
+  return data.map((data, index) => ({
+    id: data.id,
+    imgUrl: data.attachment.path,
+    title: data.title,
+    description: data.description,
+  }));
+};

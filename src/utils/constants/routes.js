@@ -17,8 +17,10 @@ import {
   manageSector,
   manageTag,
   manageOpportunity,
+  newPostResource,
 } from "@pages/manageOptions";
 import ManageCountry from "@pages/manageOptions/manageCountry";
+import ManageTenderCategory from "@pages/manageOptions/manageTenderCategory";
 
 export const PUBLIC_ROUTE = [];
 
@@ -63,6 +65,13 @@ export const AUTHENTICATED_ROUTE = [
     path: "/manage-skills",
     element: ManageSkills,
   },
+
+  {
+    id: "manage-tender-category",
+    path: "/manage-tender-category",
+    element: ManageTenderCategory,
+  },
+
   {
     id: "manage-job-category",
     path: "/manage-job-category",
@@ -77,6 +86,16 @@ export const AUTHENTICATED_ROUTE = [
     id: "manage-settings",
     path: "/settings",
     element: ManageSettings,
+  },
+  {
+    id: "create-post-settings",
+    path: "/settings/create-new-post",
+    element: newPostResource,
+  },
+  {
+    id: "create-post-settings",
+    path: "/settings/create-new-post/:resourceId",
+    element: newPostResource,
   },
   {
     id: "manage-country",

@@ -6,11 +6,13 @@ import { Paper, TableContainer } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import {
   addCategories,
+  addSubCategories,
   getCategories,
   getSubCategories,
   removeCategory,
+  removeSubCategory,
 } from "@redux/slice/choices";
-import Cities from "../manageCountry/SubCategories";
+import SubCategory from "./SubCategories";
 import { useDebounce } from "usehooks-ts";
 import {
   addCategoryApi,
@@ -113,9 +115,10 @@ const ManageCategoryComponent = () => {
     const response = await addSubCategoryApi(payload);
     if (response.remote === "success") {
       dispatch(
-        addCategories({
+        addSubCategories({
           id: response.data.data.id,
           title: payload.title,
+          categoryId: response.data.data.category,
         })
       );
       dispatch(setSuccessToast("Add Sub Category SuccessFully"));
@@ -126,9 +129,14 @@ const ManageCategoryComponent = () => {
   };
 
   const handleDeleteSub = async () => {
-    const response = await deleteSubCategoryApi(subCategoryDeleting);
+    const response = await deleteSubCategoryApi(subCategoryDeleting.id);
     if (response.remote === "success") {
-      dispatch(removeCategory({ id: subCategoryDeleting }));
+      dispatch(
+        removeSubCategory({
+          id: subCategoryDeleting.id,
+          categoryId: subCategoryDeleting.category.id,
+        })
+      );
       setSubCategoryDeleting("");
       dispatch(setSuccessToast("Delete Sub Category SuccessFully"));
     } else {
@@ -137,14 +145,14 @@ const ManageCategoryComponent = () => {
     }
   };
 
-  const handleDeleteId = async (id) => {
-    setSubCategoryDeleting(id);
+  const handleDeleteId = async (category) => {
+    setSubCategoryDeleting(category);
   };
 
-  const handleEditSub = async (city) => {
-    setEditCategoryId(city.category.id);
-    setSubCategoryEdit(city.id);
-    setSubCategoryEditValue(city.title);
+  const handleEditSub = async (subcategory) => {
+    setEditCategoryId(subcategory.categoryId);
+    setSubCategoryEdit(subcategory.id);
+    setSubCategoryEditValue(subcategory.title);
   };
 
   const handleUpdateSub = async () => {
@@ -152,6 +160,7 @@ const ManageCategoryComponent = () => {
       title: subCategoryEditValue,
       category: editCategoryId,
     };
+
     const response = await editSubCategoryApi(subCategoryEdit, payload);
     if (response.remote === "success") {
       setSubCategoryEdit("");
@@ -161,6 +170,7 @@ const ManageCategoryComponent = () => {
       dispatch(setErrorToast(response.error.errors.title));
     }
   };
+
   useEffect(() => {
     setLimit(10);
     if (!categories.data.length) {
@@ -242,7 +252,7 @@ const ManageCategoryComponent = () => {
             />
 
             <TableContainer component={Paper}>
-              <Cities
+              <SubCategory
                 countryId={category.id}
                 handleDeleteSub={handleDeleteId}
                 handleEditSub={handleEditSub}

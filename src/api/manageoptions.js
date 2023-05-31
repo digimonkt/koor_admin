@@ -124,12 +124,13 @@ export const addLanguageApi = async (data) => {
   return response;
 };
 
-export const editLanguageApi = async (jobSeekerCategoryId) => {
+export const editLanguageApi = async (languageId, data) => {
   const response = await api.request({
-    url: urlcat("/v1/admin/language/:jobSeekerCategoryId", {
-      jobSeekerCategoryId,
+    url: urlcat("/v1/admin/language/:languageId", {
+      languageId,
     }),
     method: "PUT",
+    data,
   });
   return response;
 };
@@ -152,7 +153,20 @@ export const manageTenderApi = async ({ limit, page, search, country }) => {
   return response;
 };
 
-export const createTenderApi = async (data) => {
+export const manageTenderCategoryApi = async ({
+  limit,
+  page,
+  search,
+  country,
+}) => {
+  const response = await api.request({
+    url: urlcat("/v1/admin/tender-category", { limit, page, search, country }),
+    method: "GET",
+  });
+  return response;
+};
+
+export const createTenderCategoryApi = async (data) => {
   const response = await api.request({
     url: urlcat("/v1/admin/tender-category"),
     method: "POST",
@@ -161,7 +175,7 @@ export const createTenderApi = async (data) => {
   return response;
 };
 
-export const tenderDeleteApi = async (tenderCategoryId) => {
+export const tenderCategoryDeleteApi = async (tenderCategoryId) => {
   const response = await api.request({
     url: urlcat("/v1/admin/tender-category/:tenderCategoryId", {
       tenderCategoryId,
@@ -171,13 +185,14 @@ export const tenderDeleteApi = async (tenderCategoryId) => {
   return response;
 };
 
-export const editTenderApi = async (skillId, data) => {
-  const response = alert("This Api is under process");
-  // const response = await api.request({
-  //   url: urlcat("/v1/admin/skills/:skillId", { skillId }),
-  //   method: "PUT",
-  //   data,
-  // });
+export const editTenderCategoryApi = async (tenderCategoryId, data) => {
+  const response = await api.request({
+    url: urlcat("/v1/admin/tender-category/:tenderCategoryId", {
+      tenderCategoryId,
+    }),
+    method: "PUT",
+    data,
+  });
   return response;
 };
 
@@ -203,6 +218,15 @@ export const createSectorApi = async (data) => {
   const response = await api.request({
     url: urlcat("/v1/admin/sector"),
     method: "POST",
+    data,
+  });
+  return response;
+};
+
+export const editSectorApi = async (sectorId, data) => {
+  const response = await api.request({
+    url: urlcat("/v1/admin/sector/:sectorId", { sectorId }),
+    method: "PUT",
     data,
   });
   return response;
@@ -281,6 +305,45 @@ export const editOpportunityApi = async (opportunityId, data) => {
     url: urlcat("/v1/admin/opportunity-type/:opportunityId", { opportunityId }),
     method: "PUT",
     data,
+  });
+  return response;
+};
+
+export const getResourcesApi = async () => {
+  const response = await api.request({
+    url: urlcat("/v1/admin/resources"),
+    method: "GET",
+  });
+  return response;
+};
+
+export const createResourcesApi = async (data) => {
+  const response = await api.request({
+    url: urlcat("/v1/admin/resources"),
+    method: "POST",
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+    data,
+  });
+  return response;
+};
+
+export const editResourcesApi = async (resourcesId, data) => {
+  const response = await api.request({
+    url: urlcat("/v1/admin/resources/:resourcesId", { resourcesId }),
+    method: "PUT",
+    data,
+  });
+  return response;
+};
+
+export const resourcesDeleteApi = async (resourcesId) => {
+  const response = await api.request({
+    url: urlcat("/v1/admin/resources/:resourcesId", {
+      resourcesId,
+    }),
+    method: "DELETE",
   });
   return response;
 };

@@ -128,6 +128,11 @@ function ManageLanguage() {
     }
   };
 
+  const handleEdit = async (item) => {
+    setEditLanguage(item.id);
+    setEditLanguageValue(item.name);
+  };
+
   const handleUpdate = async () => {
     const payload = {
       title: editLanguageValue,
@@ -141,11 +146,6 @@ function ManageLanguage() {
     } else {
       dispatch(setErrorToast(response.error.errors.title));
     }
-  };
-
-  const handleEdit = async (item) => {
-    setEditLanguage(item.id);
-    setEditLanguageValue(item.name);
   };
 
   const handleDelete = async () => {
