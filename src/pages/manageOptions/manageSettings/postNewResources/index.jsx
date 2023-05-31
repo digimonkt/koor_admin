@@ -1,0 +1,304 @@
+import React, { useState } from "react";
+import { Avatar, Card, CardContent, IconButton, Stack } from "@mui/material";
+import { SVG } from "@assets/svg";
+import styles from "../styles.module.css";
+import LabelStyle from "../change-password/styles.module.css";
+import { Link, useNavigate } from "react-router-dom";
+import { LabeledInput } from "@components/input";
+import ReactQuill from "react-quill";
+import { OutlinedButton } from "@components/button";
+import ImageCropper from "@components/imageCropper";
+import { createResourcesApi } from "@api/manageoptions";
+import { setErrorToast, setSuccessToast } from "@redux/slice/toast";
+import { useDispatch } from "react-redux";
+
+const NewPostResource = () => {
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const [files, setFiles] = useState([]);
+  const [newImage, setNewImage] = useState("");
+  const [addParagraph, setAddParagraph] = useState(1);
+  const [editorValue, setEditorValue] = useState(Array(addParagraph).fill(""));
+  const [editorVisibility, setEditorVisibility] = useState(
+    Array(addParagraph).fill(true)
+  );
+  const [postTitle, setPostTitle] = useState("");
+
+  const toolbarOptions = [
+    ["bold", "italic", "underline", "strike"], // basic formatting
+    ["blockquote", "code-block"], // blockquote and code block
+    [{ header: 1 }, { header: 2 }], // headers
+    [{ list: "ordered" }, { list: "bullet" }], // ordered and unordered lists
+    [{ script: "sub" }, { script: "super" }], // subscript and superscript
+    [{ indent: "-1" }, { indent: "+1" }], // outdent and indent
+    [{ direction: "rtl" }], // text direction
+    [{ size: ["small", false, "large", "huge"] }], // font size
+    [{ color: [] }, { background: [] }], // text and background color
+    [{ font: [] }], // font family
+    [{ align: [] }], // text alignment
+    ["link", "image", "video"], // link, image, and video
+    ["clean"], // remove formatting
+  ];
+
+  // image cropper
+  const handleFiles = (e) => {
+    setFiles(e.target.files);
+  };
+  const handleUpdateImage = (file) => {
+    setNewImage(file);
+    setFiles([]);
+  };
+  const thumbs = (
+    <Avatar
+      sx={{
+        width: 100,
+        height: 100,
+        color: "#CACACA",
+        borderRadius: "0",
+      }}
+      src={newImage instanceof File ? URL.createObjectURL(newImage) : newImage}
+      onLoad={() => {
+        URL.revokeObjectURL(newImage);
+      }}
+    />
+  );
+  // image cropper
+
+  // Delete Text Editor Content
+  const handleDeleteContent = (index) => {
+    const updatedVisibility = [...editorVisibility];
+    updatedVisibility[index] = false;
+    setEditorVisibility(updatedVisibility);
+    const updatedValues = [...editorValue];
+    updatedValues[index] = "";
+    setEditorValue(updatedValues);
+  };
+  // Delete Text Editor Content
+
+  // Add more paragraph
+  const handleAddParagraph = () => {
+    setAddParagraph(addParagraph + 1);
+    setEditorValue([...editorValue, ""]);
+    setEditorVisibility([...editorVisibility, true]);
+  };
+  // Add more paragraph
+  // handle get Editor value
+  const handleEditorValue = (index, value) => {
+    const updatedValues = [...editorValue];
+    updatedValues[index] = value;
+    setEditorValue(updatedValues);
+  };
+  // handle get Editor value
+
+  // Get Value Post Title
+  const handlePostTitle = (e) => {
+    setPostTitle(e.target.value);
+  };
+  // Get Value Post Title
+
+  const handleSubmit = async () => {
+    const nonEmptyValues = editorValue.filter((value) => value.trim() !== "");
+    const payload = {
+      title: postTitle,
+      attachment_file: newImage,
+      description: nonEmptyValues,
+    };
+
+    const newFormData = new FormData();
+    newFormData.set("title", payload.title);
+    newFormData.set("attachment_file", payload.attachment_file);
+    newFormData.set("description", payload.description);
+
+    if (
+      payload.title &&
+      payload.attachment_file &&
+      payload.description.length > 0
+    ) {
+      const response = await createResourcesApi(newFormData);
+      if (response.remote === "success") {
+        dispatch(setSuccessToast("Add Resource SuccessFully"));
+        navigate("/settings");
+      } else {
+        dispatch(setErrorToast("Something went wrong"));
+        console.log(response.error);
+      }
+    } else {
+      dispatch(setErrorToast("All fields are required"));
+    }
+  };
+  return (
+    <Card
+      sx={{
+        "&.MuiCard-root": {
+          boxShadow: "0px 15px 40px rgba(0, 0, 0, 0.05)",
+          borderRadius: "10px",
+          marginBottom: "100px",
+        },
+      }}
+    >
+      <CardContent
+        sx={{
+          "&.MuiCardContent-root": {
+            p: {
+              xs: 2,
+              sm: 1,
+              md: 3.75,
+              lg: 3.75,
+              xl: 3.75,
+            },
+          },
+        }}
+      >
+        <Stack
+          direction="row"
+          spacing={1}
+          alignItems="center"
+          className={`${styles.title}`}
+          sx={{
+            mb: {
+              xs: 1,
+              sm: 1,
+              md: 3.75,
+              lg: 3.75,
+              xl: 3.75,
+            },
+          }}
+        >
+          <IconButton LinkComponent={Link} to="/settings">
+            <SVG.ArrowLeftIcon />
+          </IconButton>{" "}
+          <h2>Content management</h2>
+        </Stack>
+        <Stack
+          direction={{ xs: "column", sm: "row" }}
+          spacing={{ xs: 1, sm: 2, md: 2 }}
+          justifyContent="space-between"
+          alignItems="center"
+          className={`${styles.subtitle}`}
+        ></Stack>
+        <hr />
+        <div className={`${styles.title} ${styles.spaceMy}`}>
+          <LabeledInput
+            placeholder="Post title"
+            type="text"
+            className={`${LabelStyle.formControl}`}
+            onChange={handlePostTitle}
+          />
+        </div>
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center",
+            border: "3px dashed #CACACA",
+            borderRadius: "10px",
+            width: "1000px",
+            height: "104px",
+            position: "relative",
+          }}
+        >
+          <label>
+            <input
+              type="file"
+              style={{
+                position: "absolute",
+                width: "100%",
+                height: "100%",
+                display: "none",
+              }}
+              accept="image/*"
+              onChange={handleFiles}
+            />
+            <p style={{ textAlign: "center", cursor: "pointer" }}>
+              Drag here or
+              <span style={{ color: "blue" }}> upload a post cover image</span>
+            </p>
+          </label>
+          {newImage && <>{thumbs}</>}
+        </div>
+        {Array.from({ length: addParagraph }).map(
+          (_, index) =>
+            editorVisibility[index] && (
+              <div key={index}>
+                <ReactQuill
+                  theme="snow"
+                  value={editorValue[index]}
+                  modules={{
+                    toolbar: toolbarOptions,
+                  }}
+                  onChange={(value) => handleEditorValue(index, value)}
+                  style={{
+                    height: "200px",
+                    width: "1000px",
+                    marginTop: "20px",
+                    background: "#F0F0F0",
+                  }}
+                />
+
+                <div onClick={() => handleDeleteContent(index)}>
+                  <IconButton style={{ float: "right", marginRight: "58px" }}>
+                    <SVG.DeleteIcon />
+                  </IconButton>
+                </div>
+              </div>
+            )
+        )}
+      </CardContent>
+      <div
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          marginTop: "50px",
+        }}
+      >
+        <button
+          onClick={handleAddParagraph}
+          style={{
+            border: "none",
+            background: "none",
+            cursor: "pointer",
+          }}
+        >
+          <SVG.AddCircleIcon />
+          Add one more Paragraph
+        </button>
+      </div>
+      <div
+        onClick={handleSubmit}
+        style={{
+          display: "flex",
+          justifyContent: "center",
+          marginTop: "25px",
+        }}
+      >
+        <OutlinedButton
+          title={
+            <>
+              <SVG.AddCircleIcon />
+              PUBLISH POST
+            </>
+          }
+          sx={{
+            color: "#274593",
+            borderColor: "#274593",
+            display: "flex",
+            justifyContent: "center",
+          }}
+        ></OutlinedButton>
+      </div>
+      {files.length ? (
+        <ImageCropper
+          open={files[0]}
+          handleClose={() => {
+            setFiles([]);
+          }}
+          handleSave={handleUpdateImage}
+          image={files[0]}
+        />
+      ) : (
+        ""
+      )}
+    </Card>
+  );
+};
+export default NewPostResource;

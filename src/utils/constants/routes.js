@@ -17,6 +17,7 @@ import {
   manageSector,
   manageTag,
   manageOpportunity,
+  newPostResource,
 } from "@pages/manageOptions";
 import ManageCountry from "@pages/manageOptions/manageCountry";
 import ManageTenderCategory from "@pages/manageOptions/manageTenderCategory";
@@ -85,6 +86,16 @@ export const AUTHENTICATED_ROUTE = [
     id: "manage-settings",
     path: "/settings",
     element: ManageSettings,
+  },
+  {
+    id: "create-post-settings",
+    path: "/settings/create-new-post",
+    element: newPostResource,
+  },
+  {
+    id: "create-post-settings",
+    path: "/settings/create-new-post/:resourceId",
+    element: newPostResource,
   },
   {
     id: "manage-country",

@@ -6,14 +6,20 @@ import {
   IconButton,
   Stack,
 } from "@mui/material";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { SVG } from "@assets/svg";
 import { OutlinedButton } from "@components/button";
 import styles from "./styles.module.css";
 import { styled } from "@mui/material/styles";
-import { CARD_LIST } from "./helper";
+// import { CARD_LIST } from "./helper";
+import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import ChangePassword from "./change-password";
+import { setErrorToast, setSuccessToast } from "@redux/slice/toast";
+import { getResourcesApi, resourcesDeleteApi } from "@api/manageoptions";
+import { transformResourcesResponse } from "@api/transform/choices";
+import DialogBox from "@components/dialogBox";
+import { DeleteCard } from "@components/card";
 const StyledButton = styled(IconButton)(() => ({
   background: "#D5E3F7",
   width: "30px",
@@ -24,10 +30,40 @@ const StyledButton = styled(IconButton)(() => ({
   },
 }));
 const ManageSettingsComponent = () => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
+  const [cardList, setCardList] = useState([]);
+  const [deleting, setDeleting] = useState("");
   const handleNewJob = () => {
     navigate("/settings/create-new-post");
   };
+  const resourcesList = async () => {
+    const response = await getResourcesApi();
+    if (response.remote === "success") {
+      const formateData = transformResourcesResponse(response.data.results);
+      setCardList(formateData);
+    } else {
+      console.log(response.error);
+    }
+  };
+  const handleUpdateResource = (id) => {
+    console.log(id);
+  };
+  const handleDeleteResource = async () => {
+    const response = await resourcesDeleteApi(deleting);
+    if (response.remote === "success") {
+      const newResources = cardList.filter((res) => res.id !== deleting);
+      setCardList(newResources);
+      setDeleting("");
+      dispatch(setSuccessToast("Resource Delete SuccessFully"));
+    } else {
+      dispatch(setErrorToast("Something went wrong"));
+      console.log(response.error);
+    }
+  };
+  useEffect(() => {
+    resourcesList();
+  }, []);
   return (
     <>
       <Card
@@ -110,7 +146,7 @@ const ManageSettingsComponent = () => {
             </div>
           </Stack>
           <Grid container spacing={2.5}>
-            {CARD_LIST.map((item, index) => (
+            {cardList.map((item, index) => (
               <Grid item lg={6} xs={12} key={index}>
                 <Card
                   sx={{
@@ -137,14 +173,21 @@ const ManageSettingsComponent = () => {
                     <Grid container spacing={2.5}>
                       <Grid item lg={6} xs={12}>
                         <div className={`${styles.imageBox}`}>
-                          <img src={item.imgUrl} alt="" />
+                          <img
+                            src={`${process.env.REACT_APP_BACKEND_URL}${item.imgUrl}`}
+                            alt=""
+                          />
                           {item.playIcon}
                         </div>
                       </Grid>
                       <Grid item lg={6} xs={12}>
                         <div className={`${styles.settingDescription}`}>
                           <h2>{item.title}</h2>
-                          <p>{item.description}</p>
+                          <p
+                            dangerouslySetInnerHTML={{
+                              __html: item.description,
+                            }}
+                          />
                           <Stack
                             direction="row"
                             spacing={1.5}
@@ -160,10 +203,12 @@ const ManageSettingsComponent = () => {
                             <StyledButton>
                               <SVG.EyeIcon />
                             </StyledButton>
-                            <StyledButton>
+                            <StyledButton onClick={() => setDeleting(item.id)}>
                               <SVG.DeleteIcon />
                             </StyledButton>
-                            <StyledButton>
+                            <StyledButton
+                              onClick={() => handleUpdateResource(item.id)}
+                            >
                               <SVG.EditIcon />
                             </StyledButton>
                           </Stack>
@@ -210,6 +255,14 @@ const ManageSettingsComponent = () => {
           <ChangePassword />
         </CardContent>
       </Card>
+      <DialogBox open={!!deleting} handleClose={() => setDeleting("")}>
+        <DeleteCard
+          title="Delete Resource"
+          content="Are you sure you want to delete resource?"
+          handleCancel={() => setDeleting("")}
+          handleDelete={handleDeleteResource}
+        />
+      </DialogBox>
     </>
   );
 };
