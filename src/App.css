@@ -249,3 +249,10 @@ padding: 10px 20px;
 .reupload img {
 height: 50px;
 }
+
+.ql-snow .ql-editor img{
+  max-width: 14% !important;
+  float: right;
+  top: 5px;
+  border-radius: 6px;
+}

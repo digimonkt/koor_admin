@@ -308,3 +308,42 @@ export const editOpportunityApi = async (opportunityId, data) => {
   });
   return response;
 };
+
+export const getResourcesApi = async () => {
+  const response = await api.request({
+    url: urlcat("/v1/admin/resources"),
+    method: "GET",
+  });
+  return response;
+};
+
+export const createResourcesApi = async (data) => {
+  const response = await api.request({
+    url: urlcat("/v1/admin/resources"),
+    method: "POST",
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+    data,
+  });
+  return response;
+};
+
+export const editResourcesApi = async (resourcesId, data) => {
+  const response = await api.request({
+    url: urlcat("/v1/admin/resources/:resourcesId", { resourcesId }),
+    method: "PUT",
+    data,
+  });
+  return response;
+};
+
+export const resourcesDeleteApi = async (resourcesId) => {
+  const response = await api.request({
+    url: urlcat("/v1/admin/resources/:resourcesId", {
+      resourcesId,
+    }),
+    method: "DELETE",
+  });
+  return response;
+};
