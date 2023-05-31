@@ -3,7 +3,7 @@ import { Avatar, Card, CardContent, IconButton, Stack } from "@mui/material";
 import { SVG } from "@assets/svg";
 import styles from "../styles.module.css";
 import LabelStyle from "../change-password/styles.module.css";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { LabeledInput } from "@components/input";
 import ReactQuill from "react-quill";
 import { OutlinedButton } from "@components/button";
@@ -15,6 +15,8 @@ import { useDispatch } from "react-redux";
 const NewPostResource = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { resourceId } = useParams();
+  console.log({ resourceId });
   const [files, setFiles] = useState([]);
   const [newImage, setNewImage] = useState("");
   const [addParagraph, setAddParagraph] = useState(1);

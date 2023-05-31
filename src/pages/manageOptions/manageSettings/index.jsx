@@ -47,7 +47,7 @@ const ManageSettingsComponent = () => {
     }
   };
   const handleUpdateResource = (id) => {
-    console.log(id);
+    navigate(`/settings/create-new-post/${id}`);
   };
   const handleDeleteResource = async () => {
     const response = await resourcesDeleteApi(deleting);
