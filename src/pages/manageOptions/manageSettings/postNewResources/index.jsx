@@ -1,20 +1,25 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Avatar, Card, CardContent, IconButton, Stack } from "@mui/material";
 import { SVG } from "@assets/svg";
 import styles from "../styles.module.css";
 import LabelStyle from "../change-password/styles.module.css";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useParams, useNavigate } from "react-router-dom";
 import { LabeledInput } from "@components/input";
 import ReactQuill from "react-quill";
 import { OutlinedButton } from "@components/button";
 import ImageCropper from "@components/imageCropper";
-import { createResourcesApi } from "@api/manageoptions";
+import {
+  createResourcesApi,
+  getSingleResourcesApi,
+  updateResourcesApi,
+} from "@api/manageoptions";
 import { setErrorToast, setSuccessToast } from "@redux/slice/toast";
 import { useDispatch } from "react-redux";
 
 const NewPostResource = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { resourceId } = useParams();
   const [files, setFiles] = useState([]);
   const [newImage, setNewImage] = useState("");
   const [addParagraph, setAddParagraph] = useState(1);
@@ -44,6 +49,7 @@ const NewPostResource = () => {
   const handleFiles = (e) => {
     setFiles(e.target.files);
   };
+
   const handleUpdateImage = (file) => {
     setNewImage(file);
     setFiles([]);
@@ -56,7 +62,11 @@ const NewPostResource = () => {
         color: "#CACACA",
         borderRadius: "0",
       }}
-      src={newImage instanceof File ? URL.createObjectURL(newImage) : newImage}
+      src={
+        newImage instanceof File
+          ? URL.createObjectURL(newImage)
+          : process.env.REACT_APP_BACKEND_URL + newImage.path
+      }
       onLoad={() => {
         URL.revokeObjectURL(newImage);
       }}
@@ -88,6 +98,7 @@ const NewPostResource = () => {
     updatedValues[index] = value;
     setEditorValue(updatedValues);
   };
+
   // handle get Editor value
 
   // Get Value Post Title
@@ -107,7 +118,9 @@ const NewPostResource = () => {
     const newFormData = new FormData();
     newFormData.set("title", payload.title);
     newFormData.set("attachment_file", payload.attachment_file);
-    newFormData.set("description", payload.description);
+    payload.description.forEach((desc) => {
+      newFormData.append("description", desc);
+    });
 
     if (
       payload.title &&
@@ -126,6 +139,57 @@ const NewPostResource = () => {
       dispatch(setErrorToast("All fields are required"));
     }
   };
+
+  const handleUpdate = async (resourceId) => {
+    const nonEmptyValues = editorValue.filter((value) => value.trim() !== "");
+
+    const payload = {
+      title: postTitle,
+      attachment_file: newImage,
+      description: nonEmptyValues,
+    };
+    const newFormData = new FormData();
+    if (payload.attachment_file.id) {
+      delete payload.attachment_file;
+    } else {
+      newFormData.set("attachment_file", payload.attachment_file);
+    }
+    newFormData.set("title", payload.title);
+    payload.description.forEach((desc) => {
+      newFormData.append("description", desc);
+    });
+
+    if (payload.title && payload.description.length > 0) {
+      const response = await updateResourcesApi(resourceId, newFormData);
+      if (response.remote === "success") {
+        dispatch(setSuccessToast("Add Resource SuccessFully"));
+        navigate("/settings");
+      } else {
+        dispatch(setErrorToast("Something went wrong"));
+        console.log(response.error);
+      }
+    } else {
+      dispatch(setErrorToast("All fields are required"));
+    }
+  };
+
+  const getSingleData = async () => {
+    const response = await getSingleResourcesApi(resourceId);
+    if (response.remote === "success") {
+      console.log(response.data);
+      setPostTitle(response.data.title);
+      setNewImage(response.data.attachment);
+      setEditorValue(response.data.description);
+    } else {
+      console.log(response.error);
+    }
+  };
+  useEffect(() => {
+    if (resourceId) {
+      getSingleData();
+    }
+  }, [resourceId]);
+  // get Single Resource Data  End
   return (
     <Card
       sx={{
@@ -183,6 +247,7 @@ const NewPostResource = () => {
             type="text"
             className={`${LabelStyle.formControl}`}
             onChange={handlePostTitle}
+            value={postTitle}
           />
         </div>
         <div
@@ -216,33 +281,29 @@ const NewPostResource = () => {
           </label>
           {newImage && <>{thumbs}</>}
         </div>
-        {Array.from({ length: addParagraph }).map(
-          (_, index) =>
-            editorVisibility[index] && (
-              <div key={index}>
-                <ReactQuill
-                  theme="snow"
-                  value={editorValue[index]}
-                  modules={{
-                    toolbar: toolbarOptions,
-                  }}
-                  onChange={(value) => handleEditorValue(index, value)}
-                  style={{
-                    height: "200px",
-                    width: "1000px",
-                    marginTop: "20px",
-                    background: "#F0F0F0",
-                  }}
-                />
-
-                <div onClick={() => handleDeleteContent(index)}>
-                  <IconButton style={{ float: "right", marginRight: "58px" }}>
-                    <SVG.DeleteIcon />
-                  </IconButton>
-                </div>
-              </div>
-            )
-        )}
+        {editorValue.map((_, index) => (
+          <div key={index}>
+            <ReactQuill
+              theme="snow"
+              value={editorValue[index] || ""}
+              modules={{
+                toolbar: toolbarOptions,
+              }}
+              onChange={(value) => handleEditorValue(index, value)}
+              style={{
+                height: "200px",
+                width: "1000px",
+                marginTop: "20px",
+                background: "#F0F0F0",
+              }}
+            />
+            <div onClick={() => handleDeleteContent(index)}>
+              <IconButton style={{ float: "right", marginRight: "58px" }}>
+                <SVG.DeleteIcon />
+              </IconButton>
+            </div>
+          </div>
+        ))}
       </CardContent>
       <div
         style={{
@@ -263,29 +324,56 @@ const NewPostResource = () => {
           Add one more Paragraph
         </button>
       </div>
-      <div
-        onClick={handleSubmit}
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          marginTop: "25px",
-        }}
-      >
-        <OutlinedButton
-          title={
-            <>
-              <SVG.AddCircleIcon />
-              PUBLISH POST
-            </>
-          }
-          sx={{
-            color: "#274593",
-            borderColor: "#274593",
+      {resourceId ? (
+        <div
+          onClick={() => handleUpdate(resourceId)}
+          style={{
             display: "flex",
             justifyContent: "center",
+            marginTop: "25px",
           }}
-        ></OutlinedButton>
-      </div>
+        >
+          <OutlinedButton
+            title={
+              <>
+                <SVG.AddCircleIcon />
+                Update POST
+              </>
+            }
+            sx={{
+              color: "#274593",
+              borderColor: "#274593",
+              display: "flex",
+              justifyContent: "center",
+            }}
+          ></OutlinedButton>
+        </div>
+      ) : (
+        <div
+          onClick={handleSubmit}
+          style={{
+            display: "flex",
+            justifyContent: "center",
+            marginTop: "25px",
+          }}
+        >
+          <OutlinedButton
+            title={
+              <>
+                <SVG.AddCircleIcon />
+                PUBLISH POST
+              </>
+            }
+            sx={{
+              color: "#274593",
+              borderColor: "#274593",
+              display: "flex",
+              justifyContent: "center",
+            }}
+          ></OutlinedButton>
+        </div>
+      )}
+
       {files.length ? (
         <ImageCropper
           open={files[0]}
