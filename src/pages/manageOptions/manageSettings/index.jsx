@@ -71,6 +71,7 @@ const ManageSettingsComponent = () => {
           "&.MuiCard-root": {
             boxShadow: "0px 15px 40px rgba(0, 0, 0, 0.05)",
             borderRadius: "10px",
+            mb: 10,
           },
         }}
       >
@@ -127,9 +128,9 @@ const ManageSettingsComponent = () => {
             <div onClick={() => handleNewJob()}>
               <OutlinedButton
                 title={
-                  <>
-                    <SVG.EditNoteIcon /> create a new post
-                  </>
+                  <Stack direction={"row"} spacing={1} alignItems={"center"}>
+                    <SVG.EditNoteIcon /> <span>create a new post</span>
+                  </Stack>
                 }
                 sx={{
                   "&.MuiButton-outlined": {
@@ -142,7 +143,7 @@ const ManageSettingsComponent = () => {
                     padding: "10px 30px",
                   },
                 }}
-              ></OutlinedButton>
+              />
             </div>
           </Stack>
           <Grid container spacing={2.5}>
@@ -224,19 +225,19 @@ const ManageSettingsComponent = () => {
                 <OutlinedButton
                   title={
                     <>
-                      <SVG.ArrowDownIcon />
+                      <SVG.ArrowDownIcon style={{ marginRight: "8px" }} />
                       show more
                     </>
                   }
                   sx={{
                     "&.MuiButton-outlined": {
-                      bgcolor: "#D5E3F7",
+                      borderRadius: "73px",
+                      border: "1px solid #274593",
                       color: "#274593",
-                      borderColor: "#D5E3F7",
-                      hoverBgColor: "#b4d2fe",
-                    },
-                    "&:hover": {
-                      color: "#b4d2fe",
+                      fontWeight: "500",
+                      fontSize: "16px",
+                      fontFamily: "Bahnschrift",
+                      padding: "10px 30px",
                     },
                   }}
                 >

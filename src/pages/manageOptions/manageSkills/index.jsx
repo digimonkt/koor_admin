@@ -41,7 +41,7 @@ function ManageSkillsComponent() {
       id: "3",
       field: "name",
       headerName: "Name",
-      width: 180,
+      width: 650,
       sortable: true,
     },
 

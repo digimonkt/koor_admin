@@ -1,5 +1,13 @@
 import React, { useState } from "react";
-import { Avatar, Card, CardContent, IconButton, Stack } from "@mui/material";
+import {
+  Avatar,
+  Box,
+  Button,
+  Card,
+  CardContent,
+  IconButton,
+  Stack,
+} from "@mui/material";
 import { SVG } from "@assets/svg";
 import styles from "../styles.module.css";
 import LabelStyle from "../change-password/styles.module.css";
@@ -192,7 +200,7 @@ const NewPostResource = () => {
             alignItems: "center",
             border: "3px dashed #CACACA",
             borderRadius: "10px",
-            width: "1000px",
+            width: "100%",
             height: "104px",
             position: "relative",
           }}
@@ -228,53 +236,57 @@ const NewPostResource = () => {
                   }}
                   onChange={(value) => handleEditorValue(index, value)}
                   style={{
-                    height: "200px",
-                    width: "1000px",
+                    width: "100%",
                     marginTop: "20px",
                     background: "#F0F0F0",
                   }}
                 />
 
-                <div onClick={() => handleDeleteContent(index)}>
-                  <IconButton style={{ float: "right", marginRight: "58px" }}>
+                <Stack
+                  direction={"row"}
+                  alignItems={"center"}
+                  justifyContent="flex-end"
+                  onClick={() => handleDeleteContent(index)}
+                  sx={{ mt: 3 }}
+                >
+                  <IconButton size="large" sx={{ background: "#d5e3f7" }}>
                     <SVG.DeleteIcon />
                   </IconButton>
-                </div>
+                </Stack>
               </div>
             )
         )}
       </CardContent>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          marginTop: "50px",
-        }}
+      <Stack
+        direction={"row"}
+        alignItems={"center"}
+        spacing={2}
+        justifyContent={"center"}
       >
-        <button
+        <Button
+          variant="link"
           onClick={handleAddParagraph}
-          style={{
-            border: "none",
-            background: "none",
-            cursor: "pointer",
+          sx={{
+            fontFamily: "Poppins",
           }}
         >
-          <SVG.AddCircleIcon />
-          Add one more Paragraph
-        </button>
-      </div>
+          <SVG.AddCircleIcon style={{ marginRight: "8px" }} />
+          <Box component={"span"}> Add one more Paragraph</Box>
+        </Button>
+      </Stack>
       <div
         onClick={handleSubmit}
         style={{
           display: "flex",
           justifyContent: "center",
-          marginTop: "25px",
+          marginTop: "15px",
+          marginBottom: "25px",
         }}
       >
         <OutlinedButton
           title={
             <>
-              <SVG.AddCircleIcon />
+              <SVG.AddCircleIcon style={{ marginRight: "8px" }} />
               PUBLISH POST
             </>
           }
@@ -284,7 +296,7 @@ const NewPostResource = () => {
             display: "flex",
             justifyContent: "center",
           }}
-        ></OutlinedButton>
+        />
       </div>
       {files.length ? (
         <ImageCropper

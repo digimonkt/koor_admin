@@ -24,14 +24,18 @@ function Accordion({ title, onOpen, handleDelete, handleEdit, children }) {
     ),
   };
   return (
-    <MUIAccordion>
+    <MUIAccordion elevation={0}>
       <AccordionSummary
         {...accordionProps}
         aria-controls="panel1a-content"
         id="panel1a-header"
         className="accordion-class"
       >
-        <Typography>{title}</Typography>
+        <Typography
+          sx={{ fontFamily: "Poppins", fontWeight: 500, fontSize: "18px" }}
+        >
+          {title}
+        </Typography>
         <div>
           {handleDelete && (
             <IconButton
