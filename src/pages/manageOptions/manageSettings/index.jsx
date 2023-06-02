@@ -34,11 +34,12 @@ const ManageSettingsComponent = () => {
   const navigate = useNavigate();
   const [cardList, setCardList] = useState([]);
   const [deleting, setDeleting] = useState("");
+  const [limit, setLimit] = useState(2);
   const handleNewJob = () => {
     navigate("/settings/create-new-post");
   };
   const resourcesList = async () => {
-    const response = await getResourcesApi();
+    const response = await getResourcesApi(limit);
     if (response.remote === "success") {
       const formateData = transformResourcesResponse(response.data.results);
       setCardList(formateData);
@@ -47,7 +48,7 @@ const ManageSettingsComponent = () => {
     }
   };
   const handleUpdateResource = (id) => {
-    console.log(id);
+    navigate(`/settings/create-new-post/${id}`);
   };
   const handleDeleteResource = async () => {
     const response = await resourcesDeleteApi(deleting);
@@ -61,9 +62,13 @@ const ManageSettingsComponent = () => {
       console.log(response.error);
     }
   };
+  function handleShowMore() {
+    setLimit(limit + 2);
+  }
+
   useEffect(() => {
     resourcesList();
-  }, []);
+  }, [limit]);
   return (
     <>
       <Card
@@ -186,9 +191,10 @@ const ManageSettingsComponent = () => {
                           <h2>{item.title}</h2>
                           <p
                             dangerouslySetInnerHTML={{
-                              __html: item.description,
+                              __html: item.description?.slice(0, 10) + "......",
                             }}
                           />
+
                           <Stack
                             direction="row"
                             spacing={1.5}
@@ -221,7 +227,7 @@ const ManageSettingsComponent = () => {
               </Grid>
             ))}
             <Grid item lg={12} xs={12}>
-              <div className={`${styles.showButton}`}>
+              <div className={`${styles.showButton}`} onClick={handleShowMore}>
                 <OutlinedButton
                   title={
                     <>
