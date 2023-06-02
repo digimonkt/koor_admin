@@ -309,9 +309,9 @@ export const editOpportunityApi = async (opportunityId, data) => {
   return response;
 };
 
-export const getResourcesApi = async () => {
+export const getResourcesApi = async (limit) => {
   const response = await api.request({
-    url: urlcat("/v1/admin/resources"),
+    url: urlcat("/v1/admin/resources", { limit }),
     method: "GET",
   });
   return response;
@@ -321,6 +321,18 @@ export const createResourcesApi = async (data) => {
   const response = await api.request({
     url: urlcat("/v1/admin/resources"),
     method: "POST",
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+    data,
+  });
+  return response;
+};
+
+export const updateResourcesApi = async (resourcesId, data) => {
+  const response = await api.request({
+    url: urlcat("/v1/admin/resources/:resourcesId", { resourcesId }),
+    method: "PUT",
     headers: {
       "Content-Type": "multipart/form-data",
     },
@@ -344,6 +356,14 @@ export const resourcesDeleteApi = async (resourcesId) => {
       resourcesId,
     }),
     method: "DELETE",
+  });
+  return response;
+};
+
+export const getSingleResourcesApi = async (resourcesId) => {
+  const response = await api.request({
+    url: urlcat("/v1/admin/resources/:resourcesId/detail", { resourcesId }),
+    method: "GET",
   });
   return response;
 };
