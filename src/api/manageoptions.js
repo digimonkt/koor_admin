@@ -367,3 +367,12 @@ export const getSingleResourcesApi = async (resourcesId) => {
   });
   return response;
 };
+
+export const getUserDetailsApi = async (userId) => {
+  console.log(userId);
+  const response = await api.request({
+    url: urlcat("/v1/users", { userId }),
+    method: "GET",
+  });
+  return response;
+};
