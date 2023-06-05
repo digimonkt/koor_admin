@@ -1,5 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { Avatar, Card, CardContent, IconButton, Stack } from "@mui/material";
+import {
+  Avatar,
+  Box,
+  Button,
+  Card,
+  CardContent,
+  IconButton,
+  Stack,
+} from "@mui/material";
 import { SVG } from "@assets/svg";
 import styles from "../styles.module.css";
 import LabelStyle from "../change-password/styles.module.css";
@@ -257,7 +265,7 @@ const NewPostResource = () => {
             alignItems: "center",
             border: "3px dashed #CACACA",
             borderRadius: "10px",
-            width: "1000px",
+            width: "100%",
             height: "104px",
             position: "relative",
           }}
@@ -281,99 +289,90 @@ const NewPostResource = () => {
           </label>
           {newImage && <>{thumbs}</>}
         </div>
-        {editorValue.map((_, index) => (
-          <div key={index}>
-            <ReactQuill
-              theme="snow"
-              value={editorValue[index] || ""}
-              modules={{
-                toolbar: toolbarOptions,
-              }}
-              onChange={(value) => handleEditorValue(index, value)}
-              style={{
-                height: "200px",
-                width: "1000px",
-                marginTop: "20px",
-                background: "#F0F0F0",
-              }}
-            />
-            <div onClick={() => handleDeleteContent(index)}>
-              <IconButton style={{ float: "right", marginRight: "58px" }}>
-                <SVG.DeleteIcon />
-              </IconButton>
-            </div>
-          </div>
-        ))}
-      </CardContent>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          marginTop: "50px",
-        }}
-      >
-        <button
-          onClick={handleAddParagraph}
-          style={{
-            border: "none",
-            background: "none",
-            cursor: "pointer",
-          }}
-        >
-          <SVG.AddCircleIcon />
-          Add one more Paragraph
-        </button>
-      </div>
-      {resourceId ? (
-        <div
-          onClick={() => handleUpdate(resourceId)}
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            marginTop: "25px",
-          }}
-        >
-          <OutlinedButton
-            title={
-              <>
-                <SVG.AddCircleIcon />
-                Update POST
-              </>
-            }
-            sx={{
-              color: "#274593",
-              borderColor: "#274593",
-              display: "flex",
-              justifyContent: "center",
-            }}
-          ></OutlinedButton>
-        </div>
-      ) : (
-        <div
-          onClick={handleSubmit}
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            marginTop: "25px",
-          }}
-        >
-          <OutlinedButton
-            title={
-              <>
-                <SVG.AddCircleIcon />
-                PUBLISH POST
-              </>
-            }
-            sx={{
-              color: "#274593",
-              borderColor: "#274593",
-              display: "flex",
-              justifyContent: "center",
-            }}
-          ></OutlinedButton>
-        </div>
-      )}
+        {Array.from({ length: addParagraph }).map(
+          (_, index) =>
+            editorVisibility[index] && (
+              <div key={index}>
+                <ReactQuill
+                  theme="snow"
+                  value={editorValue[index]}
+                  modules={{
+                    toolbar: toolbarOptions,
+                  }}
+                  onChange={(value) => handleEditorValue(index, value)}
+                  style={{
+                    width: "100%",
+                    marginTop: "20px",
+                    background: "#F0F0F0",
+                  }}
+                />
 
+                <Stack
+                  direction={"row"}
+                  alignItems={"center"}
+                  justifyContent="flex-end"
+                  onClick={() => handleDeleteContent(index)}
+                  sx={{ mt: 3 }}
+                >
+                  <IconButton size="large" sx={{ background: "#d5e3f7" }}>
+                    <SVG.DeleteIcon />
+                  </IconButton>
+                </Stack>
+              </div>
+            )
+        )}
+      </CardContent>
+      <Stack
+        direction={"row"}
+        alignItems={"center"}
+        spacing={2}
+        justifyContent={"center"}
+        sx={{ marginBottom: "8px" }}
+      >
+        <Button
+          variant="link"
+          onClick={handleAddParagraph}
+          sx={{
+            fontFamily: "Poppins",
+          }}
+        >
+          <SVG.AddCircleIcon style={{ marginRight: "8px" }} />
+          <Box component={"span"}> Add one more Paragraph</Box>
+        </Button>
+      </Stack>
+      {resourceId ? (
+        <Stack direction={"row"} justifyContent={"center"} >
+          <OutlinedButton onClick={() => handleUpdate(resourceId)}
+            title={
+              <Stack direction={"row"} alignItems={"center"} spacing={1}>
+                <SVG.AddCircleIcon />
+              <span>  Update POST</span>
+              </Stack>
+            }
+            sx={{
+              color: "#274593",
+              borderColor: "#274593",
+              display: "flex",
+              justifyContent: "center",
+            }}
+          />
+        </Stack>
+      ) : (
+        <Stack direction={"row"} justifyContent={"center"} sx={{ marginBottom: "50px" }}>
+          <OutlinedButton onClick={handleSubmit}
+            title={
+              <Stack direction={"row"} alignItems={"center"} spacing={1}>
+                <SVG.AddCircleIcon />
+                <span>PUBLISH POST</span>
+              </Stack>
+            }
+            sx={{
+              color: "#274593",
+              borderColor: "#274593",
+              }}
+         />
+        </Stack>
+      )}
       {files.length ? (
         <ImageCropper
           open={files[0]}

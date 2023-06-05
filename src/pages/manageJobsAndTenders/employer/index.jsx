@@ -44,7 +44,7 @@ function ManageEmployerComponent() {
       field: "email",
       headerName: "Email",
       sortable: true,
-      width: 180,
+      width: 300,
     },
     {
       field: "mobileNumber",

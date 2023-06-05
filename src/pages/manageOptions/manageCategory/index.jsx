@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Layout from "../manageCountry/layout";
 import Accordion from "@components/accordion";
 import { LabeledInput } from "@components/input";
-import { Paper, TableContainer } from "@mui/material";
+import { Card, Paper, TableContainer } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import {
   addCategories,
@@ -219,47 +219,52 @@ const ManageCategoryComponent = () => {
           onChange: (e) => setLimit(e.target.value),
         }}
       >
-        {categories.data.map((category, index) => (
-          <Accordion
-            key={index}
-            title={category.title}
-            onOpen={() => handleSelectCategories(category.id)}
-            handleDelete={() => setDeleting(category.id)}
-            handleEdit={() => handleEdit(category)}
-          >
-            <LabeledInput
-              placeholder="Add Sub Categories"
-              onChange={(e) => setAddSubCategory(e.target.value)}
-              value={addSubCategory}
-            />
-
-            <SolidButton
-              align="right"
-              sx={{
-                background: "#fff",
-                borderRadius: "73px",
-                border: "solid 1px ",
-                fontFamily: "Bahnschrift",
-                color: "#274593",
-                fontWeight: 600,
-                "&:hover": {
-                  background: "#f7f7f7",
-                  borderColor: "#f7f7f7",
-                },
-              }}
-              title={"add Sub Category"}
-              onClick={() => onAddSubCategory(category.id)}
-            />
-
-            <TableContainer component={Paper}>
-              <SubCategory
-                countryId={category.id}
-                handleDeleteSub={handleDeleteId}
-                handleEditSub={handleEditSub}
+        <Card elevation={0} sx={{ background: "transparent" }}>
+          {categories.data.map((category, index) => (
+            <Accordion
+              elevation={0}
+              key={index}
+              title={category.title}
+              onOpen={() => handleSelectCategories(category.id)}
+              handleDelete={() => setDeleting(category.id)}
+              handleEdit={() => handleEdit(category)}
+            >
+              <LabeledInput
+                placeholder="Add Sub Categories"
+                onChange={(e) => setAddSubCategory(e.target.value)}
+                value={addSubCategory}
+                style={{ marginBottom: "10px" }}
               />
-            </TableContainer>
-          </Accordion>
-        ))}
+
+              <SolidButton
+                align="right"
+                sx={{
+                  background: "#fff",
+                  borderRadius: "73px",
+                  border: "solid 1px ",
+                  fontFamily: "Bahnschrift",
+                  color: "#274593",
+                  fontWeight: 600,
+                  marginBottom: "10px",
+                  "&:hover": {
+                    background: "#f7f7f7",
+                    borderColor: "#f7f7f7",
+                  },
+                }}
+                title={"add Sub Category"}
+                onClick={() => onAddSubCategory(category.id)}
+              />
+
+              <TableContainer component={Paper}>
+                <SubCategory
+                  countryId={category.id}
+                  handleDeleteSub={handleDeleteId}
+                  handleEditSub={handleEditSub}
+                />
+              </TableContainer>
+            </Accordion>
+          ))}
+        </Card>
       </Layout>
 
       <DialogBox open={!!deleting} handleClose={() => setDeleting("")}>

@@ -1,10 +1,11 @@
 import React from "react";
 import { SolidButton } from "@components/button";
 import { SearchInput, LabeledInput } from "@components/input";
+import { Stack } from "@mui/material";
 
 const OptionsFilter = ({ searchProps, inputProps, optionsProps, tender }) => {
   return (
-    <>
+    <Stack direction={"row"} alignItems={"center"} spacing={1}>
       {tender ? (
         <SearchInput
           placeholder="Search skills"
@@ -12,17 +13,18 @@ const OptionsFilter = ({ searchProps, inputProps, optionsProps, tender }) => {
           {...searchProps}
         />
       ) : (
-        <div
-          style={{
-            display: "flex",
-          }}
-        >
+        <>
           <SearchInput
             placeholder="Search skills"
             widthInput="100%"
             {...searchProps}
           />
-          <LabeledInput placeholder="skill Level" type="text" {...inputProps} />
+          <LabeledInput
+            placeholder="skill Level"
+            type="text"
+            {...inputProps}
+            inputstyles="styles_input"
+          />
           <SolidButton
             sx={{
               background: "#fff",
@@ -40,9 +42,9 @@ const OptionsFilter = ({ searchProps, inputProps, optionsProps, tender }) => {
             }}
             {...optionsProps}
           />
-        </div>
+        </>
       )}
-    </>
+    </Stack>
   );
 };
 
