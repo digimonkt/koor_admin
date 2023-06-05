@@ -256,3 +256,7 @@ height: 50px;
   top: 5px;
   border-radius: 6px;
 }
+
+.ql-editor {
+  min-height: 18em;
+}

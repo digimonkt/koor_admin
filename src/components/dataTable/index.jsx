@@ -24,9 +24,10 @@ function DataTable({ rows, columns, limitProps, loader }) {
           <span>Items per page:</span>{" "}
           <FormControl
             sx={{
-              "&.MuiSelect-select": {
+              "& .MuiSelect-select": {
                 fontFamily: "Poppins",
                 fontSize: "16px",
+                padding: "7px 40px 5px 15px !important",
               },
             }}
             size="small"

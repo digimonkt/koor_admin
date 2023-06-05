@@ -7,6 +7,7 @@ function LabeledInputComponent({
   subtitle,
   type,
   labelWeight,
+  inputstyles,
   ...rest
 }) {
   const [isVisiblePassword, setIsVisiblePassword] = useState(false);
@@ -51,7 +52,7 @@ function LabeledInputComponent({
       ) : (
         <div className="showpassword">
           <input
-            className="form-control"
+            className={`form-control ${inputstyles}`}
             type={
               type === "password"
                 ? isVisiblePassword

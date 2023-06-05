@@ -42,7 +42,7 @@ function ManageTag() {
       id: "3",
       field: "name",
       headerName: "Name",
-      width: 180,
+      width: 680,
       sortable: true,
     },
 

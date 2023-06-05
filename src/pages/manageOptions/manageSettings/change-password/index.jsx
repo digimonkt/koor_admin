@@ -80,24 +80,24 @@ const ChangePassword = () => {
           <div className={`${styles.showButton}`}>
             <OutlinedButton
               title={
-                <div className="save_btn">
-                  <div style={{ marginTop: "6px" }}>
+                <>
+                  <div style={{ marginTop: "6px", marginRight: "8px" }}>
                     <SVG.PriorityIcon />
                   </div>
                   <div>SAVE PASSWORD</div>
-                </div>
+                </>
               }
               sx={{
-                bgcolor: "#D5E3F7",
+                borderRadius: "73px",
+                border: "1px solid #274593",
                 color: "#274593",
-                borderColor: "#D5E3F7",
-                hoverBgColor: "#b4d2fe",
-                "&:hover": {
-                  color: "#b4d2fe",
-                },
+                fontWeight: "500",
+                fontSize: "16px",
+                fontFamily: "Bahnschrift",
+                width: "100%",
               }}
               onClick={() => formik.handleSubmit()}
-            ></OutlinedButton>
+            />
           </div>
         </div>
       </form>

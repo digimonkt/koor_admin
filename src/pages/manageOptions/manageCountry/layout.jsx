@@ -49,7 +49,7 @@ const Layout = ({
         {countryInput ? (
           <SelectWithSearch title={title} {...selectList} />
         ) : (
-          <LabeledInput {...addItems} />
+          <LabeledInput {...addItems} inputstyles="styles_input" />
         )}
         <SolidButton
           align="right"
@@ -59,6 +59,7 @@ const Layout = ({
             border: "solid 1px ",
             fontFamily: "Bahnschrift",
             color: "#274593",
+            padding: "10px 30px",
             fontWeight: 600,
             "&:hover": {
               background: "#f7f7f7",
@@ -78,6 +79,7 @@ const Layout = ({
               "&.MuiSelect-select": {
                 fontFamily: "Poppins",
                 fontSize: "16px",
+                padding: "7px 40px 5px 15px !important",
               },
             }}
             size="small"

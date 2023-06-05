@@ -40,7 +40,7 @@ function ManageLanguage() {
       field: "name",
       headerName: "Name",
       sortable: true,
-      width: 180,
+      width: 680,
       id: "3",
     },
 

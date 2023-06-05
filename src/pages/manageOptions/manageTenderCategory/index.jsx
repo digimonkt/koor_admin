@@ -41,7 +41,7 @@ function ManageTender() {
       id: "3",
       field: "name",
       headerName: "Name",
-      width: 180,
+      width: 700,
       sortable: true,
     },
 
