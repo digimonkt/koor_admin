@@ -66,9 +66,15 @@ const ManageSettingsComponent = () => {
     setLimit(limit + 2);
   }
 
+  const removeImagesFromHTMLArray = (htmlArray) => {
+    const imgRegex = /<img[^>]+>/g;
+    return htmlArray.map((html) => html.replace(imgRegex, ""));
+  };
+
   useEffect(() => {
     resourcesList();
   }, [limit]);
+
   return (
     <>
       <Card
@@ -189,11 +195,17 @@ const ManageSettingsComponent = () => {
                       <Grid item lg={6} xs={12}>
                         <div className={`${styles.settingDescription}`}>
                           <h2>{item.title}</h2>
-                          <p
-                            dangerouslySetInnerHTML={{
-                              __html: item.description?.slice(0, 10) + "......",
-                            }}
-                          />
+
+                          {removeImagesFromHTMLArray(item.description)?.map(
+                            (html, innerIndex) => (
+                              <div
+                                key={innerIndex}
+                                dangerouslySetInnerHTML={{
+                                  __html: html?.slice(0, 10) + "......",
+                                }}
+                              />
+                            )
+                          )}
 
                           <Stack
                             direction="row"

@@ -150,7 +150,6 @@ const NewPostResource = () => {
 
   const handleUpdate = async (resourceId) => {
     const nonEmptyValues = editorValue.filter((value) => value.trim() !== "");
-
     const payload = {
       title: postTitle,
       attachment_file: newImage,
@@ -170,7 +169,7 @@ const NewPostResource = () => {
     if (payload.title && payload.description.length > 0) {
       const response = await updateResourcesApi(resourceId, newFormData);
       if (response.remote === "success") {
-        dispatch(setSuccessToast("Add Resource SuccessFully"));
+        dispatch(setSuccessToast("Update Resource SuccessFully"));
         navigate("/settings");
       } else {
         dispatch(setErrorToast("Something went wrong"));
@@ -184,7 +183,6 @@ const NewPostResource = () => {
   const getSingleData = async () => {
     const response = await getSingleResourcesApi(resourceId);
     if (response.remote === "success") {
-      console.log(response.data);
       setPostTitle(response.data.title);
       setNewImage(response.data.attachment);
       setEditorValue(response.data.description);
@@ -198,6 +196,7 @@ const NewPostResource = () => {
     }
   }, [resourceId]);
   // get Single Resource Data  End
+
   return (
     <Card
       sx={{
@@ -306,7 +305,6 @@ const NewPostResource = () => {
                     background: "#F0F0F0",
                   }}
                 />
-
                 <Stack
                   direction={"row"}
                   alignItems={"center"}
@@ -341,12 +339,13 @@ const NewPostResource = () => {
         </Button>
       </Stack>
       {resourceId ? (
-        <Stack direction={"row"} justifyContent={"center"} >
-          <OutlinedButton onClick={() => handleUpdate(resourceId)}
+        <Stack direction={"row"} justifyContent={"center"}>
+          <OutlinedButton
+            onClick={() => handleUpdate(resourceId)}
             title={
               <Stack direction={"row"} alignItems={"center"} spacing={1}>
                 <SVG.AddCircleIcon />
-              <span>  Update POST</span>
+                <span> Update POST</span>
               </Stack>
             }
             sx={{
@@ -358,8 +357,13 @@ const NewPostResource = () => {
           />
         </Stack>
       ) : (
-        <Stack direction={"row"} justifyContent={"center"} sx={{ marginBottom: "50px" }}>
-          <OutlinedButton onClick={handleSubmit}
+        <Stack
+          direction={"row"}
+          justifyContent={"center"}
+          sx={{ marginBottom: "50px" }}
+        >
+          <OutlinedButton
+            onClick={handleSubmit}
             title={
               <Stack direction={"row"} alignItems={"center"} spacing={1}>
                 <SVG.AddCircleIcon />
@@ -369,8 +373,8 @@ const NewPostResource = () => {
             sx={{
               color: "#274593",
               borderColor: "#274593",
-              }}
-         />
+            }}
+          />
         </Stack>
       )}
       {files.length ? (
