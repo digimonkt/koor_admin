@@ -179,10 +179,10 @@ const NewPostResource = () => {
       dispatch(setErrorToast("All fields are required"));
     }
   };
-
   const getSingleData = async () => {
     const response = await getSingleResourcesApi(resourceId);
     if (response.remote === "success") {
+      console.log(response.data.description);
       setPostTitle(response.data.title);
       setNewImage(response.data.attachment);
       setEditorValue(response.data.description);
@@ -288,37 +288,35 @@ const NewPostResource = () => {
           </label>
           {newImage && <>{thumbs}</>}
         </div>
-        {Array.from({ length: addParagraph }).map(
-          (_, index) =>
-            editorVisibility[index] && (
-              <div key={index}>
-                <ReactQuill
-                  theme="snow"
-                  value={editorValue[index]}
-                  modules={{
-                    toolbar: toolbarOptions,
-                  }}
-                  onChange={(value) => handleEditorValue(index, value)}
-                  style={{
-                    width: "100%",
-                    marginTop: "20px",
-                    background: "#F0F0F0",
-                  }}
-                />
-                <Stack
-                  direction={"row"}
-                  alignItems={"center"}
-                  justifyContent="flex-end"
-                  onClick={() => handleDeleteContent(index)}
-                  sx={{ mt: 3 }}
-                >
-                  <IconButton size="large" sx={{ background: "#d5e3f7" }}>
-                    <SVG.DeleteIcon />
-                  </IconButton>
-                </Stack>
-              </div>
-            )
-        )}
+
+        {editorValue.map((_, index) => (
+          <div key={index}>
+            <ReactQuill
+              theme="snow"
+              value={editorValue[index]}
+              modules={{
+                toolbar: toolbarOptions,
+              }}
+              onChange={(value) => handleEditorValue(index, value)}
+              style={{
+                width: "100%",
+                marginTop: "20px",
+                background: "#F0F0F0",
+              }}
+            />
+            <Stack
+              direction={"row"}
+              alignItems={"center"}
+              justifyContent="flex-end"
+              onClick={() => handleDeleteContent(index)}
+              sx={{ mt: 3 }}
+            >
+              <IconButton size="large" sx={{ background: "#d5e3f7" }}>
+                <SVG.DeleteIcon />
+              </IconButton>
+            </Stack>
+          </div>
+        ))}
       </CardContent>
       <Stack
         direction={"row"}
