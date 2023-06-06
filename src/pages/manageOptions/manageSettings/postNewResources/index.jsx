@@ -150,7 +150,6 @@ const NewPostResource = () => {
 
   const handleUpdate = async (resourceId) => {
     const nonEmptyValues = editorValue.filter((value) => value.trim() !== "");
-
     const payload = {
       title: postTitle,
       attachment_file: newImage,
@@ -170,7 +169,7 @@ const NewPostResource = () => {
     if (payload.title && payload.description.length > 0) {
       const response = await updateResourcesApi(resourceId, newFormData);
       if (response.remote === "success") {
-        dispatch(setSuccessToast("Add Resource SuccessFully"));
+        dispatch(setSuccessToast("Update Resource SuccessFully"));
         navigate("/settings");
       } else {
         dispatch(setErrorToast("Something went wrong"));
@@ -180,11 +179,10 @@ const NewPostResource = () => {
       dispatch(setErrorToast("All fields are required"));
     }
   };
-
   const getSingleData = async () => {
     const response = await getSingleResourcesApi(resourceId);
     if (response.remote === "success") {
-      console.log(response.data);
+      console.log(response.data.description);
       setPostTitle(response.data.title);
       setNewImage(response.data.attachment);
       setEditorValue(response.data.description);
@@ -198,6 +196,7 @@ const NewPostResource = () => {
     }
   }, [resourceId]);
   // get Single Resource Data  End
+
   return (
     <Card
       sx={{
@@ -289,38 +288,35 @@ const NewPostResource = () => {
           </label>
           {newImage && <>{thumbs}</>}
         </div>
-        {Array.from({ length: addParagraph }).map(
-          (_, index) =>
-            editorVisibility[index] && (
-              <div key={index}>
-                <ReactQuill
-                  theme="snow"
-                  value={editorValue[index]}
-                  modules={{
-                    toolbar: toolbarOptions,
-                  }}
-                  onChange={(value) => handleEditorValue(index, value)}
-                  style={{
-                    width: "100%",
-                    marginTop: "20px",
-                    background: "#F0F0F0",
-                  }}
-                />
 
-                <Stack
-                  direction={"row"}
-                  alignItems={"center"}
-                  justifyContent="flex-end"
-                  onClick={() => handleDeleteContent(index)}
-                  sx={{ mt: 3 }}
-                >
-                  <IconButton size="large" sx={{ background: "#d5e3f7" }}>
-                    <SVG.DeleteIcon />
-                  </IconButton>
-                </Stack>
-              </div>
-            )
-        )}
+        {editorValue.map((_, index) => (
+          <div key={index}>
+            <ReactQuill
+              theme="snow"
+              value={editorValue[index]}
+              modules={{
+                toolbar: toolbarOptions,
+              }}
+              onChange={(value) => handleEditorValue(index, value)}
+              style={{
+                width: "100%",
+                marginTop: "20px",
+                background: "#F0F0F0",
+              }}
+            />
+            <Stack
+              direction={"row"}
+              alignItems={"center"}
+              justifyContent="flex-end"
+              onClick={() => handleDeleteContent(index)}
+              sx={{ mt: 3 }}
+            >
+              <IconButton size="large" sx={{ background: "#d5e3f7" }}>
+                <SVG.DeleteIcon />
+              </IconButton>
+            </Stack>
+          </div>
+        ))}
       </CardContent>
       <Stack
         direction={"row"}
@@ -341,12 +337,13 @@ const NewPostResource = () => {
         </Button>
       </Stack>
       {resourceId ? (
-        <Stack direction={"row"} justifyContent={"center"} >
-          <OutlinedButton onClick={() => handleUpdate(resourceId)}
+        <Stack direction={"row"} justifyContent={"center"}>
+          <OutlinedButton
+            onClick={() => handleUpdate(resourceId)}
             title={
               <Stack direction={"row"} alignItems={"center"} spacing={1}>
                 <SVG.AddCircleIcon />
-              <span>  Update POST</span>
+                <span> Update POST</span>
               </Stack>
             }
             sx={{
@@ -358,8 +355,13 @@ const NewPostResource = () => {
           />
         </Stack>
       ) : (
-        <Stack direction={"row"} justifyContent={"center"} sx={{ marginBottom: "50px" }}>
-          <OutlinedButton onClick={handleSubmit}
+        <Stack
+          direction={"row"}
+          justifyContent={"center"}
+          sx={{ marginBottom: "50px" }}
+        >
+          <OutlinedButton
+            onClick={handleSubmit}
             title={
               <Stack direction={"row"} alignItems={"center"} spacing={1}>
                 <SVG.AddCircleIcon />
@@ -369,8 +371,8 @@ const NewPostResource = () => {
             sx={{
               color: "#274593",
               borderColor: "#274593",
-              }}
-         />
+            }}
+          />
         </Stack>
       )}
       {files.length ? (
