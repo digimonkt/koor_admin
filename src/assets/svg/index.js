@@ -52,15 +52,19 @@ import { ReactComponent as AddCircleIcon } from "./add_circle.svg";
 import { ReactComponent as DownlodingIcon } from "./downloading.svg";
 import { ReactComponent as EyeOff } from "./eyeOff.svg";
 import { ReactComponent as LocationIcon } from "./location.svg";
+import { ReactComponent as vectorIcon } from "./vectorIcon.svg";
+import { ReactComponent as unVerify } from "./unVerify.svg";
 
 export const SVG = {
   LocationIcon,
   EyeOff,
   Notification,
+  unVerify,
   Dashboard,
   ManageJobIcon,
   ManageTenders,
   ManageEmployee,
+  vectorIcon,
   ManageCandidate,
   FinancialTools,
   Report,

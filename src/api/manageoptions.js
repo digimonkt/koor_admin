@@ -369,10 +369,21 @@ export const getSingleResourcesApi = async (resourcesId) => {
 };
 
 export const getUserDetailsApi = async (userId) => {
-  console.log(userId);
   const response = await api.request({
     url: urlcat("/v1/users", { userId }),
     method: "GET",
+  });
+  return response;
+};
+
+export const verifyUnVerifyApi = async (employerId, action) => {
+  console.log({ employerId, action });
+  const response = await api.request({
+    url: urlcat("/v1/admin/employer/:employerId/:action", {
+      employerId,
+      action,
+    }),
+    method: "PUT",
   });
   return response;
 };

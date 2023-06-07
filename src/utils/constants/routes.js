@@ -47,8 +47,8 @@ export const AUTHENTICATED_ROUTE = [
     element: ManageEmployer,
   },
   {
-    id: "single-user",
-    path: "/manage-employers/single-user/:id",
+    id: "employer-details",
+    path: "/manage-employers/employer-details/:id",
     element: employerDetails,
   },
   {
