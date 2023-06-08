@@ -11,6 +11,8 @@ import ManageLanguageComponent from "./mangeLanguage";
 import ManageOpportunity from "./manageOpportunity";
 import ManageTenderCategory from "./manageTenderCategory";
 import NewPostResource from "./manageSettings/postNewResources";
+import FinancialTools from "./manageFinancialTools";
+export const financialTools = FinancialTools;
 export const ManageSettings = ManageSettingsComponent;
 export const ManageUserRights = ManageUserRightsComponent;
 export const ManagePrivacyPolicy = ManagePrivacyPolicyComponent;

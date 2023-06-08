@@ -134,6 +134,7 @@ function ManageTendersComponent() {
       if (!formateData.length) {
         dispatch(setLoading(false));
       }
+      console.log(formateData);
       setTenderTable(formateData);
       const totalCounts = Math.ceil(response.data.count / limit);
       setTotalCount(totalCounts);
@@ -145,62 +146,6 @@ function ManageTendersComponent() {
   function getPage(_, page) {
     setPages(page);
   }
-
-  // const addTenderFunction = async () => {
-  //   const payload = {
-  //     title: addTender,
-  //   };
-  //   const response = await createTenderApi(payload);
-  //   if (response.remote === "success") {
-  //     const temp = [...tenderTable];
-  //     temp.push({
-  //       id: response.data.id || Math.random(),
-  //       no: temp.length + 1,
-  //       name: response.data.title,
-  //     });
-  //     setTenderTable([...temp]);
-  //     setAddTender("");
-  //     dispatch(setSuccessToast("Add Tender SuccessFully"));
-  //   } else {
-  //     console.log(response.error);
-  //     dispatch(setErrorToast("Something went wrong"));
-  //   }
-  // };
-
-  // const handleDelete = async () => {
-  //   setLoading(false);
-  //   const response = await tenderDeleteApi(deleteTender);
-  //   if (response.remote === "success") {
-  //     const newTenderTable = tenderTable.filter(
-  //       (emp) => emp.id !== deleteTender
-  //     );
-  //     setTenderTable(newTenderTable);
-  //     setDeleteTender("");
-  //     dispatch(setSuccessToast("Delete Tender SuccessFully"));
-  //   } else {
-  //     dispatch(setErrorToast("Something went wrong"));
-  //     console.log(response.error);
-  //   }
-  // };
-
-  // const handleEdit = async (item) => {
-  //   setEditTender(item.id);
-  //   setEditTenderValue(item.name);
-  // };
-
-  // const handleUpdate = async () => {
-  //   const payload = {
-  //     title: editTenderValue,
-  //   };
-  //   const response = await editTenderApi(editTender, payload);
-  //   if (response.remote === "success") {
-  //     tenderList();
-  //     setEditTender("");
-  //     dispatch(setSuccessToast(response.data.message));
-  //   } else {
-  //     dispatch(setErrorToast(response.error.errors.title));
-  //   }
-  // };
 
   useEffect(() => {
     tenderList();
@@ -224,12 +169,6 @@ function ManageTendersComponent() {
           onChange: (e) => setSearchTerm(e.target.value),
           value: searchTerm,
         }}
-        // inputProps={{
-        //   type: "text",
-        //   placeholder: "Add Tender",
-        //   onChange: (e) => setAddTender(e.target.value),
-        //   value: addTender,
-        // }}
         limitProps={{
           value: limit,
           options: [
@@ -239,33 +178,14 @@ function ManageTendersComponent() {
           ],
           onChange: (e) => setLimit(e.target.value),
         }}
-        // optionsProps={{
-        //   title: (
-        //     <div onClick={addTenderFunction}>
-        //       <span className="d-inline-flex align-items-center me-2"></span>{" "}
-        //       Add Tender
-        //     </div>
-        //   ),
-        // }}
       />
       <DialogBox open={!!deleteTender} handleClose={() => setDeleteTender("")}>
         <DeleteCard
           title="Delete Tender"
           content="Are you sure you want to delete Tender?"
           handleCancel={() => setDeleteTender("")}
-          // handleDelete={handleDelete}
         />
       </DialogBox>
-
-      {/* <DialogBox open={!!editTender} handleClose={() => setEditTender("")}>
-        <EditCard
-          title="Edit Tender"
-          handleCancel={() => setEditTender("")}
-          setEditValue={setEditTenderValue}
-          editValue={editTenderValue}
-          handleUpdate={handleUpdate}
-        />
-      </DialogBox> */}
     </>
   );
 }

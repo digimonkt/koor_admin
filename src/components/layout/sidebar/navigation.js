@@ -41,8 +41,8 @@ export const MENU_ITEM = [
   {
     id: "6",
     icon: <SVG.FinancialTools />,
-    page: "Manage skills",
-    url: "/manage-skills",
+    page: "Financial tools",
+    url: "/financial-tools",
   },
   {
     id: "7",
