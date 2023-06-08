@@ -11,7 +11,6 @@ import { SVG } from "@assets/svg";
 import { OutlinedButton } from "@components/button";
 import styles from "./styles.module.css";
 import { styled } from "@mui/material/styles";
-// import { CARD_LIST } from "./helper";
 import { useDispatch } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
 import ChangePassword from "./change-password";
@@ -34,20 +33,21 @@ const ManageSettingsComponent = () => {
   const navigate = useNavigate();
   const [cardList, setCardList] = useState([]);
   const [deleting, setDeleting] = useState("");
+  const [limit, setLimit] = useState(1);
+  const [checkLimit, setCheckLimit] = useState();
   const handleNewJob = () => {
     navigate("/settings/create-new-post");
   };
   const resourcesList = async () => {
-    const response = await getResourcesApi();
+    const response = await getResourcesApi(limit);
     if (response.remote === "success") {
+      setCheckLimit(response.data.next);
       const formateData = transformResourcesResponse(response.data.results);
       setCardList(formateData);
-    } else {
-      console.log(response.error);
     }
   };
   const handleUpdateResource = (id) => {
-    console.log(id);
+    navigate(`/settings/create-new-post/${id}`);
   };
   const handleDeleteResource = async () => {
     const response = await resourcesDeleteApi(deleting);
@@ -61,9 +61,19 @@ const ManageSettingsComponent = () => {
       console.log(response.error);
     }
   };
+  function handleShowMore() {
+    setLimit(limit + 2);
+  }
+
+  const removeImagesFromHTMLArray = (htmlArray) => {
+    const imgRegex = /<img[^>]+>/g;
+    return htmlArray.map((html) => html.replace(imgRegex, ""));
+  };
+
   useEffect(() => {
     resourcesList();
-  }, []);
+  }, [limit]);
+
   return (
     <>
       <Card
@@ -71,6 +81,7 @@ const ManageSettingsComponent = () => {
           "&.MuiCard-root": {
             boxShadow: "0px 15px 40px rgba(0, 0, 0, 0.05)",
             borderRadius: "10px",
+            mb: 10,
           },
         }}
       >
@@ -127,9 +138,9 @@ const ManageSettingsComponent = () => {
             <div onClick={() => handleNewJob()}>
               <OutlinedButton
                 title={
-                  <>
-                    <SVG.EditNoteIcon /> create a new post
-                  </>
+                  <Stack direction={"row"} spacing={1} alignItems={"center"}>
+                    <SVG.EditNoteIcon /> <span>create a new post</span>
+                  </Stack>
                 }
                 sx={{
                   "&.MuiButton-outlined": {
@@ -142,7 +153,7 @@ const ManageSettingsComponent = () => {
                     padding: "10px 30px",
                   },
                 }}
-              ></OutlinedButton>
+              />
             </div>
           </Stack>
           <Grid container spacing={2.5}>
@@ -183,11 +194,18 @@ const ManageSettingsComponent = () => {
                       <Grid item lg={6} xs={12}>
                         <div className={`${styles.settingDescription}`}>
                           <h2>{item.title}</h2>
-                          <p
-                            dangerouslySetInnerHTML={{
-                              __html: item.description,
-                            }}
-                          />
+
+                          {removeImagesFromHTMLArray(item.description)?.map(
+                            (html, innerIndex) => (
+                              <div
+                                key={innerIndex}
+                                dangerouslySetInnerHTML={{
+                                  __html: html?.slice(0, 300) + "......",
+                                }}
+                              />
+                            )
+                          )}
+
                           <Stack
                             direction="row"
                             spacing={1.5}
@@ -219,36 +237,42 @@ const ManageSettingsComponent = () => {
                 </Card>
               </Grid>
             ))}
-            <Grid item lg={12} xs={12}>
-              <div className={`${styles.showButton}`}>
-                <OutlinedButton
-                  title={
-                    <>
-                      <SVG.ArrowDownIcon />
-                      show more
-                    </>
-                  }
-                  sx={{
-                    "&.MuiButton-outlined": {
-                      bgcolor: "#D5E3F7",
-                      color: "#274593",
-                      borderColor: "#D5E3F7",
-                      hoverBgColor: "#b4d2fe",
-                    },
-                    "&:hover": {
-                      color: "#b4d2fe",
-                    },
-                  }}
+            {checkLimit !== null ? (
+              <Grid item lg={12} xs={12}>
+                <div
+                  className={`${styles.showButton}`}
+                  onClick={handleShowMore}
                 >
-                  <span className="d-inline-flex me-2">
-                    <SVG.ArrowDownIcon />
-                  </span>
-                </OutlinedButton>
-              </div>
-              <Divider sx={{ borderColor: "#CACACA" }} />
-            </Grid>
+                  <OutlinedButton
+                    title={
+                      <>
+                        <SVG.ArrowDownIcon style={{ marginRight: "8px" }} />
+                        show more
+                      </>
+                    }
+                    sx={{
+                      "&.MuiButton-outlined": {
+                        borderRadius: "73px",
+                        border: "1px solid #274593",
+                        color: "#274593",
+                        fontWeight: "500",
+                        fontSize: "16px",
+                        fontFamily: "Bahnschrift",
+                        padding: "10px 30px",
+                      },
+                    }}
+                  >
+                    <span className="d-inline-flex me-2">
+                      <SVG.ArrowDownIcon />
+                    </span>
+                  </OutlinedButton>
+                </div>
+                <Divider sx={{ borderColor: "#CACACA" }} />
+              </Grid>
+            ) : (
+              ""
+            )}
           </Grid>
-
           <div className={`${styles.title} ${styles.spaceMy}`}>
             <h2>Change password</h2>
           </div>

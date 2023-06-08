@@ -39,7 +39,7 @@ export const StyledDataGrid = styled(DataGrid)(({ theme }) => ({
     outline: "none",
   },
   "& .MuiDataGrid-columnHeaderTitleContainer": {
-    justifyContent: "center",
+    justifyContent: "start",
   },
   "& .MuiDataGrid-columnHeader:first-of-type .MuiDataGrid-columnHeaderTitleContainer":
     {

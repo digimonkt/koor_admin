@@ -5,6 +5,7 @@ import {
   ManageEmployer,
   ManageJobs,
   ManageTenders,
+  employerDetails,
 } from "@pages/manageJobsAndTenders";
 import {
   ManageSkills,
@@ -44,6 +45,11 @@ export const AUTHENTICATED_ROUTE = [
     id: "manage-employers",
     path: "/manage-employers",
     element: ManageEmployer,
+  },
+  {
+    id: "employer-details",
+    path: "/manage-employers/employer-details/:id",
+    element: employerDetails,
   },
   {
     id: "manage-candidates",
@@ -97,6 +103,7 @@ export const AUTHENTICATED_ROUTE = [
     path: "/settings/create-new-post/:resourceId",
     element: newPostResource,
   },
+
   {
     id: "manage-country",
     path: "/manage-country",
