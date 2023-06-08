@@ -33,7 +33,7 @@ const ManageSettingsComponent = () => {
   const navigate = useNavigate();
   const [cardList, setCardList] = useState([]);
   const [deleting, setDeleting] = useState("");
-  const [limit, setLimit] = useState(1);
+  const [limit, setLimit] = useState(2);
   const [checkLimit, setCheckLimit] = useState();
   const handleNewJob = () => {
     navigate("/settings/create-new-post");
