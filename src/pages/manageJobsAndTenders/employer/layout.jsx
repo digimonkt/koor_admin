@@ -200,7 +200,7 @@ const Layout = (employerDetail) => {
                 borderColor: "#f7f7f7",
               },
             }}
-            title={verifiedData ? "verified" : "UnVerified"}
+            title={verifiedData ? "verified" : "unverify"}
             onClick={handleVerified}
           />
         </Grid>
