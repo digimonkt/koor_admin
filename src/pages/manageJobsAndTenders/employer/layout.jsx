@@ -1,4 +1,6 @@
+import { verifyUnVerifyApi } from "@api/manageoptions";
 import { SVG } from "@assets/svg";
+import { SolidButton } from "@components/button";
 import {
   Avatar,
   Card,
@@ -8,8 +10,29 @@ import {
   Stack,
 } from "@mui/material";
 import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+const Layout = (employerDetail) => {
+  const id = employerDetail.employerDetail?.id;
+  const [isVerified, setIsVerified] = useState(false);
+  const data = employerDetail.employerDetail?.profile?.is_verified;
+  const [verifiedData, setVerifiedData] = useState(data);
+  const handleVerified = async () => {
+    setIsVerified(!isVerified);
+    const response = await verifyUnVerifyApi(
+      id,
+      isVerified ? "unverify" : "verify"
+    );
+    if (response.remote === "success") {
+      console.log(response.data);
+      setVerifiedData(!verifiedData);
+    }
+  };
 
-const Layout = () => {
+  useEffect(() => {
+    const action = employerDetail.employerDetail?.profile?.is_verified;
+    setIsVerified(action);
+  }, [employerDetail.employerDetail?.profile?.is_verified]);
+
   return (
     <Card
       sx={{
@@ -50,7 +73,7 @@ const Layout = () => {
           <IconButton LinkComponent={Link} to="/manage-employers">
             <SVG.ArrowLeftIcon />
           </IconButton>{" "}
-          <h2>Single User Details</h2>
+          <h2>Employer Details</h2>
         </Stack>
         <hr />
         <Avatar
@@ -60,8 +83,12 @@ const Layout = () => {
             color: "#CACACA",
             borderRadius: "50",
           }}
+          src={
+            process.env.REACT_APP_BACKEND_URL +
+            employerDetail?.employerDetail?.image?.path
+          }
         />
-        <h1>Test User</h1>
+        <h1>{employerDetail.employerDetail?.name}</h1>
         <Grid lg={6} xs={12} spacing={2.5}>
           <Card
             sx={{
@@ -86,13 +113,7 @@ const Layout = () => {
               }}
             >
               Description
-              <p>
-                Lorem ipsum, dolor sit amet consectetur adipisicing elit.
-                Repudiandae magnam maxime exercitationem! Necessitatibus ut
-                corrupti tenetur a tempora debitis aperiam rerum! Inventore
-                nostrum animi autem voluptate possimus? Velit, provident
-                reprehenderit.
-              </p>
+              <p>{employerDetail.employerDetail?.profile?.description}</p>
             </CardContent>
           </Card>
           <Card
@@ -117,32 +138,71 @@ const Layout = () => {
                 },
               }}
             >
-              Description
               <p>
-                Email-<span>test@gmail.com</span>
+                Email-<span>{employerDetail.employerDetail.email}</span>
               </p>
               <p>
-                mobileNumber-<span>98989878</span>
+                mobileNumber-
+                <span>{employerDetail?.employerDetail?.mobile_number}</span>
               </p>
               <p>
-                address-<span>agra,india</span>
+                address-
+                <span>{employerDetail.employerDetail?.profile?.address}</span>
               </p>
               <p>
                 license-
-                <a href="#">
-                  <span>anish tiwari.pdf</span>
+                <a
+                  href={`${
+                    process.env.REACT_APP_BACKEND_URL +
+                    employerDetail.employerDetail.profile?.license_id_file?.path
+                  }`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <span>
+                    {
+                      employerDetail.employerDetail.profile?.license_id_file
+                        ?.title
+                    }
+                  </span>
+                  <SVG.vectorIcon />
                 </a>
               </p>
               <p>
-                orgaization type
-                <span>manufacturing</span>
+                licenseID-
+                <span>
+                  {employerDetail.employerDetail?.profile?.license_id}
+                </span>
               </p>
               <p>
-                role
-                <span>Employer</span>
+                organization-type:
+                <span>
+                  {
+                    employerDetail.employerDetail.profile?.organization_type
+                      ?.title
+                  }
+                </span>
               </p>
             </CardContent>
           </Card>
+          <SolidButton
+            align="left"
+            sx={{
+              background: "#fff",
+              borderRadius: "73px",
+              border: "solid 1px ",
+              fontFamily: "Bahnschrift",
+              color: "#274593",
+              fontWeight: 600,
+              marginBottom: "10px",
+              "&:hover": {
+                background: "#f7f7f7",
+                borderColor: "#f7f7f7",
+              },
+            }}
+            title={verifiedData ? "verified" : "UnVerified"}
+            onClick={handleVerified}
+          />
         </Grid>
       </CardContent>
     </Card>

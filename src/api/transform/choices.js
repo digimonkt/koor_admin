@@ -18,6 +18,7 @@ export const transformEmployerAPIResponse = (data) => {
     email: data.email,
     mobileNumber: data.mobile_number,
     action: data.is_active,
+    verify: data.verify,
   }));
 };
 

@@ -4,7 +4,6 @@ import { IconButton, Stack } from "@mui/material";
 import Layout from "../layout";
 import { activeInactiveUser, deleteUser, manageEmployer } from "@api/employers";
 import DialogBox from "@components/dialogBox";
-// import env from "@utils/validateEnv";
 import { useNavigate } from "react-router-dom";
 import DeleteCard from "@components/card/deleteCard";
 import { useDispatch, useSelector } from "react-redux";
@@ -60,21 +59,35 @@ function ManageEmployerComponent() {
         return (
           <Stack direction="row" spacing={1} alignItems="center">
             <>
-              <IconButton
-                onClick={() => {
-                  activeDeActiveUser(item);
-                }}
-                sx={{
-                  "&.MuiIconButton-root": {
-                    background: item.row.action ? "#D5E3F7" : "#D42929",
-                  },
-                  width: 30,
-                  height: 30,
-                  color: "#274593",
-                }}
-              >
-                {item.row.action ? <SVG.ToggleOffIcon /> : <SVG.ToggleOnIcon />}
-              </IconButton>
+              {item.row.verify ? (
+                <IconButton
+                  onClick={() => {
+                    activeDeActiveUser(item);
+                  }}
+                  sx={{
+                    "&.MuiIconButton-root": {
+                      background: item.row.action ? "#D5E3F7" : "#D42929",
+                    },
+                    width: 30,
+                    height: 30,
+                    color: "#274593",
+                  }}
+                >
+                  {item.row.action ? (
+                    <SVG.ToggleOffIcon />
+                  ) : (
+                    <SVG.ToggleOnIcon />
+                  )}
+                </IconButton>
+              ) : (
+                <IconButton
+                  onClick={() => {
+                    handleRedirectDetails(item.row.id);
+                  }}
+                >
+                  {<SVG.unVerify />}
+                </IconButton>
+              )}
             </>
 
             <IconButton
@@ -90,6 +103,7 @@ function ManageEmployerComponent() {
             >
               <SVG.EyeIcon />
             </IconButton>
+
             <IconButton
               onClick={() => setDeleting(item.row.id)}
               sx={{
@@ -110,9 +124,7 @@ function ManageEmployerComponent() {
   ];
 
   const handleRedirectDetails = (id) => {
-    // const url = `${env.REACT_APP_REDIRECT_URL}/employer/${item}/profile`;
-    // window.open(url, "_blank");
-    navigate(`single-user/${id}`);
+    navigate(`employer-details/${id}`);
   };
 
   const employerList = async () => {
