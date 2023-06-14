@@ -79,7 +79,7 @@ const PostTestimonials = () => {
       companyName &&
       clientPosition &&
       paragraph &&
-      newImage > 0
+      newImage
     ) {
       const response = await createTestimonialApi(newFormData);
       if (response.remote === "success") {

@@ -25,7 +25,7 @@ const ManageTestimonials = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [testimonialsList, setTestimonialsList] = useState([]);
-  const [checkLimit, setCheckLimit] = useState("");
+  const [checkLimit, setCheckLimit] = useState(null);
   const [deleting, setDeleting] = useState("");
   const [limit, setLimit] = useState(2);
   const handleNewJob = () => {
@@ -226,7 +226,9 @@ const ManageTestimonials = () => {
                 </Card>
               </Grid>
             ))}
-            {checkLimit !== null ? (
+            {checkLimit === null ? (
+              ""
+            ) : (
               <Grid item lg={12} xs={12}>
                 <div
                   className={`${styles.showButton}`}
@@ -258,8 +260,6 @@ const ManageTestimonials = () => {
                 </div>
                 <Divider sx={{ borderColor: "#CACACA" }} />
               </Grid>
-            ) : (
-              ""
             )}
           </Grid>
         </CardContent>
