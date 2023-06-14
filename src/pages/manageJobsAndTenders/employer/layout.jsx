@@ -23,7 +23,6 @@ const Layout = (employerDetail) => {
       isVerified ? "unverify" : "verify"
     );
     if (response.remote === "success") {
-      console.log(response.data);
       setVerifiedData(!verifiedData);
     }
   };

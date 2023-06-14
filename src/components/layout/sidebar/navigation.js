@@ -20,6 +20,12 @@ export const MENU_ITEM = [
     url: "/manage-tenders",
   },
   {
+    id: "3A",
+    icon: <SVG.ManageTenders />,
+    page: "Manage newsLetter",
+    url: "/manage-newsLetter",
+  },
+  {
     id: "4",
     icon: <SVG.ManageEmployee />,
     page: "Manage employers",
@@ -43,6 +49,19 @@ export const MENU_ITEM = [
     icon: <SVG.FinancialTools />,
     page: "Financial tools",
     url: "/financial-tools",
+  },
+
+  {
+    id: "7b",
+    icon: <SVG.FinancialTools />,
+    page: "Manage Listing Company",
+    url: "/manage-listing-company",
+  },
+  {
+    id: "7c",
+    icon: <SVG.FinancialTools />,
+    page: "Manage testimonials",
+    url: "/manage-testimonials",
   },
   {
     id: "7",

@@ -1,3 +1,6 @@
+import { SVG } from "@assets/svg";
+import { OutlinedButton } from "@components/button";
+import styles from "@pages/manageOptions/manageSettings/styles.module.css";
 import {
   Card,
   CardContent,
@@ -7,75 +10,66 @@ import {
   Stack,
 } from "@mui/material";
 import React, { useEffect, useState } from "react";
-import { SVG } from "@assets/svg";
-import { OutlinedButton } from "@components/button";
-import styles from "./styles.module.css";
 import { styled } from "@mui/material/styles";
-import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import ChangePassword from "./change-password";
-import { setErrorToast, setSuccessToast } from "@redux/slice/toast";
-import { getResourcesApi, resourcesDeleteApi } from "@api/manageoptions";
-import { transformResourcesResponse } from "@api/transform/choices";
+import {
+  getTestimonialListApi,
+  testimonialDeleteApi,
+} from "@api/manageTestimonial";
+import { transformTestimonialResponse } from "@api/transform/choices";
 import DialogBox from "@components/dialogBox";
 import { DeleteCard } from "@components/card";
-const StyledButton = styled(IconButton)(() => ({
-  background: "#D5E3F7",
-  width: "30px",
-  height: "30px",
-  color: "#274593",
-  "&:hover": {
-    background: "#b4d2fe",
-  },
-}));
-const ManageSettingsComponent = () => {
-  const dispatch = useDispatch();
+import { setErrorToast, setSuccessToast } from "@redux/slice/toast";
+import { useDispatch } from "react-redux";
+const ManageTestimonials = () => {
   const navigate = useNavigate();
-  const [cardList, setCardList] = useState([]);
+  const dispatch = useDispatch();
+  const [testimonialsList, setTestimonialsList] = useState([]);
+  const [checkLimit, setCheckLimit] = useState("");
   const [deleting, setDeleting] = useState("");
   const [limit, setLimit] = useState(2);
-  const [checkLimit, setCheckLimit] = useState("");
   const handleNewJob = () => {
-    navigate("/settings/create-new-post");
-  };
-  const resourcesList = async () => {
-    const response = await getResourcesApi(limit);
-    if (response.remote === "success") {
-      setCheckLimit(response.data.next);
-      const formateData = transformResourcesResponse(response.data.results);
-      setCardList(formateData);
-    }
-  };
-  const handleUpdateResource = (id) => {
-    navigate(`/settings/create-new-post/${id}`);
+    navigate("/post-testimonials/newPost");
   };
 
-  const handleDeleteResource = async () => {
-    const response = await resourcesDeleteApi(deleting);
+  const StyledButton = styled(IconButton)(() => ({
+    background: "#D5E3F7",
+    width: "30px",
+    height: "30px",
+    color: "#274593",
+    "&:hover": {
+      background: "#b4d2fe",
+    },
+  }));
+  const testimonialList = async () => {
+    const response = await getTestimonialListApi(limit);
     if (response.remote === "success") {
-      const newResources = cardList.filter((res) => res.id !== deleting);
-      setCardList(newResources);
-      setDeleting("");
-      dispatch(setSuccessToast("Resource Delete SuccessFully"));
-    } else {
-      dispatch(setErrorToast("Something went wrong"));
-      console.log(response.error);
+      setCheckLimit(response.data.next);
+      const formateData = transformTestimonialResponse(response.data.results);
+      setTestimonialsList(formateData);
     }
   };
 
   function handleShowMore() {
     setLimit(limit + 2);
   }
-
-  const removeImagesFromHTMLArray = (htmlArray) => {
-    const imgRegex = /<img[^>]+>/g;
-    return htmlArray.map((html) => html.replace(imgRegex, ""));
+  const handleDeleteResource = async () => {
+    const response = await testimonialDeleteApi(deleting);
+    if (response.remote === "success") {
+      const newTestimonial = testimonialsList.filter(
+        (res) => res.id !== deleting
+      );
+      setTestimonialsList(newTestimonial);
+      setDeleting("");
+      dispatch(setSuccessToast("Testimonial Delete SuccessFully"));
+    } else {
+      dispatch(setErrorToast("Something went wrong"));
+    }
   };
 
   useEffect(() => {
-    resourcesList();
+    testimonialList();
   }, [limit]);
-
   return (
     <>
       <Card
@@ -115,7 +109,7 @@ const ManageSettingsComponent = () => {
               },
             }}
           >
-            <h2>Content management</h2>
+            <h2>Testimonials</h2>
           </Stack>
           <Stack
             direction={{ xs: "column", sm: "row" }}
@@ -156,7 +150,7 @@ const ManageSettingsComponent = () => {
             </div>
           </Stack>
           <Grid container spacing={2.5}>
-            {cardList.map((item, index) => (
+            {testimonialsList.map((item, index) => (
               <Grid item lg={6} xs={12} key={index}>
                 <Card
                   sx={{
@@ -184,26 +178,22 @@ const ManageSettingsComponent = () => {
                       <Grid item lg={6} xs={12}>
                         <div className={`${styles.imageBox}`}>
                           <img
-                            src={`${process.env.REACT_APP_BACKEND_URL}${item.imgUrl}`}
+                            src={`${process.env.REACT_APP_BACKEND_URL}${item.imageUrl}`}
                             alt=""
                           />
-                          {item.playIcon}
+                          {/* {item.playIcon} */}
                         </div>
                       </Grid>
                       <Grid item lg={6} xs={12}>
                         <div className={`${styles.settingDescription}`}>
-                          <h2>{item.title}</h2>
+                          <h2>{item.clientName}</h2>
 
-                          {removeImagesFromHTMLArray(item.description)?.map(
-                            (html, innerIndex) => (
-                              <div
-                                key={innerIndex}
-                                dangerouslySetInnerHTML={{
-                                  __html: html?.slice(0, 300) + "......",
-                                }}
-                              />
-                            )
-                          )}
+                          <div
+                            dangerouslySetInnerHTML={{
+                              __html:
+                                item.description?.slice(0, 100) + "......",
+                            }}
+                          />
 
                           <Stack
                             direction="row"
@@ -224,7 +214,7 @@ const ManageSettingsComponent = () => {
                               <SVG.DeleteIcon />
                             </StyledButton>
                             <StyledButton
-                              onClick={() => handleUpdateResource(item.id)}
+                            // onClick={() => handleUpdateResource(item.id)}
                             >
                               <SVG.EditIcon />
                             </StyledButton>
@@ -272,10 +262,6 @@ const ManageSettingsComponent = () => {
               ""
             )}
           </Grid>
-          <div className={`${styles.title} ${styles.spaceMy}`}>
-            <h2>Change password</h2>
-          </div>
-          <ChangePassword />
         </CardContent>
       </Card>
       <DialogBox open={!!deleting} handleClose={() => setDeleting("")}>
@@ -289,4 +275,5 @@ const ManageSettingsComponent = () => {
     </>
   );
 };
-export default ManageSettingsComponent;
+
+export default ManageTestimonials;

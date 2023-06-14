@@ -19,6 +19,10 @@ import {
   manageTag,
   manageOpportunity,
   newPostResource,
+  manageListingCompany,
+  manageTestimonials,
+  postTestimonials,
+  manageNewsLetter,
 } from "@pages/manageOptions";
 import ManageCountry from "@pages/manageOptions/manageCountry";
 import FinancialTools from "@pages/manageOptions/manageFinancialTools";
@@ -138,6 +142,27 @@ export const AUTHENTICATED_ROUTE = [
     id: "manage-language",
     path: "/manage-language",
     element: ManageLanguage,
+  },
+
+  {
+    id: "manage-listing-company",
+    path: "/manage-listing-company",
+    element: manageListingCompany,
+  },
+  {
+    id: "manage-testimonials",
+    path: "/manage-testimonials",
+    element: manageTestimonials,
+  },
+  {
+    id: "post-testimonials",
+    path: "/post-testimonials/:id",
+    element: postTestimonials,
+  },
+  {
+    id: "manage-newsLetter",
+    path: "/manage-newsLetter",
+    element: manageNewsLetter,
   },
 ];
 

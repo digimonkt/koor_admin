@@ -377,13 +377,60 @@ export const getUserDetailsApi = async (userId) => {
 };
 
 export const verifyUnVerifyApi = async (employerId, action) => {
-  console.log({ employerId, action });
   const response = await api.request({
     url: urlcat("/v1/admin/employer/:employerId/:action", {
       employerId,
       action,
     }),
     method: "PUT",
+  });
+  return response;
+};
+
+export const getCompanyListingApi = async (limit) => {
+  const response = await api.request({
+    url: urlcat("/v1/admin/upload-logo", { limit }),
+    method: "GET",
+  });
+  return response;
+};
+
+export const addCategoryLogoApi = async (data) => {
+  const response = await api.request({
+    url: urlcat("/v1/admin/upload-logo"),
+    method: "POST",
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+    data,
+  });
+  return response;
+};
+
+export const deleteCompanyLogoApi = async (logoId) => {
+  const response = await api.request({
+    url: urlcat("/v1/admin/upload-logo/:logoId", {
+      logoId,
+    }),
+    method: "DELETE",
+  });
+  return response;
+};
+
+export const getNewsletterApi = async ({ limit, page, search, country }) => {
+  const response = await api.request({
+    url: urlcat("/v1/admin/newsletter-user", { limit, page, search, country }),
+    method: "GET",
+  });
+  return response;
+};
+
+export const deleteNewsLetterApi = async (newsletterId) => {
+  const response = await api.request({
+    url: urlcat("/v1/admin/newsletter-user/:newsletterId", {
+      newsletterId,
+    }),
+    method: "DELETE",
   });
   return response;
 };

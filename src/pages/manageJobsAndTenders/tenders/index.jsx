@@ -6,14 +6,8 @@ import Layout from "../../manageOptions/layout";
 import { setLoading } from "@redux/slice/jobsAndTenders";
 import { useDispatch } from "react-redux";
 import { useDebounce } from "usehooks-ts";
-import {
-  // createTenderApi,
-  // editTenderApi,
-  manageTenderApi,
-  // tenderDeleteApi,
-} from "@api/manageoptions";
+import { manageTenderApi } from "@api/manageoptions";
 import { transformOptionsResponse } from "@api/transform/choices";
-// import { setErrorToast, setSuccessToast } from "@redux/slice/toast";
 import DialogBox from "@components/dialogBox";
 import { DeleteCard } from "@components/card";
 
@@ -24,10 +18,7 @@ function ManageTendersComponent() {
   const [searchTerm, setSearchTerm] = useState("");
   const [pages, setPages] = useState(1);
   const [limit, setLimit] = useState(10);
-  // const [addTender, setAddTender] = useState("");
   const [deleteTender, setDeleteTender] = useState("");
-  // const [editTender, setEditTender] = useState("");
-  // const [editTenderValue, setEditTenderValue] = useState("");
 
   const debouncedSearchTenderValue = useDebounce(searchTerm, 500);
 
@@ -91,20 +82,6 @@ function ManageTendersComponent() {
       renderCell: (item) => {
         return (
           <Stack direction="row" spacing={1} alignItems="center">
-            {/* <IconButton
-              onClick={() => handleEdit(item.row)}
-              sx={{
-                "&.MuiIconButton-root": {
-                  background: "#D5E3F7",
-                },
-                width: 30,
-                height: 30,
-                color: "#274593",
-              }}
-            >
-              <SVG.ToggleOffIcon />
-            </IconButton> */}
-
             <IconButton
               onClick={() => setDeleteTender(item.row.id)}
               sx={{
@@ -134,7 +111,6 @@ function ManageTendersComponent() {
       if (!formateData.length) {
         dispatch(setLoading(false));
       }
-      console.log(formateData);
       setTenderTable(formateData);
       const totalCounts = Math.ceil(response.data.count / limit);
       setTotalCount(totalCounts);

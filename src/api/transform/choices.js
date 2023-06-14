@@ -84,3 +84,29 @@ export const transformResourcesResponse = (data) => {
     description: data.description,
   }));
 };
+
+export const transformCompanyListResponse = (data) => {
+  return data.map((data, index) => ({
+    id: data.id,
+    imgUrl: data.logo.path,
+    title: data.logo.title,
+  }));
+};
+
+export const transformNewsLetterResponse = (data) => {
+  return data.map((data, index) => ({
+    id: data.id,
+    no: index + 1,
+    email: data.email,
+    date: data.created,
+  }));
+};
+
+export const transformTestimonialResponse = (data) => {
+  return data.map((data) => ({
+    id: data.id,
+    clientName: data.client_name,
+    description: data.description,
+    imageUrl: data.image.path,
+  }));
+};

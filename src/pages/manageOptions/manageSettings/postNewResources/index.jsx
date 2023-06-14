@@ -53,7 +53,7 @@ const NewPostResource = () => {
     ["clean"], // remove formatting
   ];
 
-  // image cropper
+  // image cropper function start
   const handleFiles = (e) => {
     setFiles(e.target.files);
   };
@@ -62,6 +62,7 @@ const NewPostResource = () => {
     setNewImage(file);
     setFiles([]);
   };
+
   const thumbs = (
     <Avatar
       sx={{
@@ -80,8 +81,7 @@ const NewPostResource = () => {
       }}
     />
   );
-  // image cropper
-
+  // image cropper function end
   // Delete Text Editor Content
   const handleDeleteContent = (index) => {
     const updatedVisibility = [...editorVisibility];
@@ -182,7 +182,6 @@ const NewPostResource = () => {
   const getSingleData = async () => {
     const response = await getSingleResourcesApi(resourceId);
     if (response.remote === "success") {
-      console.log(response.data.description);
       setPostTitle(response.data.title);
       setNewImage(response.data.attachment);
       setEditorValue(response.data.description);
@@ -257,18 +256,7 @@ const NewPostResource = () => {
             value={postTitle}
           />
         </div>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            alignItems: "center",
-            border: "3px dashed #CACACA",
-            borderRadius: "10px",
-            width: "100%",
-            height: "104px",
-            position: "relative",
-          }}
-        >
+        <div className="drag-drop">
           <label>
             <input
               type="file"
