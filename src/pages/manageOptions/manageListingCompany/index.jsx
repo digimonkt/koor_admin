@@ -20,6 +20,8 @@ import {
 import { transformCompanyListResponse } from "@api/transform/choices";
 import DialogBox from "@components/dialogBox";
 import { DeleteCard } from "@components/card";
+import { useDispatch } from "react-redux";
+import { setErrorToast, setSuccessToast } from "@redux/slice/toast";
 const StyledButton = styled(IconButton)(() => ({
   background: "#D5E3F7",
   width: "30px",
@@ -31,6 +33,7 @@ const StyledButton = styled(IconButton)(() => ({
 }));
 
 const ManageListingCompany = () => {
+  const dispatch = useDispatch();
   const [files, setFiles] = useState([]);
   const [newImage, setNewImage] = useState("");
   const [deleting, setDeleting] = useState("");
@@ -90,6 +93,9 @@ const ManageListingCompany = () => {
       setCompanyLogoList([...updateData]);
       setNewImage("");
       setFiles([]);
+      dispatch(setSuccessToast("Add company image SuccessFully"));
+    } else {
+      dispatch(setErrorToast("Something went wrong"));
     }
   };
   // *Add Company  Logo End
@@ -99,6 +105,9 @@ const ManageListingCompany = () => {
       const newLogo = companyLogoList.filter((res) => res.id !== deleting);
       setCompanyLogoList(newLogo);
       setDeleting("");
+      dispatch(setSuccessToast("Delete SuccessFully"));
+    } else {
+      dispatch(setErrorToast("Something went wrong"));
     }
   };
 
