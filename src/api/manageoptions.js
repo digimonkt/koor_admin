@@ -151,7 +151,8 @@ export const manageTenderApi = async ({
   search,
   country,
   action,
-  period,
+  from,
+  to,
   filterType,
 }) => {
   const response = await api.request({
@@ -161,7 +162,8 @@ export const manageTenderApi = async ({
       search,
       country,
       action,
-      period,
+      from,
+      to,
       filterType,
     }),
     method: "GET",

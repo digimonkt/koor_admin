@@ -7,7 +7,8 @@ export const manageEmployer = async ({
   search,
   country,
   action,
-  period,
+  from,
+  to,
 }) => {
   const response = await api.request({
     url: urlcat("/v1/admin/employer", {
@@ -16,7 +17,8 @@ export const manageEmployer = async ({
       search,
       country,
       action,
-      period,
+      from,
+      to,
     }),
     method: "GET",
   });
