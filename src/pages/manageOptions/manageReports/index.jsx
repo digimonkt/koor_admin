@@ -1,9 +1,8 @@
-import React, { useCallback, useState } from "react";
-import { Box, Card, CardContent, Tab, Tabs } from "@mui/material";
+import React, { useState } from "react";
+import { Box, Card, CardContent, Tab, Tabs, TextField } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { Stack } from "@mui/system";
 import styles from "@components/reports/styles.module.css";
-import SelectOption from "@components/reports/selectoption";
 import CommonReport from "@components/reports";
 import Cbutton from "@components/button/cButton";
 import { SVG } from "@assets/svg";
@@ -13,7 +12,10 @@ import { manageTenderApi } from "@api/manageoptions";
 import { manageJobData } from "@api/jobs";
 import { useDispatch } from "react-redux";
 import { setErrorToast } from "@redux/slice/toast";
-
+import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 const AntTabs = styled(Tabs)({
   minHeight: "35px",
   "& .MuiTabs-indicator": {
@@ -81,17 +83,6 @@ const Report = () => {
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
-  // ! month array
-  const initialValue = 1;
-  const content = Array.from({ length: 12 }, (_, index) => {
-    const value = `${initialValue + index}`;
-    return {
-      title: `${value} month`,
-      value,
-      id: value,
-    };
-  });
-  // ! month array
 
   const generalReport = [
     {
@@ -128,12 +119,18 @@ const Report = () => {
 
   const [checkedItems, setCheckedItems] = useState(false);
   const [checkedTree, setCheckedTree] = useState([]);
-  const [duration, setDuration] = useState("1");
-  //* Get month value
-  const handleSelectChange = useCallback((value) => {
-    setDuration(value);
-  }, []);
+  const [startDate, setStartDate] = useState(null);
+  const [endDate, setEndDate] = useState(null);
 
+  //* Get month value
+
+  const handleGetValue = (data, identifier) => {
+    if (identifier === "startDate") {
+      setStartDate(data);
+    } else if (identifier === "endDate") {
+      setEndDate(data);
+    }
+  };
   // *Get value of checkbox
   const handleReportCheckboxChange = (value, checked, index) => {
     const updatedCheckedItems = { ...checkedItems };
@@ -145,8 +142,9 @@ const Report = () => {
 
   // ! download CSV File function Start
   const downloadFile = async (action, apiFunction) => {
-    const period = duration;
-    const response = await apiFunction({ period, action });
+    const from = startDate ? startDate.toISOString().split("T")[0] : "";
+    const to = endDate ? endDate.toISOString().split("T")[0] : "";
+    const response = await apiFunction({ from, to, action });
     if (response.remote === "success") {
       const downloadLink = document.createElement("a");
       downloadLink.href = process.env.REACT_APP_BACKEND_URL + response.data.url;
@@ -157,8 +155,9 @@ const Report = () => {
 
   // ! download CSV File With Filter start
   async function downloadFileWithFilter(action, apiFunction, filterType) {
-    const period = duration;
-    const response = await apiFunction({ period, action, filterType });
+    const from = startDate ? startDate.toISOString().split("T")[0] : "";
+    const to = endDate ? endDate.toISOString().split("T")[0] : "";
+    const response = await apiFunction({ from, to, action, filterType });
     if (response.remote) {
       const downloadLink = document.createElement("a");
       downloadLink.href = process.env.REACT_APP_BACKEND_URL + response.data.url;
@@ -169,20 +168,28 @@ const Report = () => {
   const handleSubmit = async () => {
     const value = checkedTree;
     for (const items of value) {
-      if (items === 1) {
-        await downloadFile("download", manageCandidate);
-      } else if (items === 2) {
-        await downloadFile("download", manageEmployer);
-      } else if (items === 3) {
-        await downloadFile("download", manageTenderApi);
-      } else if (items === 4) {
-        await downloadFile("download", manageJobData);
-      } else if (items === 5) {
-        await downloadFileWithFilter("download", manageJobData, "closed");
-      } else if (items === 6) {
-        await downloadFileWithFilter("download", manageTenderApi, "closed");
-      } else {
-        dispatch(setErrorToast("Something went wrong"));
+      switch (items) {
+        case 1:
+          await downloadFile("download", manageCandidate);
+          break;
+        case 2:
+          await downloadFile("download", manageEmployer);
+          break;
+        case 3:
+          await downloadFile("download", manageTenderApi);
+          break;
+        case 4:
+          await downloadFile("download", manageJobData);
+          break;
+        case 5:
+          await downloadFileWithFilter("download", manageJobData, "closed");
+          break;
+        case 6:
+          await downloadFileWithFilter("download", manageTenderApi, "closed");
+          break;
+        default:
+          dispatch(setErrorToast("Something went wrong"));
+          break;
       }
     }
   };
@@ -222,11 +229,26 @@ const Report = () => {
               >
                 <span className={`${styles.general}`}>Use data from past:</span>
                 <div className="selectedbox">
-                  <SelectOption
-                    content={content}
-                    onChange={handleSelectChange}
-                    value={duration}
-                  />
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DemoContainer components={["DatePicker"]}>
+                      <DatePicker
+                        label="Start Date"
+                        onChange={(data) => handleGetValue(data, "startDate")}
+                        value={startDate}
+                        renderInput={(params) => <TextField {...params} />}
+                      />
+                    </DemoContainer>
+                  </LocalizationProvider>
+
+                  <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <DemoContainer components={["DatePicker"]}>
+                      <DatePicker
+                        label="End Date"
+                        onChange={(data) => handleGetValue(data, "endDate")}
+                        value={endDate}
+                      />
+                    </DemoContainer>
+                  </LocalizationProvider>
                 </div>
               </Stack>
               <CommonReport

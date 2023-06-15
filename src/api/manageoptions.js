@@ -151,7 +151,8 @@ export const manageTenderApi = async ({
   search,
   country,
   action,
-  period,
+  from,
+  to,
   filterType,
 }) => {
   const response = await api.request({
@@ -161,7 +162,8 @@ export const manageTenderApi = async ({
       search,
       country,
       action,
-      period,
+      from,
+      to,
       filterType,
     }),
     method: "GET",
@@ -392,13 +394,14 @@ export const getUserDetailsApi = async (userId) => {
   return response;
 };
 
-export const verifyUnVerifyApi = async (employerId, action) => {
+export const verifyUnVerifyApi = async (employerId, action, data) => {
   const response = await api.request({
     url: urlcat("/v1/admin/employer/:employerId/:action", {
       employerId,
       action,
     }),
     method: "PUT",
+    data: { points: data },
   });
   return response;
 };

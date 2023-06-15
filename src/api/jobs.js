@@ -6,7 +6,8 @@ export const manageJobData = async ({
   search,
   country,
   action,
-  period,
+  from,
+  to,
   filterType,
 }) => {
   const response = await api.request({
@@ -16,7 +17,8 @@ export const manageJobData = async ({
       search,
       country,
       action,
-      period,
+      from,
+      to,
       filterType,
     }),
     method: "GET",
