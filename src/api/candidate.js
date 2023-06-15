@@ -7,6 +7,7 @@ export const manageCandidate = async ({
   search,
   country,
   action,
+  period,
 }) => {
   const response = await api.request({
     url: urlcat("/v1/admin/candidates", {
@@ -15,6 +16,7 @@ export const manageCandidate = async ({
       search,
       country,
       action,
+      period,
     }),
     method: "GET",
   });

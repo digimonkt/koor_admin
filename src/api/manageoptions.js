@@ -145,9 +145,25 @@ export const deleteLanguageApi = async (jobSeekerCategoryId) => {
   return response;
 };
 
-export const manageTenderApi = async ({ limit, page, search, country }) => {
+export const manageTenderApi = async ({
+  limit,
+  page,
+  search,
+  country,
+  action,
+  period,
+  filterType,
+}) => {
   const response = await api.request({
-    url: urlcat("/v1/admin/tender", { limit, page, search, country }),
+    url: urlcat("/v1/admin/tender", {
+      limit,
+      page,
+      search,
+      country,
+      action,
+      period,
+      filterType,
+    }),
     method: "GET",
   });
   return response;
