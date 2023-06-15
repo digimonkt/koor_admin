@@ -6,9 +6,19 @@ export const manageJobData = async ({
   search,
   country,
   action,
+  period,
+  filterType,
 }) => {
   const response = await api.request({
-    url: urlcat("/v1/admin/jobs", { limit, page, search, country, action }),
+    url: urlcat("/v1/admin/jobs", {
+      limit,
+      page,
+      search,
+      country,
+      action,
+      period,
+      filterType,
+    }),
     method: "GET",
   });
   return response;

@@ -23,6 +23,7 @@ import {
   manageTestimonials,
   postTestimonials,
   manageNewsLetter,
+  manageReports,
 } from "@pages/manageOptions";
 import ManageCountry from "@pages/manageOptions/manageCountry";
 import FinancialTools from "@pages/manageOptions/manageFinancialTools";
@@ -163,6 +164,11 @@ export const AUTHENTICATED_ROUTE = [
     id: "manage-newsLetter",
     path: "/manage-newsLetter",
     element: manageNewsLetter,
+  },
+  {
+    id: "manage-reports",
+    path: "/reports",
+    element: manageReports,
   },
 ];
 
