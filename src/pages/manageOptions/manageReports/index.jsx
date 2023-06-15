@@ -81,100 +81,48 @@ const Report = () => {
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
-
-  const content = [
-    {
-      title: "1 month",
-      id: "1",
-      value: "1",
-    },
-    {
-      title: "2 month",
-      id: "2",
-      value: "2",
-    },
-    {
-      title: "3 month",
-      id: "3",
-      value: "3",
-    },
-    {
-      title: "4 month",
-      id: "4",
-      value: "4",
-    },
-    {
-      title: "5 month",
-      id: "5",
-      value: "5",
-    },
-    {
-      title: "6 month",
-      id: "6",
-      value: "6",
-    },
-    {
-      title: "7 month",
-      id: "7",
-      value: "7",
-    },
-    {
-      title: "8 month",
-      id: "8",
-      value: "8",
-    },
-    {
-      title: "9 month",
-      id: "9",
-      value: "9",
-    },
-    {
-      title: "10 month",
-      id: "10",
-      value: "10",
-    },
-    {
-      title: "11 month",
-      id: "11",
-      value: "11",
-    },
-    {
-      title: "12 month",
-      id: "12",
-      value: "12",
-    },
-  ];
+  // ! month array
+  const initialValue = 1;
+  const content = Array.from({ length: 12 }, (_, index) => {
+    const value = `${initialValue + index}`;
+    return {
+      title: `${value} month`,
+      value,
+      id: value,
+    };
+  });
+  // ! month array
 
   const generalReport = [
     {
       id: 1,
       title: "Candidates list",
-      description: "List of all jobseekers and vendors on the platform",
+      description: "List of all Candidates  on the platform",
     },
     {
       id: 2,
       title: "Employers list",
-      description: "List of all jobseekers and vendors on the platform",
+      description: "List of all Employers  on the platform",
     },
     {
       id: 3,
       title: "Tenders list",
-      description: "List of all jobseekers and vendors on the platform",
+      description: "List of all Tenders on the platform",
     },
     {
       id: 4,
       title: "New job postings",
-      description: "List of all jobseekers and vendors on the platform",
+      description: "List of all New job postings on the platform",
     },
     {
       id: 5,
       title: "Closed jobs",
-      description: "List of all jobseekers and vendors on the platform",
+      description: "List of all Closed jobs on the platform",
     },
     {
       id: 6,
       title: "Closed tenders",
-      description: "List of all jobseekers and vendors on the platform",
+      description: "List of all Closed tenders on the platform",
     },
   ];
 
@@ -200,7 +148,6 @@ const Report = () => {
     const period = duration;
     const response = await apiFunction({ period, action });
     if (response.remote === "success") {
-      console.log(response.data);
       const downloadLink = document.createElement("a");
       downloadLink.href = process.env.REACT_APP_BACKEND_URL + response.data.url;
       downloadLink.click();
