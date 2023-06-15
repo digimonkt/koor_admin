@@ -24,9 +24,9 @@ import {
   postTestimonials,
   manageNewsLetter,
   manageReports,
+  financialTools,
 } from "@pages/manageOptions";
 import ManageCountry from "@pages/manageOptions/manageCountry";
-import FinancialTools from "@pages/manageOptions/manageFinancialTools";
 import ManageTenderCategory from "@pages/manageOptions/manageTenderCategory";
 
 export const PUBLIC_ROUTE = [];
@@ -80,7 +80,7 @@ export const AUTHENTICATED_ROUTE = [
   {
     id: "manage-financial-tools",
     path: "/financial-tools",
-    element: FinancialTools,
+    element: financialTools,
   },
 
   {
