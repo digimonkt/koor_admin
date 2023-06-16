@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import Layout from "../../manageOptions/layout";
 import { setLoading } from "@redux/slice/jobsAndTenders";
 import { useDispatch } from "react-redux";
@@ -21,68 +21,78 @@ function ManageNewsLetter() {
   const [deleteNewsLetter, setDeleteNewsLetter] = useState("");
   const debouncedSearchTenderValue = useDebounce(searchTerm, 500);
 
-  const columns = [
-    {
-      id: "1",
-      field: "no",
-      headerName: "No",
-      sortable: true,
-    },
-    {
-      id: "2",
-      field: "date",
-      headerName: "Date",
-      width: "220",
-      sortable: true,
-    },
-    {
-      id: "3",
-      field: "email",
-      headerName: "Email",
-      width: "220",
-      sortable: true,
-    },
-    {
-      field: "action",
-      headerName: "Action",
-      sortable: false,
-      renderCell: (item) => {
-        return (
-          <Stack direction="row" spacing={1} alignItems="center">
-            <IconButton onClick={() => setDeleteNewsLetter(item.row.id)}>
-              <SVG.DeleteIcon />
-            </IconButton>
-          </Stack>
-        );
+  const columns = useMemo(
+    () => [
+      {
+        id: "1",
+        field: "no",
+        headerName: "No",
+        sortable: true,
       },
-    },
-  ];
+      {
+        id: "2",
+        field: "date",
+        headerName: "Date",
+        width: "220",
+        sortable: true,
+      },
+      {
+        id: "3",
+        field: "email",
+        headerName: "Email",
+        width: "220",
+        sortable: true,
+      },
+      {
+        field: "action",
+        headerName: "Action",
+        sortable: false,
+        renderCell: (item) => {
+          return (
+            <Stack direction="row" spacing={1} alignItems="center">
+              <IconButton onClick={() => setDeleteNewsLetter(item.row.id)}>
+                <SVG.DeleteIcon />
+              </IconButton>
+            </Stack>
+          );
+        },
+      },
+    ],
+    []
+  );
   // *Show NewsLetter Data
-  const newsLetterList = async () => {
+  const newsLetterList = useCallback(async () => {
     dispatch(setLoading(true));
     const page = pages;
     const search = debouncedSearchTenderValue || "";
-    const response = await getNewsletterApi({ limit, page, search });
-    if (response.remote === "success") {
-      const formateData = transformNewsLetterResponse(response.data.results);
-      if (!formateData.length) {
-        dispatch(setLoading(false));
+    try {
+      const response = await getNewsletterApi({ limit, page, search });
+      if (response.remote === "success") {
+        const formattedData = transformNewsLetterResponse(
+          response.data.results
+        );
+        if (!formattedData.length) {
+          dispatch(setLoading(false));
+        }
+        setNewsLetterTable(formattedData);
+        const totalCounts = Math.ceil(response.data.count / limit);
+        setTotalCount(totalCounts);
+      } else {
+        dispatch(setErrorToast(response.error));
       }
-      setNewsLetterTable(formateData);
-      const totalCounts = Math.ceil(response.data.count / limit);
-      setTotalCount(totalCounts);
-    } else {
-      console.log(response.error);
+    } catch (error) {
+      dispatch(setErrorToast("Something went wrong"));
     }
-  };
+  }, [debouncedSearchTenderValue, dispatch, limit, pages]);
+
   // *Show NewsLetter Data
 
-  function getPage(_, page) {
+  const getPage = useCallback((_, page) => {
     setPages(page);
-  }
+  }, []);
 
-  // *Delete newsLetter
-  const handleDelete = async () => {
+  // *Delete newsLetter start
+  const handleDelete = useCallback(async () => {
     setLoading(false);
     const response = await deleteNewsLetterApi(deleteNewsLetter);
     if (response.remote === "success") {
@@ -94,19 +104,19 @@ function ManageNewsLetter() {
       dispatch(setSuccessToast("Delete news Letter  SuccessFully"));
     } else {
       dispatch(setErrorToast("Something went wrong"));
-      console.log(response.error);
     }
-  };
-  // *Delete news Letter
+  }, [deleteNewsLetter, dispatch, newsLetterTable]);
+  // *Delete news Letter end
+
   useEffect(() => {
     newsLetterList();
-  }, [debouncedSearchTenderValue, pages, limit]);
+  }, [newsLetterList]);
 
   useEffect(() => {
     if (newsLetterTable.length) {
       dispatch(setLoading(false));
     }
-  }, [newsLetterTable]);
+  }, [dispatch, newsLetterTable]);
   return (
     <>
       <Layout
@@ -130,17 +140,19 @@ function ManageNewsLetter() {
           onChange: (e) => setLimit(e.target.value),
         }}
       />
-      <DialogBox
-        open={!!deleteNewsLetter}
-        handleClose={() => setDeleteNewsLetter("")}
-      >
-        <DeleteCard
-          title="Delete News Letter"
-          content="Are you sure you want to delete News Letter?"
-          handleCancel={() => setDeleteNewsLetter("")}
-          handleDelete={handleDelete}
-        />
-      </DialogBox>
+      {deleteNewsLetter && (
+        <DialogBox
+          open={!!deleteNewsLetter}
+          handleClose={() => setDeleteNewsLetter("")}
+        >
+          <DeleteCard
+            title="Delete News Letter"
+            content="Are you sure you want to delete News Letter?"
+            handleCancel={() => setDeleteNewsLetter("")}
+            handleDelete={handleDelete}
+          />
+        </DialogBox>
+      )}
     </>
   );
 }

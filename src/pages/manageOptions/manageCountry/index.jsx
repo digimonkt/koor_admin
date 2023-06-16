@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import TableContainer from "@mui/material/TableContainer";
 import Paper from "@mui/material/Paper";
 import {
@@ -78,9 +78,13 @@ const ManageCountry = () => {
     }
   }
 
-  function getPage(_, page) {
+  // function getPage(_, page) {
+  //   setPages(page);
+  // }
+
+  const getPage = useCallback((_, page) => {
     setPages(page);
-  }
+  }, []);
 
   const getWorldCountry = async () => {
     const response = await getWorldCountryApi();

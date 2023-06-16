@@ -88,7 +88,7 @@ const Layout = (employerDetail) => {
           }
         />
         <h1>{employerDetail.employerDetail?.name}</h1>
-        <Grid lg={6} xs={12} spacing={2.5}>
+        <Grid xs={12} spacing={2.5}>
           <Card
             sx={{
               "&.MuiCard-root": {
@@ -186,18 +186,9 @@ const Layout = (employerDetail) => {
           </Card>
           <SolidButton
             align="left"
+            className="toggleBtn"
             sx={{
-              background: "#fff",
-              borderRadius: "73px",
-              border: "solid 1px ",
               fontFamily: "Bahnschrift",
-              color: "#274593",
-              fontWeight: 600,
-              marginBottom: "10px",
-              "&:hover": {
-                background: "#f7f7f7",
-                borderColor: "#f7f7f7",
-              },
             }}
             title={verifiedData ? "verified" : "unverify"}
             onClick={handleVerified}
