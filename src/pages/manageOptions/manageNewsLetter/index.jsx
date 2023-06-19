@@ -81,7 +81,7 @@ function ManageNewsLetter() {
         dispatch(setErrorToast(response.error));
       }
     } catch (error) {
-      dispatch(setErrorToast("Something went wrong"));
+      console.log(error);
     }
   }, [debouncedSearchTenderValue, dispatch, limit, pages]);
 

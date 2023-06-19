@@ -15,6 +15,7 @@ export const transformEmployerAPIResponse = (data) => {
     id: data.id,
     no: index + 1,
     name: data.name,
+    credits: data.points,
     email: data.email,
     mobileNumber: data.mobile_number,
     action: data.is_active,

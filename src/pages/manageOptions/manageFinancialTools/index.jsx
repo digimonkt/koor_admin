@@ -184,12 +184,12 @@ const FinancialTools = () => {
               onChange={handleChange}
               aria-label="basic tabs example"
             >
-              <AntTab label="Package management " {...a11yProps(0)} />
-              <AntTab label="Recharge" {...a11yProps(1)} />
+              {/* <AntTab label="Package management " {...a11yProps(0)} /> */}
+              <AntTab label="Recharge" {...a11yProps(0)} />
               {/* <AntTab label="Genenate invoices" {...a11yProps(2)} /> */}
               {/* <AntTab label="Invoices" {...a11yProps(3)} /> */}
             </AntTabs>
-            <TabPanel value={value} index={0}>
+            <TabPanel value={value} index={1}>
               <PackageManagement packageList={packageList} />
               <Stack direction="row" justifyContent="center" sx={{ mt: 3.75 }}>
                 <div>
@@ -209,7 +209,7 @@ const FinancialTools = () => {
                 </div>
               </Stack>
             </TabPanel>
-            <TabPanel value={value} index={1}>
+            <TabPanel value={value} index={0}>
               <Recharge />
             </TabPanel>
             <TabPanel value={value} index={2}>

@@ -6,7 +6,7 @@ import SelectDropDown from "./SelectDropDown";
 import { manageEmployer } from "@api/employers";
 import { SVG } from "@assets/svg";
 import Cbutton from "@components/button/cButton";
-import { verifyUnVerifyApi } from "@api/manageoptions";
+import { getUserDetailsApi, verifyUnVerifyApi } from "@api/manageoptions";
 import { useDispatch } from "react-redux";
 import { setErrorToast, setSuccessToast } from "@redux/slice/toast";
 const StyledFormLabel = styled(FormLabel)(() => ({
@@ -23,6 +23,7 @@ const Recharge = () => {
   const [content, setContent] = useState([]);
   const [contentId, setContentId] = useState("");
   const [creditsAmount, setCreditsAmount] = useState([]);
+  const [userPoints, setUserPoints] = useState(null);
   function handleChange(event) {
     setCreditsAmount(event.target.value);
   }
@@ -48,7 +49,18 @@ const Recharge = () => {
   useEffect(() => {
     getEmployerList();
   }, []);
-
+  useEffect(() => {
+    if (contentId.length) {
+      const getUserCredit = async () => {
+        const response = await getUserDetailsApi(contentId);
+        if (response.remote === "success") {
+          setUserPoints(response.data.profile.points);
+          // console.log(response.data.profile.points);
+        }
+      };
+      getUserCredit();
+    }
+  }, [contentId]);
   return (
     <>
       <div className={`${styles.packageManagement}`}>
@@ -63,7 +75,7 @@ const Recharge = () => {
               <StyledFormLabel>Number of job cretits</StyledFormLabel>
               <input
                 className={`${styles.textType}`}
-                placeholder="250"
+                placeholder="Add Credits"
                 onChange={handleChange}
                 type="number"
               />
@@ -86,6 +98,11 @@ const Recharge = () => {
               </Cbutton>
             </div>
           </Stack>
+          {userPoints && (
+            <span className="text-center">
+              Currently have <b>{userPoints} credits</b> remaining.
+            </span>
+          )}
         </form>
       </div>
     </>
