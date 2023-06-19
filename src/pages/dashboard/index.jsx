@@ -1,21 +1,27 @@
 import React, { Fragment, useEffect, useState } from "react";
 import styles from "./styles.module.css";
 import { Card, CardContent, Grid, Stack } from "@mui/material";
-import { SVG } from "../../../src/assets/svg";
+import { SVG } from "@assets/svg";
 import ColumChart from "./columChart/ColumChart";
 import Donut from "./dount/Donut";
 import { getUserCountApi } from "@api/dashboard";
+import { setErrorToast } from "@redux/slice/toast";
+import { useDispatch } from "react-redux";
 const DashboardComponent = () => {
+  const dispatch = useDispatch;
   const [userList, setUserList] = useState([]);
-  const [totalUsers, setTotalUsers] = useState(0);
-  const [jobSeekersCount, setJobSeekersCount] = useState(0);
-  const [employersCount, setEmployersCount] = useState(0);
-  const [vendorsCount, setVendorsCount] = useState(10);
-  const [seriesData, setSeriesData] = useState([]);
+  const [userData, setUserData] = useState({
+    totalUser: 0,
+    jobSeekersCount: 0,
+    employersCount: 0,
+    vendorsCount: 10,
+    seriesData: [],
+  });
 
   const userCount = async () => {
     const response = await getUserCountApi();
     if (response.remote === "success") {
+      const { employers, vendors } = response.data;
       const NewUserList = [
         {
           icon: <SVG.CreditIcon />,
@@ -34,27 +40,26 @@ const DashboardComponent = () => {
         },
         {
           icon: <SVG.GroupUser />,
-          title: response.data.employers,
+          title: employers,
           subtitle: "jobs posted",
         },
       ];
       setUserList(NewUserList);
-      setTotalUsers(response.data.total_user);
-      setVendorsCount(response.data.vendors);
-      setJobSeekersCount(response.data.job_seekers);
-      setEmployersCount(response.data.employers);
-      setSeriesData([
-        response.data.vendors,
-        response.data.job_seekers,
-        response.data.employers,
-      ]);
+
+      setUserData({
+        totalUsers: response.data.total_user,
+        vendorsCount: vendors,
+        jobSeekersCount: response.data.job_seekers,
+        employersCount: employers,
+        seriesData: [vendors, response.data.job_seekers, employers],
+      });
     } else {
-      console.log(response.error);
+      dispatch(setErrorToast("something went wrong"));
     }
   };
 
-  function getPercentage(userCount, totalUser) {
-    const result = (userCount / totalUser) * 100;
+  function getPercentage(usersCount, totalUser) {
+    const result = (usersCount / totalUser) * 100;
     return result.toFixed(2);
   }
 
@@ -99,33 +104,48 @@ const DashboardComponent = () => {
                   },
                 }}
               >
-                {seriesData.length > 0 && (
+                {userData.seriesData.length > 0 && (
                   <Donut
                     title="Koor users"
-                    total={totalUsers}
+                    total={userData.totalUsers}
                     user="Total users"
-                    series={seriesData}
+                    series={userData.seriesData}
                     colors={["#4267B2", "#4CAF50", "#FFA500"]}
                     content={
                       <>
                         <li>
-                          <b>{jobSeekersCount}</b> – JobSeekers{" "}
+                          <b>{userData.jobSeekersCount}</b> – JobSeekers{" "}
                           <small>
-                            ({getPercentage(jobSeekersCount, totalUsers)}% )
+                            (
+                            {getPercentage(
+                              userData.jobSeekersCount,
+                              userData.totalUsers
+                            )}
+                            % )
                           </small>
                         </li>
                         <li>
-                          <b>{employersCount}</b> – Employers{" "}
+                          <b>{userData.employersCount}</b> – Employers{" "}
                           <small>
                             {" "}
-                            ({getPercentage(employersCount, totalUsers)}% )
+                            (
+                            {getPercentage(
+                              userData.employersCount,
+                              userData.totalUsers
+                            )}
+                            % )
                           </small>
                         </li>
                         <li>
-                          <b>{vendorsCount}</b> – Vendors{" "}
+                          <b>{userData.vendorsCount}</b> – Vendors{" "}
                           <small>
                             {" "}
-                            ({getPercentage(vendorsCount, totalUsers)}% )
+                            (
+                            {getPercentage(
+                              userData.vendorsCount,
+                              userData.totalUsers
+                            )}
+                            % )
                           </small>
                         </li>
                       </>

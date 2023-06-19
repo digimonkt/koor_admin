@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import Layout from "../manageCountry/layout";
 import Accordion from "@components/accordion";
 import { LabeledInput } from "@components/input";
@@ -72,9 +72,12 @@ const ManageCategoryComponent = () => {
     dispatch(getSubCategories({ categoryId: id }));
   };
 
-  function getPage(_, page) {
+  // function getPage(_, page) {
+  //   setPages(page);
+  // }
+  const getPage = useCallback((_, page) => {
     setPages(page);
-  }
+  }, []);
 
   async function handleDelete(id) {
     handleSelectCategories(id);

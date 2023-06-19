@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import DataTable from "@components/dataTable";
 import OptionsFilter from "@components/optionsFilter";
 import { Card, CardContent, Pagination } from "@mui/material";
@@ -44,11 +44,31 @@ function Layout({
   cityValue,
   tender,
 }) {
-  const { loading } = useSelector((state) => state.jobsAndTenders);
-  const { countries } = useSelector((state) => state.choice);
+  const { loading } = useSelector(({ jobsAndTenders }) => jobsAndTenders);
+  const { countries } = useSelector(({ choice }) => choice);
   const [dropDownList, setDropDownList] = useState([]);
   const [cityValueList, setCityValueList] = useState([]);
   const dispatch = useDispatch();
+
+  const memoizedCountryOptions = useMemo(
+    () =>
+      dropDownList.map((country) => ({
+        value: country.id,
+        label: country.title,
+        ...country,
+      })),
+    [dropDownList]
+  );
+  const memoizedCityOptions = useMemo(
+    () =>
+      cityValueList.map((city) => ({
+        value: city.id,
+        label: city.title,
+        ...city,
+      })),
+    [cityValueList]
+  );
+
   useEffect(() => {
     if (!countries.data.length) {
       dispatch(getCountries());
@@ -79,19 +99,11 @@ function Layout({
           searchProps={{ ...(searchProps || {}) }}
           selectPropsCountry={{
             ...(selectPropsCountry || {}),
-            options: dropDownList.map((country) => ({
-              value: country.id,
-              label: country.title,
-              ...country,
-            })),
+            options: memoizedCountryOptions,
           }}
           selectPropsCities={{
             ...(selectPropsCities || {}),
-            options: cityValueList.map((city) => ({
-              value: city.id,
-              label: city.title,
-              ...city,
-            })),
+            options: memoizedCityOptions,
           }}
           country={country}
           city={city}

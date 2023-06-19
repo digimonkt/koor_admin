@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import Layout from "../layout";
 import { SVG } from "@assets/svg";
 import { IconButton, Stack } from "@mui/material";
@@ -127,9 +127,12 @@ function ManageTag() {
     }
   };
 
-  function getPage(_, page) {
+  // function getPage(_, page) {
+  //   setPages(page);
+  // }
+  const getPage = useCallback((_, page) => {
     setPages(page);
-  }
+  }, []);
 
   const handleDelete = async () => {
     setLoading(false);
