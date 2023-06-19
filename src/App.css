@@ -315,3 +315,8 @@ height: 50px;
      background: #f7f7f7 !important;
      border-color: #f7f7f7 !important;
 }
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}

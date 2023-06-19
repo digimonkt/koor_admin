@@ -17,6 +17,8 @@ import ManageTestimonials from "./manageTestimonial";
 import PostTestimonials from "./manageTestimonial/postManageTestimonials";
 import ManageNewsLetter from "./manageNewsLetter";
 import Report from "./manageReports";
+import ManageFAQ from "./manageFAQ";
+export const manageFAQ = ManageFAQ;
 export const manageReports = Report;
 export const manageNewsLetter = ManageNewsLetter;
 export const postTestimonials = PostTestimonials;

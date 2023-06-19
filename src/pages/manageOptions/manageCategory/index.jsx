@@ -72,9 +72,6 @@ const ManageCategoryComponent = () => {
     dispatch(getSubCategories({ categoryId: id }));
   };
 
-  // function getPage(_, page) {
-  //   setPages(page);
-  // }
   const getPage = useCallback((_, page) => {
     setPages(page);
   }, []);

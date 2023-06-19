@@ -47,6 +47,12 @@ function ManageEmployerComponent() {
         width: 300,
       },
       {
+        field: "credits",
+        headerName: "Credits",
+        sortable: true,
+        width: 300,
+      },
+      {
         field: "mobileNumber",
         headerName: "Mobile number",
         sortable: true,
@@ -144,6 +150,7 @@ function ManageEmployerComponent() {
       country: country.title,
     });
     if (response.remote === "success") {
+      console.log(response.data);
       const formateData = transformEmployerAPIResponse(response.data.results);
       if (!formateData.length) {
         dispatch(setLoading(false));

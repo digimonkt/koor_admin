@@ -25,6 +25,7 @@ import {
   manageNewsLetter,
   manageReports,
   financialTools,
+  manageFAQ,
 } from "@pages/manageOptions";
 import ManageCountry from "@pages/manageOptions/manageCountry";
 import ManageTenderCategory from "@pages/manageOptions/manageTenderCategory";
@@ -169,6 +170,11 @@ export const AUTHENTICATED_ROUTE = [
     id: "manage-reports",
     path: "/reports",
     element: manageReports,
+  },
+  {
+    id: "manage-faq",
+    path: "/manage-faq",
+    element: manageFAQ,
   },
 ];
 
