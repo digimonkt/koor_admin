@@ -89,6 +89,7 @@ function Layout({
             rows={rows || []}
             columns={columns || []}
             limitProps={limitProps}
+            page={page}
             loader={loading}
           />
           <div className="pagination-custom">

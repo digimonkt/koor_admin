@@ -184,6 +184,7 @@ function ManageLanguage() {
         rows={languageTable}
         columns={columns}
         totalCount={totalCount}
+        page={pages}
         handlePageChange={getPage}
         searchProps={{
           placeholder: "Search Language ",

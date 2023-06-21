@@ -76,6 +76,14 @@ export const transformSkillResponse = (data) => {
     name: data.title,
   }));
 };
+export const transformFAQCategoryResponse = (data) => {
+  return data.map((data, index) => ({
+    id: data.id,
+    no: index + 1,
+    name: data.title,
+    role: data.role,
+  }));
+};
 
 export const transformResourcesResponse = (data) => {
   return data.map((data, index) => ({
@@ -99,7 +107,7 @@ export const transformNewsLetterResponse = (data) => {
     id: data.id,
     no: index + 1,
     email: data.email,
-    date: data.created,
+    date: data.created.slice(0, 10),
   }));
 };
 

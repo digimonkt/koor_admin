@@ -150,7 +150,6 @@ function ManageEmployerComponent() {
       country: country.title,
     });
     if (response.remote === "success") {
-      console.log(response.data);
       const formateData = transformEmployerAPIResponse(response.data.results);
       if (!formateData.length) {
         dispatch(setLoading(false));
@@ -176,20 +175,35 @@ function ManageEmployerComponent() {
   const activeDeActiveUser = useCallback(
     async (item) => {
       const id = item.row.id;
-      const response = await activeInactiveUser(id);
-      if (response.remote === "success") {
-        const update = [...employerTable].map((i) => {
-          if (i.id === item.row.id) {
-            i.action = !i.action;
-          }
-          return i;
-        });
-        setEmployerTable(update);
-      } else {
-        dispatch(setErrorToast("something went wrong"));
-      }
+      const update = employerTable.map((i) => {
+        if (i.action === id) {
+          return { ...i };
+        }
+        return i;
+      });
+      setEmployerTable(update);
+      await activeInactiveUser(id);
+      employerList();
+
+      // const update = employerTable.map((i) => (
+      //   if (i.id === id) {
+      //     return {...i}
+      //   }
+      // ));
+      // const response = await activeInactiveUser(id);
+      // if (response.remote === "success") {
+      //   const update = [...employerTable].map((i) => {
+      //     if (i.id === item.row.id) {
+      //       i.action = !i.action;
+      //     }
+      //     return i;
+      //   });
+      //   setEmployerTable(update);
+      // } else {
+      //   dispatch(setErrorToast("something went wrong"));
+      // }
     },
-    [employerTable, dispatch]
+    [employerTable]
   );
 
   const handleDelete = useCallback(async () => {

@@ -31,9 +31,12 @@ const ManageTestimonials = () => {
   const [limit, setLimit] = useState(2);
   const [loading, setLoading] = useState(false);
   const handleNewJob = () => {
-    navigate("/post-testimonials/newPost");
+    navigate("/post-testimonials");
   };
 
+  const handleUpdateTestimonial = (id) => {
+    navigate(`/post-testimonials/${id}`);
+  };
   const StyledButton = styled(IconButton)(() => ({
     background: "#D5E3F7",
     width: "30px",
@@ -188,7 +191,6 @@ const ManageTestimonials = () => {
                               src={`${process.env.REACT_APP_BACKEND_URL}${item.imageUrl}`}
                               alt=""
                             />
-                            {/* {item.playIcon} */}
                           </div>
                         </Grid>
                         <Grid item lg={6} xs={12}>
@@ -223,7 +225,7 @@ const ManageTestimonials = () => {
                                 <SVG.DeleteIcon />
                               </StyledButton>
                               <StyledButton
-                              // onClick={() => handleUpdateResource(item.id)}
+                                onClick={() => handleUpdateTestimonial(item.id)}
                               >
                                 <SVG.EditIcon />
                               </StyledButton>

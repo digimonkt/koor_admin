@@ -131,7 +131,11 @@ function ManageJobsComponent() {
       country: country.title,
     });
     if (response.remote === "success") {
-      const formateData = transformJobAPIResponse(response.data.results);
+      const startIndex = (page - 1) * 10;
+      const formateData = transformJobAPIResponse(
+        response.data.results,
+        startIndex
+      );
       if (!formateData.length) {
         dispatch(setLoading(false));
       }
@@ -181,12 +185,8 @@ function ManageJobsComponent() {
         return job;
       });
       setJobTable(updatedJobTable);
-      const response = await activeInactiveJob(id);
-      if (response.remote !== "success") {
-        dispatch(setErrorToast(response.data.message));
-      } else {
-        dispatch(setSuccessToast(response.data.message));
-      }
+      await activeInactiveJob(id);
+      manageJobList();
     },
     [jobTable, dispatch]
   );
@@ -217,7 +217,7 @@ function ManageJobsComponent() {
 
   useEffect(() => {
     manageJobList();
-  }, []);
+  }, [manageJobList]);
 
   return (
     <>

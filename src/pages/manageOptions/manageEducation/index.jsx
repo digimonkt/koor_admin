@@ -184,6 +184,7 @@ function manageEducation() {
         columns={columns}
         totalCount={totalCount}
         handlePageChange={getPage}
+        page={pages}
         searchProps={{
           placeholder: "Search  Education",
           onChange: (e) => setSearchTerm(e.target.value),

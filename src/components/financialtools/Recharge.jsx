@@ -2,13 +2,13 @@ import { FormLabel, Grid, Stack } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import styles from "./styles.module.css";
 import { styled } from "@mui/material/styles";
-import SelectDropDown from "./SelectDropDown";
 import { manageEmployer } from "@api/employers";
 import { SVG } from "@assets/svg";
 import Cbutton from "@components/button/cButton";
 import { getUserDetailsApi, verifyUnVerifyApi } from "@api/manageoptions";
 import { useDispatch } from "react-redux";
 import { setErrorToast, setSuccessToast } from "@redux/slice/toast";
+import SelectWithSearch from "@components/input/selectWithsearch";
 const StyledFormLabel = styled(FormLabel)(() => ({
   fontFamily: "Poppins",
   color: "#121212",
@@ -55,12 +55,16 @@ const Recharge = () => {
         const response = await getUserDetailsApi(contentId);
         if (response.remote === "success") {
           setUserPoints(response.data.profile.points);
-          // console.log(response.data.profile.points);
         }
       };
       getUserCredit();
     }
   }, [contentId]);
+  const options = content.map((item) => ({
+    value: item.id,
+    label: item.name || "",
+  }));
+
   return (
     <>
       <div className={`${styles.packageManagement}`}>
@@ -69,7 +73,18 @@ const Recharge = () => {
           <Grid container spacing={2.5}>
             <Grid item lg={6} xs={12}>
               <StyledFormLabel>Select employer (by name or ID)</StyledFormLabel>
-              <SelectDropDown content={content} setContentId={setContentId} />
+              <SelectWithSearch
+                options={options}
+                title={"select the options"}
+                onChange={(_, value) => {
+                  if (value) {
+                    setContentId(value.value);
+                  } else {
+                    setContentId("");
+                  }
+                }}
+                {...options}
+              />
             </Grid>
             <Grid item lg={6} xs={12}>
               <StyledFormLabel>Number of job cretits</StyledFormLabel>

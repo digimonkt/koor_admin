@@ -78,10 +78,6 @@ const ManageCountry = () => {
     }
   }
 
-  // function getPage(_, page) {
-  //   setPages(page);
-  // }
-
   const getPage = useCallback((_, page) => {
     setPages(page);
   }, []);
@@ -112,7 +108,6 @@ const ManageCountry = () => {
       dispatch(setSuccessToast("Delete Country SuccessFully"));
     } else {
       dispatch(setErrorToast("Something went wrong"));
-      console.log(response.error);
     }
   }
   async function addCities() {
