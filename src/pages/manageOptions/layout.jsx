@@ -31,10 +31,10 @@ function Layout({
   totalCount,
   handlePageChange,
   page,
+  csvProps,
   limitProps,
   inputProps,
   optionsProps,
-  selectProps,
   country,
   city,
   dropDownValue,
@@ -42,14 +42,16 @@ function Layout({
   selectPropsCities,
   SubCategory,
   cityValue,
+  inputPropsRole,
   tender,
+  faq,
+  news,
 }) {
   const { loading } = useSelector(({ jobsAndTenders }) => jobsAndTenders);
   const { countries } = useSelector(({ choice }) => choice);
   const [dropDownList, setDropDownList] = useState([]);
   const [cityValueList, setCityValueList] = useState([]);
   const dispatch = useDispatch();
-
   const memoizedCountryOptions = useMemo(
     () =>
       dropDownList.map((country) => ({
@@ -94,8 +96,12 @@ function Layout({
         sx={{ marginBottom: 2.5 }}
       >
         <OptionsFilter
+          news={news}
+          faq={faq}
+          csvProps={{ ...(csvProps || {}) }}
           optionsProps={{ ...(optionsProps || {}) }}
           inputProps={{ ...(inputProps || {}) }}
+          inputPropsRole={{ ...(inputPropsRole || {}) }}
           searchProps={{ ...(searchProps || {}) }}
           selectPropsCountry={{
             ...(selectPropsCountry || {}),
@@ -132,6 +138,7 @@ function Layout({
             limitProps={limitProps}
             getRowId={(rows) => rows.id || Math.random()}
             loader={loading}
+            page={page}
           />
         </CardContent>
       </Card>

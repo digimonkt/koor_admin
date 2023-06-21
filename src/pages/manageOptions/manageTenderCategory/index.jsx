@@ -187,6 +187,7 @@ function ManageTender() {
         columns={columns}
         totalCount={totalCount}
         handlePageChange={getPage}
+        page={pages}
         searchProps={{
           placeholder: "Search Tender Category",
           onChange: (e) => setSearchTerm(e.target.value),

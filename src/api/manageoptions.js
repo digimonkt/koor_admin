@@ -436,9 +436,21 @@ export const deleteCompanyLogoApi = async (logoId) => {
   return response;
 };
 
-export const getNewsletterApi = async ({ limit, page, search, country }) => {
+export const getNewsletterApi = async ({
+  limit,
+  page,
+  search,
+  country,
+  action,
+}) => {
   const response = await api.request({
-    url: urlcat("/v1/admin/newsletter-user", { limit, page, search, country }),
+    url: urlcat("/v1/admin/newsletter-user", {
+      limit,
+      page,
+      search,
+      country,
+      action,
+    }),
     method: "GET",
   });
   return response;

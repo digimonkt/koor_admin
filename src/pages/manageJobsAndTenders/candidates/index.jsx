@@ -180,11 +180,12 @@ function ManageCandidatesComponent() {
           return i;
         });
         setCandidateTable(update);
+        candidateList();
       } else {
-        dispatch(setErrorToast("something went wrong"));
+        // dispatch(setErrorToast("something went wrong"));
       }
     },
-    [dispatch, candidateTable]
+    [candidateTable]
   );
 
   const handleDelete = useCallback(async () => {

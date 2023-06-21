@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { SVG } from "@assets/svg";
 import { OutlinedButton } from "@components/button";
 import styles from "@pages/manageOptions/manageSettings/styles.module.css";
@@ -6,12 +6,20 @@ import { Avatar, Card, CardContent, IconButton, Stack } from "@mui/material";
 import ReactQuill from "react-quill";
 import ImageCropper from "@components/imageCropper";
 import { LabeledInput } from "@components/input";
-import { Link, useNavigate } from "react-router-dom";
-import { createTestimonialApi } from "@api/manageTestimonial";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import {
+  createTestimonialApi,
+  editTestimonialIdApi,
+  // editTestimonialIdApi,
+  getSingleTestimonialListApi,
+} from "@api/manageTestimonial";
 import { useDispatch } from "react-redux";
 import { setErrorToast, setSuccessToast } from "@redux/slice/toast";
 
 const PostTestimonials = () => {
+  const params = useParams();
+  const { id } = params;
+  const testimonialId = id;
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [files, setFiles] = useState([]);
@@ -65,6 +73,18 @@ const PostTestimonials = () => {
     setParagraph(e);
   };
 
+  const getFetchData = async () => {
+    const response = await getSingleTestimonialListApi(testimonialId);
+    if (response.remote === "success") {
+      setPostTitle(response.data.title);
+      setClientName(response.data.client_name);
+      setCompanyName(response.data.client_company);
+      setClientPosition(response.data.client_position);
+      setNewImage(response.data.image);
+      setParagraph(response.data.description);
+    }
+  };
+
   const handleAddTestimonial = async () => {
     const newFormData = new FormData();
     newFormData.set("title", postTitle);
@@ -94,6 +114,52 @@ const PostTestimonials = () => {
     }
   };
 
+  const handleUpdateTestimonial = async (testimonialId) => {
+    const payload = {
+      title: postTitle,
+      client_name: clientName,
+      client_company: companyName,
+      client_position: clientPosition,
+      description: paragraph,
+      testimonial_image: newImage,
+    };
+    const newFormData = new FormData();
+    if (payload.testimonial_image.id) {
+      delete payload.testimonial_image;
+    } else {
+      newFormData.set("testimonial_image", payload.testimonial_image);
+    }
+    newFormData.set("title", postTitle);
+    newFormData.set("client_name", clientName);
+    newFormData.set("client_company", companyName);
+    newFormData.set("client_position", clientPosition);
+    newFormData.set("description", paragraph);
+    if (
+      postTitle &&
+      clientName &&
+      companyName &&
+      clientPosition &&
+      newImage &&
+      paragraph
+    ) {
+      const response = await editTestimonialIdApi(testimonialId, newFormData);
+      if (response.remote === "success") {
+        dispatch(setSuccessToast("Add Testimonial SuccessFully"));
+        navigate("/manage-testimonials");
+      } else {
+        dispatch(setErrorToast("Something went wrong"));
+        console.log(response.error);
+      }
+    } else {
+      dispatch(setErrorToast("All fields are required"));
+    }
+  };
+
+  useEffect(() => {
+    if (testimonialId) {
+      getFetchData();
+    }
+  }, [testimonialId]);
   return (
     <Card
       sx={{
@@ -207,23 +273,43 @@ const PostTestimonials = () => {
           />
         </div>
       </CardContent>
-      <Stack direction={"row"} justifyContent={"center"}>
-        <OutlinedButton
-          onClick={handleAddTestimonial}
-          title={
-            <Stack direction={"row"} alignItems={"center"} spacing={1}>
-              <SVG.AddCircleIcon />
-              <span> Add Testimonials</span>
-            </Stack>
-          }
-          sx={{
-            color: "#274593",
-            borderColor: "#274593",
-            display: "flex",
-            justifyContent: "center",
-          }}
-        />
-      </Stack>
+      {testimonialId ? (
+        <Stack direction={"row"} justifyContent={"center"}>
+          <OutlinedButton
+            onClick={() => handleUpdateTestimonial(testimonialId)}
+            title={
+              <Stack direction={"row"} alignItems={"center"} spacing={1}>
+                <SVG.AddCircleIcon />
+                <span> Update Testimonials</span>
+              </Stack>
+            }
+            sx={{
+              color: "#274593",
+              borderColor: "#274593",
+              display: "flex",
+              justifyContent: "center",
+            }}
+          />
+        </Stack>
+      ) : (
+        <Stack direction={"row"} justifyContent={"center"}>
+          <OutlinedButton
+            onClick={handleAddTestimonial}
+            title={
+              <Stack direction={"row"} alignItems={"center"} spacing={1}>
+                <SVG.AddCircleIcon />
+                <span> Add Testimonials</span>
+              </Stack>
+            }
+            sx={{
+              color: "#274593",
+              borderColor: "#274593",
+              display: "flex",
+              justifyContent: "center",
+            }}
+          />
+        </Stack>
+      )}
 
       {files.length ? (
         <ImageCropper

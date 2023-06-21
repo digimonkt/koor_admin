@@ -183,6 +183,7 @@ function ManageOpportunity() {
         rows={skillsTable}
         columns={columns}
         totalCount={totalCount}
+        page={pages}
         handlePageChange={getPage}
         searchProps={{
           placeholder: "Search Opportunity",

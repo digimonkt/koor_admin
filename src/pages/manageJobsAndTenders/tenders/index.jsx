@@ -103,7 +103,6 @@ function ManageTendersComponent() {
     ],
     []
   );
-
   const tenderList = useCallback(async () => {
     dispatch(setLoading(true));
     const page = pages;
@@ -141,6 +140,7 @@ function ManageTendersComponent() {
         tender
         rows={tenderTable}
         columns={columns}
+        page={pages}
         totalCount={totalCount}
         handlePageChange={getPage}
         searchProps={{

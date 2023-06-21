@@ -3,29 +3,33 @@ import Layout from "../layout";
 import { SVG } from "@assets/svg";
 import { IconButton, Stack } from "@mui/material";
 import { useDispatch } from "react-redux";
-import {
-  createTenderCategoryApi,
-  editTenderCategoryApi,
-  manageTenderCategoryApi,
-  tenderCategoryDeleteApi,
-} from "@api/manageoptions";
 import { setLoading } from "@redux/slice/jobsAndTenders";
-import { transformSkillResponse } from "@api/transform/choices";
+import { transformFAQCategoryResponse } from "@api/transform/choices";
 import DialogBox from "@components/dialogBox";
 import { setErrorToast, setSuccessToast } from "@redux/slice/toast";
 import DeleteCard from "@components/card/deleteCard";
 import EditCard from "@components/card/editCard";
 import { useDebounce } from "usehooks-ts";
+import { OutlinedButton } from "@components/button";
+import { useNavigate } from "react-router-dom";
+import {
+  addFAQCategoryApi,
+  deleteFaqCategoryApi,
+  editFaqCategoryApi,
+  getFAQCategoryApi,
+} from "@api/manageFAQ";
 function ManageFQL() {
   const dispatch = useDispatch();
-  const [tenderCategoryTable, setTenderCategoryTable] = useState([]);
+  const navigate = useNavigate();
+  const [faqCategoryTable, setFAQCategoryTable] = useState([]);
   const [pages, setPages] = useState(1);
   const [limit, setLimit] = useState(10);
-  const [addTenderCategory, setAddTenderCategory] = useState("");
-  const [editTenderCategory, setEditTenderCategory] = useState("");
-  const [editTenderValue, setEditTenderValue] = useState("");
+  const [addFAQCategory, setAddFAQCategory] = useState("");
+  const [addFAQRole, setAddFAQRole] = useState("");
+  const [editFAQCategory, setEditFAQCategory] = useState("");
+  const [editFAQValue, setEditFAQValue] = useState("");
   const [totalCount, setTotalCount] = useState(0);
-  const [deleteTenderCategory, setDeleteTenderCategory] = useState("");
+  const [deleteFAQCategory, setDeleteFAQCategory] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
   const debouncedSearchTenderCategoryValue = useDebounce(searchTerm, 500);
 
@@ -41,14 +45,14 @@ function ManageFQL() {
       id: "3",
       field: "name",
       headerName: "Name",
-      width: 700,
+      width: 300,
       sortable: true,
     },
     {
       id: "4",
-      field: "name",
+      field: "role",
       headerName: "Role",
-      width: 700,
+      width: 300,
       sortable: true,
     },
     {
@@ -59,7 +63,7 @@ function ManageFQL() {
         return (
           <Stack direction="row" spacing={1} alignItems="center">
             <IconButton
-              onClick={() => setDeleteTenderCategory(item.row.id)}
+              onClick={() => showFAQ(item.row.id)}
               sx={{
                 "&.MuiIconButton-root": {
                   background: "#D5E3F7",
@@ -69,7 +73,7 @@ function ManageFQL() {
                 color: "#274593",
               }}
             >
-              <SVG.DeleteIcon />
+              <SVG.EyeIcon />
             </IconButton>
 
             <IconButton
@@ -85,23 +89,54 @@ function ManageFQL() {
             >
               <SVG.EditIcon />
             </IconButton>
+
+            <IconButton
+              onClick={() => setDeleteFAQCategory(item.row.id)}
+              sx={{
+                "&.MuiIconButton-root": {
+                  background: "#D5E3F7",
+                },
+                width: 30,
+                height: 30,
+                color: "#274593",
+              }}
+            >
+              <SVG.DeleteIcon />
+            </IconButton>
+            <OutlinedButton
+              title={
+                <Stack
+                  direction={"row"}
+                  spacing={1}
+                  alignItems={"center"}
+                  onClick={AddFAQ}
+                >
+                  <span>create FAQ </span>
+                </Stack>
+              }
+              sx={{
+                "&.MuiButton-outlined": {
+                  whiteSpace: "nowrap",
+                },
+              }}
+            />
           </Stack>
         );
       },
     },
   ];
 
-  const tenderCategoryList = async () => {
+  const faqCategoryList = async () => {
     dispatch(setLoading(true));
     const page = pages;
     const search = debouncedSearchTenderCategoryValue || "";
-    const response = await manageTenderCategoryApi({ limit, page, search });
+    const response = await getFAQCategoryApi({ limit, page, search });
     if (response.remote === "success") {
-      const formateData = transformSkillResponse(response.data.results);
+      const formateData = transformFAQCategoryResponse(response.data.results);
       if (!formateData.length) {
         dispatch(setLoading(false));
       }
-      setTenderCategoryTable(formateData);
+      setFAQCategoryTable(formateData);
       const totalCounts = Math.ceil(response.data.count / limit);
       setTotalCount(totalCounts);
     } else {
@@ -109,32 +144,29 @@ function ManageFQL() {
     }
   };
 
-  const addTenderCategoryFunction = async () => {
+  const addFaqCategoryFunction = async () => {
     const payload = {
-      title: addTenderCategory,
+      title: addFAQCategory,
+      role: addFAQRole,
     };
-    const response = await createTenderCategoryApi(payload);
+    const response = await addFAQCategoryApi(payload);
     if (response.remote === "success") {
-      const temp = [...tenderCategoryTable];
+      const temp = [...faqCategoryTable];
       temp.push({
         id: response.data.id || Math.random(),
         no: temp.length + 1,
         name: response.data.title,
+        role: response.data.role,
       });
 
-      setTenderCategoryTable([...temp]);
-      setAddTenderCategory("");
-
-      dispatch(setSuccessToast("Add Tender Category SuccessFully"));
+      setFAQCategoryTable([...temp]);
+      setAddFAQCategory("");
+      setAddFAQRole("");
+      dispatch(setSuccessToast("Add FAQ Category SuccessFully"));
     } else {
-      console.log(response.error);
       dispatch(setErrorToast("Something went wrong"));
     }
   };
-
-  // function getPage(_, page) {
-  //   setPages(page);
-  // }
 
   const getPage = useCallback((_, page) => {
     setPages(page);
@@ -142,34 +174,41 @@ function ManageFQL() {
 
   const handleDelete = async () => {
     setLoading(false);
-    const response = await tenderCategoryDeleteApi(deleteTenderCategory);
+    const response = await deleteFaqCategoryApi(deleteFAQCategory);
     if (response.remote === "success") {
-      const newSkillTable = tenderCategoryTable.filter(
-        (emp) => emp.id !== deleteTenderCategory
+      const newSkillTable = faqCategoryTable.filter(
+        (emp) => emp.id !== deleteFAQCategory
       );
-      setTenderCategoryTable(newSkillTable);
-      setDeleteTenderCategory("");
-      dispatch(setSuccessToast("Delete Tender Category SuccessFully"));
+      setFAQCategoryTable(newSkillTable);
+      setDeleteFAQCategory("");
+      dispatch(setSuccessToast("Delete FAQ Category SuccessFully"));
     } else {
       dispatch(setErrorToast("Something went wrong"));
-      console.log(response.error);
     }
   };
 
   const handleEdit = async (item) => {
-    setEditTenderCategory(item.id);
-    setEditTenderValue(item.name);
+    setEditFAQCategory(item.id);
+    setEditFAQValue(item);
+  };
+
+  const showFAQ = async (id) => {
+    navigate(`/manage-faq/${id}`);
+  };
+
+  const AddFAQ = async (id) => {
+    navigate("/add-FAQ");
   };
 
   const handleUpdate = async () => {
     const payload = {
-      title: editTenderValue,
+      title: editFAQValue,
     };
 
-    const response = await editTenderCategoryApi(editTenderCategory, payload);
+    const response = await editFaqCategoryApi(editFAQCategory, payload);
     if (response.remote === "success") {
-      tenderCategoryList();
-      setEditTenderCategory("");
+      faqCategoryList();
+      setEditFAQCategory("");
       dispatch(setSuccessToast(response.data.message));
     } else {
       dispatch(setErrorToast(response.error.errors.title));
@@ -177,21 +216,23 @@ function ManageFQL() {
   };
 
   useEffect(() => {
-    tenderCategoryList();
+    faqCategoryList();
   }, [debouncedSearchTenderCategoryValue, pages, limit]);
 
   useEffect(() => {
-    if (tenderCategoryTable.length) {
+    if (faqCategoryTable.length) {
       dispatch(setLoading(false));
     }
-  }, [tenderCategoryTable]);
-
+  }, [faqCategoryTable]);
+  console.log({ addFAQRole });
   return (
     <>
       <Layout
-        rows={tenderCategoryTable}
+        faq
+        rows={faqCategoryTable}
         columns={columns}
         totalCount={totalCount}
+        page={pages}
         handlePageChange={getPage}
         searchProps={{
           placeholder: "Search manage FAQ",
@@ -200,9 +241,13 @@ function ManageFQL() {
         }}
         inputProps={{
           type: "text",
-          placeholder: "Add manage FAQ",
-          onChange: (e) => setAddTenderCategory(e.target.value),
-          value: addTenderCategory,
+          placeholder: "Add FAQ Category",
+          onChange: (e) => setAddFAQCategory(e.target.value),
+          value: addFAQCategory,
+        }}
+        inputPropsRole={{
+          content: { faqCategoryTable },
+          setContentId: { setAddFAQRole },
         }}
         limitProps={{
           value: limit,
@@ -215,34 +260,34 @@ function ManageFQL() {
         }}
         optionsProps={{
           title: (
-            <div onClick={addTenderCategoryFunction}>
+            <div onClick={addFaqCategoryFunction}>
               <span className="d-inline-flex align-items-center me-2"></span>{" "}
-              Add Manage FAQ
+              Add FAQ Category
             </div>
           ),
         }}
       />
       <DialogBox
-        open={!!deleteTenderCategory}
-        handleClose={() => setDeleteTenderCategory("")}
+        open={!!deleteFAQCategory}
+        handleClose={() => setDeleteFAQCategory("")}
       >
         <DeleteCard
-          title="Delete Tender Category"
-          content="Are you sure you want to delete Tender Category?"
-          handleCancel={() => setDeleteTenderCategory("")}
+          title="Delete FAQ Category"
+          content="Are you sure you want to delete FAQ Category?"
+          handleCancel={() => setDeleteFAQCategory("")}
           handleDelete={handleDelete}
         />
       </DialogBox>
 
       <DialogBox
-        open={!!editTenderCategory}
-        handleClose={() => setEditTenderCategory("")}
+        open={!!editFAQCategory}
+        handleClose={() => setEditFAQCategory("")}
       >
         <EditCard
           title="Edit Skill"
-          handleCancel={() => setEditTenderCategory("")}
-          setEditValue={setEditTenderValue}
-          editValue={editTenderValue}
+          handleCancel={() => setEditFAQCategory("")}
+          setEditValue={setEditFAQValue}
+          editValue={editFAQValue}
           handleUpdate={handleUpdate}
         />
       </DialogBox>

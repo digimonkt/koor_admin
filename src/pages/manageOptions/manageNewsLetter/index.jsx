@@ -68,6 +68,7 @@ function ManageNewsLetter() {
     try {
       const response = await getNewsletterApi({ limit, page, search });
       if (response.remote === "success") {
+        console.log(response.data.results);
         const formattedData = transformNewsLetterResponse(
           response.data.results
         );
@@ -108,6 +109,19 @@ function ManageNewsLetter() {
   }, [deleteNewsLetter, dispatch, newsLetterTable]);
   // *Delete news Letter end
 
+  const downloadNewsCSV = useCallback(async () => {
+    const action = "download";
+    const response = await getNewsletterApi({ action });
+    if (response.remote === "success") {
+      window.open(
+        process.env.REACT_APP_BACKEND_URL + response.data.url,
+        "_blank"
+      );
+    } else {
+      dispatch(setErrorToast("Something went wrong"));
+    }
+  }, [dispatch]);
+
   useEffect(() => {
     newsLetterList();
   }, [newsLetterList]);
@@ -120,15 +134,27 @@ function ManageNewsLetter() {
   return (
     <>
       <Layout
+        news
         tender
         rows={newsLetterTable}
         columns={columns}
+        page={pages}
         totalCount={totalCount}
         handlePageChange={getPage}
         searchProps={{
           placeholder: "Search News Letter",
           onChange: (e) => setSearchTerm(e.target.value),
           value: searchTerm,
+        }}
+        csvProps={{
+          title: (
+            <div onClick={() => downloadNewsCSV()}>
+              <span className="d-inline-flex align-items-center me-2">
+                <SVG.ExportIcon />
+              </span>
+              Export CSV
+            </div>
+          ),
         }}
         limitProps={{
           value: limit,

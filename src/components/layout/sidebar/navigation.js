@@ -145,7 +145,7 @@ export const MENU_ITEM = [
   {
     id: "18a",
     icon: <SVG.Settings />,
-    page: "Manage-FAQ",
+    page: "Manage FAQ",
     url: "/manage-faq",
   },
   {

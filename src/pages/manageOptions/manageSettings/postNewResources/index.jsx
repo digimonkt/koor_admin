@@ -141,7 +141,6 @@ const NewPostResource = () => {
         navigate("/settings");
       } else {
         dispatch(setErrorToast("Something went wrong"));
-        console.log(response.error);
       }
     } else {
       dispatch(setErrorToast("All fields are required"));
@@ -173,7 +172,6 @@ const NewPostResource = () => {
         navigate("/settings");
       } else {
         dispatch(setErrorToast("Something went wrong"));
-        console.log(response.error);
       }
     } else {
       dispatch(setErrorToast("All fields are required"));
