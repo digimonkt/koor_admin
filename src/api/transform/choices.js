@@ -129,7 +129,7 @@ export const transformTestimonialResponse = (data) => {
   }));
 };
 
-function stripHTMLTags(html) {
+export function stripHTMLTags(html) {
   const tempElement = document.createElement("div");
   tempElement.innerHTML = html;
   return tempElement.textContent || tempElement.innerText || "";
