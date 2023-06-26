@@ -4,7 +4,7 @@ import { setLoading } from "@redux/slice/jobsAndTenders";
 import { useDispatch } from "react-redux";
 import { SVG } from "@assets/svg";
 import { useDebounce } from "usehooks-ts";
-import { transformFAQResponse } from "@api/transform/choices";
+import { stripHTMLTags, transformFAQResponse } from "@api/transform/choices";
 import DialogBox from "@components/dialogBox";
 import { DeleteCard, FAQCard } from "@components/card";
 import { IconButton, Stack } from "@mui/material";
@@ -24,6 +24,8 @@ function ShowFAQ() {
   const [updateFAQ, setUpdateFAQ] = useState("");
   const [updateFAQQuestion, setUpdateFAQQuestion] = useState("");
   const [updateFAQAnswer, setUpdateFAQAnswer] = useState("");
+  const [addFAQQuestion, setAddFAQQuestion] = useState("");
+  const [addFAQAnswer, setAddFAQAnswer] = useState("");
   const [addFAQ, setAddFAQ] = useState("");
   const debouncedSearchTenderValue = useDebounce(searchTerm, 500);
   const columns = useMemo(
@@ -142,13 +144,13 @@ function ShowFAQ() {
   };
   //* Update FAQ end
   //* Add FAQ Start
-  const downloadNewsCSV = useCallback(async () => {
+  const addNewFAQ = useCallback(async () => {
     setAddFAQ(faqCategoryId);
   }, [dispatch]);
   const addFAQFunction = async () => {
     const payload = {
-      question: updateFAQQuestion,
-      answer: updateFAQAnswer,
+      question: addFAQQuestion,
+      answer: addFAQAnswer,
       category: addFAQ,
       role,
     };
@@ -159,10 +161,12 @@ function ShowFAQ() {
         id: response.data.data.id || Math.random(),
         no: temp.length + 1,
         Question: response.data.data.question,
-        Answer: response.data.data.answer,
+        Answer: stripHTMLTags(response.data.data.answer).slice(0, 15) + "...",
       });
       setFAQListTable([...temp]);
       setAddFAQ("");
+      setAddFAQAnswer("");
+      setAddFAQQuestion("");
     }
   };
   //* Add FAQ End
@@ -192,7 +196,7 @@ function ShowFAQ() {
         }}
         csvProps={{
           title: (
-            <div onClick={() => downloadNewsCSV()}>
+            <div onClick={() => addNewFAQ()}>
               <span className="d-inline-flex align-items-center me-2">
                 <SVG.ExportIcon />
               </span>
@@ -236,10 +240,10 @@ function ShowFAQ() {
         <FAQCard
           title="Add FAQ"
           handleCancel={() => setAddFAQ("")}
-          setEditValue={setUpdateFAQQuestion}
-          editValue={updateFAQQuestion}
-          updateFAQAnswer={updateFAQAnswer}
-          setUpdateFAQAnswer={setUpdateFAQAnswer}
+          setEditValue={setAddFAQQuestion}
+          editValue={addFAQQuestion}
+          updateFAQAnswer={addFAQAnswer}
+          setUpdateFAQAnswer={setAddFAQAnswer}
           handleUpdate={addFAQFunction}
         />
       </DialogBox>
