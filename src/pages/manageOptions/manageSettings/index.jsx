@@ -1,3 +1,4 @@
+import React, { useEffect, useState } from "react";
 import {
   Card,
   CardContent,
@@ -6,7 +7,6 @@ import {
   IconButton,
   Stack,
 } from "@mui/material";
-import React, { useEffect, useState } from "react";
 import { SVG } from "@assets/svg";
 import { OutlinedButton } from "@components/button";
 import styles from "./styles.module.css";
@@ -19,6 +19,7 @@ import { getResourcesApi, resourcesDeleteApi } from "@api/manageoptions";
 import { transformResourcesResponse } from "@api/transform/choices";
 import DialogBox from "@components/dialogBox";
 import { DeleteCard } from "@components/card";
+import AddJobPoint from "./addJobPoint";
 const StyledButton = styled(IconButton)(() => ({
   background: "#D5E3F7",
   width: "30px",
@@ -276,6 +277,10 @@ const ManageSettingsComponent = () => {
             <h2>Change password</h2>
           </div>
           <ChangePassword />
+          <div className={`${styles.title} ${styles.spaceMy}`}>
+            <h2>Set Job Points</h2>
+          </div>
+          <AddJobPoint />
         </CardContent>
       </Card>
       <DialogBox open={!!deleting} handleClose={() => setDeleting("")}>

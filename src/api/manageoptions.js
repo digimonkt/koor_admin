@@ -465,3 +465,20 @@ export const deleteNewsLetterApi = async (newsletterId) => {
   });
   return response;
 };
+
+export const getPointApi = async () => {
+  const response = await api.request({
+    url: urlcat("/v1/admin/set-points"),
+    method: "GET",
+  });
+  return response;
+};
+
+export const setPointsApi = async (data) => {
+  const response = await api.request({
+    url: urlcat("/v1/admin/set-points"),
+    method: "PATCH",
+    data,
+  });
+  return response;
+};
