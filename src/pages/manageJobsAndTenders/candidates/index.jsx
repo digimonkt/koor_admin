@@ -182,7 +182,7 @@ function ManageCandidatesComponent() {
         setCandidateTable(update);
         candidateList();
       } else {
-        // dispatch(setErrorToast("something went wrong"));
+        dispatch(setErrorToast("something went wrong"));
       }
     },
     [candidateTable]

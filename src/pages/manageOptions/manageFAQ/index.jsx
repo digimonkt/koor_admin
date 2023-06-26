@@ -10,7 +10,6 @@ import { setErrorToast, setSuccessToast } from "@redux/slice/toast";
 import DeleteCard from "@components/card/deleteCard";
 import EditCard from "@components/card/editCard";
 import { useDebounce } from "usehooks-ts";
-import { OutlinedButton } from "@components/button";
 import { useNavigate } from "react-router-dom";
 import {
   addFAQCategoryApi,
@@ -63,7 +62,7 @@ function ManageFQL() {
         return (
           <Stack direction="row" spacing={1} alignItems="center">
             <IconButton
-              onClick={() => showFAQ(item.row.id)}
+              onClick={() => showFAQ(item.row)}
               sx={{
                 "&.MuiIconButton-root": {
                   background: "#D5E3F7",
@@ -103,23 +102,6 @@ function ManageFQL() {
             >
               <SVG.DeleteIcon />
             </IconButton>
-            <OutlinedButton
-              title={
-                <Stack
-                  direction={"row"}
-                  spacing={1}
-                  alignItems={"center"}
-                  onClick={AddFAQ}
-                >
-                  <span>create FAQ </span>
-                </Stack>
-              }
-              sx={{
-                "&.MuiButton-outlined": {
-                  whiteSpace: "nowrap",
-                },
-              }}
-            />
           </Stack>
         );
       },
@@ -153,12 +135,11 @@ function ManageFQL() {
     if (response.remote === "success") {
       const temp = [...faqCategoryTable];
       temp.push({
-        id: response.data.id || Math.random(),
+        id: response.data.data.id || Math.random(),
         no: temp.length + 1,
-        name: response.data.title,
-        role: response.data.role,
+        name: response.data.data.title,
+        role: response.data.data.role,
       });
-
       setFAQCategoryTable([...temp]);
       setAddFAQCategory("");
       setAddFAQRole("");
@@ -171,15 +152,14 @@ function ManageFQL() {
   const getPage = useCallback((_, page) => {
     setPages(page);
   }, []);
-
   const handleDelete = async () => {
     setLoading(false);
     const response = await deleteFaqCategoryApi(deleteFAQCategory);
     if (response.remote === "success") {
-      const newSkillTable = faqCategoryTable.filter(
+      const newFAQTable = faqCategoryTable.filter(
         (emp) => emp.id !== deleteFAQCategory
       );
-      setFAQCategoryTable(newSkillTable);
+      setFAQCategoryTable(newFAQTable);
       setDeleteFAQCategory("");
       dispatch(setSuccessToast("Delete FAQ Category SuccessFully"));
     } else {
@@ -189,15 +169,13 @@ function ManageFQL() {
 
   const handleEdit = async (item) => {
     setEditFAQCategory(item.id);
-    setEditFAQValue(item);
+    setEditFAQValue(item.name);
   };
 
-  const showFAQ = async (id) => {
-    navigate(`/manage-faq/${id}`);
-  };
-
-  const AddFAQ = async (id) => {
-    navigate("/add-FAQ");
+  const showFAQ = async (details) => {
+    const id = details.id;
+    const role = details.role;
+    navigate(`/manage-faq/${id}/${role}`);
   };
 
   const handleUpdate = async () => {
@@ -224,7 +202,6 @@ function ManageFQL() {
       dispatch(setLoading(false));
     }
   }, [faqCategoryTable]);
-  console.log({ addFAQRole });
   return (
     <>
       <Layout
@@ -248,6 +225,7 @@ function ManageFQL() {
         inputPropsRole={{
           content: { faqCategoryTable },
           setContentId: { setAddFAQRole },
+          value: { addFAQRole },
         }}
         limitProps={{
           value: limit,
@@ -284,7 +262,7 @@ function ManageFQL() {
         handleClose={() => setEditFAQCategory("")}
       >
         <EditCard
-          title="Edit Skill"
+          title="Edit FAQ Category"
           handleCancel={() => setEditFAQCategory("")}
           setEditValue={setEditFAQValue}
           editValue={editFAQValue}

@@ -111,6 +111,15 @@ export const transformNewsLetterResponse = (data) => {
   }));
 };
 
+export const transformFAQResponse = (data) => {
+  return data.map((data, index) => ({
+    id: data.id,
+    no: index + 1,
+    Question: data.question,
+    Answer: stripHTMLTags(data.answer).slice(0, 15) + "...",
+  }));
+};
+
 export const transformTestimonialResponse = (data) => {
   return data.map((data) => ({
     id: data.id,
@@ -119,3 +128,9 @@ export const transformTestimonialResponse = (data) => {
     imageUrl: data.image.path,
   }));
 };
+
+function stripHTMLTags(html) {
+  const tempElement = document.createElement("div");
+  tempElement.innerHTML = html;
+  return tempElement.textContent || tempElement.innerText || "";
+}
