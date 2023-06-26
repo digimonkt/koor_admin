@@ -53,6 +53,7 @@ const OptionsFilter = ({
             <SelectDropDown
               content={inputPropsRole.content.faqCategoryTable}
               setContentId={inputPropsRole.setContentId.setAddFAQRole}
+              value={inputPropsRole.value.addFAQRole}
               faq={faq}
             />
           ) : (

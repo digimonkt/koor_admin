@@ -1,103 +1,250 @@
+import React, { useCallback, useEffect, useMemo, useState } from "react";
+import Layout from "@pages/manageOptions/layout";
+import { setLoading } from "@redux/slice/jobsAndTenders";
+import { useDispatch } from "react-redux";
 import { SVG } from "@assets/svg";
-import { Minimize } from "@mui/icons-material";
-import {
-  Accordion,
-  AccordionDetails,
-  AccordionSummary,
-  Grid,
-  Typography,
-  Card,
-  CardContent,
-  Stack,
-  IconButton,
-} from "@mui/material";
-import React from "react";
-import { Link } from "react-router-dom";
+import { useDebounce } from "usehooks-ts";
+import { transformFAQResponse } from "@api/transform/choices";
+import DialogBox from "@components/dialogBox";
+import { DeleteCard, FAQCard } from "@components/card";
+import { IconButton, Stack } from "@mui/material";
+import { setErrorToast, setSuccessToast } from "@redux/slice/toast";
+import { addFAQApi, deleteFaqApi, editFaqApi, getFAQApi } from "@api/manageFAQ";
+import { useParams } from "react-router-dom";
 
-const ShowFAQ = () => {
-  return (
-    <Card
-      sx={{
-        "&.MuiCard-root": {
-          boxShadow: "0px 15px 40px rgba(0, 0, 0, 0.05)",
-          borderRadius: "10px",
-          marginBottom: "100px",
+function ShowFAQ() {
+  const dispatch = useDispatch();
+  const { faqCategoryId, role } = useParams();
+  const [totalCount, setTotalCount] = useState(0);
+  const [FAQListTable, setFAQListTable] = useState([]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [pages, setPages] = useState(1);
+  const [limit, setLimit] = useState(10);
+  const [deleteFaq, setDeleteFaq] = useState("");
+  const [updateFAQ, setUpdateFAQ] = useState("");
+  const [updateFAQQuestion, setUpdateFAQQuestion] = useState("");
+  const [updateFAQAnswer, setUpdateFAQAnswer] = useState("");
+  const [addFAQ, setAddFAQ] = useState("");
+  const debouncedSearchTenderValue = useDebounce(searchTerm, 500);
+  const columns = useMemo(
+    () => [
+      {
+        id: "1",
+        field: "no",
+        headerName: "No",
+        sortable: true,
+      },
+      {
+        id: "2",
+        field: "Question",
+        headerName: "Question",
+        width: "220",
+        sortable: true,
+      },
+      {
+        id: "3",
+        field: "Answer",
+        headerName: "Answer",
+        width: "220",
+        sortable: true,
+      },
+      {
+        field: "action",
+        headerName: "Action",
+        sortable: false,
+        renderCell: (item) => {
+          return (
+            <>
+              <Stack direction="row" spacing={1} alignItems="center">
+                <IconButton onClick={() => setDeleteFaq(item.row.id)}>
+                  <SVG.DeleteIcon />
+                </IconButton>
+                <IconButton onClick={() => handleEdit(item.row)}>
+                  <SVG.EditIcon />
+                </IconButton>
+              </Stack>
+            </>
+          );
         },
-      }}
-    >
-      <Stack
-        direction="row"
-        spacing={1}
-        alignItems="center"
-        sx={{
-          mb: {
-            xs: 1,
-            sm: 1,
-            md: 3.75,
-            lg: 3.75,
-            xl: 3.75,
-          },
+      },
+    ],
+    []
+  );
+  // *Show FAQ Data
+  const faqList = useCallback(async () => {
+    dispatch(setLoading(true));
+    const page = pages;
+    const search = debouncedSearchTenderValue || "";
+    try {
+      const response = await getFAQApi({
+        limit,
+        page,
+        search,
+        faqCategoryId,
+        role,
+      });
+      if (response.remote === "success") {
+        const formattedData = transformFAQResponse(response.data.results);
+        if (!formattedData.length) {
+          dispatch(setLoading(false));
+        }
+        setFAQListTable(formattedData);
+        const totalCounts = Math.ceil(response.data.count / limit);
+        setTotalCount(totalCounts);
+      } else {
+        dispatch(setErrorToast(response.error));
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }, [debouncedSearchTenderValue, dispatch, limit, pages]);
+
+  // *Show faq Data
+
+  const getPage = useCallback((_, page) => {
+    setPages(page);
+  }, []);
+
+  // *Delete faq start
+  const handleDelete = useCallback(async () => {
+    setLoading(false);
+    const response = await deleteFaqApi(deleteFaq);
+    if (response.remote === "success") {
+      const faq = FAQListTable.filter((emp) => emp.id !== deleteFaq);
+      setFAQListTable(faq);
+      setDeleteFaq("");
+      dispatch(setSuccessToast("Delete Faq  SuccessFully"));
+    } else {
+      dispatch(setErrorToast("Something went wrong"));
+    }
+  }, [deleteFaq, dispatch, FAQListTable]);
+  // *Delete faq end
+
+  //* Update FAQ start
+  const handleEdit = (data) => {
+    setUpdateFAQ(data.id);
+    setUpdateFAQQuestion(data.Question);
+    setUpdateFAQAnswer(data.Answer);
+  };
+  const handleUpdate = async () => {
+    const payload = {
+      question: updateFAQQuestion,
+      answer: updateFAQAnswer,
+    };
+    const response = await editFaqApi(updateFAQ, payload);
+    if (response.remote === "success") {
+      faqList();
+      setUpdateFAQ("");
+      dispatch(setSuccessToast("Update SuccessFully"));
+    } else {
+      dispatch(setErrorToast(response.error.errors.message));
+    }
+  };
+  //* Update FAQ end
+  //* Add FAQ Start
+  const downloadNewsCSV = useCallback(async () => {
+    setAddFAQ(faqCategoryId);
+  }, [dispatch]);
+  const addFAQFunction = async () => {
+    const payload = {
+      question: updateFAQQuestion,
+      answer: updateFAQAnswer,
+      category: addFAQ,
+      role,
+    };
+    const response = await addFAQApi(payload);
+    if (response.remote === "success") {
+      const temp = [...FAQListTable];
+      temp.push({
+        id: response.data.data.id || Math.random(),
+        no: temp.length + 1,
+        Question: response.data.data.question,
+        Answer: response.data.data.answer,
+      });
+      setFAQListTable([...temp]);
+      setAddFAQ("");
+    }
+  };
+  //* Add FAQ End
+  useEffect(() => {
+    faqList();
+  }, [faqList]);
+
+  useEffect(() => {
+    if (FAQListTable.length) {
+      dispatch(setLoading(false));
+    }
+  }, [dispatch, FAQListTable]);
+  return (
+    <>
+      <Layout
+        news
+        tender
+        rows={FAQListTable}
+        columns={columns}
+        page={pages}
+        totalCount={totalCount}
+        handlePageChange={getPage}
+        searchProps={{
+          placeholder: "Search FAQ",
+          onChange: (e) => setSearchTerm(e.target.value),
+          value: searchTerm,
         }}
-      >
-        <IconButton LinkComponent={Link} to="/manage-faq">
-          <SVG.ArrowLeftIcon />
-        </IconButton>{" "}
-        <h2>Manage FAQ</h2>
-      </Stack>
-      <CardContent
-        sx={{
-          "&.MuiCardContent-root": {
-            p: {
-              xs: 2,
-              sm: 1,
-              md: 3.75,
-              lg: 3.75,
-              xl: 3.75,
-            },
-          },
+        csvProps={{
+          title: (
+            <div onClick={() => downloadNewsCSV()}>
+              <span className="d-inline-flex align-items-center me-2">
+                <SVG.ExportIcon />
+              </span>
+              Add FAQ
+            </div>
+          ),
+        }}
+        limitProps={{
+          value: limit,
+          options: [
+            { label: 5, value: 5 },
+            { label: 10, value: 10 },
+            { label: 15, value: 15 },
+          ],
+          onChange: (e) => setLimit(e.target.value),
         }}
       />
-      <Stack
-        direction="row"
-        spacing={1}
-        alignItems="center"
-        sx={{
-          mb: {
-            xs: 1,
-            sm: 1,
-            md: 3.75,
-            lg: 3.75,
-            xl: 3.75,
-          },
-        }}
-      >
-        <Grid container spacing={{ xs: 0, lg: 3, sm: 3, md: 3 }}>
-          <Grid item lg={6} sm={6} xs={12}>
-            <div>
-              <Accordion>
-                <AccordionSummary
-                  expandIcon={<Minimize />}
-                  aria-controls={"panel-content"}
-                  id={"panel-header"}
-                >
-                  <Typography>
-                    Questions
-                    <div style={{ float: "right", marginLeft: "300px" }}>
-                      <SVG.DeleteIcon />
-                      <SVG.EditIcon />
-                    </div>
-                  </Typography>
-                </AccordionSummary>
-                <AccordionDetails>
-                  <Typography>Answers</Typography>
-                </AccordionDetails>
-              </Accordion>
-            </div>
-          </Grid>
-        </Grid>
-      </Stack>
-    </Card>
+      {deleteFaq && (
+        <DialogBox open={!!deleteFaq} handleClose={() => setDeleteFaq("")}>
+          <DeleteCard
+            title="Delete FAQ"
+            content="Are you sure you want to delete FAQ ?"
+            handleCancel={() => setDeleteFaq("")}
+            handleDelete={handleDelete}
+          />
+        </DialogBox>
+      )}
+      <DialogBox open={!!updateFAQ} handleClose={() => setUpdateFAQ("")}>
+        <FAQCard
+          title="Edit FAQ"
+          handleCancel={() => setUpdateFAQ("")}
+          setEditValue={setUpdateFAQQuestion}
+          editValue={updateFAQQuestion}
+          updateFAQAnswer={updateFAQAnswer}
+          setUpdateFAQAnswer={setUpdateFAQAnswer}
+          handleUpdate={handleUpdate}
+        />
+      </DialogBox>
+
+      <DialogBox open={!!addFAQ} handleClose={() => setAddFAQ("")}>
+        <FAQCard
+          title="Add FAQ"
+          handleCancel={() => setAddFAQ("")}
+          setEditValue={setUpdateFAQQuestion}
+          editValue={updateFAQQuestion}
+          updateFAQAnswer={updateFAQAnswer}
+          setUpdateFAQAnswer={setUpdateFAQAnswer}
+          handleUpdate={addFAQFunction}
+        />
+      </DialogBox>
+    </>
   );
-};
+}
 
 export default ShowFAQ;

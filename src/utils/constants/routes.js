@@ -27,7 +27,7 @@ import {
   financialTools,
   manageFAQ,
   showFAQ,
-  addFAQ,
+  // addFAQ,
 } from "@pages/manageOptions";
 import ManageCountry from "@pages/manageOptions/manageCountry";
 import ManageTenderCategory from "@pages/manageOptions/manageTenderCategory";
@@ -185,18 +185,8 @@ export const AUTHENTICATED_ROUTE = [
   },
   {
     id: "manage-faq",
-    path: "/manage-faq/:id",
+    path: "/manage-faq/:faqCategoryId/:role",
     element: showFAQ,
-  },
-  {
-    id: "add-faq",
-    path: "/add-FAQ",
-    element: addFAQ,
-  },
-  {
-    id: "update-faq",
-    path: "/add-FAQ/:id",
-    element: addFAQ,
   },
 ];
 

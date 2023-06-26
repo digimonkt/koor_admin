@@ -1,7 +1,6 @@
 import { SVG } from "@assets/svg";
 import { OutlinedButton } from "@components/button";
 import { LabeledInput } from "@components/input";
-// import SelectWithSearch from "@components/input/selectWithsearch";
 import { Card, CardContent, IconButton, Stack } from "@mui/material";
 import styles from "@pages/manageOptions/manageSettings/styles.module.css";
 import { Link } from "react-router-dom";
@@ -51,43 +50,17 @@ const AddFAQ = () => {
         <h2>Manage FAQ</h2>
       </Stack>
       <div className={`${styles.title} ${styles.spaceMy}`}>
-        <LabeledInput
-          placeholder="Question"
-          type="text"
-          //   onChange={(e) => handlePostTitle(e.target.value)}
-          //   value={postTitle}
-        />
+        <LabeledInput placeholder="Question" type="text" />
       </div>
       <div className={`${styles.title} ${styles.spaceMy}`}>
-        <LabeledInput
-          placeholder="Answer"
-          type="text"
-          //   onChange={(e) => handleClientName(e.target.value)}
-          //   value={clientName}
-        />
+        <LabeledInput placeholder="Answer" type="text" />
       </div>
       <div className={`${styles.title} ${styles.spaceMy}`}>
-        <LabeledInput
-          placeholder="Select Category"
-          type="text"
-          //   onChange={(e) => handleCompanyName(e.target.value)}
-          //   value={companyName}
-        />
+        <LabeledInput placeholder="Select Category" type="text" />
       </div>
-      <div className={`${styles.title} ${styles.spaceMy}`}>
-        {/* <SelectWithSearch title={"hello"}
-              onChange={(_, value) => setSelectCityValue(value)}
-              onKeyPress={(e) => getDataCity(e.target.value)}
-              options={role.map((cities) => ({
-                value: cities.id,
-                label: cities.title,
-                ...cities,
-              }))}
-              /> */}
-      </div>
+      <div className={`${styles.title} ${styles.spaceMy}`}></div>
       <Stack direction={"row"} justifyContent={"center"}>
         <OutlinedButton
-          //   onClick={handleAddTestimonial}
           title={
             <Stack direction={"row"} alignItems={"center"} spacing={1}>
               <SVG.AddCircleIcon />

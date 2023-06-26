@@ -36,7 +36,7 @@ const SelectBox = styled(Select)`
   }
 `;
 
-const SelectDropDown = ({ content, padding, setContentId, faq }) => {
+const SelectDropDown = ({ content, padding, setContentId, faq, value }) => {
   const [isSelect, setIsSelect] = useState("");
   const handleChangeSelect = (event) => {
     setIsSelect(event.target.value);
@@ -56,7 +56,7 @@ const SelectDropDown = ({ content, padding, setContentId, faq }) => {
       >
         {faq ? (
           <SelectBox
-            value={isSelect}
+            value={value}
             icon={KeyboardArrowUpIcon}
             onChange={handleChangeSelect}
             inputProps={{ "aria-label": "Without label" }}

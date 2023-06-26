@@ -163,7 +163,6 @@ function manageEducation() {
       dispatch(setSuccessToast("Delete Skill SuccessFully"));
     } else {
       dispatch(setErrorToast("Something went wrong"));
-      console.log(response.error);
     }
   };
 

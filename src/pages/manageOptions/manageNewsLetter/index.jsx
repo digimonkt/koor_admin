@@ -68,7 +68,6 @@ function ManageNewsLetter() {
     try {
       const response = await getNewsletterApi({ limit, page, search });
       if (response.remote === "success") {
-        console.log(response.data.results);
         const formattedData = transformNewsLetterResponse(
           response.data.results
         );
