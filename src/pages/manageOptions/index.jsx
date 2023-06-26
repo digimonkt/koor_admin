@@ -19,8 +19,6 @@ import ManageNewsLetter from "./manageNewsLetter";
 import Report from "./manageReports";
 import ManageFAQ from "./manageFAQ";
 import ShowFAQ from "./manageFAQ/createFQL/showFAQ";
-import AddFAQ from "./manageFAQ/createFQL/AddFAQ";
-export const addFAQ = AddFAQ;
 export const showFAQ = ShowFAQ;
 export const manageFAQ = ManageFAQ;
 export const manageReports = Report;

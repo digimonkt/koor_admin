@@ -14,3 +14,7 @@ export const validateChangePasswordForm = Yup.object({
     )
     .required("Confirm Password is Required"),
 });
+
+export const validateSetPassword = Yup.object({
+  getPoints: Yup.string().required("Set point is required"),
+});
