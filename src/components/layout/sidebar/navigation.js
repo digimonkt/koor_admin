@@ -26,6 +26,12 @@ export const MENU_ITEM = [
     url: "/manage-newsLetter",
   },
   {
+    id: "3b",
+    icon: <SVG.ManageTenders />,
+    page: "Manage skills",
+    url: "/manage-skills",
+  },
+  {
     id: "4",
     icon: <SVG.ManageEmployee />,
     page: "Manage employers",
@@ -135,6 +141,12 @@ export const MENU_ITEM = [
     icon: <SVG.UserManagement />,
     page: "User management",
     url: "/user-management",
+  },
+  {
+    id: "18a",
+    icon: <SVG.Settings />,
+    page: "Manage FAQ",
+    url: "/manage-faq",
   },
   {
     id: "19",

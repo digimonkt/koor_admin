@@ -1519,7 +1519,7 @@ span.count {
 }
 body {
   padding: 0px !important;
-  overflow-y: hidden !important;
+  /* overflow-y: hidden !important; */
 }
 @media (min-width: 1536px) {
   .MuiContainer-root {

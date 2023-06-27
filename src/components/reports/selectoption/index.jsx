@@ -59,7 +59,7 @@ const SelectOption = ({ content, onChange, value }) => {
           IconComponent={KeyboardArrowUpIcon}
           displayEmpty
         >
-          {content?.map((item, index) => (
+          {content?.map((item) => (
             <MenuItem key={item.id} value={item.value}>
               {item.title}
             </MenuItem>

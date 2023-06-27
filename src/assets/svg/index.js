@@ -54,8 +54,9 @@ import { ReactComponent as EyeOff } from "./eyeOff.svg";
 import { ReactComponent as LocationIcon } from "./location.svg";
 import { ReactComponent as vectorIcon } from "./vectorIcon.svg";
 import { ReactComponent as unVerify } from "./unVerify.svg";
-
+import { ReactComponent as polygon } from "./Polygon.svg";
 export const SVG = {
+  polygon,
   LocationIcon,
   EyeOff,
   Notification,

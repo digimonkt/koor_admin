@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { SVG } from "@assets/svg";
 import { IconButton, Stack } from "@mui/material";
 import Layout from "../layout";
@@ -24,110 +24,122 @@ function ManageEmployerComponent() {
   const [country, setCountry] = useState({});
   const debouncedSearchEmployerValue = useDebounce(searchTerm, 500);
 
-  const columns = [
-    {
-      id: "1",
-      field: "no",
-      headerName: "No",
-      sortable: true,
-    },
-
-    {
-      field: "name",
-      headerName: "Name",
-      sortable: true,
-      width: 180,
-      id: "3",
-    },
-    {
-      field: "email",
-      headerName: "Email",
-      sortable: true,
-      width: 300,
-    },
-    {
-      field: "mobileNumber",
-      headerName: "Mobile number",
-      sortable: true,
-      width: 180,
-    },
-    {
-      field: "action",
-      headerName: "Action",
-      sortable: false,
-      renderCell: (item) => {
-        return (
-          <Stack direction="row" spacing={1} alignItems="center">
-            <>
-              {item.row.verify ? (
-                <IconButton
-                  onClick={() => {
-                    activeDeActiveUser(item);
-                  }}
-                  sx={{
-                    "&.MuiIconButton-root": {
-                      background: item.row.action ? "#D5E3F7" : "#D42929",
-                    },
-                    width: 30,
-                    height: 30,
-                    color: "#274593",
-                  }}
-                >
-                  {item.row.action ? (
-                    <SVG.ToggleOffIcon />
-                  ) : (
-                    <SVG.ToggleOnIcon />
-                  )}
-                </IconButton>
-              ) : (
-                <IconButton
-                  onClick={() => {
-                    handleRedirectDetails(item.row.id);
-                  }}
-                >
-                  {<SVG.unVerify />}
-                </IconButton>
-              )}
-            </>
-
-            <IconButton
-              onClick={() => handleRedirectDetails(item.row.id)}
-              sx={{
-                "&.MuiIconButton-root": {
-                  background: "#D5E3F7",
-                },
-                width: 30,
-                height: 30,
-                color: "#274593",
-              }}
-            >
-              <SVG.EyeIcon />
-            </IconButton>
-
-            <IconButton
-              onClick={() => setDeleting(item.row.id)}
-              sx={{
-                "&.MuiIconButton-root": {
-                  background: "#D5E3F7",
-                },
-                width: 30,
-                height: 30,
-                color: "#274593",
-              }}
-            >
-              <SVG.DeleteIcon />
-            </IconButton>
-          </Stack>
-        );
+  const columns = useMemo(
+    () => [
+      {
+        id: "1",
+        field: "no",
+        headerName: "No",
+        sortable: true,
       },
+
+      {
+        field: "name",
+        headerName: "Name",
+        sortable: true,
+        width: 180,
+        id: "3",
+      },
+      {
+        field: "email",
+        headerName: "Email",
+        sortable: true,
+        width: 300,
+      },
+      {
+        field: "credits",
+        headerName: "Credits",
+        sortable: true,
+        width: 300,
+      },
+      {
+        field: "mobileNumber",
+        headerName: "Mobile number",
+        sortable: true,
+        width: 180,
+      },
+      {
+        field: "action",
+        headerName: "Action",
+        sortable: false,
+        renderCell: (item) => {
+          return (
+            <Stack direction="row" spacing={1} alignItems="center">
+              <>
+                {item.row.verify ? (
+                  <IconButton
+                    onClick={() => {
+                      activeDeActiveUser(item);
+                    }}
+                    sx={{
+                      "&.MuiIconButton-root": {
+                        background: item.row.action ? "#D5E3F7" : "#D42929",
+                      },
+                      width: 30,
+                      height: 30,
+                      color: "#274593",
+                    }}
+                  >
+                    {item.row.action ? (
+                      <SVG.ToggleOffIcon />
+                    ) : (
+                      <SVG.ToggleOnIcon />
+                    )}
+                  </IconButton>
+                ) : (
+                  <IconButton
+                    onClick={() => {
+                      handleRedirectDetails(item.row.id);
+                    }}
+                  >
+                    {<SVG.unVerify />}
+                  </IconButton>
+                )}
+              </>
+
+              <IconButton
+                onClick={() => handleRedirectDetails(item.row.id)}
+                sx={{
+                  "&.MuiIconButton-root": {
+                    background: "#D5E3F7",
+                  },
+                  width: 30,
+                  height: 30,
+                  color: "#274593",
+                }}
+              >
+                <SVG.EyeIcon />
+              </IconButton>
+
+              <IconButton
+                onClick={() => setDeleting(item.row.id)}
+                sx={{
+                  "&.MuiIconButton-root": {
+                    background: "#D5E3F7",
+                  },
+                  width: 30,
+                  height: 30,
+                  color: "#274593",
+                }}
+              >
+                <SVG.DeleteIcon />
+              </IconButton>
+            </Stack>
+          );
+        },
+      },
+    ],
+    []
+  );
+
+  const handleRedirectDetails = useCallback(
+    (id) => {
+      navigate(`employer-details/${id}`);
     },
-  ];
+    [navigate]
+  );
 
-  const handleRedirectDetails = (id) => {
-    navigate(`employer-details/${id}`);
-  };
-
-  const employerList = async () => {
+  const employerList = useCallback(async () => {
     dispatch(setLoading(true));
     const page = pages;
     const search = debouncedSearchEmployerValue || "";
@@ -146,13 +158,13 @@ function ManageEmployerComponent() {
       const totalCounts = Math.ceil(response.data.count / limit);
       setTotalCount(totalCounts);
     } else {
-      console.log(response.error);
+      dispatch(setErrorToast("something went wrong"));
     }
-  };
+  }, [country, debouncedSearchEmployerValue, pages, limit]);
 
-  function getPage(_, page) {
+  const getPage = useCallback((_, page) => {
     setPages(page);
-  }
+  }, []);
 
   const filterJobsCountry = (e) => {
     const countryId = e.target.value;
@@ -160,23 +172,41 @@ function ManageEmployerComponent() {
     setCountry(country);
   };
 
-  const activeDeActiveUser = async (item) => {
-    const id = item.row.id;
-    const response = await activeInactiveUser(id);
-    if (response.remote === "success") {
-      const update = [...employerTable].map((i) => {
-        if (i.id === item.row.id) {
-          i.action = !i.action;
+  const activeDeActiveUser = useCallback(
+    async (item) => {
+      const id = item.row.id;
+      const update = employerTable.map((i) => {
+        if (i.action === id) {
+          return { ...i };
         }
         return i;
       });
       setEmployerTable(update);
-    } else {
-      console.log(response.error);
-    }
-  };
+      await activeInactiveUser(id);
+      employerList();
 
-  const handleDelete = async () => {
+      // const update = employerTable.map((i) => (
+      //   if (i.id === id) {
+      //     return {...i}
+      //   }
+      // ));
+      // const response = await activeInactiveUser(id);
+      // if (response.remote === "success") {
+      //   const update = [...employerTable].map((i) => {
+      //     if (i.id === item.row.id) {
+      //       i.action = !i.action;
+      //     }
+      //     return i;
+      //   });
+      //   setEmployerTable(update);
+      // } else {
+      //   dispatch(setErrorToast("something went wrong"));
+      // }
+    },
+    [employerTable]
+  );
+
+  const handleDelete = useCallback(async () => {
     const response = await deleteUser(deleting);
     if (response.remote === "success") {
       const newEmployerTable = employerTable.filter(
@@ -187,16 +217,15 @@ function ManageEmployerComponent() {
       dispatch(setSuccessToast("Job Delete SuccessFully"));
     } else {
       dispatch(setErrorToast("Something went wrong"));
-      console.log(response.error);
     }
-  };
+  }, [deleting, employerTable, dispatch]);
 
   const resetFilterEmployer = () => {
     setSearchTerm("");
     setCountry({});
   };
 
-  const downloadEmployerCSV = async () => {
+  const downloadEmployerCSV = useCallback(async () => {
     const action = "download";
     const response = await manageEmployer({ action });
     if (response.remote === "success") {
@@ -205,9 +234,9 @@ function ManageEmployerComponent() {
         "_blank"
       );
     } else {
-      console.log(response.error);
+      dispatch(setErrorToast("something went wrong"));
     }
-  };
+  }, [dispatch]);
 
   useEffect(() => {
     if (employerTable.length) {
@@ -217,7 +246,7 @@ function ManageEmployerComponent() {
 
   useEffect(() => {
     employerList();
-  }, [country, debouncedSearchEmployerValue, pages, limit]);
+  }, [employerList]);
   return (
     <>
       <Layout
@@ -264,15 +293,16 @@ function ManageEmployerComponent() {
         }}
         job
       />
-
-      <DialogBox open={!!deleting} handleClose={() => setDeleting("")}>
-        <DeleteCard
-          title="Delete Job"
-          content="Are you sure you want to delete job?"
-          handleCancel={() => setDeleting("")}
-          handleDelete={handleDelete}
-        />
-      </DialogBox>
+      {deleting && (
+        <DialogBox open={!!deleting} handleClose={() => setDeleting("")}>
+          <DeleteCard
+            title="Delete Job"
+            content="Are you sure you want to delete job?"
+            handleCancel={() => setDeleting("")}
+            handleDelete={handleDelete}
+          />
+        </DialogBox>
+      )}
     </>
   );
 }

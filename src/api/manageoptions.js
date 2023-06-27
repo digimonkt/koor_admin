@@ -436,9 +436,21 @@ export const deleteCompanyLogoApi = async (logoId) => {
   return response;
 };
 
-export const getNewsletterApi = async ({ limit, page, search, country }) => {
+export const getNewsletterApi = async ({
+  limit,
+  page,
+  search,
+  country,
+  action,
+}) => {
   const response = await api.request({
-    url: urlcat("/v1/admin/newsletter-user", { limit, page, search, country }),
+    url: urlcat("/v1/admin/newsletter-user", {
+      limit,
+      page,
+      search,
+      country,
+      action,
+    }),
     method: "GET",
   });
   return response;
@@ -450,6 +462,23 @@ export const deleteNewsLetterApi = async (newsletterId) => {
       newsletterId,
     }),
     method: "DELETE",
+  });
+  return response;
+};
+
+export const getPointApi = async () => {
+  const response = await api.request({
+    url: urlcat("/v1/admin/set-points"),
+    method: "GET",
+  });
+  return response;
+};
+
+export const setPointsApi = async (data) => {
+  const response = await api.request({
+    url: urlcat("/v1/admin/set-points"),
+    method: "PATCH",
+    data,
   });
   return response;
 };

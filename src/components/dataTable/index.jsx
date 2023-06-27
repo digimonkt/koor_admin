@@ -1,12 +1,19 @@
+// import React, { useEffect, useState } from "react";
 import { SelectInput } from "@components/input";
 import { FormControl, Stack } from "@mui/material";
-import React from "react";
 import { StyledDataGrid } from "./style";
+import { useEffect } from "react";
+import { incrementPage } from "@utils/common";
 
-function DataTable({ rows, columns, limitProps, loader }) {
+function DataTable({ rows, columns, limitProps, loader, page }) {
+  useEffect(() => {
+    if (rows.length) {
+      incrementPage({ page, rows });
+    }
+  }, [page, rows]);
   return (
     <>
-      <div style={{ width: "100%", height: "500px", marginBottom: "30px" }}>
+      <div style={{ width: "100%", height: "625px", marginBottom: "30px" }}>
         <StyledDataGrid
           className="scrolltable"
           rows={rows}

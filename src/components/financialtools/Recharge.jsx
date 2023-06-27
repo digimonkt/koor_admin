@@ -2,13 +2,13 @@ import { FormLabel, Grid, Stack } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import styles from "./styles.module.css";
 import { styled } from "@mui/material/styles";
-import SelectDropDown from "./SelectDropDown";
 import { manageEmployer } from "@api/employers";
 import { SVG } from "@assets/svg";
 import Cbutton from "@components/button/cButton";
-import { verifyUnVerifyApi } from "@api/manageoptions";
+import { getUserDetailsApi, verifyUnVerifyApi } from "@api/manageoptions";
 import { useDispatch } from "react-redux";
 import { setErrorToast, setSuccessToast } from "@redux/slice/toast";
+import SelectWithSearch from "@components/input/selectWithsearch";
 const StyledFormLabel = styled(FormLabel)(() => ({
   fontFamily: "Poppins",
   color: "#121212",
@@ -23,6 +23,7 @@ const Recharge = () => {
   const [content, setContent] = useState([]);
   const [contentId, setContentId] = useState("");
   const [creditsAmount, setCreditsAmount] = useState([]);
+  const [userPoints, setUserPoints] = useState(null);
   function handleChange(event) {
     setCreditsAmount(event.target.value);
   }
@@ -48,6 +49,21 @@ const Recharge = () => {
   useEffect(() => {
     getEmployerList();
   }, []);
+  useEffect(() => {
+    if (contentId.length) {
+      const getUserCredit = async () => {
+        const response = await getUserDetailsApi(contentId);
+        if (response.remote === "success") {
+          setUserPoints(response.data.profile.points);
+        }
+      };
+      getUserCredit();
+    }
+  }, [contentId]);
+  const options = content.map((item) => ({
+    value: item.id,
+    label: item.name || "",
+  }));
 
   return (
     <>
@@ -57,13 +73,50 @@ const Recharge = () => {
           <Grid container spacing={2.5}>
             <Grid item lg={6} xs={12}>
               <StyledFormLabel>Select employer (by name or ID)</StyledFormLabel>
-              <SelectDropDown content={content} setContentId={setContentId} />
+
+              <SelectWithSearch
+                sx={{
+                  borderRadius: "10px",
+                  background: "#F0F0F0",
+                  fontFamily: "Poppins",
+
+                  "& fieldset": {
+                    border: "1px solid #cacaca",
+                    borderRadius: "93px",
+                    display: "none",
+                    "&:hover": { borderColor: "#cacaca" },
+                  },
+                  "& .MuiOutlinedInput-root": {
+                    fontFamily: "Poppins",
+                    padding: "4px 9px",
+                  },
+                  "& .MuiFormLabel-root": {
+                    fontSize: "16px",
+                    color: "#848484",
+                    fontFamily: "Poppins",
+                    transform: "translate(14px, 12px) scale(1)",
+                  },
+                  "& .MuiInputLabel-shrink": {
+                    transform: "translate(14px, -9px) scale(0.75)",
+                  },
+                }}
+                options={options}
+                title={"select the options"}
+                onChange={(_, value) => {
+                  if (value) {
+                    setContentId(value.value);
+                  } else {
+                    setContentId("");
+                  }
+                }}
+                {...options}
+              />
             </Grid>
             <Grid item lg={6} xs={12}>
               <StyledFormLabel>Number of job cretits</StyledFormLabel>
               <input
                 className={`${styles.textType}`}
-                placeholder="250"
+                placeholder="Add Credits"
                 onChange={handleChange}
                 type="number"
               />
@@ -86,6 +139,11 @@ const Recharge = () => {
               </Cbutton>
             </div>
           </Stack>
+          {userPoints && (
+            <span className="text-center">
+              Currently have <b>{userPoints} credits</b> remaining.
+            </span>
+          )}
         </form>
       </div>
     </>

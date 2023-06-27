@@ -14,7 +14,7 @@ const EmployerDetails = () => {
   };
   useEffect(() => {
     employerDetails();
-  }, []);
+  }, [id]);
   return (
     <>
       <Layout employerDetail={employerDetail} />

@@ -3,31 +3,34 @@ import Layout from "../layout";
 import { SVG } from "@assets/svg";
 import { IconButton, Stack } from "@mui/material";
 import { useDispatch } from "react-redux";
-import {
-  editSkillApi,
-  createSkillApi,
-  manageSkillApi,
-  skillDeleteApi,
-} from "@api/manageoptions";
 import { setLoading } from "@redux/slice/jobsAndTenders";
-import { transformSkillResponse } from "@api/transform/choices";
+import { transformFAQCategoryResponse } from "@api/transform/choices";
 import DialogBox from "@components/dialogBox";
 import { setErrorToast, setSuccessToast } from "@redux/slice/toast";
 import DeleteCard from "@components/card/deleteCard";
 import EditCard from "@components/card/editCard";
 import { useDebounce } from "usehooks-ts";
-function ManageSkillsComponent() {
+import { useNavigate } from "react-router-dom";
+import {
+  addFAQCategoryApi,
+  deleteFaqCategoryApi,
+  editFaqCategoryApi,
+  getFAQCategoryApi,
+} from "@api/manageFAQ";
+function ManageFQL() {
   const dispatch = useDispatch();
-  const [skillsTable, setSkillsTable] = useState([]);
+  const navigate = useNavigate();
+  const [faqCategoryTable, setFAQCategoryTable] = useState([]);
   const [pages, setPages] = useState(1);
   const [limit, setLimit] = useState(10);
-  const [addSkill, setAddSkill] = useState("");
-  const [editSkill, setEditSkill] = useState("");
-  const [editSkillValue, setEditSkillValue] = useState("");
+  const [addFAQCategory, setAddFAQCategory] = useState("");
+  const [addFAQRole, setAddFAQRole] = useState("");
+  const [editFAQCategory, setEditFAQCategory] = useState("");
+  const [editFAQValue, setEditFAQValue] = useState("");
   const [totalCount, setTotalCount] = useState(0);
-  const [deleteSkill, setDeleteSkill] = useState("");
+  const [deleteFAQCategory, setDeleteFAQCategory] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
-  const debouncedSearchSkillValue = useDebounce(searchTerm, 500);
+  const debouncedSearchTenderCategoryValue = useDebounce(searchTerm, 500);
 
   const columns = [
     {
@@ -41,10 +44,16 @@ function ManageSkillsComponent() {
       id: "3",
       field: "name",
       headerName: "Name",
-      width: 650,
+      width: 300,
       sortable: true,
     },
-
+    {
+      id: "4",
+      field: "role",
+      headerName: "Role",
+      width: 300,
+      sortable: true,
+    },
     {
       field: "action",
       headerName: "Action",
@@ -53,7 +62,7 @@ function ManageSkillsComponent() {
         return (
           <Stack direction="row" spacing={1} alignItems="center">
             <IconButton
-              onClick={() => setDeleteSkill(item.row.id)}
+              onClick={() => showFAQ(item.row)}
               sx={{
                 "&.MuiIconButton-root": {
                   background: "#D5E3F7",
@@ -63,7 +72,7 @@ function ManageSkillsComponent() {
                 color: "#274593",
               }}
             >
-              <SVG.DeleteIcon />
+              <SVG.EyeIcon />
             </IconButton>
 
             <IconButton
@@ -79,23 +88,37 @@ function ManageSkillsComponent() {
             >
               <SVG.EditIcon />
             </IconButton>
+
+            <IconButton
+              onClick={() => setDeleteFAQCategory(item.row.id)}
+              sx={{
+                "&.MuiIconButton-root": {
+                  background: "#D5E3F7",
+                },
+                width: 30,
+                height: 30,
+                color: "#274593",
+              }}
+            >
+              <SVG.DeleteIcon />
+            </IconButton>
           </Stack>
         );
       },
     },
   ];
 
-  const skillsList = async () => {
+  const faqCategoryList = async () => {
     dispatch(setLoading(true));
     const page = pages;
-    const search = debouncedSearchSkillValue || "";
-    const response = await manageSkillApi({ limit, page, search });
+    const search = debouncedSearchTenderCategoryValue || "";
+    const response = await getFAQCategoryApi({ limit, page, search });
     if (response.remote === "success") {
-      const formateData = transformSkillResponse(response.data.results);
+      const formateData = transformFAQCategoryResponse(response.data.results);
       if (!formateData.length) {
         dispatch(setLoading(false));
       }
-      setSkillsTable(formateData);
+      setFAQCategoryTable(formateData);
       const totalCounts = Math.ceil(response.data.count / limit);
       setTotalCount(totalCounts);
     } else {
@@ -103,64 +126,67 @@ function ManageSkillsComponent() {
     }
   };
 
-  const addSkillFunction = async () => {
+  const addFaqCategoryFunction = async () => {
     const payload = {
-      title: addSkill,
+      title: addFAQCategory,
+      role: addFAQRole,
     };
-    const response = await createSkillApi(payload);
+    const response = await addFAQCategoryApi(payload);
     if (response.remote === "success") {
-      const temp = [...skillsTable];
+      const temp = [...faqCategoryTable];
       temp.push({
         id: response.data.data.id || Math.random(),
         no: temp.length + 1,
         name: response.data.data.title,
+        role: response.data.data.role,
       });
-
-      setSkillsTable([...temp]);
-      setAddSkill("");
-
-      dispatch(setSuccessToast("Add Skill SuccessFully"));
+      setFAQCategoryTable([...temp]);
+      setAddFAQCategory("");
+      setAddFAQRole("");
+      dispatch(setSuccessToast("Add FAQ Category SuccessFully"));
     } else {
-      console.log(response.error);
       dispatch(setErrorToast("Something went wrong"));
     }
   };
 
-  // function getPage(_, page) {
-  //   setPages(page);
-  // }
   const getPage = useCallback((_, page) => {
     setPages(page);
   }, []);
-
   const handleDelete = async () => {
     setLoading(false);
-    const response = await skillDeleteApi(deleteSkill);
+    const response = await deleteFaqCategoryApi(deleteFAQCategory);
     if (response.remote === "success") {
-      const newSkillTable = skillsTable.filter((emp) => emp.id !== deleteSkill);
-      setSkillsTable(newSkillTable);
-      setDeleteSkill("");
-      dispatch(setSuccessToast("Delete Skill SuccessFully"));
+      const newFAQTable = faqCategoryTable.filter(
+        (emp) => emp.id !== deleteFAQCategory
+      );
+      setFAQCategoryTable(newFAQTable);
+      setDeleteFAQCategory("");
+      dispatch(setSuccessToast("Delete FAQ Category SuccessFully"));
     } else {
       dispatch(setErrorToast("Something went wrong"));
-      console.log(response.error);
     }
   };
 
   const handleEdit = async (item) => {
-    setEditSkill(item.id);
-    setEditSkillValue(item.name);
+    setEditFAQCategory(item.id);
+    setEditFAQValue(item.name);
+  };
+
+  const showFAQ = async (details) => {
+    const id = details.id;
+    const role = details.role;
+    navigate(`/manage-faq/${id}/${role}`);
   };
 
   const handleUpdate = async () => {
     const payload = {
-      title: editSkillValue,
+      title: editFAQValue,
     };
 
-    const response = await editSkillApi(editSkill, payload);
+    const response = await editFaqCategoryApi(editFAQCategory, payload);
     if (response.remote === "success") {
-      skillsList();
-      setEditSkill("");
+      faqCategoryList();
+      setEditFAQCategory("");
       dispatch(setSuccessToast(response.data.message));
     } else {
       dispatch(setErrorToast(response.error.errors.title));
@@ -168,33 +194,38 @@ function ManageSkillsComponent() {
   };
 
   useEffect(() => {
-    skillsList();
-  }, [debouncedSearchSkillValue, pages, limit]);
+    faqCategoryList();
+  }, [debouncedSearchTenderCategoryValue, pages, limit]);
 
   useEffect(() => {
-    if (skillsTable.length) {
+    if (faqCategoryTable.length) {
       dispatch(setLoading(false));
     }
-  }, [skillsTable]);
-
+  }, [faqCategoryTable]);
   return (
     <>
       <Layout
-        rows={skillsTable}
+        faq
+        rows={faqCategoryTable}
         columns={columns}
         totalCount={totalCount}
         page={pages}
         handlePageChange={getPage}
         searchProps={{
-          placeholder: "Search Skills",
+          placeholder: "Search manage FAQ",
           onChange: (e) => setSearchTerm(e.target.value),
           value: searchTerm,
         }}
         inputProps={{
           type: "text",
-          placeholder: "Add Skill",
-          onChange: (e) => setAddSkill(e.target.value),
-          value: addSkill,
+          placeholder: "Add FAQ Category",
+          onChange: (e) => setAddFAQCategory(e.target.value),
+          value: addFAQCategory,
+        }}
+        inputPropsRole={{
+          content: { faqCategoryTable },
+          setContentId: { setAddFAQRole },
+          value: { addFAQRole },
         }}
         limitProps={{
           value: limit,
@@ -207,28 +238,34 @@ function ManageSkillsComponent() {
         }}
         optionsProps={{
           title: (
-            <div onClick={addSkillFunction}>
+            <div onClick={addFaqCategoryFunction}>
               <span className="d-inline-flex align-items-center me-2"></span>{" "}
-              Add Skill
+              Add FAQ Category
             </div>
           ),
         }}
       />
-      <DialogBox open={!!deleteSkill} handleClose={() => setDeleteSkill("")}>
+      <DialogBox
+        open={!!deleteFAQCategory}
+        handleClose={() => setDeleteFAQCategory("")}
+      >
         <DeleteCard
-          title="Delete Skill"
-          content="Are you sure you want to delete Skill?"
-          handleCancel={() => setDeleteSkill("")}
+          title="Delete FAQ Category"
+          content="Are you sure you want to delete FAQ Category?"
+          handleCancel={() => setDeleteFAQCategory("")}
           handleDelete={handleDelete}
         />
       </DialogBox>
 
-      <DialogBox open={!!editSkill} handleClose={() => setEditSkill("")}>
+      <DialogBox
+        open={!!editFAQCategory}
+        handleClose={() => setEditFAQCategory("")}
+      >
         <EditCard
-          title="Edit Skill"
-          handleCancel={() => setEditSkill("")}
-          setEditValue={setEditSkillValue}
-          editValue={editSkillValue}
+          title="Edit FAQ Category"
+          handleCancel={() => setEditFAQCategory("")}
+          setEditValue={setEditFAQValue}
+          editValue={editFAQValue}
           handleUpdate={handleUpdate}
         />
       </DialogBox>
@@ -236,4 +273,4 @@ function ManageSkillsComponent() {
   );
 }
 
-export default ManageSkillsComponent;
+export default ManageFQL;

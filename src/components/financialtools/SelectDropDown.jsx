@@ -36,7 +36,7 @@ const SelectBox = styled(Select)`
   }
 `;
 
-const SelectDropDown = ({ content, padding, setContentId }) => {
+const SelectDropDown = ({ content, padding, setContentId, faq, value }) => {
   const [isSelect, setIsSelect] = useState("");
   const handleChangeSelect = (event) => {
     setIsSelect(event.target.value);
@@ -46,7 +46,6 @@ const SelectDropDown = ({ content, padding, setContentId }) => {
   return (
     <>
       <FormControl
-        fullWidth
         sx={{
           "&.MuiSelect-select": {
             fontFamily: "Poppins",
@@ -55,24 +54,44 @@ const SelectDropDown = ({ content, padding, setContentId }) => {
         }}
         size="small"
       >
-        <SelectBox
-          value={isSelect}
-          icon={KeyboardArrowUpIcon}
-          onChange={handleChangeSelect}
-          inputProps={{ "aria-label": "Without label" }}
-          IconComponent={KeyboardArrowUpIcon}
-          displayEmpty
-          sx={{ "& .MuiSelect-select": { padding } }}
-        >
-          <MenuItem value="" disabled>
-            Select an option
-          </MenuItem>
-          {content?.map((item) => (
-            <MenuItem key={item.id} value={item.id}>
-              {item.name}
+        {faq ? (
+          <SelectBox
+            value={value}
+            icon={KeyboardArrowUpIcon}
+            onChange={handleChangeSelect}
+            inputProps={{ "aria-label": "Without label" }}
+            IconComponent={KeyboardArrowUpIcon}
+            displayEmpty
+            sx={{ "& .MuiSelect-select": { padding } }}
+          >
+            <MenuItem value="" disabled>
+              Select an option
             </MenuItem>
-          ))}
-        </SelectBox>
+            <MenuItem value="job_seeker">job Seeker</MenuItem>
+            <MenuItem value="employer">Employer</MenuItem>
+            <MenuItem value="vendor">vendor</MenuItem>
+          </SelectBox>
+        ) : (
+          <SelectBox
+            value={isSelect}
+            icon={KeyboardArrowUpIcon}
+            onChange={handleChangeSelect}
+            inputProps={{ "aria-label": "Without label" }}
+            IconComponent={KeyboardArrowUpIcon}
+            displayEmpty
+            sx={{ "& .MuiSelect-select": { padding } }}
+          >
+            <MenuItem value="" disabled>
+              Select an option
+            </MenuItem>
+
+            {content?.map((item) => (
+              <MenuItem key={item.id} value={item.id}>
+                {item.name}
+              </MenuItem>
+            ))}
+          </SelectBox>
+        )}
       </FormControl>
     </>
   );

@@ -271,3 +271,52 @@ height: 50px;
   height: 104px;
   position: relative
 }
+
+.csvButton{
+            width: 100% !important;
+            background: #fff !important;
+            border-radius: 73px !important;
+            border: solid 1px !important;
+            font-size: 16px !important;
+            color: #274593 !important;
+            padding: 10px 30px !important;
+            font-weight: 600 !important;
+            
+}
+.csvButton:hover{
+    background: #f7f7f7 !important;
+     border-color: #f7f7f7 !important;
+}
+.resetButton{
+   width: 100% !important;
+   background: #274593 !important;
+   border-radius: 73px !important;
+   border: solid 1px !important;
+   font-size: 16px !important;
+   color: #fff !important;
+   padding: 10px 24px !important;
+   font-weight: 600 !important;
+}
+.resetButton:hover{
+       background: #274593 !important;
+     border-color: #274593 !important;
+    
+}
+
+.toggleBtn{
+   background: #fff !important;
+   border-radius: 73px !important;
+   border: solid 1px !important;
+   color: #274593 !important;
+   font-weight: 600 !important;
+   margin-bottom: 10px !important;
+}
+.toggleBtn:hover{
+     background: #f7f7f7 !important;
+     border-color: #f7f7f7 !important;
+}
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}

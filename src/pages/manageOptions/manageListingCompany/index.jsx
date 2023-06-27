@@ -22,11 +22,16 @@ import DialogBox from "@components/dialogBox";
 import { DeleteCard } from "@components/card";
 import { useDispatch } from "react-redux";
 import { setErrorToast, setSuccessToast } from "@redux/slice/toast";
+import Loader from "@components/loader";
+
 const StyledButton = styled(IconButton)(() => ({
   background: "#D5E3F7",
   width: "30px",
   height: "30px",
   color: "#274593",
+  position: "absolute",
+  top: "5px",
+  right: "5px",
   "&:hover": {
     background: "#b4d2fe",
   },
@@ -38,6 +43,7 @@ const ManageListingCompany = () => {
   const [newImage, setNewImage] = useState("");
   const [deleting, setDeleting] = useState("");
   const [companyLogoList, setCompanyLogoList] = useState([]);
+  const [loading, setLoading] = useState(false);
   const thumbs = (
     <Avatar
       sx={{
@@ -70,10 +76,12 @@ const ManageListingCompany = () => {
 
   //* get All listing  company start
   const getCompanyLogoList = async () => {
+    setLoading(true);
     const response = await getCompanyListingApi();
     if (response.remote === "success") {
       const formateData = transformCompanyListResponse(response.data);
       setCompanyLogoList(formateData);
+      setLoading(false);
     }
   };
   // *Add Company  Logo start
@@ -142,8 +150,7 @@ const ManageListingCompany = () => {
         >
           <Stack
             direction="row"
-            spacing={1}
-            alignItems="center"
+            spacing={2}
             className={`${styles.title}`}
             sx={{
               mb: {
@@ -183,13 +190,14 @@ const ManageListingCompany = () => {
               title={<>Add</>}
               sx={{
                 "&.MuiButton-outlined": {
-                  borderRadius: "73px",
+                  borderRadius: "10px !important",
                   border: "1px solid #274593",
                   color: "#274593",
                   fontWeight: "500",
                   fontSize: "16px",
                   fontFamily: "Bahnschrift",
                   padding: "10px 30px",
+                  width: "30%",
                 },
               }}
             ></OutlinedButton>
@@ -212,46 +220,45 @@ const ManageListingCompany = () => {
           >
             <h3>Listed Companies</h3>
           </Stack>
-
-          <Grid container spacing={2.5}>
-            {companyLogoList.map((logo, index) => (
-              <Grid item lg={4} xs={6} key={index}>
-                <Card
-                  sx={{
-                    "&.MuiCard-root": {
-                      boxShadow: "none",
-                      borderRadius: "10px",
-                      border: "1px solid #CACACA",
-                    },
-                  }}
-                >
-                  <CardContent
+          {loading ? (
+            <Loader loading={loading} />
+          ) : (
+            <Grid container spacing={2.5}>
+              {companyLogoList.map((logo, index) => (
+                <Grid item lg={3} xs={6} key={index}>
+                  <Card
                     sx={{
-                      "&.MuiCardContent-root": {
-                        p: {
-                          xs: 2,
-                          sm: 1,
-                          md: 1.5,
-                          lg: 2.5,
-                          xl: 2.5,
-                        },
+                      "&.MuiCard-root": {
+                        boxShadow: "none",
+                        borderRadius: "10px",
+                        border: "1px solid #CACACA",
                       },
                     }}
                   >
-                    <div className={`${styles.imageBox}`}>
-                      <img
-                        src={`${process.env.REACT_APP_BACKEND_URL}${logo.imgUrl}`}
-                        height={200}
-                      />
-                    </div>
-                    <StyledButton>
-                      <SVG.DeleteIcon onClick={() => setDeleting(logo.id)} />
-                    </StyledButton>
-                  </CardContent>
-                </Card>
-              </Grid>
-            ))}
-          </Grid>
+                    <CardContent
+                      sx={{
+                        "&.MuiCardContent-root": {
+                          p: 0.5,
+                        },
+                      }}
+                    >
+                      <div className={`${styles.imageBox}`}>
+                        <img
+                          src={`${process.env.REACT_APP_BACKEND_URL}${logo.imgUrl}`}
+                          height={140}
+                        />
+                        <StyledButton>
+                          <SVG.DeleteIcon
+                            onClick={() => setDeleting(logo.id)}
+                          />
+                        </StyledButton>
+                      </div>
+                    </CardContent>
+                  </Card>
+                </Grid>
+              ))}
+            </Grid>
+          )}
         </CardContent>
       </Card>
 

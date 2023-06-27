@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { SVG } from "@assets/svg";
 import { IconButton, Stack } from "@mui/material";
 import Layout from "../layout";
@@ -25,98 +25,107 @@ function ManageCandidatesComponent() {
   const [country, setCountry] = useState({});
   const debouncedSearchCandidatesValue = useDebounce(searchTerm, 500);
 
-  const columns = [
-    {
-      id: "1",
-      field: "no",
-      headerName: "No",
-      sortable: true,
-    },
-    {
-      id: "A1",
-      field: "role",
-      headerName: "Role",
-      sortable: true,
-    },
+  const columns = useMemo(
+    () => [
+      {
+        id: "1",
+        field: "no",
+        headerName: "No",
+        sortable: true,
+      },
+      {
+        id: "A1",
+        field: "role",
+        headerName: "Role",
+        sortable: true,
+      },
 
-    {
-      field: "name",
-      headerName: "Name",
-      sortable: true,
-      width: 180,
-      id: "3",
-    },
+      {
+        field: "name",
+        headerName: "Name",
+        sortable: true,
+        width: 180,
+        id: "3",
+      },
 
-    {
-      field: "email",
-      headerName: "Email",
-      sortable: true,
-      width: 180,
-    },
-    {
-      field: "mobileNumber",
-      headerName: "Mobile number",
-      sortable: true,
-      width: 180,
-    },
-    {
-      field: "action",
-      headerName: "Action",
-      sortable: false,
-      renderCell: (item) => {
-        return (
-          <Stack direction="row" spacing={1} alignItems="center">
-            <>
+      {
+        field: "email",
+        headerName: "Email",
+        sortable: true,
+        width: 180,
+      },
+      {
+        field: "mobileNumber",
+        headerName: "Mobile number",
+        sortable: true,
+        width: 180,
+      },
+      {
+        field: "action",
+        headerName: "Action",
+        sortable: false,
+        renderCell: (item) => {
+          return (
+            <Stack direction="row" spacing={1} alignItems="center">
+              <>
+                <IconButton
+                  onClick={() => {
+                    activeDeActiveUser(item);
+                  }}
+                  sx={{
+                    "&.MuiIconButton-root": {
+                      background: item.row.action ? "#D5E3F7" : "#D42929",
+                    },
+                    width: 30,
+                    height: 30,
+                    color: "#274593",
+                  }}
+                >
+                  {item.row.action ? (
+                    <SVG.ToggleOffIcon />
+                  ) : (
+                    <SVG.ToggleOnIcon />
+                  )}
+                </IconButton>
+              </>
+
               <IconButton
-                onClick={() => {
-                  activeDeActiveUser(item);
-                }}
+                onClick={() =>
+                  handleRedirectDetails(item.row.id, item.row.role)
+                }
                 sx={{
                   "&.MuiIconButton-root": {
-                    background: item.row.action ? "#D5E3F7" : "#D42929",
+                    background: "#D5E3F7",
                   },
                   width: 30,
                   height: 30,
                   color: "#274593",
                 }}
               >
-                {item.row.action ? <SVG.ToggleOffIcon /> : <SVG.ToggleOnIcon />}
+                <SVG.EyeIcon />
               </IconButton>
-            </>
-
-            <IconButton
-              onClick={() => handleRedirectDetails(item.row.id, item.row.role)}
-              sx={{
-                "&.MuiIconButton-root": {
-                  background: "#D5E3F7",
-                },
-                width: 30,
-                height: 30,
-                color: "#274593",
-              }}
-            >
-              <SVG.EyeIcon />
-            </IconButton>
-            <IconButton
-              onClick={() => setDeleting(item.row.id)}
-              sx={{
-                "&.MuiIconButton-root": {
-                  background: "#D5E3F7",
-                },
-                width: 30,
-                height: 30,
-                color: "#274593",
-              }}
-            >
-              <SVG.DeleteIcon />
-            </IconButton>
-          </Stack>
-        );
+              <IconButton
+                onClick={() => setDeleting(item.row.id)}
+                sx={{
+                  "&.MuiIconButton-root": {
+                    background: "#D5E3F7",
+                  },
+                  width: 30,
+                  height: 30,
+                  color: "#274593",
+                }}
+              >
+                <SVG.DeleteIcon />
+              </IconButton>
+            </Stack>
+          );
+        },
       },
-    },
-  ];
+    ],
+    []
+  );
 
-  const handleRedirectDetails = (item, role) => {
+  const handleRedirectDetails = useCallback((item, role) => {
     if (role === USER_ROLES.vendor) {
       const url = `${env.REACT_APP_REDIRECT_URL}/vendor/${item}/profile`;
       window.open(url, "_blank");
@@ -124,9 +133,9 @@ function ManageCandidatesComponent() {
       const url = `${env.REACT_APP_REDIRECT_URL}/job-seeker/${item}/profile`;
       window.open(url, "_blank");
     }
-  };
+  }, []);
 
-  const candidateList = async () => {
+  const candidateList = useCallback(async () => {
     dispatch(setLoading(true));
     const page = pages;
     const search = debouncedSearchCandidatesValue || "";
@@ -147,11 +156,11 @@ function ManageCandidatesComponent() {
     } else {
       console.log(response.error);
     }
-  };
+  }, [country, debouncedSearchCandidatesValue, pages, limit]);
 
-  function getPage(_, page) {
+  const getPage = useCallback((_, page) => {
     setPages(page);
-  }
+  }, []);
 
   const filterJobsCountry = (e) => {
     const countryId = e.target.value;
@@ -159,44 +168,48 @@ function ManageCandidatesComponent() {
     setCountry(country);
   };
 
-  const activeDeActiveUser = async (item) => {
-    const id = item.row.id;
-    const response = await activeInactiveUser(id);
-    if (response.remote === "success") {
-      const update = [...candidateTable].map((i) => {
-        if (i.id === item.row.id) {
-          i.action = !i.action;
-        }
-        return i;
-      });
-      setCandidateTable(update);
-    } else {
-      console.log(response.error);
-    }
-  };
+  const activeDeActiveUser = useCallback(
+    async (item) => {
+      const id = item.row.id;
+      const response = await activeInactiveUser(id);
+      if (response.remote === "success") {
+        const update = [...candidateTable].map((i) => {
+          if (i.id === item.row.id) {
+            i.action = !i.action;
+          }
+          return i;
+        });
+        setCandidateTable(update);
+        candidateList();
+      } else {
+        dispatch(setErrorToast("something went wrong"));
+      }
+    },
+    [candidateTable]
+  );
 
-  const handleDelete = async () => {
+  const handleDelete = useCallback(async () => {
     setLoading(false);
     const response = await deleteUser(deleting);
     if (response.remote === "success") {
-      const newEmployerTable = candidateTable.filter(
+      const newCandidateTable = candidateTable.filter(
         (emp) => emp.id !== deleting
       );
-      setCandidateTable(newEmployerTable);
+      setCandidateTable(newCandidateTable);
       setDeleting("");
       dispatch(setSuccessToast("Job Delete SuccessFully"));
     } else {
       dispatch(setErrorToast("Something went wrong"));
       console.log(response.error);
     }
-  };
+  }, [deleting, candidateTable, dispatch]);
 
   const resetFilterCandidate = () => {
     setSearchTerm("");
     setCountry({});
   };
 
-  const downloadCandidatesCSV = async () => {
+  const downloadCandidatesCSV = useCallback(async () => {
     const action = "download";
     const response = await manageCandidate({ action });
     if (response.remote === "success") {
@@ -205,9 +218,9 @@ function ManageCandidatesComponent() {
         "_blank"
       );
     } else {
-      console.log(response.error);
+      dispatch(setErrorToast("something went wrong"));
     }
-  };
+  }, [dispatch]);
 
   useEffect(() => {
     if (candidateTable.length) {
@@ -217,7 +230,7 @@ function ManageCandidatesComponent() {
 
   useEffect(() => {
     candidateList();
-  }, [country, debouncedSearchCandidatesValue, pages, limit]);
+  }, [candidateList]);
   return (
     <>
       <Layout
@@ -264,14 +277,16 @@ function ManageCandidatesComponent() {
         }}
         job
       />
-      <DialogBox open={!!deleting} handleClose={() => setDeleting("")}>
-        <DeleteCard
-          title="Delete Job"
-          content="Are you sure you want to delete job?"
-          handleCancel={() => setDeleting("")}
-          handleDelete={handleDelete}
-        />
-      </DialogBox>
+      {deleting && (
+        <DialogBox open={!!deleting} handleClose={() => setDeleting("")}>
+          <DeleteCard
+            title="Delete Job"
+            content="Are you sure you want to delete job?"
+            handleCancel={() => setDeleting("")}
+            handleDelete={handleDelete}
+          />
+        </DialogBox>
+      )}
     </>
   );
 }

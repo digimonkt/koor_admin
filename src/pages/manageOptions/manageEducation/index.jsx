@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import Layout from "../layout";
 import { SVG } from "@assets/svg";
 import { IconButton, Stack } from "@mui/material";
@@ -102,9 +102,12 @@ function manageEducation() {
     }
   };
 
-  function getPage(_, page) {
+  // function getPage(_, page) {
+  //   setPages(page);
+  // }
+  const getPage = useCallback((_, page) => {
     setPages(page);
-  }
+  }, []);
 
   const addEducationFunction = async () => {
     const payload = {
@@ -160,7 +163,6 @@ function manageEducation() {
       dispatch(setSuccessToast("Delete Skill SuccessFully"));
     } else {
       dispatch(setErrorToast("Something went wrong"));
-      console.log(response.error);
     }
   };
 
@@ -181,6 +183,7 @@ function manageEducation() {
         columns={columns}
         totalCount={totalCount}
         handlePageChange={getPage}
+        page={pages}
         searchProps={{
           placeholder: "Search  Education",
           onChange: (e) => setSearchTerm(e.target.value),

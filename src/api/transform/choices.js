@@ -15,6 +15,7 @@ export const transformEmployerAPIResponse = (data) => {
     id: data.id,
     no: index + 1,
     name: data.name,
+    credits: data.points,
     email: data.email,
     mobileNumber: data.mobile_number,
     action: data.is_active,
@@ -75,6 +76,14 @@ export const transformSkillResponse = (data) => {
     name: data.title,
   }));
 };
+export const transformFAQCategoryResponse = (data) => {
+  return data.map((data, index) => ({
+    id: data.id,
+    no: index + 1,
+    name: data.title,
+    role: data.role,
+  }));
+};
 
 export const transformResourcesResponse = (data) => {
   return data.map((data, index) => ({
@@ -98,7 +107,16 @@ export const transformNewsLetterResponse = (data) => {
     id: data.id,
     no: index + 1,
     email: data.email,
-    date: data.created,
+    date: data.created.slice(0, 10),
+  }));
+};
+
+export const transformFAQResponse = (data) => {
+  return data.map((data, index) => ({
+    id: data.id,
+    no: index + 1,
+    Question: data.question,
+    Answer: stripHTMLTags(data.answer).slice(0, 15) + "...",
   }));
 };
 
@@ -110,3 +128,9 @@ export const transformTestimonialResponse = (data) => {
     imageUrl: data.image.path,
   }));
 };
+
+export function stripHTMLTags(html) {
+  const tempElement = document.createElement("div");
+  tempElement.innerHTML = html;
+  return tempElement.textContent || tempElement.innerText || "";
+}

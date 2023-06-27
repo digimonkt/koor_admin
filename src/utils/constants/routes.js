@@ -25,6 +25,9 @@ import {
   manageNewsLetter,
   manageReports,
   financialTools,
+  manageFAQ,
+  showFAQ,
+  // addFAQ,
 } from "@pages/manageOptions";
 import ManageCountry from "@pages/manageOptions/manageCountry";
 import ManageTenderCategory from "@pages/manageOptions/manageTenderCategory";
@@ -161,6 +164,11 @@ export const AUTHENTICATED_ROUTE = [
     element: postTestimonials,
   },
   {
+    id: "post-testimonials",
+    path: "/post-testimonials",
+    element: postTestimonials,
+  },
+  {
     id: "manage-newsLetter",
     path: "/manage-newsLetter",
     element: manageNewsLetter,
@@ -169,6 +177,16 @@ export const AUTHENTICATED_ROUTE = [
     id: "manage-reports",
     path: "/reports",
     element: manageReports,
+  },
+  {
+    id: "manage-faq",
+    path: "/manage-faq",
+    element: manageFAQ,
+  },
+  {
+    id: "manage-faq",
+    path: "/manage-faq/:faqCategoryId/:role",
+    element: showFAQ,
   },
 ];
 

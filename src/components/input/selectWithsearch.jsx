@@ -5,7 +5,6 @@ function SelectWithSearch({ options, title, ...rest }) {
       sx={{
         borderRadius: "73px",
         background: "#fff",
-
         "& hover": { borderColor: "#cacaca" },
         "& fieldset": {
           border: "1px solid #cacaca",
@@ -22,7 +21,6 @@ function SelectWithSearch({ options, title, ...rest }) {
         },
       }}
       options={options}
-      key={options.value}
       getOptionLabel={(option) => option.label}
       renderInput={(params) => {
         return <TextField {...params} label={title} />;
@@ -33,12 +31,13 @@ function SelectWithSearch({ options, title, ...rest }) {
             component="li"
             sx={{ "& > img": { mr: 2, flexShrink: 0 } }}
             {...props}
+            key={options.value}
           >
             {option.label}
           </Box>
         );
       }}
-      style={{ width: 300 }}
+      style={{ width: "100%" }}
       {...rest}
     />
   );
