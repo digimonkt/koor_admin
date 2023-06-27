@@ -1,7 +1,7 @@
 import React from "react";
 import { LabeledInput, SearchInput, SelectInput } from "@components/input";
 import { SolidButton } from "@components/button";
-import { FormControl, Pagination, Stack } from "@mui/material";
+import { Box, Card, FormControl, Pagination, Stack } from "@mui/material";
 import SelectWithSearch from "@components/input/selectWithsearch";
 import styled from "@emotion/styled";
 
@@ -65,42 +65,51 @@ const Layout = ({
               background: "#f7f7f7",
               borderColor: "#f7f7f7",
             },
+            "@media(min-width:992px)": {
+              width: "40%",
+              height: "50px",
+            },
           }}
           title={addBtnTitle}
           onClick={onAddItems}
         />
       </Stack>
-      {children}
-      <div className="peritemview">
-        <Stack direction="row" spacing={2} alignItems="center">
-          <span>Items per page:</span>{" "}
-          <FormControl
-            sx={{
-              "&.MuiSelect-select": {
-                fontFamily: "Poppins",
-                fontSize: "16px",
-                padding: "7px 40px 5px 15px !important",
-              },
-            }}
-            size="small"
-          >
-            <SelectInput
-              options={[
-                { label: 5, value: 5 },
-                { label: 10, value: 10 },
-                { label: 15, value: 15 },
-              ]}
-              {...(limitProps || {})}
+      <Card sx={{ boxShadow: "none" }}>
+        {children}
+        <Box
+          className="peritemview"
+          sx={{ p: 3, borderTop: "1px solid rgba(0, 0, 0, 0.12)" }}
+        >
+          <Stack direction="row" spacing={2} alignItems="center">
+            <span>Items per page:</span>{" "}
+            <FormControl
+              sx={{
+                "&.MuiSelect-select": {
+                  fontFamily: "Poppins",
+                  fontSize: "16px",
+                  padding: "7px 40px 5px 15px !important",
+                },
+              }}
+              size="small"
+            >
+              <SelectInput
+                options={[
+                  { label: 5, value: 5 },
+                  { label: 10, value: 10 },
+                  { label: 15, value: 15 },
+                ]}
+                {...(limitProps || {})}
+              />
+            </FormControl>
+            <TablePagination
+              count={totalCount || 0}
+              page={page}
+              onChange={handlePageChange}
+              shape="rounded"
             />
-          </FormControl>
-          <TablePagination
-            count={totalCount || 0}
-            page={page}
-            onChange={handlePageChange}
-            shape="rounded"
-          />
-        </Stack>
-      </div>
+          </Stack>
+        </Box>
+      </Card>
     </>
   );
 };

@@ -140,16 +140,16 @@ function Layout({
             loader={loading}
             page={page}
           />
+          <div className="pagination-custom">
+            <TablePagination
+              count={totalCount || 0}
+              page={page}
+              onChange={handlePageChange}
+              shape="rounded"
+            />
+          </div>
         </CardContent>
       </Card>
-      <div className="pagination-custom">
-        <TablePagination
-          count={totalCount || 0}
-          page={page}
-          onChange={handlePageChange}
-          shape="rounded"
-        />
-      </div>
     </>
   );
 }

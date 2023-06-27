@@ -37,7 +37,7 @@ function SelectWithSearch({ options, title, ...rest }) {
           </Box>
         );
       }}
-      style={{ width: 300 }}
+      style={{ width: "100%" }}
       {...rest}
     />
   );

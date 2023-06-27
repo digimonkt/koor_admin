@@ -2,7 +2,15 @@ import { useEffect, useState } from "react";
 import { SVG } from "@assets/svg";
 import { OutlinedButton } from "@components/button";
 import styles from "@pages/manageOptions/manageSettings/styles.module.css";
-import { Avatar, Card, CardContent, IconButton, Stack } from "@mui/material";
+import {
+  Avatar,
+  Box,
+  Card,
+  CardContent,
+  Grid,
+  IconButton,
+  Stack,
+} from "@mui/material";
 import ReactQuill from "react-quill";
 import ImageCropper from "@components/imageCropper";
 import { LabeledInput } from "@components/input";
@@ -203,126 +211,149 @@ const PostTestimonials = () => {
           </IconButton>{" "}
           <h2>Testimonials</h2>
         </Stack>
-        <hr />
-        <div className={`${styles.title} ${styles.spaceMy}`}>
-          <LabeledInput
-            placeholder="Post title"
-            type="text"
-            onChange={(e) => handlePostTitle(e.target.value)}
-            value={postTitle}
-          />
-        </div>
-        <hr />
-        <div className={`${styles.title} ${styles.spaceMy}`}>
-          <LabeledInput
-            placeholder="Client Name"
-            type="text"
-            onChange={(e) => handleClientName(e.target.value)}
-            value={clientName}
-          />
-        </div>
-        <hr />
-        <div className={`${styles.title} ${styles.spaceMy}`}>
-          <LabeledInput
-            placeholder="Company Name "
-            type="text"
-            onChange={(e) => handleCompanyName(e.target.value)}
-            value={companyName}
-          />
-        </div>
-        <hr />
-        <div className={`${styles.title} ${styles.spaceMy}`}>
-          <LabeledInput
-            placeholder="Client position "
-            type="text"
-            onChange={(e) => handlePosition(e.target.value)}
-            value={clientPosition}
-          />
-        </div>
-
-        <div className="drag-drop">
-          <label>
-            <input
-              type="file"
-              style={{
-                position: "absolute",
-                width: "100%",
-                height: "100%",
-                display: "none",
+        <Grid container spacing={2}>
+          <Grid item xs={12} lg={6}>
+            <div className={`${styles.title} ${styles.spaceMy}`}>
+              <LabeledInput
+                placeholder="Post title"
+                type="text"
+                onChange={(e) => handlePostTitle(e.target.value)}
+                value={postTitle}
+              />
+            </div>
+          </Grid>
+          <Grid item xs={12} lg={6}>
+            <div className={`${styles.title} ${styles.spaceMy}`}>
+              <LabeledInput
+                placeholder="Client Name"
+                type="text"
+                onChange={(e) => handleClientName(e.target.value)}
+                value={clientName}
+              />
+            </div>
+          </Grid>
+          <Grid item xs={12} lg={6}>
+            <div className={`${styles.title} ${styles.spaceMy}`}>
+              <LabeledInput
+                placeholder="Company Name "
+                type="text"
+                onChange={(e) => handleCompanyName(e.target.value)}
+                value={companyName}
+              />
+            </div>
+          </Grid>
+          <Grid item xs={12} lg={6}>
+            <div className={`${styles.title} ${styles.spaceMy}`}>
+              <LabeledInput
+                placeholder="Client position "
+                type="text"
+                onChange={(e) => handlePosition(e.target.value)}
+                value={clientPosition}
+              />
+            </div>
+          </Grid>
+          <Grid item xs={12} lg={12}>
+            <div
+              className="drag-drop"
+              style={{ flexDirection: "column", height: "auto" }}
+            >
+              <label>
+                <input
+                  type="file"
+                  style={{
+                    position: "absolute",
+                    width: "100%",
+                    height: "100%",
+                    display: "none",
+                  }}
+                  accept="image/*"
+                  onChange={handleFiles}
+                />
+                <p style={{ textAlign: "center", cursor: "pointer" }}>
+                  Drag here or
+                  <span style={{ color: "blue" }}>
+                    {" "}
+                    upload a post cover image
+                  </span>
+                </p>
+              </label>
+              <Box sx={{ py: 1 }}>{newImage && <>{thumbs}</>}</Box>
+            </div>
+          </Grid>
+          <Grid item xs={12} lg={12}>
+            <div>
+              <ReactQuill
+                theme="snow"
+                value={paragraph}
+                style={{
+                  width: "100%",
+                  marginTop: "20px",
+                  background: "#F0F0F0",
+                }}
+                onChange={(value) => handleParagraph(value)}
+              />
+            </div>
+          </Grid>
+        </Grid>
+        {testimonialId ? (
+          <Stack
+            direction={"row"}
+            justifyContent={"center"}
+            sx={{ marginTop: "15px" }}
+          >
+            <OutlinedButton
+              onClick={() => handleUpdateTestimonial(testimonialId)}
+              title={
+                <Stack direction={"row"} alignItems={"center"} spacing={1}>
+                  <SVG.AddCircleIcon />
+                  <span> Update Testimonials</span>
+                </Stack>
+              }
+              sx={{
+                color: "#274593",
+                borderColor: "#274593",
+                display: "flex",
+                justifyContent: "center",
               }}
-              accept="image/*"
-              onChange={handleFiles}
             />
-            <p style={{ textAlign: "center", cursor: "pointer" }}>
-              Drag here or
-              <span style={{ color: "blue" }}> upload a post cover image</span>
-            </p>
-          </label>
-          {newImage && <>{thumbs}</>}
-        </div>
-        <div>
-          <ReactQuill
-            theme="snow"
-            value={paragraph}
-            style={{
-              width: "100%",
-              marginTop: "20px",
-              background: "#F0F0F0",
-            }}
-            onChange={(value) => handleParagraph(value)}
-          />
-        </div>
-      </CardContent>
-      {testimonialId ? (
-        <Stack direction={"row"} justifyContent={"center"}>
-          <OutlinedButton
-            onClick={() => handleUpdateTestimonial(testimonialId)}
-            title={
-              <Stack direction={"row"} alignItems={"center"} spacing={1}>
-                <SVG.AddCircleIcon />
-                <span> Update Testimonials</span>
-              </Stack>
-            }
-            sx={{
-              color: "#274593",
-              borderColor: "#274593",
-              display: "flex",
-              justifyContent: "center",
-            }}
-          />
-        </Stack>
-      ) : (
-        <Stack direction={"row"} justifyContent={"center"}>
-          <OutlinedButton
-            onClick={handleAddTestimonial}
-            title={
-              <Stack direction={"row"} alignItems={"center"} spacing={1}>
-                <SVG.AddCircleIcon />
-                <span> Add Testimonials</span>
-              </Stack>
-            }
-            sx={{
-              color: "#274593",
-              borderColor: "#274593",
-              display: "flex",
-              justifyContent: "center",
-            }}
-          />
-        </Stack>
-      )}
+          </Stack>
+        ) : (
+          <Stack
+            direction={"row"}
+            justifyContent={"center"}
+            sx={{ marginTop: "15px" }}
+          >
+            <OutlinedButton
+              onClick={handleAddTestimonial}
+              title={
+                <Stack direction={"row"} alignItems={"center"} spacing={1}>
+                  <SVG.AddCircleIcon />
+                  <span> Add Testimonials</span>
+                </Stack>
+              }
+              sx={{
+                color: "#274593",
+                borderColor: "#274593",
+                display: "flex",
+                justifyContent: "center",
+              }}
+            />
+          </Stack>
+        )}
 
-      {files.length ? (
-        <ImageCropper
-          open={files[0]}
-          handleClose={() => {
-            setFiles([]);
-          }}
-          handleSave={handleUpdateImage}
-          image={files[0]}
-        />
-      ) : (
-        ""
-      )}
+        {files.length ? (
+          <ImageCropper
+            open={files[0]}
+            handleClose={() => {
+              setFiles([]);
+            }}
+            handleSave={handleUpdateImage}
+            image={files[0]}
+          />
+        ) : (
+          ""
+        )}
+      </CardContent>
     </Card>
   );
 };
