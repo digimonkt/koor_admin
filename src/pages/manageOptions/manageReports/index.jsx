@@ -228,7 +228,12 @@ const Report = () => {
                 sx={{ mb: 4.5 }}
               >
                 <span className={`${styles.general}`}>Use data from past:</span>
-                <div className="selectedbox">
+                <Stack
+                  direction={"row"}
+                  spacing={2}
+                  alignItems={"center"}
+                  className="selectedbox"
+                >
                   <LocalizationProvider dateAdapter={AdapterDayjs}>
                     <DemoContainer components={["DatePicker"]}>
                       <DatePicker
@@ -249,7 +254,7 @@ const Report = () => {
                       />
                     </DemoContainer>
                   </LocalizationProvider>
-                </div>
+                </Stack>
               </Stack>
               <CommonReport
                 reportList={generalReport}

@@ -124,8 +124,8 @@ function Sidebar() {
           padding: {
             xs: 1.875,
             lg: 5,
-            overflowY: "scroll",
-            height: "100vh",
+
+            height: "100%",
           },
           width: { sm: `calc(100% - ${drawerWidth}px)` },
           background: "#E5E5E5",

@@ -13,7 +13,7 @@ function DataTable({ rows, columns, limitProps, loader, page }) {
   }, [page, rows]);
   return (
     <>
-      <div style={{ width: "100%", height: "500px", marginBottom: "30px" }}>
+      <div style={{ width: "100%", height: "625px", marginBottom: "30px" }}>
         <StyledDataGrid
           className="scrolltable"
           rows={rows}

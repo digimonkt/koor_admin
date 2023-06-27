@@ -27,6 +27,7 @@ import DialogBox from "@components/dialogBox";
 import { DeleteCard } from "@components/card";
 import SelectWithSearch from "@components/input/selectWithsearch";
 import { SolidButton } from "@components/button";
+import { Stack } from "@mui/material";
 
 const ManageCountry = () => {
   const dispatch = useDispatch();
@@ -218,33 +219,43 @@ const ManageCountry = () => {
             onOpen={() => handleSelectCountry(country)}
             handleDelete={() => setDeleting(country.id)}
           >
-            <SelectWithSearch
-              title={"Add city"}
-              onChange={(_, value) => setSelectCityValue(value)}
-              onKeyPress={(e) => getDataCity(e.target.value)}
-              options={cityName.map((cities) => ({
-                value: cities.id,
-                label: cities.title,
-                ...cities,
-              }))}
-            />
-            <SolidButton
-              align="right"
-              sx={{
-                background: "#fff",
-                borderRadius: "73px",
-                border: "solid 1px ",
-                fontFamily: "Bahnschrift",
-                color: "#274593",
-                fontWeight: 600,
-                "&:hover": {
-                  background: "#f7f7f7",
-                  borderColor: "#f7f7f7",
-                },
-              }}
-              title={"Add City"}
-              onClick={addCities}
-            />
+            <Stack
+              direction={"row"}
+              alignItems={"center"}
+              spacing={2}
+              sx={{ mb: 3 }}
+            >
+              <SelectWithSearch
+                title={"Add city"}
+                onChange={(_, value) => setSelectCityValue(value)}
+                onKeyPress={(e) => getDataCity(e.target.value)}
+                options={cityName.map((cities) => ({
+                  value: cities.id,
+                  label: cities.title,
+                  ...cities,
+                }))}
+              />
+              <SolidButton
+                align="right"
+                sx={{
+                  background: "#fff",
+                  borderRadius: "73px",
+                  border: "solid 1px ",
+                  fontFamily: "Bahnschrift",
+                  color: "#274593",
+                  whiteSpace: "nowrap",
+                  fontWeight: 600,
+                  height: "56px",
+                  width: "16%",
+                  "&:hover": {
+                    background: "#f7f7f7",
+                    borderColor: "#f7f7f7",
+                  },
+                }}
+                title={"Add City"}
+                onClick={addCities}
+              />
+            </Stack>
             <TableContainer component={Paper}>
               <Cities
                 countryId={country.id}

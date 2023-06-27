@@ -73,7 +73,33 @@ const Recharge = () => {
           <Grid container spacing={2.5}>
             <Grid item lg={6} xs={12}>
               <StyledFormLabel>Select employer (by name or ID)</StyledFormLabel>
+
               <SelectWithSearch
+                sx={{
+                  borderRadius: "10px",
+                  background: "#F0F0F0",
+                  fontFamily: "Poppins",
+
+                  "& fieldset": {
+                    border: "1px solid #cacaca",
+                    borderRadius: "93px",
+                    display: "none",
+                    "&:hover": { borderColor: "#cacaca" },
+                  },
+                  "& .MuiOutlinedInput-root": {
+                    fontFamily: "Poppins",
+                    padding: "4px 9px",
+                  },
+                  "& .MuiFormLabel-root": {
+                    fontSize: "16px",
+                    color: "#848484",
+                    fontFamily: "Poppins",
+                    transform: "translate(14px, 12px) scale(1)",
+                  },
+                  "& .MuiInputLabel-shrink": {
+                    transform: "translate(14px, -9px) scale(0.75)",
+                  },
+                }}
                 options={options}
                 title={"select the options"}
                 onChange={(_, value) => {

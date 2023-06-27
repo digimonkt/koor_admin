@@ -13,12 +13,15 @@ function DeleteCardComponent({
   return (
     <div>
       <h1 className="headding">{title}</h1>
-      <div className="form-content">{content}</div>
+      <div className="form-content" style={{ paddingBottom: "10px" }}>
+        {content}
+      </div>
       <Grid item xl={12} lg={12} xs={12}>
         <Stack
           direction="row"
           alignItems="center"
-          justifyContent="space-between"
+          justifyContent={"center"}
+          spacing={2}
         >
           <OutlinedButton
             title="No"
