@@ -184,24 +184,6 @@ function ManageEmployerComponent() {
       setEmployerTable(update);
       await activeInactiveUser(id);
       employerList();
-
-      // const update = employerTable.map((i) => (
-      //   if (i.id === id) {
-      //     return {...i}
-      //   }
-      // ));
-      // const response = await activeInactiveUser(id);
-      // if (response.remote === "success") {
-      //   const update = [...employerTable].map((i) => {
-      //     if (i.id === item.row.id) {
-      //       i.action = !i.action;
-      //     }
-      //     return i;
-      //   });
-      //   setEmployerTable(update);
-      // } else {
-      //   dispatch(setErrorToast("something went wrong"));
-      // }
     },
     [employerTable]
   );

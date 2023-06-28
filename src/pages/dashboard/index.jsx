@@ -45,7 +45,6 @@ const DashboardComponent = () => {
         },
       ];
       setUserList(NewUserList);
-
       setUserData({
         totalUsers: response.data.total_user,
         vendorsCount: vendors,
