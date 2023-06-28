@@ -51,7 +51,6 @@ const ManageCountry = () => {
     getWorldCities(countryName);
   };
   const debouncedSearchCountryValue = useDebounce(searchTerm, 500);
-
   async function addItems() {
     const payload = {
       title: selectValue.title,
@@ -73,9 +72,10 @@ const ManageCountry = () => {
         })
       );
       dispatch(setSuccessToast("Add Country SuccessFully"));
-      setSelectValue("");
+      setSelectValue([]);
     } else {
-      dispatch(setErrorToast(response.error.errors.title));
+      setSelectValue([]);
+      dispatch(setErrorToast(response.error.errors.message));
     }
   }
 
@@ -149,7 +149,6 @@ const ManageCountry = () => {
       dispatch(setSuccessToast("Delete Cities SuccessFully"));
     } else {
       dispatch(setErrorToast("Something went wrong"));
-      console.log(response.error);
     }
   };
 
@@ -163,20 +162,16 @@ const ManageCountry = () => {
       limit,
       page: pages,
     };
+
     dispatch(getCountries(payload));
+  }, [debouncedSearchCountryValue, limit, pages]);
+  useEffect(() => {
     const totalCounts = Math.ceil(countries.count / limit);
     setTotalCount(totalCounts);
-  }, [debouncedSearchCountryValue, limit, pages]);
+  }, [countries, limit]);
 
   useEffect(() => {
     getWorldCountry();
-  }, []);
-
-  useEffect(() => {
-    setLimit(10);
-    if (!countries.data.length) {
-      dispatch(getCountries());
-    }
   }, []);
 
   return (
