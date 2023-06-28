@@ -172,13 +172,6 @@ const ManageCategoryComponent = () => {
   };
 
   useEffect(() => {
-    setLimit(10);
-    if (!categories.data.length) {
-      dispatch(getCategories());
-    }
-  }, []);
-
-  useEffect(() => {
     const payload = {
       search: searchTerm,
       limit,
@@ -186,10 +179,11 @@ const ManageCategoryComponent = () => {
     };
 
     dispatch(getCategories(payload));
+  }, [debouncedSearchCategoryValue, limit, pages]);
+  useEffect(() => {
     const totalCounts = Math.ceil(categories.count / limit);
     setTotalCount(totalCounts);
-  }, [debouncedSearchCategoryValue, limit, pages]);
-
+  }, [categories, limit]);
   return (
     <>
       <Layout
