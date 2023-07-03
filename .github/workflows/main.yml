@@ -18,17 +18,17 @@ jobs:
         uses: appleboy/ssh-action@master
 
         with:
-          host: 203.190.153.20
+          host: 203.190.153.19
 
           key: ${{ secrets.SSH_PRIVATE_KEY }}
 
-          username: user
+          username: devops
 
           port: 22
 
           script: |
-            cd /home/user/koor/admin_koor/ 
+            cd /home/user/koor/admin/ 
             git pull origin master
             npm install
             npm run build
-            pm2 restart 36
+            pm2 restart 4
