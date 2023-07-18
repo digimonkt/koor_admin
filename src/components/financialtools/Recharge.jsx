@@ -62,7 +62,7 @@ const Recharge = () => {
   }, [contentId]);
   const options = content.map((item) => ({
     value: item.id,
-    label: item.name || "",
+    label: item.name || item.email,
   }));
 
   return (
@@ -113,7 +113,7 @@ const Recharge = () => {
               />
             </Grid>
             <Grid item lg={6} xs={12}>
-              <StyledFormLabel>Number of job cretits</StyledFormLabel>
+              <StyledFormLabel>Number of job credits</StyledFormLabel>
               <input
                 className={`${styles.textType}`}
                 placeholder="Add Credits"
