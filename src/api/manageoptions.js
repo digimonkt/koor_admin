@@ -482,3 +482,23 @@ export const setPointsApi = async (data) => {
   });
   return response;
 };
+
+export const getInvoiceListApi = async ({
+  limit,
+  page,
+  invoiceId,
+  employer,
+  sent,
+}) => {
+  const response = await api.request({
+    url: urlcat("/v1/admin/invoice", {
+      limit,
+      page,
+      invoiceId,
+      employer,
+      sent,
+    }),
+    method: "GET",
+  });
+  return response;
+};
