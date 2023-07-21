@@ -12,7 +12,7 @@ const StyledIconButton = styled(IconButton)(() => ({
   color: "#274593",
 }));
 
-const SaveButton = ({ buttonName, buttonPdf }) => {
+export const SaveButton = ({ buttonName, buttonPdf }) => {
   return (
     <>
       <Stack direction="row" spacing={1.5} justifyContent="center">
@@ -23,7 +23,7 @@ const SaveButton = ({ buttonName, buttonPdf }) => {
   );
 };
 
-const ManageButtonIcon = ({ eyeIcon, editIcon, mailIcon }) => {
+export const ManageButtonIcon = ({ eyeIcon, editIcon, mailIcon }) => {
   return (
     <>
       <Stack direction="row" spacing={1.5} justifyContent="center">
@@ -95,9 +95,9 @@ export const USER_ROW_DATA = [
     save: <SaveButton buttonName="XLS" buttonPdf="PDF" />,
     manage: (
       <ManageButtonIcon
-        eyeIcon=<SVG.EyeIcon />
-        editIcon=<SVG.EditIcon />
-        mailIcon=<SVG.ForwardIcon />
+        eyeIcon={<SVG.EyeIcon />}
+        editIcon={<SVG.EditIcon />}
+        mailIcon={<SVG.ForwardIcon />}
       />
     ),
   },

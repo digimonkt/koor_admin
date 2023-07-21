@@ -1,3 +1,4 @@
+import React from "react";
 import {
   Box,
   Button,
@@ -7,16 +8,17 @@ import {
   Pagination,
   Stack,
   Tab,
+  FormControl,
   Tabs,
 } from "@mui/material";
-import React from "react";
+import { SelectInput } from "@components/input";
 import { styled } from "@mui/material/styles";
 import PackageManagement from "@components/financialtools/PackageManagement ";
 import Cbutton from "@components/button/cButton";
 import { SVG } from "@assets/svg";
 import Recharge from "@components/financialtools/Recharge";
-// import GenenateInvoices from "@components/financialtools/GenerateInvoices";
-// import Invoices from "@components/financialtools/Invoices";
+import GenenateInvoices from "@components/financialtools/GenerateInvoices";
+import Invoices from "@components/financialtools/Invoices";
 // import PerPageItems from "../../globalcomponent/perpageitems/PerPageItems";
 const AntTabs = styled(Tabs)({
   minHeight: "35px",
@@ -184,12 +186,12 @@ const FinancialTools = () => {
               onChange={handleChange}
               aria-label="basic tabs example"
             >
-              {/* <AntTab label="Package management " {...a11yProps(0)} /> */}
-              <AntTab label="Recharge" {...a11yProps(0)} />
-              {/* <AntTab label="Genenate invoices" {...a11yProps(2)} /> */}
-              {/* <AntTab label="Invoices" {...a11yProps(3)} /> */}
+              <AntTab label="Package management " {...a11yProps(0)} />
+              <AntTab label="Recharge" {...a11yProps(1)} />
+              <AntTab label="Genenate invoices" {...a11yProps(2)} />
+              <AntTab label="Invoices" {...a11yProps(3)} />
             </AntTabs>
-            <TabPanel value={value} index={1}>
+            <TabPanel value={value} index={0}>
               <PackageManagement packageList={packageList} />
               <Stack direction="row" justifyContent="center" sx={{ mt: 3.75 }}>
                 <div>
@@ -209,11 +211,11 @@ const FinancialTools = () => {
                 </div>
               </Stack>
             </TabPanel>
-            <TabPanel value={value} index={0}>
+            <TabPanel value={value} index={1}>
               <Recharge />
             </TabPanel>
             <TabPanel value={value} index={2}>
-              {/* <GenenateInvoices /> */}
+              <GenenateInvoices />
               <Stack direction="row" justifyContent="center" sx={{ mt: 3.75 }}>
                 <div>
                   <Cbutton
@@ -246,13 +248,35 @@ const FinancialTools = () => {
               </Box>
             </TabPanel>
             <TabPanel value={value} index={3}>
-              {/* <Invoices /> */}
+              <Invoices />
               <Box sx={{ mt: 4.875 }}>
                 {/* <PerPageItems content={content} /> */}
               </Box>
             </TabPanel>
           </div>
         </CardContent>
+        <Stack direction="row" spacing={2} alignItems="center">
+          <span>Items per page:</span>{" "}
+          <FormControl
+            sx={{
+              "& .MuiSelect-select": {
+                fontFamily: "Poppins",
+                fontSize: "16px",
+                padding: "7px 40px 5px 15px !important",
+              },
+            }}
+            size="small"
+          >
+            <SelectInput
+              options={[
+                { label: 5, value: 5 },
+                { label: 10, value: 10 },
+                { label: 15, value: 15 },
+              ]}
+              // {...(limitProps || {})}
+            />
+          </FormControl>
+        </Stack>
       </Card>
 
       <TabPanel className="pagination-custom" value={value} index={3}>
