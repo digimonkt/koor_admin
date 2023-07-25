@@ -502,3 +502,19 @@ export const getInvoiceListApi = async ({
   });
   return response;
 };
+
+export const getPlansAPI = async () => {
+  const resp = await api.request({
+    url: urlcat("v1/admin/package"),
+    method: "GET",
+  });
+  return resp;
+};
+export const updatePlansAPI = async (data) => {
+  const resp = await api.request({
+    url: urlcat("v1/admin/package"),
+    method: "PATCH",
+    data
+  });
+  return resp;
+};

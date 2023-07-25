@@ -1,10 +1,9 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Button,
   Card,
   CardContent,
-  Divider,
   Pagination,
   Stack,
   Tab,
@@ -19,6 +18,7 @@ import { SVG } from "@assets/svg";
 import Recharge from "@components/financialtools/Recharge";
 import GenenateInvoices from "@components/financialtools/GenerateInvoices";
 import Invoices from "@components/financialtools/Invoices";
+import { getPlansAPI } from "@api/manageoptions";
 // import PerPageItems from "../../globalcomponent/perpageitems/PerPageItems";
 const AntTabs = styled(Tabs)({
   minHeight: "35px",
@@ -106,56 +106,48 @@ const FinancialTools = () => {
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
-  const packageList = [
-    {
-      id: 1,
-      title: "Gold",
-      price: "5",
-      post: "10",
-      benefits: "Best to try how good the Koor works",
-      benefitPost: "For ~3 posts",
-      placeholder: "Add benefit",
-      divider: <Divider sx={{ my: 3.5, opacity: 1, borderColor: "#CACACA" }} />,
-    },
-    {
-      id: 2,
-      title: "Silver",
-      price: "5",
-      post: "10",
-      benefits: "Best to try how good the Koor works",
-      benefitPost: "Some more info",
-      benefits3: "For ~15 posts",
-      placeholder: "Add benefit",
-      divider: <Divider sx={{ my: 3.5, opacity: 1, borderColor: "#CACACA" }} />,
-    },
-    {
-      id: 3,
-      title: "Copper",
-      price: "5",
-      post: "10",
-      benefits: "Best to try how good the Koor works",
-      benefitPost: "For ~3 posts",
-      benefits3: "Some more info",
-      benefitPost4: "For ~50 posts",
-    },
-  ];
-  // const content = [
-  //   {
-  //     title: "5",
-  //     id: "1",
-  //     value: "",
-  //   },
-  //   {
-  //     title: "10",
-  //     id: "2",
-  //     value: "2",
-  //   },
-  //   {
-  //     title: "15",
-  //     id: "3",
-  //     value: "3",
-  //   },
-  // ];
+  const [packageList, setPackageList] = useState(
+    [
+      {
+        id: 1,
+        title: "Gold",
+        price: "5",
+        post: "10",
+        benefits: "Best to try how good the Koor works",
+        benefitPost: "For ~3 posts",
+        placeholder: "Add benefit",
+      },
+      {
+        id: 2,
+        title: "Silver",
+        price: "5",
+        post: "10",
+        benefits: "Best to try how good the Koor works",
+        benefitPost: "Some more info",
+        benefits3: "For ~15 posts",
+        placeholder: "Add benefit",
+      },
+      {
+        id: 3,
+        title: "Copper",
+        price: "5",
+        post: "10",
+        benefits: "Best to try how good the Koor works",
+        benefitPost: "For ~3 posts",
+        benefits3: "Some more info",
+        benefitPost4: "For ~50 posts",
+      },
+    ]
+  );
+
+  const getPlans = async () => {
+    const resp = await getPlansAPI();
+    setPackageList(resp.data.results);
+  };
+  useEffect(() => {
+    getPlans();
+  }, []);
+
   return (
     <>
       <Card
@@ -192,24 +184,7 @@ const FinancialTools = () => {
               <AntTab label="Invoices" {...a11yProps(3)} />
             </AntTabs>
             <TabPanel value={value} index={0}>
-              <PackageManagement packageList={packageList} />
-              <Stack direction="row" justifyContent="center" sx={{ mt: 3.75 }}>
-                <div>
-                  <Cbutton
-                    bgcolor="#D5E3F7"
-                    color="#274593"
-                    bordercolor="#D5E3F7"
-                    hoverBgColor="#b4d2fe"
-                    hoverborderColor="#b4d2fe"
-                    padding="7px 30px"
-                  >
-                    <span className="d-inline-flex me-2">
-                      <SVG.PriorityIcon />
-                    </span>
-                    Save changes
-                  </Cbutton>
-                </div>
-              </Stack>
+              <PackageManagement packageList={packageList} refreshList={() => getPlans()} />
             </TabPanel>
             <TabPanel value={value} index={1}>
               <Recharge />
@@ -255,28 +230,31 @@ const FinancialTools = () => {
             </TabPanel>
           </div>
         </CardContent>
-        <Stack direction="row" spacing={2} alignItems="center">
-          <span>Items per page:</span>{" "}
-          <FormControl
-            sx={{
-              "& .MuiSelect-select": {
-                fontFamily: "Poppins",
-                fontSize: "16px",
-                padding: "7px 40px 5px 15px !important",
-              },
-            }}
-            size="small"
-          >
-            <SelectInput
-              options={[
-                { label: 5, value: 5 },
-                { label: 10, value: 10 },
-                { label: 15, value: 15 },
-              ]}
+        {
+          value === 4 && <Stack direction="row" spacing={2} alignItems="center">
+            <span>Items per page:</span>{" "}
+            <FormControl
+              sx={{
+                "& .MuiSelect-select": {
+                  fontFamily: "Poppins",
+                  fontSize: "16px",
+                  padding: "7px 40px 5px 15px !important",
+                },
+              }}
+              size="small"
+            >
+              <SelectInput
+                options={[
+                  { label: 5, value: 5 },
+                  { label: 10, value: 10 },
+                  { label: 15, value: 15 },
+                ]}
               // {...(limitProps || {})}
-            />
-          </FormControl>
-        </Stack>
+              />
+            </FormControl>
+          </Stack>
+        }
+
       </Card>
 
       <TabPanel className="pagination-custom" value={value} index={3}>
