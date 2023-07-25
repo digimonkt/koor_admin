@@ -18,3 +18,7 @@ export const validateChangePasswordForm = Yup.object({
 export const validateSetPassword = Yup.object({
   getPoints: Yup.string().required("Set point is required"),
 });
+
+export const validatePlanForm = Yup.object({
+  // plans: Yup.array().required(""),
+});
