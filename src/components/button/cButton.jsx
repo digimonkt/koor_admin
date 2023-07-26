@@ -13,10 +13,12 @@ const Cbutton = ({
   padding,
   url,
   bordercolor,
+  onClick
 }) => {
   return (
     <>
       <Button
+        onClick={() => onClick()}
         LinkComponent={Link}
         to={url}
         fullWidth

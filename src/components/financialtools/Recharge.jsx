@@ -123,7 +123,7 @@ const Recharge = () => {
             </Grid>
           </Grid>
           <Stack direction="row" justifyContent="center" sx={{ mt: 3.75 }}>
-            <div onClick={handleSubmit}>
+            <div >
               <Cbutton
                 bgcolor="#D5E3F7"
                 color="#274593"
@@ -131,6 +131,7 @@ const Recharge = () => {
                 hoverBgColor="#b4d2fe"
                 hoverborderColor="#b4d2fe"
                 padding="7px 30px"
+                onClick={handleSubmit}
               >
                 <span className="d-inline-flex me-2">
                   <SVG.TokenIcon />
