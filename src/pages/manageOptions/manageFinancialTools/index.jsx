@@ -12,7 +12,7 @@ import {
 } from "@mui/material";
 import { SelectInput } from "@components/input";
 import { styled } from "@mui/material/styles";
-import PackageManagement from "@components/financialtools/PackageManagement ";
+import PackageManagement from "@components/financialtools/PackageManagement";
 import Cbutton from "@components/button/cButton";
 import { SVG } from "@assets/svg";
 import Recharge from "@components/financialtools/Recharge";
@@ -111,31 +111,31 @@ const FinancialTools = () => {
       {
         id: 1,
         title: "Gold",
-        price: "5",
-        post: "10",
-        benefits: "Best to try how good the Koor works",
-        benefitPost: "For ~3 posts",
+        price: "0",
+        post: "0",
+        benefits: "Add Benefit",
+        benefitPost: "Add Benefit",
         placeholder: "Add benefit",
       },
       {
         id: 2,
         title: "Silver",
-        price: "5",
-        post: "10",
-        benefits: "Best to try how good the Koor works",
-        benefitPost: "Some more info",
-        benefits3: "For ~15 posts",
-        placeholder: "Add benefit",
+        price: "0",
+        post: "0",
+        benefits: "Add Benefit",
+        benefitPost: "Add Benefit",
+        benefits3: "Add Benefit",
+        placeholder: "Add Benefit",
       },
       {
         id: 3,
         title: "Copper",
-        price: "5",
-        post: "10",
-        benefits: "Best to try how good the Koor works",
-        benefitPost: "For ~3 posts",
-        benefits3: "Some more info",
-        benefitPost4: "For ~50 posts",
+        price: "0",
+        post: "0",
+        benefits: "Add Benefit",
+        benefitPost: "Add Benefit",
+        benefits3: "Add Benefit",
+        benefitPost4: "Add Benefit",
       },
     ]
   );
