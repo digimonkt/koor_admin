@@ -2,7 +2,14 @@ import React from "react";
 import { SolidButton } from "@components/button";
 import { SearchInput, SelectInput } from "@components/input";
 
-function TableFilter({ searchProps, selectProps, csvProps, jobProps, job }) {
+function TableFilter({
+  jobPost,
+  searchProps,
+  selectProps,
+  csvProps,
+  jobProps,
+  job,
+}) {
   return (
     <>
       <SearchInput
@@ -18,6 +25,15 @@ function TableFilter({ searchProps, selectProps, csvProps, jobProps, job }) {
             fontFamily: "Bahnschrift",
           }}
           {...csvProps}
+        />
+      </div>
+      <div className="w-100">
+        <SolidButton
+          className="csvButton"
+          sx={{
+            fontFamily: "Bahnschrift",
+          }}
+          {...jobPost}
         />
       </div>
       {job && (

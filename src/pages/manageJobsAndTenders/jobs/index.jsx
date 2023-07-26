@@ -256,6 +256,16 @@ function ManageJobsComponent() {
             </div>
           ),
         }}
+        jobPost={{
+          title: (
+            <div onClick={() => downloadJobCSV()}>
+              <span className="d-inline-flex align-items-center me-2">
+                <SVG.ExportIcon />
+              </span>
+              New Job Post
+            </div>
+          ),
+        }}
         jobProps={{
           title: (
             <div onClick={() => resetFilterJob()}>
