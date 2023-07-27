@@ -4,6 +4,8 @@ import ManageJobsComponent from "./jobs";
 import ManageTendersComponent from "./tenders";
 import DashboardComponent from "../dashboard";
 import EmployerDetails from "./employer/EmployerDetails";
+import PostNewJob from "./jobs/postNewJob/PostNewJob";
+export const postNewJob = PostNewJob;
 export const ManageJobs = ManageJobsComponent;
 export const ManageTenders = ManageTendersComponent;
 export const ManageEmployer = ManageEmployerComponent;

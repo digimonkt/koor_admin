@@ -9,6 +9,7 @@ function TableFilter({
   csvProps,
   jobProps,
   job,
+  newJob,
 }) {
   return (
     <>
@@ -27,24 +28,30 @@ function TableFilter({
           {...csvProps}
         />
       </div>
-      <div className="w-100">
-        <SolidButton
-          className="csvButton"
-          sx={{
-            fontFamily: "Bahnschrift",
-          }}
-          {...jobPost}
-        />
-      </div>
+
       {job && (
+        <>
+          <div className="w-100">
+            <SolidButton
+              title={(jobProps || {}).title}
+              className="resetButton"
+              sx={{
+                fontFamily: "Bahnschrift",
+              }}
+              {...jobProps}
+            />
+          </div>
+        </>
+      )}
+      {newJob && (
         <div className="w-100">
           <SolidButton
-            title={(jobProps || {}).title}
+            title={(jobPost || {}).title}
             className="resetButton"
             sx={{
               fontFamily: "Bahnschrift",
             }}
-            {...jobProps}
+            {...jobPost}
           />
         </div>
       )}

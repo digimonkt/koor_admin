@@ -9,6 +9,7 @@ import { ReactComponent as Report } from "./report.svg";
 import { ReactComponent as UserRole } from "./userRole.svg";
 import { ReactComponent as PrivacyPolicy } from "./privacypolicy.svg";
 import { ReactComponent as UserManagement } from "./user_manage.svg";
+import { ReactComponent as AttachIcon } from "./attachIcon.svg";
 import { ReactComponent as Settings } from "./settings.svg";
 import { ReactComponent as LogOut } from "./logout.svg";
 import { ReactComponent as CreditIcon } from "./creaditicon.svg";
@@ -73,6 +74,7 @@ export const SVG = {
   PrivacyPolicy,
   UserManagement,
   Settings,
+  AttachIcon,
   LogOut,
   CreditIcon,
   ClockIcon,

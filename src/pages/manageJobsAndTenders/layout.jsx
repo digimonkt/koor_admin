@@ -36,6 +36,7 @@ function Layout({
   page,
   limitProps,
   jobPost,
+  newJob,
 }) {
   const dispatch = useDispatch();
   //! const { loading } = useSelector((state) => state.jobsAndTenders);
@@ -70,6 +71,7 @@ function Layout({
             })),
           }}
           job={job}
+          newJob={newJob}
         />
       </Stack>
       <Card

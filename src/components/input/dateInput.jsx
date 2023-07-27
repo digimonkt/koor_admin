@@ -1,6 +1,6 @@
 import { TextField } from "@mui/material";
 import { DesktopDatePicker, LocalizationProvider } from "@mui/x-date-pickers";
-// import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import styles from "./style.module.css";
 import React from "react";
 import { DATE_FORMAT } from "@utils/constants/constants";
@@ -13,7 +13,7 @@ function DateInputComponent({ renderInput, ...rest }) {
     props.inputFormat = DATE_FORMAT;
   }
   return (
-    <LocalizationProvider dateAdapter={""}>
+    <LocalizationProvider dateAdapter={AdapterDayjs}>
       <DesktopDatePicker
         className={styles.date_picker_error}
         renderInput={(params) => <TextField {...params} />}

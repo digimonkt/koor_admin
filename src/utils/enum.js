@@ -11,3 +11,10 @@ export const MESSAGE_TYPE = {
   warning: "warning",
   null: "",
 };
+export const PAY_PERIOD = {
+  year: "yearly",
+  quarter: "quarterly",
+  month: "monthly",
+  week: "weekly",
+  hour: "hourly",
+};
