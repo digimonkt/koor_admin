@@ -1,5 +1,10 @@
-import { getCountriesName } from "@api/jobs";
-import { getCityApi } from "@api/manageCountryCity";
+import {
+  getCountriesName,
+  getEducationLevelsAPI,
+  getLanguagesAPI,
+  getSkillsAPI,
+} from "@api/jobs";
+import { getCityApi, getWorldCityApi } from "@api/manageCountryCity";
 import { getJobSubCategoryApi } from "@api/managejobSubCategory";
 import { manageCategoryApi } from "@api/manageoptions";
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
@@ -14,14 +19,30 @@ const initialState = {
     data: {},
   },
 
-  categories: {
+  worldCities: {
     loading: false,
     data: [],
   },
 
+  categories: {
+    loading: false,
+    data: [],
+  },
+  educationLevels: {
+    loading: false,
+    data: [],
+  },
   subCategories: {
     loading: false,
     data: {},
+  },
+  languages: {
+    loading: false,
+    data: [],
+  },
+  skills: {
+    loading: false,
+    data: [],
   },
 };
 // counties
@@ -51,6 +72,23 @@ export const getCitiesByCountry = createAsyncThunk(
     }
   }
 );
+
+// WorldCities
+export const getWorldCities = createAsyncThunk(
+  "choices/getWorldCities",
+  async (data, { rejectWithValue }) => {
+    const res = await getWorldCityApi(data);
+    if (res.remote === "success") {
+      return {
+        countryId: data.countryId,
+        data: res.data.results,
+      };
+    } else {
+      return rejectWithValue(res.error);
+    }
+  }
+);
+
 // categories
 export const getCategories = createAsyncThunk(
   "choices/getCategories",
@@ -95,13 +133,27 @@ export const choiceSlice = createSlice({
     addCity: (state, action) => {
       const newCity = [
         action.payload,
-        ...(state.cities.data[action.payload.countryId] || []),
+        ...(state.worldCities.data[action.payload.countryId] || []),
       ];
-      state.cities = {
+      state.worldCities = {
         loading: false,
         data: {
-          ...state.cities.data,
+          ...state.worldCities.data,
           [action.payload.countryId]: [...newCity],
+        },
+      };
+    },
+
+    addWorldCity: (state, action) => {
+      const newWorldCity = [
+        action.payload,
+        ...(state.worldCities.data[action.payload.countryId] || []),
+      ];
+      state.worldCities = {
+        loading: false,
+        data: {
+          ...state.worldCities.data,
+          [action.payload.countryId]: [...newWorldCity],
         },
       };
     },
@@ -223,6 +275,31 @@ export const choiceSlice = createSlice({
       };
     });
 
+    //  WorldCities
+    builder.addCase(getWorldCities.fulfilled, (state, action) => {
+      state.worldCities = {
+        loading: false,
+        data: {
+          ...(state.worldCities.data || {}),
+          [action.payload.countryId]: action.payload.data.length
+            ? action.payload.data
+            : null,
+        },
+      };
+    });
+    builder.addCase(getWorldCities.pending, (state) => {
+      state.worldCities = {
+        ...state.worldCities,
+        loading: true,
+      };
+    });
+    builder.addCase(getWorldCities.rejected, (state) => {
+      state.worldCities = {
+        ...state.worldCities,
+        loading: false,
+      };
+    });
+
     //  Categories
     builder.addCase(getCategories.fulfilled, (state, action) => {
       state.categories = {
@@ -267,8 +344,102 @@ export const choiceSlice = createSlice({
         loading: false,
       };
     });
+    // language
+    builder.addCase(getLanguages.fulfilled, (state, action) => {
+      state.languages = {
+        loading: false,
+        data: action.payload,
+      };
+    });
+    builder.addCase(getLanguages.pending, (state) => {
+      state.languages = {
+        ...state.languages,
+        loading: true,
+      };
+    });
+    builder.addCase(getLanguages.rejected, (state) => {
+      state.languages = {
+        ...state.languages,
+        loading: false,
+      };
+    });
+    // education
+    builder.addCase(getEducationLevels.fulfilled, (state, action) => {
+      state.educationLevels = {
+        loading: false,
+        data: action.payload,
+      };
+    });
+    builder.addCase(getEducationLevels.pending, (state) => {
+      state.educationLevels = {
+        ...state.educationLevels,
+        loading: true,
+      };
+    });
+    builder.addCase(getEducationLevels.rejected, (state) => {
+      state.educationLevels = {
+        ...state.educationLevels,
+        loading: false,
+      };
+    });
+    // skills
+    builder.addCase(getSkills.fulfilled, (state, action) => {
+      state.skills = {
+        loading: false,
+        data: action.payload,
+      };
+    });
+    builder.addCase(getSkills.pending, (state) => {
+      state.skills = {
+        ...state.skills,
+        loading: true,
+        data: [],
+      };
+    });
+    builder.addCase(getSkills.rejected, (state) => {
+      state.skills = {
+        ...state.skills,
+        loading: false,
+      };
+    });
   },
 });
+// Language
+export const getLanguages = createAsyncThunk(
+  "choices/getLanguages",
+  async (_, { rejectWithValue }) => {
+    const res = await getLanguagesAPI();
+    if (res.remote === "success") {
+      return res.data;
+    } else {
+      return rejectWithValue(res.error);
+    }
+  }
+);
+// education
+export const getEducationLevels = createAsyncThunk(
+  "choices/getEducationLevels",
+  async (_, { rejectWithValue }) => {
+    const res = await getEducationLevelsAPI();
+    if (res.remote === "success") {
+      return res.data;
+    } else {
+      return rejectWithValue(res.error);
+    }
+  }
+);
+// skills
+export const getSkills = createAsyncThunk(
+  "choices/skills",
+  async (data, { rejectWithValue }) => {
+    const res = await getSkillsAPI(data);
+    if (res.remote === "success") {
+      return res.data;
+    } else {
+      return rejectWithValue(res.error);
+    }
+  }
+);
 export const {
   addCountry,
   addCategories,
@@ -278,5 +449,6 @@ export const {
   removeSubCategory,
   removeCity,
   addCity,
+  addWorldCity,
 } = choiceSlice.actions;
 export default choiceSlice.reducer;

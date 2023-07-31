@@ -12,8 +12,12 @@ import { setLoading } from "@redux/slice/jobsAndTenders";
 import env from "@utils/validateEnv";
 import { useDebounce } from "usehooks-ts";
 import { transformJobAPIResponse } from "@api/transform/choices";
+import { useNavigate } from "react-router-dom";
+
 function ManageJobsComponent() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const { countries } = useSelector((state) => state.choice);
   const [jobTable, setJobTable] = useState([]);
   const [totalCount, setTotalCount] = useState(0);
@@ -209,6 +213,10 @@ function ManageJobsComponent() {
     }
   }, [dispatch]);
 
+  const PostNewJob = () => {
+    navigate("/post-newJob");
+  };
+
   useEffect(() => {
     if (jobTable.length) {
       dispatch(setLoading(false));
@@ -223,6 +231,7 @@ function ManageJobsComponent() {
     <>
       <Layout
         job
+        newJob
         rows={jobTable}
         totalCount={totalCount}
         columns={columns}
@@ -253,6 +262,14 @@ function ManageJobsComponent() {
                 <SVG.ExportIcon />
               </span>
               Export CSV
+            </div>
+          ),
+        }}
+        jobPost={{
+          title: (
+            <div onClick={() => PostNewJob()}>
+              <span className="d-inline-flex align-items-center me-2"></span>
+              New Job Post
             </div>
           ),
         }}

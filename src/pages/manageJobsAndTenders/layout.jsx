@@ -35,6 +35,8 @@ function Layout({
   handlePageChange,
   page,
   limitProps,
+  jobPost,
+  newJob,
 }) {
   const dispatch = useDispatch();
   //! const { loading } = useSelector((state) => state.jobsAndTenders);
@@ -57,6 +59,7 @@ function Layout({
         sx={{ marginBottom: 2.5 }}
       >
         <TableFilter
+          jobPost={{ ...(jobPost || {}) }}
           csvProps={{ ...(csvProps || {}) }}
           jobProps={{ ...(jobProps || {}) }}
           searchProps={{ ...(searchProps || {}) }}
@@ -68,6 +71,7 @@ function Layout({
             })),
           }}
           job={job}
+          newJob={newJob}
         />
       </Stack>
       <Card
