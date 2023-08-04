@@ -9,6 +9,7 @@ import { getUserDetailsApi, verifyUnVerifyApi } from "@api/manageoptions";
 import { useDispatch } from "react-redux";
 import { setErrorToast, setSuccessToast } from "@redux/slice/toast";
 import SelectWithSearch from "@components/input/selectWithsearch";
+import { useDebounce } from "usehooks-ts";
 const StyledFormLabel = styled(FormLabel)(() => ({
   fontFamily: "Poppins",
   color: "#121212",
@@ -24,11 +25,12 @@ const Recharge = () => {
   const [contentId, setContentId] = useState("");
   const [creditsAmount, setCreditsAmount] = useState([]);
   const [userPoints, setUserPoints] = useState(null);
+  const [searchTerm, setSearchTerm] = useState("");
   function handleChange(event) {
     setCreditsAmount(event.target.value);
   }
   const getEmployerList = async () => {
-    const response = await manageEmployer({});
+    const response = await manageEmployer({ search: searchTerm });
     if (response.remote === "success") {
       setContent(response.data.results);
     }
@@ -46,9 +48,10 @@ const Recharge = () => {
       dispatch(setErrorToast("Something Went Wrong"));
     }
   };
+  const debouncedSearchCountryValue = useDebounce(searchTerm, 500);
   useEffect(() => {
     getEmployerList();
-  }, []);
+  }, [debouncedSearchCountryValue]);
   useEffect(() => {
     if (contentId.length) {
       const getUserCredit = async () => {
@@ -110,6 +113,7 @@ const Recharge = () => {
                   }
                 }}
                 {...options}
+                onKeyUp={(e) => setSearchTerm(e.target.value)}
               />
             </Grid>
             <Grid item lg={6} xs={12}>

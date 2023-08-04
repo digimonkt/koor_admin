@@ -56,6 +56,9 @@ import { ReactComponent as LocationIcon } from "./location.svg";
 import { ReactComponent as vectorIcon } from "./vectorIcon.svg";
 import { ReactComponent as unVerify } from "./unVerify.svg";
 import { ReactComponent as polygon } from "./Polygon.svg";
+import { ReactComponent as ProfileIcon } from "./profile.svg";
+import { ReactComponent as ReceiptIcon } from "./receipt.svg";
+import { ReactComponent as ArrowForward } from "./arrow_forward.svg";
 export const SVG = {
   polygon,
   LocationIcon,
@@ -115,4 +118,7 @@ export const SVG = {
   FacebookIcon,
   AddCircleIcon,
   DownlodingIcon,
+  ProfileIcon,
+  ReceiptIcon,
+  ArrowForward,
 };

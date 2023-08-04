@@ -1,3 +1,4 @@
+import { manageEmployer } from "@api/employers";
 import {
   getCountriesName,
   getEducationLevelsAPI,
@@ -44,6 +45,10 @@ const initialState = {
     loading: false,
     data: [],
   },
+  employers: {
+    loading: false,
+    data: [],
+  }
 };
 // counties
 export const getCountries = createAsyncThunk(
@@ -402,6 +407,26 @@ export const choiceSlice = createSlice({
         loading: false,
       };
     });
+    // Employer
+    builder.addCase(getEmployers.fulfilled, (state, action) => {
+      state.employers = {
+        loading: false,
+        data: action.payload,
+      };
+    });
+    builder.addCase(getEmployers.pending, (state) => {
+      state.employers = {
+        ...state.employers,
+        loading: true,
+        data: [],
+      };
+    });
+    builder.addCase(getEmployers.rejected, (state) => {
+      state.employers = {
+        ...state.employers,
+        loading: false,
+      };
+    });
   },
 });
 // Language
@@ -440,6 +465,15 @@ export const getSkills = createAsyncThunk(
     }
   }
 );
+export const getEmployers = createAsyncThunk("choice/employers",
+  async (_, { rejectWithValue }) => {
+    const res = await manageEmployer();
+    if (res.remote === "success") {
+      return res.data;
+    } else {
+      return rejectWithValue(res.error);
+    }
+  });
 export const {
   addCountry,
   addCategories,

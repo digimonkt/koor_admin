@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import styles from "./postJobs.module.css";
 import { JobFormControl } from "./style";
 import {
@@ -7,10 +7,11 @@ import {
   LabeledInput,
   SelectInput,
   AttachmentDragNDropInput,
+  // ProfilePicInput,
 } from "@components/input";
 import CloseIcon from "@mui/icons-material/Close";
 import CurrencyInput from "./currencyInput";
-import { PAY_PERIOD } from "@utils/enum";
+import { PAY_PERIOD, SUBMITTING_STATUS_ENUM } from "@utils/enum";
 import { useFormik } from "formik";
 
 import {
@@ -30,60 +31,86 @@ import {
   getCountries,
   getCitiesByCountry,
   getEducationLevels,
-  // getWorldCities,
-  getWorldCities,
   getCategories,
-  // getJobSubCategories,
+  getSubCategories,
   getLanguages,
   getSkills,
+  getEmployers,
 } from "@redux/slice/choices";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import { FilledButton } from "@components/button";
 import { ErrorMessage } from "@components/caption";
+import SelectWithSearch from "@components/input/selectWithsearch";
+import { manageEmployer } from "@api/employers";
+import { useDebounce } from "usehooks-ts";
+import { GetSuggestedAddressAPI, createJobAPI, getCountriesName, getJobDetailsByIdAPI, updateEmployerJobAPI } from "@api/jobs";
+import { validateCreateJobInput } from "@pages/manageJobsAndTenders/validator";
+import dayjs from "dayjs";
+import { DATABASE_DATE_FORMAT } from "@utils/constants/constants";
+import { setErrorToast, setSuccessToast } from "@redux/slice/toast";
 
 const PostNewJob = () => {
   const {
     countries,
     educationLevels,
     categories,
+    subCategories,
     languages,
     skills,
     cities,
-    worldCities,
+    // worldCities,
+    employers
   } = useSelector(({ choice }) => choice);
-  console.log({ worldCities });
   const dispatch = useDispatch();
-  const [selectedValue, setSelectedValue] = React.useState("selectCompany");
+  const [selectedValue, setSelectedValue] = React.useState("exist");
   const handleChange = (event) => {
     setSelectedValue(event.target.value);
+    formik.setFieldValue("companyType", selectedValue);
   };
-  useEffect(() => {
-    if (!countries.data.length) {
-      dispatch(getCountries());
+  const [searchTerm, setSearchTerm] = useState("");
+  // const [companyType, setCompanyType] = useState("exist");
+  const [searchCountry, setSearchCountry] = useState("");
+  const [employersData, setEmployersData] = useState(employers.data);
+  const [countriesData, setCountriesData] = useState(employers.data);
+  const debouncedSearchCountryValue = useDebounce(searchCountry, 500);
+  const debouncedSearchEmployerValue = useDebounce(searchTerm, 500);
+  const [suggestedAddress, setSuggestedAddress] = useState([]);
+  const [suggestedAddressValue, setSuggestedAddressValue] = useState("");
+  const debouncedSearchValue = useDebounce(suggestedAddressValue, 500);
+  const [submitting, setSubmitting] = useState(SUBMITTING_STATUS_ENUM.null);
+  const [jobId, setJobId] = useState(null);
+  const [searchParams] = useSearchParams();
+  const getEmployerList = async () => {
+    const response = await manageEmployer({ search: searchTerm });
+    if (response.remote === "success") {
+      setEmployersData(response.data.results);
     }
-    if (!categories.data.length) {
-      dispatch(getCategories());
+  };
+  const getCountryList = async () => {
+    let limitParam = 10;
+    if (jobId) {
+      limitParam = 500;
     }
-    if (!languages.data.length) {
-      dispatch(getLanguages());
+    const response = await getCountriesName({ search: searchCountry, limit: limitParam });
+    if (response.remote === "success") {
+      setCountriesData(response.data.results);
     }
-    if (!educationLevels.data.length) {
-      dispatch(getEducationLevels());
-    }
-    if (!skills.data.length) {
-      dispatch(getSkills());
-    }
-  }, []);
+  };
 
   // !! formik  validation start
   const formik = useFormik({
     initialValues: {
+      companyType: "",
+      existCompany: "",
+      company: "",
+      companyLogo: [],
+      companyLogoRemove: [],
       title: "",
       budgetCurrency: "usd",
       budgetAmount: 0,
       budgetPayPeriod: PAY_PERIOD.month,
       description: "",
-      country: "",
+      country: { label: "", value: "" },
       city: "",
       address: "",
       jobCategories: "",
@@ -108,23 +135,240 @@ const PostNewJob = () => {
       attachments: [],
       attachmentsRemove: [],
     },
+    validationSchema: validateCreateJobInput,
     onSubmit: async (values, { resetForm }) => {
-      console.log({ values });
+      setSubmitting(SUBMITTING_STATUS_ENUM.loading);
+      const payload = {
+        company_type: selectedValue,
+        company: values.company,
+        company_logo_item: values.companyLogo,
+        exist_company: values.existCompany,
+        title: values.title,
+        budget_currency: values.budgetCurrency,
+        budget_amount: values.budgetAmount,
+        budget_pay_period: values.budgetPayPeriod,
+        description: values.description,
+        country: values.country.value,
+        city: values.city,
+        address: values.address,
+        job_category: values.jobCategories,
+        job_sub_category: values.jobSubCategory,
+        is_full_time: values.isFullTime,
+        is_part_time: values.isPartTime,
+        has_contract: values.hasContract,
+        deadline: dayjs(values.deadline).format(DATABASE_DATE_FORMAT),
+        start_date: values.startDate
+          ? dayjs(values.startDate).format(DATABASE_DATE_FORMAT)
+          : "",
+        contact_email: values.isContactEmail ? values.contactEmail : "",
+        cc1: values.isContactEmail ? values.cc1 : "",
+        cc2: values.isContactEmail ? values.cc2 : "",
+        contact_whatsapp: values.isContactWhatsapp
+          ? values.contactWhatsapp
+          : "",
+        highest_education: values.highestEducation || "",
+        language: values.languages,
+        skill: values.skills,
+        attachments: values.attachments,
+        attachments_remove: values.attachmentsRemove,
+        duration: values.duration,
+        experience: values.experience,
+      };
+      const newFormData = new FormData();
+      for (const key in payload) {
+        if (key === "language") {
+          payload.language.forEach((language) => {
+            if (language.language) {
+              newFormData.append("language", JSON.stringify(language));
+            }
+          });
+        } else if (key === "attachments") {
+          payload.attachments.forEach((attachment) => {
+            if (!attachment.id) {
+              newFormData.append(key, attachment);
+            }
+          });
+        } else if (key === "company_logo_item") {
+          payload.company_logo_item.forEach((attachment) => {
+            if (!attachment.id) {
+              newFormData.append(key, attachment);
+            }
+          });
+        } else {
+          if (payload[key]) {
+            if (payload[key].forEach) {
+              payload[key].forEach((data) => {
+                newFormData.append(key, data);
+              });
+            } else {
+              if (payload[key]) newFormData.append(key, payload[key]);
+            }
+          }
+        }
+      }
+      let res;
+      if (!jobId) {
+        // create
+        res = await createJobAPI(newFormData);
+        if (res.remote === "success") {
+          // dispatch(setJobPostUpdate(true));
+          setSubmitting(SUBMITTING_STATUS_ENUM.submitted);
+          dispatch(setSuccessToast("Job Post Successfully"));
+          resetForm();
+        } else {
+          dispatch(setErrorToast("Something went wrong"));
+          setSubmitting(SUBMITTING_STATUS_ENUM.error);
+        }
+      } else {
+        // update
+        res = await updateEmployerJobAPI(jobId, newFormData);
+        if (res.remote === "success") {
+          // dispatch(setJobPostUpdate(true));
+          setSubmitting(SUBMITTING_STATUS_ENUM.updated);
+          dispatch(setSuccessToast("Job Updated Successfully"));
+        } else {
+          setSubmitting(SUBMITTING_STATUS_ENUM.error);
+          dispatch(setErrorToast("Something went wrong"));
+        }
+      }
     },
   });
+
   // !! formik  validation end
+  const getSuggestedAddress = async (search) => {
+    const res = await GetSuggestedAddressAPI(search);
+    if (res.remote === "success") {
+      setSuggestedAddress(res.data.predictions);
+    }
+  };
+  const getJobDetailsById = useCallback(async (jobId) => {
+    const response = await getJobDetailsByIdAPI({ jobId });
+    if (response.remote === "success") {
+      const { data } = response;
+      if (!data.users) {
+        setSelectedValue("new");
+      }
+      formik.setFieldValue("companyType", selectedValue);
+      formik.setFieldValue("company", data.company);
+      formik.setFieldValue("companyLogo", data.companyLogo);
+      formik.setFieldValue("existCompany", data.user?.id);
+      formik.setFieldValue("title", data.title);
+      formik.setFieldValue("budgetCurrency", data.budgetCurrency);
+      formik.setFieldValue("budgetAmount", data.budgetAmount);
+      formik.setFieldValue("budgetPayPeriod", data.budgetPayPeriod);
+      formik.setFieldValue("description", data.description);
+      formik.setFieldValue("country", { value: data.country.id, label: data.country.title });
+      formik.setFieldValue("city", data.city.id);
+      formik.setFieldValue("address", data.address);
+      formik.setFieldValue("duration", data.duration);
+      formik.setFieldValue("experience", data.experience);
+      setSuggestedAddress(data.address);
+      formik.setFieldValue("jobCategories", data.jobCategories.id);
+      formik.setFieldValue("jobSubCategory", data.jobSubCategory.id);
+      formik.setFieldValue("isFullTime", data.isFullTime);
+      formik.setFieldValue("isPartTime", data.isPartTime);
+      formik.setFieldValue("hasContract", data.hasContract);
+      formik.setFieldValue("deadline", dayjs(data.deadline));
+      formik.setFieldValue("startDate", dayjs(data.startDate));
+      formik.setFieldValue("isContactEmail", Boolean(data.contactEmail));
+      formik.setFieldValue("contactEmail", data.contactEmail);
+      formik.setFieldValue("cc1", data.cc1);
+      formik.setFieldValue("cc2", data.cc2);
+      formik.setFieldValue("isContactWhatsapp", Boolean(data.contactWhatsapp));
+      formik.setFieldValue("contactWhatsapp", data.contactWhatsapp);
+      formik.setFieldValue("highestEducation", data.highestEducation.id || "");
+      formik.setFieldValue(
+        "languages",
+        data.languages.map && data.languages.length
+          ? [
+            ...data.languages.map((language) => ({
+              language: language.language.id,
+            })),
+            {
+              language: "",
+            },
+            {
+              language: "",
+            },
+          ]
+          : [1, 2, 3].map(() => ({
+            language: "",
+          }))
+      );
+      formik.setFieldValue("highestEducation", data.highestEducation.id);
+      formik.setFieldValue(
+        "skills",
+        data.skills.map ? data.skills.map((skill) => skill.id) : []
+      );
+      formik.setFieldValue("attachments", data.attachments);
+    }
+  }, []);
+  // const handleProfilePicSave = async (file) => {
+  //   const newFormData = new FormData();
+  //   newFormData.append("profile_image", file);
+  //   console.log(URL.createObjectURL(file));
+  //   console.log({ newFormData });
+  // };
   useEffect(() => {
     if (formik.values.country && !cities.data[formik.values.country]?.length) {
-      dispatch(getCitiesByCountry({ countryId: formik.values.country }));
+      dispatch(getCitiesByCountry({ countryId: formik.values.country?.value }));
     }
   }, [formik.values.country]);
 
   useEffect(() => {
-    if (formik.values.country && !cities.data[formik.values.country]?.length) {
-      dispatch(getWorldCities({ countryId: formik.values.country }));
+    getEmployerList();
+  }, [debouncedSearchEmployerValue, !formik.values.existCompany]);
+
+  useEffect(() => {
+    getCountryList();
+  }, [debouncedSearchCountryValue, !formik.values.country, jobId]);
+  useEffect(() => {
+    if (jobId) {
+      getJobDetailsById(jobId);
     }
-  }, [formik.values.country]);
-  const [searchValue, setSearchValue] = useState("");
+  }, [jobId]);
+  useEffect(() => {
+    if (!countries.data.length) {
+      dispatch(getCountries());
+    }
+    if (!categories.data.length) {
+      dispatch(getCategories());
+    }
+    if (!languages.data.length) {
+      dispatch(getLanguages());
+    }
+    if (!educationLevels.data.length) {
+      dispatch(getEducationLevels());
+    }
+    if (!skills.data.length) {
+      dispatch(getSkills());
+    }
+    if (!employers.data.length) {
+      dispatch(getEmployers());
+    }
+  }, []);
+  useEffect(() => {
+    if (
+      debouncedSearchValue &&
+      debouncedSearchValue !== formik.values.address
+    ) {
+      getSuggestedAddress(debouncedSearchValue);
+    }
+  }, [debouncedSearchValue]);
+  useEffect(() => {
+    if (
+      formik.values.jobCategories &&
+      !subCategories.data[formik.values.jobCategories]?.length
+    ) {
+      dispatch(
+        getSubCategories({ categoryId: formik.values.jobCategories })
+      );
+    }
+  }, [formik.values.jobCategories]);
+  useEffect(() => {
+    const newJobId = searchParams.get("jobId");
+    if (newJobId && jobId !== newJobId) setJobId(newJobId);
+  }, [searchParams.get("jobId")]);
   return (
     <div className="job-application">
       <Card
@@ -145,7 +389,7 @@ const PostNewJob = () => {
         >
           <div className="job-content">
             <h2>
-              Post a new job
+              {jobId ? "Edit Job" : "Post a new job"}
               <span className="right-pull">
                 <IconButton LinkComponent={Link} to={"/manage-jobs"}>
                   <CloseIcon />
@@ -156,17 +400,19 @@ const PostNewJob = () => {
               <form onSubmit={formik.handleSubmit}>
                 <RadioGroup value={selectedValue} onChange={handleChange}>
                   <FormControlLabel
-                    value="selectCompany"
+                    value="exist"
                     control={<Radio />}
                     label="Select Company"
+                    checked={selectedValue === "exist"}
                   />
                   <FormControlLabel
-                    value="option2"
+                    value="new"
                     control={<Radio />}
-                    label="new Company"
+                    label="Create Company"
+                    checked={selectedValue === "new"}
                   />
                 </RadioGroup>
-                {selectedValue === "selectCompany" && (
+                {selectedValue === "exist" && (
                   <>
                     <Grid xl={12} lg={12} xs={12}>
                       <h2 className="mt-3">Select company</h2>
@@ -178,15 +424,47 @@ const PostNewJob = () => {
                             Select Company
                             <span className="required-field">*</span>
                           </label>
-                          <SelectInput
-                            className="mb-3"
-                            defaultValue=""
-                            placeholder="Select a Skill"
-                            options={skills.data.map((skill) => ({
-                              value: skill.id,
-                              label: skill.title,
+                          <SelectWithSearch
+                            sx={{
+                              borderRadius: "10px",
+                              background: "#F0F0F0",
+                              fontFamily: "Poppins",
+
+                              "& fieldset": {
+                                border: "1px solid #cacaca",
+                                borderRadius: "93px",
+                                display: "none",
+                                "&:hover": { borderColor: "#cacaca" },
+                              },
+                              "& .MuiOutlinedInput-root": {
+                                fontFamily: "Poppins",
+                                padding: "4px 9px",
+                              },
+                              "& .MuiFormLabel-root": {
+                                fontSize: "16px",
+                                color: "#848484",
+                                fontFamily: "Poppins",
+                                transform: "translate(14px, 12px) scale(1)",
+                              },
+                              "& .MuiInputLabel-shrink": {
+                                transform: "translate(14px, -9px) scale(0.75)",
+                              },
+                            }}
+                            options={(employersData || []).map((employer) => ({
+                              value: employer.id,
+                              label: employer.name || employer.email,
                             }))}
-                            name="skills[0]"
+                            // title={"select the options"}
+                            onChange={(_, value) => {
+                              if (value) {
+                                setSearchTerm(value.value);
+                                formik.setFieldValue("existCompany", value?.value);
+                              } else {
+                                setSearchTerm("");
+                                formik.setFieldValue("existCompany", "");
+                              }
+                            }}
+                            onKeyUp={(e) => setSearchTerm(e.target.value)}
                           />
                         </Grid>
                       </Grid>
@@ -196,10 +474,10 @@ const PostNewJob = () => {
                     </Grid>
                   </>
                 )}
-                {selectedValue === "option2" && (
+                {selectedValue === "new" && (
                   <>
                     <Grid xl={12} lg={12} xs={12}>
-                      <h2 className="mt-3"> New company</h2>
+                      <h2 className="mt-3"> New Company</h2>
                     </Grid>
                     <Grid item xl={12} lg={12} xs={12}>
                       <Grid container spacing={2}>
@@ -212,18 +490,68 @@ const PostNewJob = () => {
                             type="text"
                             placeholder="Company Name"
                             className="add-form-control"
-                            name={"address"}
-                            onChange={(e) => setSearchValue(e.target.value)}
-                            value={searchValue}
+                            {...formik.getFieldProps("company")}
                           />
                         </Grid>
 
-                        <Grid item xl={4} lg={4} xs={12}>
+                        <Grid item xl={12} lg={12} xs={12}>
                           <label className="mb-2">
                             Add Company Logo
                             <span className="required-field">*</span>
                           </label>
-                          <AttachmentDragNDropInput handleDrop={(file) => {}} />
+                          <AttachmentDragNDropInput
+                            files={formik.getFieldProps("companyLogo").value}
+                            handleDrop={(file) => {
+                              formik.setValues({
+                                ...formik.values,
+                                companyLogo: [
+                                  ...formik.getFieldProps("companyLogo").value,
+                                  file[0],
+                                ],
+                              });
+                            }}
+                            deleteFile={(file) => {
+                              if (file.id) {
+                                formik.setFieldValue("companyLogoRemove", [
+                                  ...formik.values.companyLogoRemove,
+                                  file.id,
+                                ]);
+                              } else {
+                                formik.setFieldValue(
+                                  "companyLogo",
+                                  formik.values.companyLogo.filter(
+                                    (companyLogo) => companyLogo.path !== file.path
+                                  )
+                                );
+                              }
+                            }}
+                          />
+                          {/* <Card
+                            sx={{
+                              "&.MuiCard-root": {
+                                boxShadow: "0px 15px 40px rgba(0, 0, 0, 0.05)",
+                                borderRadius: "10px",
+                              },
+                            }}
+                          >
+                            <CardContent
+                              sx={{
+                                "&.MuiCardContent-root": {
+                                  padding: "30px",
+                                },
+                              }}
+                            >
+                              <ProfilePicInput
+                                title="Your organization logo"
+                                textColor="#274593"
+                                color="#274593"
+                                bgColor="rgba(40, 71, 146, 0.1)"
+                                handleSave={handleProfilePicSave}
+                                image={formik.values?.companyLogo}
+                                loading={"loading"}
+                              />
+                            </CardContent>
+                          </Card> */}
                         </Grid>
                       </Grid>
                     </Grid>
@@ -260,12 +588,23 @@ const PostNewJob = () => {
                   <Grid item xl={4} lg={4}>
                     <CurrencyInput
                       currency="USD"
-                      optionsValues={{
-                        currency: "budgetCurrency",
-                        input: "budgetAmount",
-                        payPeriod: "budgetPayPeriod",
-                      }}
                       title="Budget"
+                      optionsValues={{
+                        currency: formik.getFieldProps("budgetCurrency"),
+                        input: formik.getFieldProps("budgetAmount"),
+                        payPeriod: formik.getFieldProps("budgetPayPeriod"),
+                      }}
+                      errors={{
+                        currency: formik.touched.budgetCurrency
+                          ? formik.errors.budgetCurrency
+                          : "",
+                        input: formik.touched.budgetAmount
+                          ? formik.errors.budgetAmount
+                          : "",
+                        payPeriod: formik.touched.budgetPayPeriod
+                          ? formik.errors.budgetPayPeriod
+                          : "",
+                      }}
                     />
                   </Grid>
                   <Grid item xl={12} lg={12} xs={12}>
@@ -289,14 +628,50 @@ const PostNewJob = () => {
                     </label>
                     <Grid container spacing={2}>
                       <Grid item xl={6} lg={6} xs={12}>
-                        <SelectInput
-                          placeholder="Country"
-                          defaultValue=""
-                          options={countries.data.map((country) => ({
+                        <SelectWithSearch
+                          sx={{
+                            borderRadius: "10px",
+                            background: "#F0F0F0",
+                            fontFamily: "Poppins",
+
+                            "& fieldset": {
+                              border: "1px solid #cacaca",
+                              borderRadius: "93px",
+                              display: "none",
+                              "&:hover": { borderColor: "#cacaca" },
+                            },
+                            "& .MuiOutlinedInput-root": {
+                              fontFamily: "Poppins",
+                              padding: "4px 9px",
+                            },
+                            "& .MuiFormLabel-root": {
+                              fontSize: "16px",
+                              color: "#848484",
+                              fontFamily: "Poppins",
+                              transform: "translate(14px, 12px) scale(1)",
+                            },
+                            "& .MuiInputLabel-shrink": {
+                              transform: "translate(14px, -9px) scale(0.75)",
+                            },
+                          }}
+                          options={(countriesData || []).map((country) => ({
                             value: country.id,
                             label: country.title,
                           }))}
-                          {...formik.getFieldProps("country")}
+                          title={"select the options"}
+                          onChange={(_, value) => {
+                            if (value) {
+                              formik.setFieldValue("country", value);
+                            } else {
+                              setSearchCountry("");
+                              formik.setFieldValue("country", {
+                                value: "",
+                                label: "",
+                              });
+                            }
+                          }}
+                          value={formik.values.country}
+                          onKeyUp={(e) => setSearchCountry(e.target.value)}
                         />
                         {formik.touched.country && formik.errors.country ? (
                           <ErrorMessage>{formik.errors.country}</ErrorMessage>
@@ -311,7 +686,7 @@ const PostNewJob = () => {
                           }
                           disabled={!formik.values.country}
                           options={(
-                            cities.data[formik.values.country] || []
+                            cities.data[formik.values.country?.value] || []
                           ).map((country) => ({
                             value: country.id,
                             label: country.title,
@@ -334,11 +709,37 @@ const PostNewJob = () => {
                         type="text"
                         placeholder="Address"
                         className="add-form-control"
-                        name={"address"}
-                        onChange={(e) => setSearchValue(e.target.value)}
-                        value={searchValue}
+                        name={formik.getFieldProps("address").name}
+                        onBlur={(e) => formik.getFieldProps("address").onBlur}
+                        onChange={(e) => setSuggestedAddressValue(e.target.value)}
+                        value={suggestedAddressValue}
                       />
+                      {debouncedSearchValue &&
+                        suggestedAddressValue !== formik.values.address && (
+                          <div className={styles.search_results_box}>
+                            {suggestedAddress.map((address) => {
+                              return (
+                                <div
+                                  key={address.description}
+                                  className={styles.search_results}
+                                  onClick={() => {
+                                    formik.setFieldValue(
+                                      "address",
+                                      address.description
+                                    );
+                                    setSuggestedAddressValue(address.description);
+                                  }}
+                                >
+                                  {address.description}
+                                </div>
+                              );
+                            })}
+                          </div>
+                        )}
                     </div>
+                    {formik.touched.address && formik.errors.address ? (
+                      <ErrorMessage>{formik.errors.address}</ErrorMessage>
+                    ) : null}
                   </Grid>
                   <Grid item xl={12} lg={12} xs={12}>
                     <label>
@@ -360,7 +761,7 @@ const PostNewJob = () => {
                           onBlur={formik.handleBlur}
                         />
                         {formik.touched.jobCategories &&
-                        formik.errors.jobCategories ? (
+                          formik.errors.jobCategories ? (
                           <ErrorMessage>
                             {formik.errors.jobCategories}
                           </ErrorMessage>
@@ -369,14 +770,23 @@ const PostNewJob = () => {
                       <Grid item xl={6} lg={6} xs={12}>
                         <SelectInput
                           defaultValue=""
-                          placeholder={"Select Category first"}
-                          options={countries.data.map((country) => ({
-                            value: country.id,
-                            label: country.title,
+                          placeholder={
+                            formik.values.jobCategories
+                              ? "Job Sub Category"
+                              : "Select Category first"
+                          }
+                          options={(
+                            subCategories.data[
+                            formik.values.jobCategories
+                            ] || []
+                          ).map((subCategory) => ({
+                            value: subCategory.id,
+                            label: subCategory.title,
                           }))}
+                          {...formik.getFieldProps("jobSubCategory")}
                         />
                         {formik.touched.jobSubCategory &&
-                        formik.errors.jobSubCategory ? (
+                          formik.errors.jobSubCategory ? (
                           <ErrorMessage>
                             {formik.errors.jobSubCategory}
                           </ErrorMessage>
@@ -487,7 +897,7 @@ const PostNewJob = () => {
                       {...formik.getFieldProps("contactEmail")}
                     />
                     {formik.touched.contactEmail &&
-                    formik.errors.contactEmail ? (
+                      formik.errors.contactEmail ? (
                       <ErrorMessage>{formik.errors.contactEmail}</ErrorMessage>
                     ) : null}
                   </Grid>
@@ -539,7 +949,7 @@ const PostNewJob = () => {
                       {...formik.getFieldProps("highestEducation")}
                     />
                     {formik.touched.highestEducation &&
-                    formik.errors.highestEducation ? (
+                      formik.errors.highestEducation ? (
                       <ErrorMessage>
                         {formik.errors.highestEducation}
                       </ErrorMessage>
@@ -571,7 +981,7 @@ const PostNewJob = () => {
                             {i === 0 ? (
                               <>
                                 {formik.touched.languages &&
-                                formik.errors.languages ? (
+                                  formik.errors.languages ? (
                                   <ErrorMessage>
                                     {formik.errors.languages}
                                   </ErrorMessage>
@@ -674,7 +1084,19 @@ const PostNewJob = () => {
                       }
                     }}
                   />
-                  <FilledButton title={"POST THE JOB"} type="submit" />
+                  <FilledButton
+                    disabled={submitting === SUBMITTING_STATUS_ENUM.loading}
+                    title={
+                      submitting === SUBMITTING_STATUS_ENUM.loading
+                        ? jobId
+                          ? "Updating..."
+                          : "Posting..."
+                        : jobId
+                          ? "UPDATE THE JOB"
+                          : "POST THE JOB"
+                    }
+                    type="submit"
+                  />
                 </Grid>
               </form>
             </div>

@@ -18,3 +18,10 @@ export const PAY_PERIOD = {
   week: "weekly",
   hour: "hourly",
 };
+export const SUBMITTING_STATUS_ENUM = Object.freeze({
+  loading: "loading",
+  submitted: "submitted",
+  updated: "updated",
+  error: "error",
+  null: "",
+});

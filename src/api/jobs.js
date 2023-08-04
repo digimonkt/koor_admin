@@ -1,5 +1,6 @@
 import api from ".";
 import urlcat from "urlcat";
+import { transformFullJobDetails } from "./transform/job";
 export const manageJobData = async ({
   limit,
   page,
@@ -86,6 +87,50 @@ export const getSkillsAPI = async (data) => {
     return {
       remote: "success",
       data: response.data.results,
+    };
+  }
+  return response;
+};
+
+export const GetSuggestedAddressAPI = async (search) => {
+  return await api.request({
+    url: urlcat("v1/users/get-location", { search }),
+    method: "GET",
+  });
+};
+
+export const createJobAPI = async (data) => {
+  const res = await api.request({
+    url: urlcat("/v1/admin/jobs/create"),
+    method: "POST",
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+    data,
+  });
+  return res;
+};
+export const updateEmployerJobAPI = async (jobId, data) => {
+  const response = await api.request({
+    url: urlcat("/v1/admin/jobs/create/:jobId", { jobId }),
+    method: "PUT",
+    data,
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+  return response;
+};
+
+export const getJobDetailsByIdAPI = async (data) => {
+  const response = await api.request({
+    url: urlcat("/v1/jobs/:jobId", data),
+    method: "GET",
+  });
+  if (response.remote === "success") {
+    return {
+      remote: "success",
+      data: transformFullJobDetails(response.data),
     };
   }
   return response;
