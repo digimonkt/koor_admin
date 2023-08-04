@@ -1,15 +1,11 @@
+import { generateFileUrl } from "@utils/generateFileUrl";
 import dayjs from "dayjs";
 
 export const transformFullJobDetails = (data) => {
     return {
         id: data.id,
         company: data.company,
-        companyLogo: [{
-            id: data.company_logo.id,
-            path: data.company_logo.path,
-            // type: data.company_logo.type,
-            // title: data.company_logo.title,
-        }] || [],
+        companyLogo: data.company_logo?.path ? generateFileUrl(data.company_logo.path) : "",
         title: data.title,
         application: data.application || {},
         description: data.description,
