@@ -1,4 +1,4 @@
-import { OutlinedButton } from "@components/button";
+// import { OutlinedButton } from "@components/button";
 import { Avatar, Stack } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
@@ -7,7 +7,7 @@ import ImageCropper from "@components/imageCropper";
 import { useSelector } from "react-redux";
 import { USER_ROLES } from "@utils/enum";
 
-const ProfilePicInputComponent = ({ title, handleSave, image, loading }) => {
+const ProfilePicInputComponent = ({ title, handleSave, image, loading, handleSaveCroppedImg }) => {
   const { role } = useSelector((state) => state.auth);
   const [files, setFiles] = useState([]);
   const [newImage, setNewImage] = useState("");
@@ -26,12 +26,13 @@ const ProfilePicInputComponent = ({ title, handleSave, image, loading }) => {
 
   const handleUpdateImage = (file) => {
     setNewImage(file);
+    handleSaveCroppedImg(file);
     setFiles([]);
   };
 
-  const handleSaveImage = () => {
-    if (newImage instanceof File) handleSave(newImage);
-  };
+  // const handleSaveImage = () => {
+  //   if (newImage instanceof File) handleSave(newImage);
+  // };
 
   const thumbs = (
     <Avatar
@@ -93,7 +94,7 @@ const ProfilePicInputComponent = ({ title, handleSave, image, loading }) => {
                 </p>
               </div>
             </div>
-            <div className="text-center">
+            {/* <div className="text-center">
               <OutlinedButton
                 title={
                   <>
@@ -112,7 +113,7 @@ const ProfilePicInputComponent = ({ title, handleSave, image, loading }) => {
                 disabled={loading}
                 onClick={handleSaveImage}
               />
-            </div>
+            </div> */}
           </Stack>
         </Stack>
       </div>

@@ -7,7 +7,7 @@ import {
   LabeledInput,
   SelectInput,
   AttachmentDragNDropInput,
-  // ProfilePicInput,
+  ProfilePicInput,
 } from "@components/input";
 import CloseIcon from "@mui/icons-material/Close";
 import CurrencyInput from "./currencyInput";
@@ -68,7 +68,8 @@ const PostNewJob = () => {
     formik.setFieldValue("companyType", selectedValue);
   };
   const [searchTerm, setSearchTerm] = useState("");
-  // const [companyType, setCompanyType] = useState("exist");
+  const [companyLogo, setCompanyLogo] = useState("");
+  const [companyAttachments, setCompanyAttachments] = useState("");
   const [searchCountry, setSearchCountry] = useState("");
   const [employersData, setEmployersData] = useState(employers.data);
   const [countriesData, setCountriesData] = useState(employers.data);
@@ -248,9 +249,10 @@ const PostNewJob = () => {
       if (!data.users) {
         setSelectedValue("new");
       }
+      setCompanyLogo(data.companyLogo);
+      setCompanyAttachments(data.attachments);
       formik.setFieldValue("companyType", selectedValue);
       formik.setFieldValue("company", data.company);
-      formik.setFieldValue("companyLogo", data.companyLogo);
       formik.setFieldValue("existCompany", data.user?.id);
       formik.setFieldValue("title", data.title);
       formik.setFieldValue("budgetCurrency", data.budgetCurrency);
@@ -300,15 +302,12 @@ const PostNewJob = () => {
         "skills",
         data.skills.map ? data.skills.map((skill) => skill.id) : []
       );
-      formik.setFieldValue("attachments", data.attachments);
+      // formik.setFieldValue("attachments", data.attachments);
     }
   }, []);
-  // const handleProfilePicSave = async (file) => {
-  //   const newFormData = new FormData();
-  //   newFormData.append("profile_image", file);
-  //   console.log(URL.createObjectURL(file));
-  //   console.log({ newFormData });
-  // };
+  const handleProfilePicSave = async (file) => {
+    formik.setFieldValue("companyLogo", file);
+  };
   useEffect(() => {
     if (formik.values.country && !cities.data[formik.values.country]?.length) {
       dispatch(getCitiesByCountry({ countryId: formik.values.country?.value }));
@@ -499,7 +498,7 @@ const PostNewJob = () => {
                             Add Company Logo
                             <span className="required-field">*</span>
                           </label>
-                          <AttachmentDragNDropInput
+                          {/* <AttachmentDragNDropInput
                             files={formik.getFieldProps("companyLogo").value}
                             handleDrop={(file) => {
                               formik.setValues({
@@ -516,6 +515,12 @@ const PostNewJob = () => {
                                   ...formik.values.companyLogoRemove,
                                   file.id,
                                 ]);
+                                formik.setFieldValue(
+                                  "companyLogo",
+                                  formik.values.companyLogo.filter(
+                                    (companyLogo) => companyLogo.path !== file.path
+                                  )
+                                );
                               } else {
                                 formik.setFieldValue(
                                   "companyLogo",
@@ -525,8 +530,8 @@ const PostNewJob = () => {
                                 );
                               }
                             }}
-                          />
-                          {/* <Card
+                          /> */}
+                          <Card
                             sx={{
                               "&.MuiCard-root": {
                                 boxShadow: "0px 15px 40px rgba(0, 0, 0, 0.05)",
@@ -546,12 +551,14 @@ const PostNewJob = () => {
                                 textColor="#274593"
                                 color="#274593"
                                 bgColor="rgba(40, 71, 146, 0.1)"
-                                handleSave={handleProfilePicSave}
-                                image={formik.values?.companyLogo}
+                                // handleSave={handleProfilePicSave}
+                                image={companyLogo || formik.values.companyLogo[0].path}
                                 loading={"loading"}
+                                newLogo={handleProfilePicSave}
+                                handleSaveCroppedImg={file => formik.setFieldValue("companyLogo", [file])}
                               />
                             </CardContent>
-                          </Card> */}
+                          </Card>
                         </Grid>
                       </Grid>
                     </Grid>
@@ -1058,7 +1065,7 @@ const PostNewJob = () => {
                 <Grid item xl={12} lg={12} xs={12}>
                   <h2 className="mt-3 mb-3">Attach files</h2>
                   <AttachmentDragNDropInput
-                    files={formik.getFieldProps("attachments").value}
+                    files={companyAttachments || formik.getFieldProps("attachments").value}
                     handleDrop={(file) => {
                       formik.setValues({
                         ...formik.values,
@@ -1074,6 +1081,8 @@ const PostNewJob = () => {
                           ...formik.values.attachmentsRemove,
                           file.id,
                         ]);
+                        formik.setFieldValue("attachments", formik.values.attachments.filter((attachment) => attachment.id !== file.id));
+                        setCompanyAttachments(companyAttachments.filter((attachment) => attachment.id !== file.id));
                       } else {
                         formik.setFieldValue(
                           "attachments",
