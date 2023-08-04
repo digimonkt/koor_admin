@@ -552,7 +552,7 @@ const PostNewJob = () => {
                                 color="#274593"
                                 bgColor="rgba(40, 71, 146, 0.1)"
                                 // handleSave={handleProfilePicSave}
-                                image={companyLogo || formik.values.companyLogo[0].path}
+                                image={companyLogo}
                                 loading={"loading"}
                                 newLogo={handleProfilePicSave}
                                 handleSaveCroppedImg={file => formik.setFieldValue("companyLogo", [file])}

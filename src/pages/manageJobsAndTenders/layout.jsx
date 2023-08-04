@@ -39,6 +39,8 @@ function Layout({
   newJob,
 }) {
   const dispatch = useDispatch();
+  //! const { loading } = useSelector((state) => state.jobsAndTenders);
+  //! const { countries } = useSelector((state) => state.choice);
   const { loading } = useSelector(({ jobsAndTenders }) => jobsAndTenders);
   const { countries } = useSelector(({ choice }) => choice);
 
