@@ -15,7 +15,7 @@ export const BLACKLIST_REASON_LIST = [
 ];
 export const OTHER_BUTTON = [
   {
-    icon: <SVG.Reciept />,
+    icon: <SVG.ReceiptIcon />,
     svg: <SVG.ArrowForward />,
     text: "Find Tender",
     url: "/search/tenders",
@@ -27,7 +27,7 @@ export const OTHER_BUTTON = [
     url: "/search/talents",
   },
   {
-    icon: <SVG.Work />,
+    icon: <SVG.WorkIcon />,
     svg: <SVG.ArrowForward />,
     text: "Find Job",
     url: "/search/jobs",

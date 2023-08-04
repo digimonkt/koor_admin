@@ -4,16 +4,11 @@ import React, { useEffect, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { SVG } from "@assets/svg";
 import ImageCropper from "@components/imageCropper";
+import { useSelector } from "react-redux";
+import { USER_ROLES } from "@utils/enum";
 
-const ProfilePicInputComponent = ({
-  title,
-  color,
-  bgColor,
-  textColor,
-  handleSave,
-  image,
-  loading,
-}) => {
+const ProfilePicInputComponent = ({ title, handleSave, image, loading }) => {
+  const { role } = useSelector((state) => state.auth);
   const [files, setFiles] = useState([]);
   const [newImage, setNewImage] = useState("");
   const { getRootProps, getInputProps } = useDropzone({
@@ -87,7 +82,14 @@ const ProfilePicInputComponent = ({
                 <input {...getInputProps()} disabled={loading} />
                 <p>
                   Drag here or{" "}
-                  <span style={{ color: textColor }}>upload a photo</span>
+                  <span
+                    style={{
+                      color:
+                        role === USER_ROLES.jobSeeker ? "#EEA23D" : "#274593",
+                    }}
+                  >
+                    upload a photo
+                  </span>
                 </p>
               </div>
             </div>
@@ -109,20 +111,6 @@ const ProfilePicInputComponent = ({
                 }
                 disabled={loading}
                 onClick={handleSaveImage}
-                sx={{
-                  "&.MuiButton-outlined": {
-                    border: `1px solid ${color} !important`,
-                    color: `${color} !important`,
-                    fontWeight: "500",
-                    fontSize: "16px",
-                    padding: "6px 30px",
-                    "&:hover": { background: bgColor },
-                    "@media (max-width: 992px)": {
-                      padding: "10px 16px",
-                      fontSize: "14px",
-                    },
-                  },
-                }}
               />
             </div>
           </Stack>

@@ -60,7 +60,7 @@ function ManageJobsComponent() {
       {
         field: "action",
         headerName: "Action",
-        width: 120,
+        width: 180,
         sortable: true,
         renderCell: (item) => {
           return (
@@ -116,6 +116,19 @@ function ManageJobsComponent() {
               >
                 <SVG.DeleteIcon />
               </IconButton>
+              <IconButton
+                onClick={() => handleEdit(item.row.id)}
+                sx={{
+                  "&.MuiIconButton-root": {
+                    background: "#D5E3F7",
+                  },
+                  width: 30,
+                  height: 30,
+                  color: "#274593",
+                }}
+              >
+                <SVG.EditIcon />
+              </IconButton>
             </Stack>
           );
         },
@@ -154,7 +167,9 @@ function ManageJobsComponent() {
   const getPage = useCallback((_, page) => {
     setPages(page);
   }, []);
-
+  const handleEdit = async (item) => {
+    navigate(`/post-newJob?jobId=${item}`);
+  };
   const handleRedirectDetails = useCallback((item) => {
     const url = `${env.REACT_APP_REDIRECT_URL}/jobs/details/${item}`;
     window.open(url, "_blank");
