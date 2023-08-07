@@ -3,7 +3,7 @@ import { SVG } from "@assets/svg";
 import { IconButton } from "@mui/material";
 import { Stack } from "@mui/system";
 import Layout from "../layout";
-import { activeInactiveJob, deleteJob, manageJobData } from "@api/jobs";
+import { activeInactiveJob, deleteJob, getCountriesName, manageJobData } from "@api/jobs";
 import DialogBox from "@components/dialogBox";
 import DeleteCard from "@components/card/deleteCard";
 import { useDispatch, useSelector } from "react-redux";
@@ -19,6 +19,7 @@ function ManageJobsComponent() {
   const navigate = useNavigate();
 
   const { countries } = useSelector((state) => state.choice);
+  const [countriesData, setCountriesData] = useState(countries.data);
   const [jobTable, setJobTable] = useState([]);
   const [totalCount, setTotalCount] = useState(0);
   const [pages, setPages] = useState(1);
@@ -187,10 +188,16 @@ function ManageJobsComponent() {
     }
     setDeleting("");
   }, [jobTable, dispatch, deleting]);
-
+  const getCountryList = async () => {
+    const limitParam = 500;
+    const response = await getCountriesName({ limit: limitParam });
+    if (response.remote === "success") {
+      setCountriesData(response.data.results);
+    }
+  };
   const filterJobsCountry = (e) => {
     const countryId = e.target.value;
-    const country = countries.data.find((country) => country.id === countryId);
+    const country = countriesData.find((country) => country.id === countryId);
     setCountry(country);
   };
 
@@ -241,7 +248,9 @@ function ManageJobsComponent() {
   useEffect(() => {
     manageJobList();
   }, [manageJobList]);
-
+  useEffect(() => {
+    getCountryList();
+  }, []);
   return (
     <>
       <Layout
