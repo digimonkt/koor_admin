@@ -72,7 +72,7 @@ const PostNewJob = () => {
   const [companyAttachments, setCompanyAttachments] = useState("");
   const [searchCountry, setSearchCountry] = useState("");
   const [employersData, setEmployersData] = useState(employers.data);
-  const [countriesData, setCountriesData] = useState(countries);
+  const [countriesData, setCountriesData] = useState(countries.data);
   const debouncedSearchCountryValue = useDebounce(searchCountry, 500);
   const debouncedSearchEmployerValue = useDebounce(searchTerm, 500);
   const [suggestedAddress, setSuggestedAddress] = useState([]);
