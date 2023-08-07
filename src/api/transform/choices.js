@@ -9,7 +9,7 @@ export const transformJobAPIResponse = (data) => {
     no: index + 1,
     jobId: data.job_id,
     jobTitle: data.title,
-    company: data.user,
+    company: data.user || data.company,
     location: `${data.city.title},${data.country.title}`,
     action: data.status,
   }));
