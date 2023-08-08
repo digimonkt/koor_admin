@@ -106,7 +106,7 @@ const PostNewJob = () => {
   const formik = useFormik({
     initialValues: {
       companyType: "",
-      existCompany: "",
+      existCompany: { label: "", value: "" },
       company: "",
       companyLogo: [],
       companyLogoRemove: [],
@@ -257,7 +257,7 @@ const PostNewJob = () => {
       setCompanyAttachments(data.attachments);
       formik.setFieldValue("companyType", selectedValue);
       formik.setFieldValue("company", data.company);
-      formik.setFieldValue("existCompany", { value: data.user?.id, label: data.user?.name });
+      formik.setFieldValue("existCompany", { value: data.user?.id || "", label: data.user?.name || "" });
       formik.setFieldValue("title", data.title);
       formik.setFieldValue("budgetCurrency", data.budgetCurrency);
       formik.setFieldValue("budgetAmount", data.budgetAmount);
@@ -372,6 +372,7 @@ const PostNewJob = () => {
     const newJobId = searchParams.get("jobId");
     if (newJobId && jobId !== newJobId) setJobId(newJobId);
   }, [searchParams.get("jobId")]);
+  console.log("formik", formik.values);
   return (
     <div className="job-application">
       <Card
@@ -457,7 +458,7 @@ const PostNewJob = () => {
                               value: employer.id,
                               label: employer.name || employer.email,
                             }))}
-                            // title={"select the options"}
+                            title={"select the options"}
                             onChange={(_, value) => {
                               if (value) {
                                 setSearchTerm(value.value);
