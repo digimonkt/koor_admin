@@ -482,3 +482,39 @@ export const setPointsApi = async (data) => {
   });
   return response;
 };
+
+export const getInvoiceListApi = async ({
+  limit,
+  page,
+  invoiceId,
+  employer,
+  sent,
+}) => {
+  const response = await api.request({
+    url: urlcat("/v1/admin/invoice", {
+      limit,
+      page,
+      invoiceId,
+      employer,
+      sent,
+    }),
+    method: "GET",
+  });
+  return response;
+};
+
+export const getPlansAPI = async () => {
+  const resp = await api.request({
+    url: urlcat("v1/admin/package"),
+    method: "GET",
+  });
+  return resp;
+};
+export const updatePlansAPI = async (data) => {
+  const resp = await api.request({
+    url: urlcat("v1/admin/package"),
+    method: "PATCH",
+    data
+  });
+  return resp;
+};

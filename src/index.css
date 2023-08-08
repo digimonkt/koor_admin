@@ -11,3 +11,44 @@ code {
 * {
   box-sizing: border-box;
 }
+
+.styles_attachment {
+  border: 2px dashed #cacaca;
+  border-radius: 6px;
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 300;
+  font-size: 16px;
+  line-height: 24px;
+  text-align: center;
+  color: #000000;
+  padding: 30px;
+  display: inline-flex;
+  align-items: center;
+  cursor: pointer;
+  width: 100%;
+  box-sizing: border-box;
+  justify-content: center;
+}
+
+.styles_attachment p {
+  margin: 0px;
+}
+
+.styles_attachment p span {
+  font-weight: 600;
+}
+
+.styles_attachment small {
+  display: block;
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 21px;
+  /* identical to box height */
+  text-align: center;
+
+  /* Dark grey */
+  color: #848484;
+}

@@ -7,7 +7,38 @@ import { SVG } from "@assets/svg";
 
 export const SelectBox = styled(Select)`
   & .MuiSelect-select {
-    background: #ffffff;
+    background: #f0f0f0;
+    border-radius: 10px;
+    color: #121212;
+    font-size: 12px;
+    font-family: "Poppins";
+    font-weight: 400;
+  }
+  & .Mui-disabled {
+    color: #121212;
+    -webkit-text-fill-color: #121212;
+  }
+
+  & .MuiInputBase-root {
+    border-radius: 0px;
+    font-family: "Poppins";
+    font-style: normal;
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 22px;
+
+    letter-spacing: 0.02em;
+
+    color: #121212;
+  }
+  & fieldset {
+    display: none;
+  }
+  }
+`;
+
+/*
+ background: #ffffff;
     border-radius: 100px;
     padding: 14px 34px 14px 60px;
     border: 1px solid #cacaca;
@@ -36,7 +67,7 @@ export const SelectBox = styled(Select)`
   & fieldset {
     display: none;
   }
-`;
+*/
 
 function SelectInputComponent({
   title,

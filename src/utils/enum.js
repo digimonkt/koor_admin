@@ -11,3 +11,17 @@ export const MESSAGE_TYPE = {
   warning: "warning",
   null: "",
 };
+export const PAY_PERIOD = {
+  year: "yearly",
+  quarter: "quarterly",
+  month: "monthly",
+  week: "weekly",
+  hour: "hourly",
+};
+export const SUBMITTING_STATUS_ENUM = Object.freeze({
+  loading: "loading",
+  submitted: "submitted",
+  updated: "updated",
+  error: "error",
+  null: "",
+});

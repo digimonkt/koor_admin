@@ -10,7 +10,7 @@ function AttachmentDragNDropInputComponent({
   single,
 }) {
   const { getRootProps, getInputProps } = useDropzone({
-    onDrop: handleDrop || (() => {}),
+    onDrop: handleDrop || (() => { }),
     multiple: !single,
     maxFiles: single ? 1 : 10,
   });
@@ -37,7 +37,7 @@ function AttachmentDragNDropInputComponent({
           disableFocusRipple
           sx={{ color: "#274593" }}
         >
-          <SVG.DeleteICon />
+          <SVG.DeleteIcon />
         </IconButton>
       </li>
     );

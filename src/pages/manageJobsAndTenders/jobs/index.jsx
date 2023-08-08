@@ -3,7 +3,7 @@ import { SVG } from "@assets/svg";
 import { IconButton } from "@mui/material";
 import { Stack } from "@mui/system";
 import Layout from "../layout";
-import { activeInactiveJob, deleteJob, manageJobData } from "@api/jobs";
+import { activeInactiveJob, deleteJob, getCountriesName, manageJobData } from "@api/jobs";
 import DialogBox from "@components/dialogBox";
 import DeleteCard from "@components/card/deleteCard";
 import { useDispatch, useSelector } from "react-redux";
@@ -12,9 +12,14 @@ import { setLoading } from "@redux/slice/jobsAndTenders";
 import env from "@utils/validateEnv";
 import { useDebounce } from "usehooks-ts";
 import { transformJobAPIResponse } from "@api/transform/choices";
+import { useNavigate } from "react-router-dom";
+
 function ManageJobsComponent() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const { countries } = useSelector((state) => state.choice);
+  const [countriesData, setCountriesData] = useState(countries.data);
   const [jobTable, setJobTable] = useState([]);
   const [totalCount, setTotalCount] = useState(0);
   const [pages, setPages] = useState(1);
@@ -56,7 +61,7 @@ function ManageJobsComponent() {
       {
         field: "action",
         headerName: "Action",
-        width: 120,
+        width: 180,
         sortable: true,
         renderCell: (item) => {
           return (
@@ -112,6 +117,19 @@ function ManageJobsComponent() {
               >
                 <SVG.DeleteIcon />
               </IconButton>
+              <IconButton
+                onClick={() => handleEdit(item.row.id)}
+                sx={{
+                  "&.MuiIconButton-root": {
+                    background: "#D5E3F7",
+                  },
+                  width: 30,
+                  height: 30,
+                  color: "#274593",
+                }}
+              >
+                <SVG.EditIcon />
+              </IconButton>
             </Stack>
           );
         },
@@ -150,7 +168,9 @@ function ManageJobsComponent() {
   const getPage = useCallback((_, page) => {
     setPages(page);
   }, []);
-
+  const handleEdit = async (item) => {
+    navigate(`/post-newJob?jobId=${item}`);
+  };
   const handleRedirectDetails = useCallback((item) => {
     const url = `${env.REACT_APP_REDIRECT_URL}/jobs/details/${item}`;
     window.open(url, "_blank");
@@ -168,10 +188,16 @@ function ManageJobsComponent() {
     }
     setDeleting("");
   }, [jobTable, dispatch, deleting]);
-
+  const getCountryList = async () => {
+    const limitParam = 500;
+    const response = await getCountriesName({ limit: limitParam });
+    if (response.remote === "success") {
+      setCountriesData(response.data.results);
+    }
+  };
   const filterJobsCountry = (e) => {
     const countryId = e.target.value;
-    const country = countries.data.find((country) => country.id === countryId);
+    const country = countriesData.find((country) => country.id === countryId);
     setCountry(country);
   };
 
@@ -209,6 +235,10 @@ function ManageJobsComponent() {
     }
   }, [dispatch]);
 
+  const PostNewJob = () => {
+    navigate("/post-newJob");
+  };
+
   useEffect(() => {
     if (jobTable.length) {
       dispatch(setLoading(false));
@@ -218,11 +248,14 @@ function ManageJobsComponent() {
   useEffect(() => {
     manageJobList();
   }, [manageJobList]);
-
+  useEffect(() => {
+    getCountryList();
+  }, []);
   return (
     <>
       <Layout
         job
+        newJob
         rows={jobTable}
         totalCount={totalCount}
         columns={columns}
@@ -253,6 +286,14 @@ function ManageJobsComponent() {
                 <SVG.ExportIcon />
               </span>
               Export CSV
+            </div>
+          ),
+        }}
+        jobPost={{
+          title: (
+            <div onClick={() => PostNewJob()}>
+              <span className="d-inline-flex align-items-center me-2"></span>
+              New Job Post
             </div>
           ),
         }}

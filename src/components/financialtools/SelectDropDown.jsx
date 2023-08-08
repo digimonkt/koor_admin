@@ -36,7 +36,7 @@ const SelectBox = styled(Select)`
   }
 `;
 
-const SelectDropDown = ({ content, padding, setContentId, faq, value }) => {
+const SelectDropDown = ({ content, setContentId, padding, faq, value }) => {
   const [isSelect, setIsSelect] = useState("");
   const handleChangeSelect = (event) => {
     setIsSelect(event.target.value);
@@ -87,7 +87,7 @@ const SelectDropDown = ({ content, padding, setContentId, faq, value }) => {
 
             {content?.map((item) => (
               <MenuItem key={item.id} value={item.id}>
-                {item.name}
+                {item.title}
               </MenuItem>
             ))}
           </SelectBox>

@@ -1,10 +1,15 @@
+import {
+  ManageButtonIcon,
+  SaveButton,
+} from "@components/financialtools/table/data";
+import { SVG } from "@assets/svg";
 export const transformJobAPIResponse = (data) => {
   return data.map((data, index) => ({
     id: data.id,
     no: index + 1,
     jobId: data.job_id,
     jobTitle: data.title,
-    company: data.user,
+    company: data.user || data.company,
     location: `${data.city.title},${data.country.title}`,
     action: data.status,
   }));
@@ -134,3 +139,29 @@ export function stripHTMLTags(html) {
   tempElement.innerHTML = html;
   return tempElement.textContent || tempElement.innerText || "";
 }
+
+export const transformInvoiceList = (data) => {
+  return data.map((data) => ({
+    date: data.created.slice(0, 9),
+    number: data.invoice_id,
+    company: data.user.name,
+    amount: "0",
+    sent: data.is_send ? <SVG.CircleCheckIcon /> : "",
+    save: <SaveButton buttonName="XLS" buttonPdf="PDF" />,
+    manage: (
+      <ManageButtonIcon
+        eyeIcon={<SVG.EyeIcon />}
+        editIcon={<SVG.EditIcon />}
+        mailIcon={<SVG.ForwardIcon />}
+      />
+    ),
+  }));
+};
+
+export const transformEmployerData = (data) => {
+  return data.map((data) => ({
+    id: data.id,
+    title: data.name || data.email,
+    value: data.id,
+  }));
+};

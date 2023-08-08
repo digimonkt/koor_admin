@@ -9,6 +9,7 @@ import { ReactComponent as Report } from "./report.svg";
 import { ReactComponent as UserRole } from "./userRole.svg";
 import { ReactComponent as PrivacyPolicy } from "./privacypolicy.svg";
 import { ReactComponent as UserManagement } from "./user_manage.svg";
+import { ReactComponent as AttachIcon } from "./attachIcon.svg";
 import { ReactComponent as Settings } from "./settings.svg";
 import { ReactComponent as LogOut } from "./logout.svg";
 import { ReactComponent as CreditIcon } from "./creaditicon.svg";
@@ -55,6 +56,10 @@ import { ReactComponent as LocationIcon } from "./location.svg";
 import { ReactComponent as vectorIcon } from "./vectorIcon.svg";
 import { ReactComponent as unVerify } from "./unVerify.svg";
 import { ReactComponent as polygon } from "./Polygon.svg";
+import { ReactComponent as ProfileIcon } from "./profile.svg";
+import { ReactComponent as ReceiptIcon } from "./receipt.svg";
+import { ReactComponent as ArrowForward } from "./arrow_forward.svg";
+import { ReactComponent as UserIcon } from "./user.svg";
 export const SVG = {
   polygon,
   LocationIcon,
@@ -73,6 +78,7 @@ export const SVG = {
   PrivacyPolicy,
   UserManagement,
   Settings,
+  AttachIcon,
   LogOut,
   CreditIcon,
   ClockIcon,
@@ -113,4 +119,8 @@ export const SVG = {
   FacebookIcon,
   AddCircleIcon,
   DownlodingIcon,
+  ProfileIcon,
+  ReceiptIcon,
+  ArrowForward,
+  UserIcon
 };
