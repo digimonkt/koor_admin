@@ -82,7 +82,11 @@ const PostNewJob = () => {
   const [jobId, setJobId] = useState(null);
   const [searchParams] = useSearchParams();
   const getEmployerList = async () => {
-    const response = await manageEmployer({ search: searchTerm });
+    let limitParam = 10;
+    if (jobId) {
+      limitParam = 500;
+    }
+    const response = await manageEmployer({ search: searchTerm, limit: limitParam });
     if (response.remote === "success") {
       setEmployersData(response.data.results);
     }
@@ -246,14 +250,14 @@ const PostNewJob = () => {
     const response = await getJobDetailsByIdAPI({ jobId });
     if (response.remote === "success") {
       const { data } = response;
-      if (!data.users) {
+      if (!data.user?.id) {
         setSelectedValue("new");
       }
       setCompanyLogo(data.companyLogo);
       setCompanyAttachments(data.attachments);
       formik.setFieldValue("companyType", selectedValue);
       formik.setFieldValue("company", data.company);
-      formik.setFieldValue("existCompany", data.user?.id);
+      formik.setFieldValue("existCompany", { value: data.user?.id, label: data.user?.name });
       formik.setFieldValue("title", data.title);
       formik.setFieldValue("budgetCurrency", data.budgetCurrency);
       formik.setFieldValue("budgetAmount", data.budgetAmount);
@@ -316,7 +320,7 @@ const PostNewJob = () => {
 
   useEffect(() => {
     getEmployerList();
-  }, [debouncedSearchEmployerValue, !formik.values.existCompany]);
+  }, [debouncedSearchEmployerValue, !formik.values.existCompany, jobId]);
 
   useEffect(() => {
     getCountryList();
@@ -457,12 +461,16 @@ const PostNewJob = () => {
                             onChange={(_, value) => {
                               if (value) {
                                 setSearchTerm(value.value);
-                                formik.setFieldValue("existCompany", value?.value);
+                                formik.setFieldValue("existCompany", value);
                               } else {
                                 setSearchTerm("");
-                                formik.setFieldValue("existCompany", "");
+                                formik.setFieldValue("existCompany", {
+                                  value: "",
+                                  label: "",
+                                });
                               }
                             }}
+                            value={formik.values.existCompany}
                             onKeyUp={(e) => setSearchTerm(e.target.value)}
                           />
                         </Grid>
@@ -498,39 +506,6 @@ const PostNewJob = () => {
                             Add Company Logo
                             <span className="required-field">*</span>
                           </label>
-                          {/* <AttachmentDragNDropInput
-                            files={formik.getFieldProps("companyLogo").value}
-                            handleDrop={(file) => {
-                              formik.setValues({
-                                ...formik.values,
-                                companyLogo: [
-                                  ...formik.getFieldProps("companyLogo").value,
-                                  file[0],
-                                ],
-                              });
-                            }}
-                            deleteFile={(file) => {
-                              if (file.id) {
-                                formik.setFieldValue("companyLogoRemove", [
-                                  ...formik.values.companyLogoRemove,
-                                  file.id,
-                                ]);
-                                formik.setFieldValue(
-                                  "companyLogo",
-                                  formik.values.companyLogo.filter(
-                                    (companyLogo) => companyLogo.path !== file.path
-                                  )
-                                );
-                              } else {
-                                formik.setFieldValue(
-                                  "companyLogo",
-                                  formik.values.companyLogo.filter(
-                                    (companyLogo) => companyLogo.path !== file.path
-                                  )
-                                );
-                              }
-                            }}
-                          /> */}
                           <Card
                             sx={{
                               "&.MuiCard-root": {
