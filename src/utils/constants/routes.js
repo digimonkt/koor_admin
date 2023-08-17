@@ -31,6 +31,7 @@ import {
   // addFAQ,
 } from "@pages/manageOptions";
 import ManageCountry from "@pages/manageOptions/manageCountry";
+import ViewInvoices from "@pages/manageOptions/manageFinancialTools/view-invoices";
 import ManageTenderCategory from "@pages/manageOptions/manageTenderCategory";
 
 export const PUBLIC_ROUTE = [];
@@ -193,6 +194,11 @@ export const AUTHENTICATED_ROUTE = [
     id: "manage-faq",
     path: "/manage-faq/:faqCategoryId/:role",
     element: showFAQ,
+  },
+  {
+    id: "view-invoice",
+    path: "/financial-tools/view-invoice/:invoiceId",
+    element: ViewInvoices,
   },
 ];
 

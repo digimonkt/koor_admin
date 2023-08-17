@@ -4,13 +4,13 @@ import {
   Button,
   Card,
   CardContent,
-  Pagination,
+  // Pagination,
   Stack,
   Tab,
-  FormControl,
+  // FormControl,
   Tabs,
 } from "@mui/material";
-import { SelectInput } from "@components/input";
+// import { SelectInput } from "@components/input";
 import { styled } from "@mui/material/styles";
 import PackageManagement from "@components/financialtools/PackageManagement";
 import Cbutton from "@components/button/cButton";
@@ -61,23 +61,23 @@ const AntTab = styled((props) => <Tab disableRipple {...props} />)(
   })
 );
 
-const TablePagination = styled(Pagination)(() => ({
-  " &.MuiPagination-root .MuiPaginationItem-root": {
-    minWidth: "36px",
-    fontFamily: "Bahnschrift",
-    fontSize: "16px",
-    color: "#000",
-    fontWeight: "400",
-  },
-  " &.MuiPagination-root .MuiPaginationItem-root.Mui-selected": {
-    background: "#fff",
-    borderRadius: "5px",
-    boxShadow: "0px 2px 6px rgba(0, 0, 0, 0.15)",
-  },
-  " &.MuiPagination-root .MuiPaginationItem-root .MuiPaginationItem-icon": {
-    display: "none",
-  },
-}));
+// const TablePagination = styled(Pagination)(() => ({
+//   " &.MuiPagination-root .MuiPaginationItem-root": {
+//     minWidth: "36px",
+//     fontFamily: "Bahnschrift",
+//     fontSize: "16px",
+//     color: "#000",
+//     fontWeight: "400",
+//   },
+//   " &.MuiPagination-root .MuiPaginationItem-root.Mui-selected": {
+//     background: "#fff",
+//     borderRadius: "5px",
+//     boxShadow: "0px 2px 6px rgba(0, 0, 0, 0.15)",
+//   },
+//   " &.MuiPagination-root .MuiPaginationItem-root .MuiPaginationItem-icon": {
+//     display: "none",
+//   },
+// }));
 
 const FinancialTools = () => {
   function TabPanel(props) {
@@ -147,7 +147,6 @@ const FinancialTools = () => {
   useEffect(() => {
     getPlans();
   }, []);
-
   return (
     <>
       <Card
@@ -230,7 +229,7 @@ const FinancialTools = () => {
             </TabPanel>
           </div>
         </CardContent>
-        {
+        {/* {
           value === 4 && <Stack direction="row" spacing={2} alignItems="center">
             <span>Items per page:</span>{" "}
             <FormControl
@@ -253,13 +252,13 @@ const FinancialTools = () => {
               />
             </FormControl>
           </Stack>
-        }
+        } */}
 
       </Card>
 
-      <TabPanel className="pagination-custom" value={value} index={3}>
+      {/* <TabPanel className="pagination-custom" value={value} index={3}>
         <TablePagination count={10} shape="rounded" />
-      </TabPanel>
+      </TabPanel> */}
     </>
   );
 };
