@@ -1,19 +1,17 @@
 import { Card, CardContent, Grid, IconButton, Stack } from "@mui/material";
 import { Box } from "@mui/system";
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useParams } from "react-router-dom";
 import { SVG } from "@assets/svg";
 import styles from "@components/financialtools/styles.module.css";
-import Cbutton from "@components/button/cButton";
+// import Cbutton from "@components/button/cButton";
 import logo from "@assets/images/logo.png";
 import CustomTable from "@components/financialtools/table";
-import {
-  VIEW_COLUMN_DATA,
-  VIEW_ROW_DATA,
-} from "../../../components/financialtools/table/data";
-// import Verified from "@assets/images/round-verified-stamp-png-1.png";
-// import autograp from "@assets/images/autograph.png";
+
 import { styled } from "@mui/material/styles";
+import { getInvoiceDetailsAPI } from "@api/manageoptions";
+import { useDispatch } from "react-redux";
+import { setErrorToast } from "@redux/slice/toast";
 
 const StyledIconButton = styled(IconButton)(() => ({
   color: "#121212",
@@ -21,6 +19,70 @@ const StyledIconButton = styled(IconButton)(() => ({
 }));
 
 const ViewInvoices = () => {
+  const dispatch = useDispatch();
+  const { invoiceId } = useParams();
+  const USER_COLUMN_DATA = [
+    {
+      id: 1,
+      name: "Amount",
+      key: "amount",
+      width: 115,
+    },
+    {
+      id: 2,
+      name: "Points",
+      key: "points",
+      tableCellClass: "text-center",
+    },
+    {
+      id: 3,
+      name: "Created",
+      key: "created",
+      tableCellClass: "text-center",
+    },
+    // {
+    //   id: 4,
+    //   name: "Amount",
+    //   key: "amount",
+    // },
+  ];
+  const [invoiceDetails, setInvoiceDetails] = useState({
+    id: "",
+    startDate: "",
+    endDate: "",
+    invoiceId: "",
+    total: "",
+    discount: "",
+    isSend: "",
+    grandTotal: "",
+    created: "",
+    points: "",
+    user: {
+      id: "",
+      name: "",
+      email: "",
+      country_code: "",
+      mobileNumber: "",
+      // image: {
+      //     title: data.user.image.title,
+      //     path: data.user.image.path,
+      // },
+    },
+    detail: []
+  });
+  // const [invoiceId, setInvoiceId] = useState([]);
+  const getInvoiceDetail = async (id) => {
+    const response = await getInvoiceDetailsAPI({ id });
+    if (response.remote === "success") {
+      setInvoiceDetails(response.data);
+    } else {
+      dispatch(setErrorToast("Something went wrong"));
+    };
+  };
+  useEffect(() => {
+    getInvoiceDetail(invoiceId);
+  }, [invoiceId]);
+
   return (
     <>
       <Card
@@ -64,10 +126,10 @@ const ViewInvoices = () => {
               <IconButton LinkComponent={Link} to="/financial-tools">
                 <SVG.ArrowLeftIcon />
               </IconButton>{" "}
-              <h2>Invoice – ID 117082</h2>
+              <h2>Invoice – ID {invoiceId}</h2>
             </Stack>
             <Stack direction="row" spacing={2}>
-              <Cbutton
+              {/* <Cbutton
                 color="#274593"
                 bordercolor="#274593"
                 hoverBgColor="#b4d2fe"
@@ -91,7 +153,7 @@ const ViewInvoices = () => {
                   <SVG.ForwardIcon />
                 </span>
                 Send
-              </Cbutton>
+              </Cbutton> */}
             </Stack>
           </Stack>
           <Box sx={{ textAlign: "center", mb: "54px" }}>
@@ -103,32 +165,26 @@ const ViewInvoices = () => {
               <Grid item lg={6} xs={12}>
                 <div className={`${styles.address}`}>
                   <Box sx={{ mb: 1.875 }}>
-                    <b>Client name:</b> Telegram LLC
+                    <b>Client name:</b> {invoiceDetails.user.name || invoiceDetails.user.email}
                   </Box>
-                  <p>+49 279 82 82</p>
-                  <p>contact@telegram.org</p>
-                  <p>Person name</p>
+                  <p>{invoiceDetails.user.mobileNumber}</p>
+                  <p>{invoiceDetails.user.email}</p>
                 </div>
               </Grid>
               <Grid item lg={6} xs={12}>
                 <div className={`text-lg-end ${styles.address}`}>
                   <Box sx={{ mb: 1.875 }}>
-                    <b>Invoice number:</b> 733
+                    <b>Invoice number:</b> {invoiceId}
                   </Box>
-                  <Box sx={{ mb: 1.875 }}>
+                  {/* <Box sx={{ mb: 1.875 }}>
                     <b>Contract number:</b> 804
-                  </Box>
+                  </Box> */}
                 </div>
               </Grid>
             </Grid>
             <Box sx={{ mt: 1.875 }}>
-              <CustomTable
-                rows={VIEW_ROW_DATA}
-                columns={VIEW_COLUMN_DATA}
-                radius="7px 7px 0px 0px"
-              />
               <Grid container spacing={2} justifyContent="space-between">
-                <Grid item lg={6} xs={6}>
+                {/* <Grid item lg={6} xs={6}>
                   <ul className={`${styles.bankDetails}`}>
                     <li>
                       <span>Please deposit to through</span>
@@ -147,7 +203,7 @@ const ViewInvoices = () => {
                       <b>0971881</b>
                     </li>
                   </ul>
-                </Grid>
+                </Grid> */}
                 <Grid item xs="auto">
                   <Box className={`${styles.topBorder}`}>
                     <table className={`${styles.totalBox}`}>
@@ -155,13 +211,13 @@ const ViewInvoices = () => {
                         <tr>
                           <td>Subtotal:</td>
                           <td>
-                            <b>$5,345.12</b>
+                            <b>{invoiceDetails.total}</b>
                           </td>
                         </tr>
                         <tr>
                           <td>Discount:</td>
                           <td>
-                            <b>$345.12</b>
+                            <b>{invoiceDetails.discount}</b>
                           </td>
                         </tr>
                         <tr>
@@ -169,7 +225,7 @@ const ViewInvoices = () => {
                             <strong>Total:</strong>
                           </td>
                           <td className={`${styles.td_last}`}>
-                            <strong>$5,000.00</strong>
+                            <strong>{invoiceDetails.grandTotal}</strong>
                           </td>
                         </tr>
                       </tbody>
@@ -177,6 +233,13 @@ const ViewInvoices = () => {
                   </Box>
                 </Grid>
               </Grid>
+            </Box>
+            <Box>
+              <CustomTable
+                rows={invoiceDetails.detail || []}
+                columns={USER_COLUMN_DATA || []}
+                radius="7px 7px 0px 0px"
+              />
             </Box>
             <Box sx={{ my: 6.25 }}>
               <Grid

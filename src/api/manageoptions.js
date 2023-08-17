@@ -1,5 +1,6 @@
 import api from ".";
 import urlcat from "urlcat";
+import { transformInvoiceDetailsAPI, transformInvoiceListAPI } from "./transform/invoice";
 
 export const manageSkillApi = async ({ limit, page, search, country }) => {
   const response = await api.request({
@@ -487,19 +488,28 @@ export const getInvoiceListApi = async ({
   limit,
   page,
   invoiceId,
-  employer,
+  employerId,
   sent,
+  fromDate,
+  toDate
 }) => {
   const response = await api.request({
     url: urlcat("/v1/admin/invoice", {
       limit,
       page,
       invoiceId,
-      employer,
-      sent,
+      userId: employerId,
+      from: fromDate,
+      to: toDate
     }),
     method: "GET",
   });
+  if (response.remote === "success") {
+    return {
+      remote: "success",
+      data: transformInvoiceListAPI(response.data),
+    };
+  }
   return response;
 };
 
@@ -517,4 +527,30 @@ export const updatePlansAPI = async (data) => {
     data
   });
   return resp;
+};
+export const mailSendInvoiceAPI = async (invoiceId) => {
+  const response = await api.request({
+    url: urlcat("/v1/admin/invoice/:invoiceId/send", { invoiceId }),
+    method: "GET",
+  });
+  return response;
+};
+
+export const getInvoiceDetailsAPI = async ({
+  id,
+}) => {
+  const invoiceId = id;
+  const response = await api.request({
+    url: urlcat("/v1/admin/invoice/:invoiceId/detail", {
+      invoiceId
+    }),
+    method: "GET",
+  });
+  if (response.remote === "success") {
+    return {
+      remote: "success",
+      data: transformInvoiceDetailsAPI(response.data),
+    };
+  }
+  return response;
 };
