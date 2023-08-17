@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { styled } from "@mui/material/styles";
 import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
 import { FormControl, MenuItem, Select } from "@mui/material";
@@ -36,12 +36,21 @@ const SelectBox = styled(Select)`
   }
 `;
 
-const SelectDropDown = ({ content, setContentId, padding, faq, value }) => {
+const SelectDropDown = ({ content, setContentId, padding, faq, value, action }) => {
   const [isSelect, setIsSelect] = useState("");
+  const [isDisabled, setIsDisabled] = useState(true);
   const handleChangeSelect = (event) => {
     setIsSelect(event.target.value);
     setContentId(event.target.value);
   };
+  useEffect(() => {
+    if (action) {
+      setIsDisabled(false);
+    }
+  }, [action]);
+  useEffect(() => {
+    console.log({ isDisabled });
+  }, [isDisabled]);
 
   return (
     <>
@@ -64,7 +73,7 @@ const SelectDropDown = ({ content, setContentId, padding, faq, value }) => {
             displayEmpty
             sx={{ "& .MuiSelect-select": { padding } }}
           >
-            <MenuItem value="" disabled>
+            <MenuItem value="" disabled >
               Select an option
             </MenuItem>
             <MenuItem value="job_seeker">job Seeker</MenuItem>
@@ -81,7 +90,7 @@ const SelectDropDown = ({ content, setContentId, padding, faq, value }) => {
             displayEmpty
             sx={{ "& .MuiSelect-select": { padding } }}
           >
-            <MenuItem value="" disabled>
+            <MenuItem value="" disabled={isDisabled} >
               Select an option
             </MenuItem>
 

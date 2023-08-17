@@ -218,6 +218,7 @@ const Invoices = () => {
               content={employerData}
               setContentId={setEmployerId}
               onChange={(e) => setEmployerId(e.target.value)}
+              action="isBlank"
             />
           </Grid>
           <Grid item lg={12} xs={12}>
