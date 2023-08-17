@@ -1,17 +1,18 @@
 import { Card, CardContent, Grid, IconButton, Stack } from "@mui/material";
 import { Box } from "@mui/system";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { SVG } from "@assets/svg";
 import styles from "@components/financialtools/styles.module.css";
-// import Cbutton from "@components/button/cButton";
-import logo from "@assets/images/logo.png";
+import Cbutton from "@components/button/cButton";
+// import logo from "@assets/images/logo.png";
 import CustomTable from "@components/financialtools/table";
 
 import { styled } from "@mui/material/styles";
-import { getInvoiceDetailsAPI } from "@api/manageoptions";
+import { getInvoiceDetailsAPI, mailSendInvoiceAPI } from "@api/manageoptions";
 import { useDispatch } from "react-redux";
-import { setErrorToast } from "@redux/slice/toast";
+import { setErrorToast, setSuccessToast } from "@redux/slice/toast";
+import env from "@utils/validateEnv";
 
 const StyledIconButton = styled(IconButton)(() => ({
   color: "#121212",
@@ -24,27 +25,23 @@ const ViewInvoices = () => {
   const USER_COLUMN_DATA = [
     {
       id: 1,
-      name: "Amount",
-      key: "amount",
-      width: 115,
+      name: "Date",
+      key: "created",
+      tableCellClass: "text-center",
     },
     {
       id: 2,
-      name: "Points",
-      key: "points",
+      name: "Description",
+      key: "note",
       tableCellClass: "text-center",
     },
     {
       id: 3,
-      name: "Created",
-      key: "created",
+      name: "Amount",
+      key: "amount",
+      width: 115,
       tableCellClass: "text-center",
     },
-    // {
-    //   id: 4,
-    //   name: "Amount",
-    //   key: "amount",
-    // },
   ];
   const [invoiceDetails, setInvoiceDetails] = useState({
     id: "",
@@ -79,6 +76,14 @@ const ViewInvoices = () => {
       dispatch(setErrorToast("Something went wrong"));
     };
   };
+  const handleSendMail = async (id) => {
+    dispatch(setSuccessToast("Email Sent Successfully"));
+    await mailSendInvoiceAPI(id);
+  };
+  const handleDownload = useCallback((id) => {
+    const url = `${env.REACT_APP_BACKEND_URL}/api/v1/admin/invoice/download?invoice-id=${id}`;
+    window.open(url, "_blank");
+  }, []);
   useEffect(() => {
     getInvoiceDetail(invoiceId);
   }, [invoiceId]);
@@ -129,35 +134,37 @@ const ViewInvoices = () => {
               <h2>Invoice – ID {invoiceId}</h2>
             </Stack>
             <Stack direction="row" spacing={2}>
-              {/* <Cbutton
-                color="#274593"
-                bordercolor="#274593"
-                hoverBgColor="#b4d2fe"
-                hoverborderColor="#b4d2fe"
-                padding="7px 30px 7px 20px"
-                url="/financial-tools/edit"
-              >
-                <span className="d-inline-flex me-2">
-                  <SVG.EditIcon />
-                </span>
-                Edit
-              </Cbutton>
               <Cbutton
                 color="#274593"
                 bordercolor="#274593"
                 hoverBgColor="#b4d2fe"
                 hoverborderColor="#b4d2fe"
                 padding="7px 30px 7px 20px"
+                onClick={() => handleDownload(invoiceId)}
+              >
+                <span className="d-inline-flex me-2">
+                  <SVG.EditIcon />
+                </span>
+                Download
+              </Cbutton>
+              <Cbutton
+                onClick={() => handleSendMail(invoiceId)}
+                color="#274593"
+                bordercolor="#274593"
+                hoverBgColor="#b4d2fe"
+                hoverborderColor="#b4d2fe"
+                padding="7px 30px 7px 20px"
+
               >
                 <span className="d-inline-flex me-2">
                   <SVG.ForwardIcon />
                 </span>
                 Send
-              </Cbutton> */}
+              </Cbutton>
             </Stack>
           </Stack>
           <Box sx={{ textAlign: "center", mb: "54px" }}>
-            <img alt="" src={logo} />
+            <SVG.KoorLogo />
           </Box>
           <div className={` ${styles.invoiceTitle}`}>
             <h3 className="text-lg-end">Invoice</h3>
@@ -165,10 +172,14 @@ const ViewInvoices = () => {
               <Grid item lg={6} xs={12}>
                 <div className={`${styles.address}`}>
                   <Box sx={{ mb: 1.875 }}>
-                    <b>Client name:</b> {invoiceDetails.user.name || invoiceDetails.user.email}
+                    <b>Client name: </b> {invoiceDetails.user.name || invoiceDetails.user.email}
                   </Box>
-                  <p>{invoiceDetails.user.mobileNumber}</p>
-                  <p>{invoiceDetails.user.email}</p>
+                  <Box sx={{ mb: 1.875 }}>
+                    <b>Mobile Number: </b>{invoiceDetails.user.mobileNumber}
+                  </Box>
+                  <Box sx={{ mb: 1.875 }}>
+                    <b>Email: </b>{invoiceDetails.user.email}
+                  </Box>
                 </div>
               </Grid>
               <Grid item lg={6} xs={12}>
@@ -176,16 +187,23 @@ const ViewInvoices = () => {
                   <Box sx={{ mb: 1.875 }}>
                     <b>Invoice number:</b> {invoiceId}
                   </Box>
-                  {/* <Box sx={{ mb: 1.875 }}>
-                    <b>Contract number:</b> 804
-                  </Box> */}
+                  <Box sx={{ mb: 1.875 }}>
+                    <b>Invoice Date:</b> {invoiceDetails.createdDate}
+                  </Box>
                 </div>
               </Grid>
             </Grid>
+            <Box>
+              <CustomTable
+                rows={invoiceDetails.detail || []}
+                columns={USER_COLUMN_DATA || []}
+                radius="7px 7px 0px 0px"
+              />
+            </Box>
             <Box sx={{ mt: 1.875 }}>
               <Grid container spacing={2} justifyContent="space-between">
-                {/* <Grid item lg={6} xs={6}>
-                  <ul className={`${styles.bankDetails}`}>
+                <Grid item lg={6} xs={6}>
+                  {/* <ul className={`${styles.bankDetails}`}>
                     <li>
                       <span>Please deposit to through</span>
                       <b>xxx</b>
@@ -202,9 +220,9 @@ const ViewInvoices = () => {
                       <span>Account No:</span>
                       <b>0971881</b>
                     </li>
-                  </ul>
-                </Grid> */}
-                <Grid item xs="auto">
+                  </ul> */}
+                </Grid>
+                <Grid item lg={3} xs="auto">
                   <Box className={`${styles.topBorder}`}>
                     <table className={`${styles.totalBox}`}>
                       <tbody>
@@ -233,13 +251,6 @@ const ViewInvoices = () => {
                   </Box>
                 </Grid>
               </Grid>
-            </Box>
-            <Box>
-              <CustomTable
-                rows={invoiceDetails.detail || []}
-                columns={USER_COLUMN_DATA || []}
-                radius="7px 7px 0px 0px"
-              />
             </Box>
             <Box sx={{ my: 6.25 }}>
               <Grid
