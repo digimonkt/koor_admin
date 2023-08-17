@@ -7,7 +7,6 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { Grid, FormLabel, Pagination, Stack, IconButton, Tooltip } from "@mui/material";
 import SelectDropDown from "./SelectDropDown";
-// import CustomTable from "./table";
 import { getInvoiceListApi, mailSendInvoiceAPI } from "@api/manageoptions";
 import {
   transformEmployerData,
@@ -152,7 +151,7 @@ const Invoices = () => {
     const fromDate = dayjs(dateFrom).format("YYYY-MM-DD");
     const toDate = dayjs(dateTo).format("YYYY-MM-DD");
     const response = await getInvoiceListApi(
-      { employerId, limit, fromDate, toDate, invoiceId }
+      { employerId, limit, fromDate, toDate, invoiceId, page }
     );
     if (response.remote === "success") {
       setListInvoice(response.data.results);
@@ -199,7 +198,7 @@ const Invoices = () => {
   }, []);
   useEffect(() => {
     invoiceList();
-  }, [dateTo, dateFrom, employerId, debouncedSearchCountryValue]);
+  }, [dateTo, dateFrom, employerId, debouncedSearchCountryValue, limit, page]);
   return (
     <>
       <div className={`${styles.packageManagement}`}>
