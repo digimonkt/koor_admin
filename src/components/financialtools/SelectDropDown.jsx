@@ -48,10 +48,6 @@ const SelectDropDown = ({ content, setContentId, padding, faq, value, action }) 
       setIsDisabled(false);
     }
   }, [action]);
-  useEffect(() => {
-    console.log({ isDisabled });
-  }, [isDisabled]);
-
   return (
     <>
       <FormControl
