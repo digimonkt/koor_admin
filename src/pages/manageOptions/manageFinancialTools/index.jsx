@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 import {
   Box,
-  Button,
+  // Button,
   Card,
   CardContent,
   // Pagination,
-  Stack,
+  // Stack,
   Tab,
   // FormControl,
   Tabs,
@@ -13,10 +13,10 @@ import {
 // import { SelectInput } from "@components/input";
 import { styled } from "@mui/material/styles";
 import PackageManagement from "@components/financialtools/PackageManagement";
-import Cbutton from "@components/button/cButton";
-import { SVG } from "@assets/svg";
+// import Cbutton from "@components/button/cButton";
+// import { SVG } from "@assets/svg";
 import Recharge from "@components/financialtools/Recharge";
-import GenenateInvoices from "@components/financialtools/GenerateInvoices";
+// import GenenateInvoices from "@components/financialtools/GenerateInvoices";
 import Invoices from "@components/financialtools/Invoices";
 import { getPlansAPI } from "@api/manageoptions";
 // import PerPageItems from "../../globalcomponent/perpageitems/PerPageItems";
@@ -179,8 +179,8 @@ const FinancialTools = () => {
             >
               <AntTab label="Package management " {...a11yProps(0)} />
               <AntTab label="Recharge" {...a11yProps(1)} />
-              <AntTab label="Genenate invoices" {...a11yProps(2)} />
-              <AntTab label="Invoices" {...a11yProps(3)} />
+              {/* <AntTab label="Genenate invoices" {...a11yProps(2)} /> */}
+              <AntTab label="Invoices" {...a11yProps(2)} />
             </AntTabs>
             <TabPanel value={value} index={0}>
               <PackageManagement packageList={packageList} refreshList={() => getPlans()} />
@@ -188,7 +188,7 @@ const FinancialTools = () => {
             <TabPanel value={value} index={1}>
               <Recharge />
             </TabPanel>
-            <TabPanel value={value} index={2}>
+            {/* <TabPanel value={value} index={2}>
               <GenenateInvoices />
               <Stack direction="row" justifyContent="center" sx={{ mt: 3.75 }}>
                 <div>
@@ -220,8 +220,8 @@ const FinancialTools = () => {
                   Clear all fields
                 </Button>
               </Box>
-            </TabPanel>
-            <TabPanel value={value} index={3}>
+            </TabPanel> */}
+            <TabPanel value={value} index={2}>
               <Invoices />
               <Box sx={{ mt: 4.875 }}>
                 {/* <PerPageItems content={content} /> */}

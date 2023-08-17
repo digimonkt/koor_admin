@@ -28,18 +28,18 @@ export const transformInvoiceDetailsAPI = (data) => {
         startDate: data.start_date,
         endDate: data.end_date,
         invoiceId: data.invoice_id,
-        total: data.total,
-        discount: data.discount,
+        total: "$" + data.total,
+        discount: "$" + data.discount,
         isSend: data.is_send,
-        grandTotal: data.grand_total,
-        created: dayjs(data.created).format("DD-MM-YYYY"),
+        grandTotal: "$" + data.grand_total,
+        createdDate: dayjs(data.created).format("MMMM D, YYYY h:mm A"),
         points: data.points,
         user: {
             id: data.user.id,
             name: data.user.name,
             email: data.user.email,
             country_code: data.user.country_code,
-            mobileNumber: data.user.country_code + data.user.mobile_number,
+            mobileNumber: data.user.country_code + "-" + data.user.mobile_number,
             // image: {
             //     title: data.user.image.title,
             //     path: data.user.image.path,
@@ -50,7 +50,8 @@ export const transformInvoiceDetailsAPI = (data) => {
                 id: details.id,
                 points: details.points,
                 amount: "$" + details.amount,
-                created: dayjs(details.created).format("DD-MM-YYYY"),
+                created: dayjs(details.created).format("MMMM D, YYYY h:mm A"),
+                note: details.note || `Point updated by koor admin (${details.points})`
             };
         }),
     };
