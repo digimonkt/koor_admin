@@ -60,6 +60,7 @@ import { ReactComponent as ProfileIcon } from "./profile.svg";
 import { ReactComponent as ReceiptIcon } from "./receipt.svg";
 import { ReactComponent as ArrowForward } from "./arrow_forward.svg";
 import { ReactComponent as UserIcon } from "./user.svg";
+import { ReactComponent as KoorLogo } from "./logo.svg";
 export const SVG = {
   polygon,
   LocationIcon,
@@ -122,5 +123,6 @@ export const SVG = {
   ProfileIcon,
   ReceiptIcon,
   ArrowForward,
-  UserIcon
+  UserIcon,
+  KoorLogo
 };
