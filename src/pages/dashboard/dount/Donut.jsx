@@ -16,7 +16,7 @@ export const SelectBox = styled(Select)`
     font-family: "Poppins";
     font-style: normal;
     font-weight: 400;
-    font-size: 12px;
+    font-size: 14px;
     line-height: 22px;
 
     letter-spacing: 0.02em;
@@ -105,17 +105,20 @@ const Donut = ({ title, total, user, series, colors, content }) => {
           }}
           size="small"
         >
+          <div className="selectOption">
           <SelectBox
             value={isSelect}
             onChange={handleChange}
             inputProps={{ "aria-label": "Without label" }}
             IconComponent={KeyboardArrowUpIcon}
             displayEmpty
+            className="selectOption"
           >
             <MenuItem value="">This Week</MenuItem>
             <MenuItem value={20}>Last Month</MenuItem>
             <MenuItem value={30}>year</MenuItem>
           </SelectBox>
+          </div>
         </FormControl>
       </Stack>
 

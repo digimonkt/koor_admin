@@ -234,7 +234,7 @@ const ColumChart = () => {
           </div>
           <div className={`${styles.views}`}>
             <span
-              className={`${styles.blueView}`}
+              className={`${styles.blueView} pinkBorderChart`}
               style={{ borderColor: "#4CAF50" }}
             ></span>
             <b>{isApplication} </b>Applications

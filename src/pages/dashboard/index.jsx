@@ -1,6 +1,6 @@
 import React, { Fragment, useEffect, useState } from "react";
 import styles from "./styles.module.css";
-import { Card, CardContent, Grid, Stack } from "@mui/material";
+import { Box, Card, CardContent, Grid, Stack } from "@mui/material";
 import { SVG } from "@assets/svg";
 import ColumChart from "./columChart/ColumChart";
 import Donut from "./dount/Donut";
@@ -22,24 +22,27 @@ const DashboardComponent = () => {
     const response = await getUserCountApi();
     if (response.remote === "success") {
       const { employers, vendors } = response.data;
+
       const NewUserList = [
         {
-          icon: <SVG.CreditIcon />,
+          icon: <SVG.CreditIcon className="imgSize_Dashboard" />,
           title: response.data.active_jobs,
           subtitle: "active users",
         },
+
         {
-          icon: <SVG.ClockIcon />,
+          icon: <SVG.ClockIcon className="imgSize_Dashboard"/>,
           title: "143 344",
           subtitle: "visitors today",
         },
+
         {
-          icon: <SVG.WorkIcon />,
+          icon: <SVG.WorkIcon className="imgSize_Dashboard"/>,
           title: response.data.active_user,
           subtitle: "active posts",
         },
         {
-          icon: <SVG.GroupUser />,
+          icon: <SVG.GroupUser className="imgSize_Dashboard"/>,
           title: employers,
           subtitle: "jobs posted",
         },
@@ -66,11 +69,11 @@ const DashboardComponent = () => {
     userCount();
   }, []);
   return (
-    <Fragment>
+    <Fragment className={`${styles.dashboard_Page}`}>
       <div className="main-admin">
         <Grid container spacing={2} className={`${styles.marginBottom}`}>
           {userList.map((item, index) => (
-            <Grid item xl={3} lg={3} xs={12} sm={6} key={index}>
+            <Grid item xl={3} lg={3} xs={6} sm={6} key={index}>
               <Stack
                 direction="row"
                 spacing={1}
@@ -103,54 +106,56 @@ const DashboardComponent = () => {
                   },
                 }}
               >
-                {userData.seriesData.length > 0 && (
-                  <Donut
-                    title="Koor users"
-                    total={userData.totalUsers}
-                    user="Total users"
-                    series={userData.seriesData}
-                    colors={["#4267B2", "#4CAF50", "#FFA500"]}
-                    content={
-                      <>
-                        <li>
-                          <b>{userData.jobSeekersCount}</b> – JobSeekers{" "}
-                          <small>
-                            (
-                            {getPercentage(
-                              userData.jobSeekersCount,
-                              userData.totalUsers
-                            )}
-                            % )
-                          </small>
-                        </li>
-                        <li>
-                          <b>{userData.employersCount}</b> – Employers{" "}
-                          <small>
-                            {" "}
-                            (
-                            {getPercentage(
-                              userData.employersCount,
-                              userData.totalUsers
-                            )}
-                            % )
-                          </small>
-                        </li>
-                        <li>
-                          <b>{userData.vendorsCount}</b> – Vendors{" "}
-                          <small>
-                            {" "}
-                            (
-                            {getPercentage(
-                              userData.vendorsCount,
-                              userData.totalUsers
-                            )}
-                            % )
-                          </small>
-                        </li>
-                      </>
-                    }
-                  />
-                )}
+                <Box className={`${styles.userChart}`}>
+                  {userData.seriesData.length > 0 && (
+                    <Donut
+                      title="Koor users"
+                      total={userData.totalUsers}
+                      user="Total users"
+                      series={userData.seriesData}
+                      colors={["#4267B2", "#4CAF50", "#FFA500"]}
+                      content={
+                        <>
+                          <li className="koorUsers">
+                            <b>{userData.jobSeekersCount}</b> – JobSeekers{" "}
+                            <small>
+                              (
+                              {getPercentage(
+                                userData.jobSeekersCount,
+                                userData.totalUsers
+                              )}
+                              % )
+                            </small>
+                          </li>
+                          <li className="koorUsers">
+                            <b>{userData.employersCount}</b> – Employers{" "}
+                            <small>
+                              {" "}
+                              (
+                              {getPercentage(
+                                userData.employersCount,
+                                userData.totalUsers
+                              )}
+                              % )
+                            </small>
+                          </li>
+                          <li className="koorUsers">
+                            <b>{userData.vendorsCount}</b> – Vendors{" "}
+                            <small>
+                              {" "}
+                              (
+                              {getPercentage(
+                                userData.vendorsCount,
+                                userData.totalUsers
+                              )}
+                              % )
+                            </small>
+                          </li>
+                        </>
+                      }
+                    />
+                  )}
+                </Box>
               </CardContent>
             </Card>
           </Grid>

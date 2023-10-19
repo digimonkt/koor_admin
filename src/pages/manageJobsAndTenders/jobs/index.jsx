@@ -2,8 +2,14 @@ import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { SVG } from "@assets/svg";
 import { IconButton } from "@mui/material";
 import { Stack } from "@mui/system";
+import styles from "./style.module.css";
 import Layout from "../layout";
-import { activeInactiveJob, deleteJob, getCountriesName, manageJobData } from "@api/jobs";
+import {
+  activeInactiveJob,
+  deleteJob,
+  getCountriesName,
+  manageJobData,
+} from "@api/jobs";
 import DialogBox from "@components/dialogBox";
 import DeleteCard from "@components/card/deleteCard";
 import { useDispatch, useSelector } from "react-redux";
@@ -65,72 +71,74 @@ function ManageJobsComponent() {
         sortable: true,
         renderCell: (item) => {
           return (
-            <Stack direction="row" spacing={1} alignItems="center">
-              <IconButton
-                onClick={() => handleRedirectDetails(item.row.id)}
-                sx={{
-                  "&.MuiIconButton-root": {
-                    background: "#D5E3F7",
-                  },
+            <div className={`${styles.manageJobs_Page} `}>
+              <Stack direction="row" spacing={1} alignItems="center">
+                <IconButton
+                  onClick={() => handleRedirectDetails(item.row.id)}
+                  sx={{
+                    "&.MuiIconButton-root": {
+                      background: "#D5E3F7",
+                    },
 
-                  width: 30,
-                  height: 30,
-                  color: "#274593",
-                }}
-              >
-                <SVG.EyeIcon />
-              </IconButton>
+                    width: 30,
+                    height: 30,
+                    color: "#274593",
+                  }}
+                >
+                  <SVG.EyeIcon />
+                </IconButton>
 
-              <IconButton
-                onClick={() => {
-                  handleHoldJob(
-                    item,
-                    item.row.action === "active" ? "inActive" : "active"
-                  );
-                }}
-                sx={{
-                  "&.MuiIconButton-root": {
-                    background: "#D5E3F7",
-                  },
-                  width: 30,
-                  height: 30,
-                  color: "#274593",
-                }}
-              >
-                {item.row.action === "active" ? (
-                  <SVG.HoldIcon />
-                ) : (
-                  <SVG.polygon />
-                )}
-              </IconButton>
+                <IconButton
+                  onClick={() => {
+                    handleHoldJob(
+                      item,
+                      item.row.action === "active" ? "inActive" : "active"
+                    );
+                  }}
+                  sx={{
+                    "&.MuiIconButton-root": {
+                      background: "#D5E3F7",
+                    },
+                    width: 30,
+                    height: 30,
+                    color: "#274593",
+                  }}
+                >
+                  {item.row.action === "active" ? (
+                    <SVG.HoldIcon />
+                  ) : (
+                    <SVG.polygon />
+                  )}
+                </IconButton>
 
-              <IconButton
-                onClick={() => setDeleting(item.row.id)}
-                sx={{
-                  "&.MuiIconButton-root": {
-                    background: "#D5E3F7",
-                  },
-                  width: 30,
-                  height: 30,
-                  color: "#274593",
-                }}
-              >
-                <SVG.DeleteIcon />
-              </IconButton>
-              <IconButton
-                onClick={() => handleEdit(item.row.id)}
-                sx={{
-                  "&.MuiIconButton-root": {
-                    background: "#D5E3F7",
-                  },
-                  width: 30,
-                  height: 30,
-                  color: "#274593",
-                }}
-              >
-                <SVG.EditIcon />
-              </IconButton>
-            </Stack>
+                <IconButton
+                  onClick={() => setDeleting(item.row.id)}
+                  sx={{
+                    "&.MuiIconButton-root": {
+                      background: "#D5E3F7",
+                    },
+                    width: 30,
+                    height: 30,
+                    color: "#274593",
+                  }}
+                >
+                  <SVG.DeleteIcon />
+                </IconButton>
+                <IconButton
+                  onClick={() => handleEdit(item.row.id)}
+                  sx={{
+                    "&.MuiIconButton-root": {
+                      background: "#D5E3F7",
+                    },
+                    width: 30,
+                    height: 30,
+                    color: "#274593",
+                  }}
+                >
+                  <SVG.EditIcon />
+                </IconButton>
+              </Stack>
+            </div>
           );
         },
       },
@@ -282,25 +290,35 @@ function ManageJobsComponent() {
         csvProps={{
           title: (
             <div onClick={() => downloadJobCSV()}>
-              <span className="d-inline-flex align-items-center me-2">
-                <SVG.ExportIcon />
+              <span className="d-inline-flex align-items-center">
+                <SVG.ExportIcon className="me-1" />
+                Export CSV
               </span>
-              Export CSV
             </div>
           ),
         }}
         jobPost={{
           title: (
-            <div onClick={() => PostNewJob()}>
-              <span className="d-inline-flex align-items-center me-2"></span>
+            <div
+              onClick={() => PostNewJob()}
+              className={`${styles.blueBtnJob}`}
+            >
+              <span className="d-inline-flex align-items-center">
+                <SVG.ExportIcon className="me-1" />
+              </span>
               New Job Post
             </div>
           ),
         }}
         jobProps={{
           title: (
-            <div onClick={() => resetFilterJob()}>
-              <span className="d-inline-flex align-items-center me-2"></span>{" "}
+            <div
+              onClick={() => resetFilterJob()}
+              className={`${styles.blueBtnJob}`}
+            >
+              <span className="d-inline-flex align-items-center">
+                <SVG.ExportIcon className="me-1" />
+              </span>
               Reset Filter
             </div>
           ),

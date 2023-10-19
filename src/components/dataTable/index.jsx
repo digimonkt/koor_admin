@@ -27,9 +27,14 @@ function DataTable({ rows, columns, limitProps, loader, page }) {
       </div>
       <div className="peritemview">
         <Stack direction="row" spacing={2} alignItems="center">
-          <span>Items per page:</span>{" "}
+          <span className="table_Select_Page">Items per page:</span>{" "}
           <FormControl
             sx={{
+              "@media (max-width: 767px)": {
+                "& .MuiSelect-select": {
+                  fontSize: "14px !important",
+                },
+              },
               "& .MuiSelect-select": {
                 fontFamily: "Poppins",
                 fontSize: "16px",

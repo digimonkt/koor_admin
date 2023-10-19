@@ -4,10 +4,11 @@ import { Box, Drawer, IconButton, Stack } from "@mui/material";
 import { Link, Route, Routes, useLocation } from "react-router-dom";
 import { MENU_ITEM } from "./navigation";
 import { SVG } from "@assets/svg";
-import MenuOpenIcon from "@mui/icons-material/MenuOpen";
+// import MenuOpenIcon from "@mui/icons-material/MenuOpen";
 import styles from "./sidebar.module.css";
 import { AUTHENTICATED_ROUTE } from "@utils/constants/routes";
 import { AuthenticatedRoute } from "@utils/routes";
+import MenuIcon from "@mui/icons-material/Menu";
 
 const drawerWidth = 300;
 function Sidebar() {
@@ -139,8 +140,10 @@ function Sidebar() {
           edge="start"
           onClick={handleDrawerToggle}
           sx={{ mr: 2, display: { sm: "none" } }}
+          className="hamburgerMenu_Sidebar"
         >
-          <MenuOpenIcon />
+          {/* <MenuOpenIcon /> */}
+          <MenuIcon />
         </IconButton>
 
         <Routes>

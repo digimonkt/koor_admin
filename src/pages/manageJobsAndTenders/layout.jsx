@@ -61,10 +61,11 @@ function Layout({
   return (
     <>
       <Stack
-        direction={{ xs: "column", sm: "row" }}
-        spacing={{ xs: 1.25, sm: 2.5 }}
+        direction={{ xs: "column", md: "row" }}
+        spacing={{ xs: 1.25, sm: 1.3 }}
         alignItems={{ xs: "start", sm: "center" }}
         sx={{ marginBottom: 2.5 }}
+        className="topStackCard"
       >
         <TableFilter
           jobPost={{ ...(jobPost || {}) }}
@@ -89,6 +90,7 @@ function Layout({
             borderRadius: "10px",
           },
         }}
+        className="tableCard"
       >
         <CardContent
           sx={{

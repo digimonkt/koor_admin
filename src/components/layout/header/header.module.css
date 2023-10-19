@@ -7,6 +7,11 @@
   z-index: 4;
   font-family: "Bahnschrift";
 }
+
+header .headerContainer{
+  padding: 0;
+}
+
 .menu {
   margin: 0px;
   padding: 0px;

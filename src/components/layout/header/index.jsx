@@ -25,14 +25,14 @@ function Header() {
   });
   return (
     <header className={`${styles.header}`}>
-      <Container>
+      <Container className={`${styles.headerContainer}`}>
         <Stack
           direction="row"
           spacing="3"
           alignItems={{ xs: "start", lg: "center" }}
         >
           <Link to="/" className="navbar-brand">
-            <img src={IMAGES.Logo} alt="logo" />
+            <img src={IMAGES.Logo} alt="logo" className="headerLogo"/>
           </Link>
 
           <div className="ms-auto" ref={menu}>
@@ -40,6 +40,7 @@ function Header() {
               color="#fff"
               edge="start"
               sx={{ mr: 2, fontSize: "14px", display: { sm: "none" } }}
+              className="hamburgerMenu"
             >
               <MenuIcon />
             </IconButton>
