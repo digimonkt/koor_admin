@@ -1,8 +1,32 @@
-.blueBtnJob{
+.blueBtnJob {
   display: flex;
 }
 
-.style_btn__wQ5np{
+.style_btn__wQ5np {
   position: absolute;
   right: 25px;
+}
+
+.topFilterBtn {
+  display: flex;
+}
+
+.exportCSV,
+.newlobPost,
+.resetFilter {
+  margin-right: 5px;
+}
+
+
+@media (max-width: 767px) {
+  .topFilterBtn {
+    display: flex;
+  }
+
+  .exportCSV,
+  .newlobPost,
+  .resetFilter {
+    margin-right: 15px;
+  }
+
 }

@@ -18,8 +18,8 @@ function TableFilter({
         widthInput="100%"
         {...searchProps}
       />
-      <SelectInput placeholder="Location" value="" search {...selectProps} />
-      <div className="w-100">
+      <SelectInput placeholder="Location" value="" search {...selectProps} className="selectInput_Location"/>
+      <div className="locationInput">
         <SolidButton
           className="csvButton"
           sx={{

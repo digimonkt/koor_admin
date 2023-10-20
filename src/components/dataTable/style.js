@@ -19,6 +19,9 @@ export const StyledDataGrid = styled(DataGrid)(({ theme }) => ({
   "& .MuiDataGrid-columnsContainer, .MuiDataGrid-cell": {
     borderBottom: "0px",
   },
+  "& .MuiDataGrid-columnHeaders .MuiDataGrid-columnSeparator": {
+    visibility: "visible!important",
+  },
   "& .MuiDataGrid-row:not(.MuiDataGrid-row--dynamicHeight)>.MuiDataGrid-cell": {
     whiteSpace: "normal",
     overflow: "visible",
@@ -65,6 +68,14 @@ export const StyledDataGrid = styled(DataGrid)(({ theme }) => ({
     },
     "& .MuiDataGrid-cellContent": {
       fontSize: "12px",
+    },
+  },
+  "@media (max-width: 580px)": {
+    "& .MuiDataGrid-columnHeaders": {
+      fontSize: "10px",
+    },
+    "& .MuiDataGrid-cellContent": {
+      fontSize: "10px",
     },
   },
   "& .MuiDataGrid-row": {

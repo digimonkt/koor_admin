@@ -32,7 +32,7 @@ function Header() {
           alignItems={{ xs: "start", lg: "center" }}
         >
           <Link to="/" className="navbar-brand">
-            <img src={IMAGES.Logo} alt="logo" className="headerLogo"/>
+            <img src={IMAGES.Logo} alt="logo" className="headerLogo" />
           </Link>
 
           <div className="ms-auto" ref={menu}>
@@ -44,6 +44,7 @@ function Header() {
             >
               <MenuIcon />
             </IconButton>
+
             <ul className={` ${styles.menu} ${isMenu && styles.menuSelected}`}>
               <li>
                 <Link to="/">Home</Link>

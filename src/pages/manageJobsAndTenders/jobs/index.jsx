@@ -261,69 +261,71 @@ function ManageJobsComponent() {
   }, []);
   return (
     <>
-      <Layout
-        job
-        newJob
-        rows={jobTable}
-        totalCount={totalCount}
-        columns={columns}
-        handlePageChange={getPage}
-        page={pages}
-        searchProps={{
-          placeholder: "Search Jobs",
-          onChange: (e) => setSearchTerm(e.target.value),
-          value: searchTerm,
-        }}
-        selectProps={{
-          onChange: (e) => filterJobsCountry(e),
-          value: country.id || "",
-        }}
-        limitProps={{
-          value: limit,
-          options: [
-            { label: 5, value: 5 },
-            { label: 10, value: 10 },
-            { label: 15, value: 15 },
-          ],
-          onChange: (e) => setLimit(e.target.value),
-        }}
-        csvProps={{
-          title: (
-            <div onClick={() => downloadJobCSV()}>
-              <span className="d-inline-flex align-items-center">
-                <SVG.ExportIcon className="me-1" />
-                Export CSV
-              </span>
-            </div>
-          ),
-        }}
-        jobPost={{
-          title: (
-            <div
-              onClick={() => PostNewJob()}
-              className={`${styles.blueBtnJob}`}
-            >
-              <span className="d-inline-flex align-items-center">
-                <SVG.ExportIcon className="me-1" />
-              </span>
-              New Job Post
-            </div>
-          ),
-        }}
-        jobProps={{
-          title: (
-            <div
-              onClick={() => resetFilterJob()}
-              className={`${styles.blueBtnJob}`}
-            >
-              <span className="d-inline-flex align-items-center">
-                <SVG.ExportIcon className="me-1" />
-              </span>
-              Reset Filter
-            </div>
-          ),
-        }}
-      />
+      <div className="cjcs">
+        <Layout
+          job
+          newJob
+          rows={jobTable}
+          totalCount={totalCount}
+          columns={columns}
+          handlePageChange={getPage}
+          page={pages}
+          searchProps={{
+            placeholder: "Search Jobs",
+            onChange: (e) => setSearchTerm(e.target.value),
+            value: searchTerm,
+          }}
+          selectProps={{
+            onChange: (e) => filterJobsCountry(e),
+            value: country.id || "",
+          }}
+          limitProps={{
+            value: limit,
+            options: [
+              { label: 5, value: 5 },
+              { label: 10, value: 10 },
+              { label: 15, value: 15 },
+            ],
+            onChange: (e) => setLimit(e.target.value),
+          }}
+          csvProps={{
+            title: (
+              <div onClick={() => downloadJobCSV()}>
+                <span className={`${styles.topFilterBtn}`}>
+                  <SVG.ExportIcon className={`${styles.exportCSV}`} />
+                  Export CSV
+                </span>
+              </div>
+            ),
+          }}
+          jobPost={{
+            title: (
+              <div
+                onClick={() => PostNewJob()}
+                className={`${styles.blueBtnJob}`}
+              >
+                <span className={`${styles.topFilterBtn}`}>
+                  <SVG.ExportIcon className={`${styles.newlobPost}`} />
+                </span>
+                New Job Post
+              </div>
+            ),
+          }}
+          jobProps={{
+            title: (
+              <div
+                onClick={() => resetFilterJob()}
+                className={`${styles.blueBtnJob}`}
+              >
+                <span className={`${styles.topFilterBtn}`}>
+                  <SVG.ExportIcon className={`${styles.resetFilter}`} />
+                </span>
+                Reset Filter
+              </div>
+            ),
+          }}
+        />
+      </div>
       {deleting && (
         <DialogBox open={!!deleting} handleClose={() => setDeleting("")}>
           <DeleteCard

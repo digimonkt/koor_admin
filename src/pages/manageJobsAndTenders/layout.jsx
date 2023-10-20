@@ -65,7 +65,7 @@ function Layout({
         spacing={{ xs: 1.25, sm: 1.3 }}
         alignItems={{ xs: "start", sm: "center" }}
         sx={{ marginBottom: 2.5 }}
-        className="topStackCard"
+        className="layoutComponent_Main"
       >
         <TableFilter
           jobPost={{ ...(jobPost || {}) }}
@@ -90,7 +90,7 @@ function Layout({
             borderRadius: "10px",
           },
         }}
-        className="tableCard"
+        className="tableCard_Main"
       >
         <CardContent
           sx={{

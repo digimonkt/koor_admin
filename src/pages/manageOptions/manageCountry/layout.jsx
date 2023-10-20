@@ -81,7 +81,7 @@ const Layout = ({
           sx={{ p: 3, borderTop: "1px solid rgba(0, 0, 0, 0.12)" }}
         >
           <Stack direction="row" spacing={2} alignItems="center">
-            <span>Items per page: </span>{" "}
+            <span>Items per page: </span>
             <FormControl
               sx={{
                 "&.MuiSelect-select": {

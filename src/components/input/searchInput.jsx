@@ -10,15 +10,15 @@ function SearchInputComponent({ placeholder, widthInput, ...rest }) {
       className={`${styles.search_box} ${widthInput}`}
       alignItems="center"
     >
-      <SVG.SearchIcon />{" "}
+      <SVG.SearchIcon />
       <input
         className={`${styles.FormControl}`}
         type="text"
         placeholder={placeholder}
         {...rest}
       />
-      <button className={`${styles.btn}`}>
-        <SVG.SearchRightIcon />
+      <button className={`${styles.btn} searchIcon_Jobs`}>
+        <SVG.SearchRightIcon/>
       </button>
     </Stack>
   );

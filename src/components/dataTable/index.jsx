@@ -11,7 +11,7 @@ function DataTable({ rows, columns, limitProps, loader, page }) {
     }
   }, [page, rows]);
   return (
-    <>
+    <div className="dataTable_Component">
       <div style={{ width: "100%", height: "625px", marginBottom: "30px" }}>
         <StyledDataGrid
           className="scrolltable"
@@ -27,8 +27,9 @@ function DataTable({ rows, columns, limitProps, loader, page }) {
       </div>
       <div className="peritemview">
         <Stack direction="row" spacing={2} alignItems="center">
-          <span className="table_Select_Page">Items per page:</span>{" "}
+          <span className="table_Select_Page">Items per page:</span>
           <FormControl
+            className="selectRow_Page"
             sx={{
               "@media (max-width: 767px)": {
                 "& .MuiSelect-select": {
@@ -54,7 +55,7 @@ function DataTable({ rows, columns, limitProps, loader, page }) {
           </FormControl>
         </Stack>
       </div>
-    </>
+    </div>
   );
 }
 

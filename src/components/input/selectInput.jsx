@@ -130,7 +130,7 @@ function SelectInputComponent({
         >
           {options.map((option) => {
             return (
-              <MenuItem value={option.value} key={option.value}>
+              <MenuItem value={option.value} key={option.value} className="asaaaa">
                 {option.label}
               </MenuItem>
             );
