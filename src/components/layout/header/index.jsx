@@ -35,7 +35,7 @@ function Header() {
             <img src={IMAGES.Logo} alt="logo" className="headerLogo" />
           </Link>
 
-          <div className="ms-auto" ref={menu}>
+          <div ref={menu} className={` ${styles.headerMenu}`}>
             <IconButton
               color="#fff"
               edge="start"
@@ -61,12 +61,14 @@ function Header() {
                       color: "#fff",
                     },
                   }}
+                  className={` ${styles.ghantiIcon}`}
                 >
                   <SVG.Notification />
                 </IconButton>
               </li>
               <li>
                 <SolidButton
+                  className={` ${styles.adminBtn}`}
                   title="ADMIN PANEL"
                   sx={{
                     background: "#fff",

@@ -29,19 +29,16 @@
   font-weight: 500;
 }
 
-.paginations
-  .MuiButtonBase-root.MuiPaginationItem-root.MuiPaginationItem-sizeMedium.MuiPaginationItem-text.MuiPaginationItem-rounded.Mui-selected.MuiPaginationItem-page.css-10w330c-MuiButtonBase-root-MuiPaginationItem-root {
+.paginations .MuiButtonBase-root.MuiPaginationItem-root.MuiPaginationItem-sizeMedium.MuiPaginationItem-text.MuiPaginationItem-rounded.Mui-selected.MuiPaginationItem-page.css-10w330c-MuiButtonBase-root-MuiPaginationItem-root {
   background-color: #fff !important;
   box-shadow: 0px 2px 6px 0px #00000026;
 }
 
-.paginations
-  .css-10w330c-MuiButtonBase-root-MuiPaginationItem-root.Mui-disabled {
+.paginations .css-10w330c-MuiButtonBase-root-MuiPaginationItem-root.Mui-disabled {
   display: none !important;
 }
 
-.paginations
-  button.MuiButtonBase-root.MuiPaginationItem-root.MuiPaginationItem-sizeMedium.MuiPaginationItem-text.MuiPaginationItem-rounded.MuiPaginationItem-previousNext.css-10w330c-MuiButtonBase-root-MuiPaginationItem-root {
+.paginations button.MuiButtonBase-root.MuiPaginationItem-root.MuiPaginationItem-sizeMedium.MuiPaginationItem-text.MuiPaginationItem-rounded.MuiPaginationItem-previousNext.css-10w330c-MuiButtonBase-root-MuiPaginationItem-root {
   display: none !important;
 }
 
@@ -182,7 +179,7 @@ span.MuiTouchRipple-root.css-8je8zh-MuiTouchRipple-root {
   border-bottom: 0 !important;
 }
 
-.SelectDropdown label + .css-hrjh4n-MuiInputBase-root {
+.SelectDropdown label+.css-hrjh4n-MuiInputBase-root {
   margin-top: 12px;
   font-family: "Poppins";
 }
@@ -375,8 +372,7 @@ header {
   padding-bottom: 16px;
 }
 
-.saved-jobs
-  button.MuiButtonBase-root.MuiIconButton-root.MuiIconButton-sizeMedium.css-15arr0g-MuiButtonBase-root-MuiIconButton-root {
+.saved-jobs button.MuiButtonBase-root.MuiIconButton-root.MuiIconButton-sizeMedium.css-15arr0g-MuiButtonBase-root-MuiIconButton-root {
   justify-content: center;
   position: relative !important;
   left: 13px !important;
@@ -410,7 +406,7 @@ header {
   margin: 0px;
 }
 
-.register-des > a {
+.register-des>a {
   border: 2px solid #cacaca;
   border-radius: 88px;
   display: block;
@@ -421,7 +417,7 @@ header {
   margin-bottom: 16px;
 }
 
-.register-des > a:last-child {
+.register-des>a:last-child {
   margin-bottom: 0px;
   cursor: pointer;
 }
@@ -434,7 +430,7 @@ header {
   opacity: 0.5;
 }
 
-.register-des > a:hover {
+.register-des>a:hover {
   background: #d5e3f7;
   border: 2px solid #274593;
   box-shadow: 0px 2px 15px 2px rgba(0, 44, 106, 0.35);
@@ -468,7 +464,7 @@ header {
   position: relative;
 }
 
-.showpassword > div > svg {
+.showpassword>div>svg {
   cursor: pointer;
   position: absolute;
   width: 20px;
@@ -1875,6 +1871,15 @@ input.employersearch {
   height: 50px;
 }
 
+
+
+
+
+
+
+
+
+
 /* _____________ MY CUSTOM ADD CLASS CSS START _____________ */
 .navbar-brand .headerLogo {
   width: 115px;
@@ -1897,7 +1902,7 @@ input.employersearch {
   margin-left: 10px;
 }
 
-.css-28yutn-MuiStack-root > :not(style) ~ :not(style) {
+.css-28yutn-MuiStack-root> :not(style)~ :not(style) {
   margin-left: 10px !important;
 }
 
@@ -1993,9 +1998,7 @@ input.employersearch {
     margin-left: 42px;
   }
 
-  .layoutComponent_Main
-    .css-ugxp22-MuiInputBase-root-MuiOutlinedInput-root-MuiSelect-root
-    .MuiSelect-select {
+  .layoutComponent_Main .css-ugxp22-MuiInputBase-root-MuiOutlinedInput-root-MuiSelect-root .MuiSelect-select {
     border: 1px solid #cacaca !important;
     border-radius: 100px !important;
   }
@@ -2020,13 +2023,16 @@ input.employersearch {
 
 /* MOBILE RESPONSIVE START */
 @media screen and (max-width: 580px) and (min-width: 320px) {
+
+  .navbar-brand {
+    width: 6% !important;
+  }
+
   .table_Select_Page {
     font-size: 12px;
   }
 
-  .pagination-custom
-    .css-1ixcsf-MuiPagination-root.MuiPagination-root
-    .MuiPaginationItem-root {
+  .pagination-custom .css-1ixcsf-MuiPagination-root.MuiPagination-root .MuiPaginationItem-root {
     font-size: 14px !important;
   }
 
@@ -2036,9 +2042,8 @@ input.employersearch {
 
   .navbar-brand .headerLogo {
     width: 83px;
-    height: 28px;
     object-fit: contain;
-    margin-top: 7px;
+    margin-top: 0px;
   }
 
   .styles_userCounter__OLN3K p {
