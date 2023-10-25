@@ -71,3 +71,16 @@
     display: inline-block;
     margin-right: 5px;
   }
+
+  @media screen and (max-width: 992px) {
+    .chartContent h2 {
+      font-size: 24px;
+    }
+  }
+
+    @media screen and (max-width: 480px) {
+      .chartContent h2 {
+        font-size: 20px;
+      }
+
+  }
