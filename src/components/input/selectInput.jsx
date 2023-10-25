@@ -10,7 +10,7 @@ export const SelectBox = styled(Select)`
     background: #f0f0f0;
     border-radius: 10px;
     color: #121212;
-    font-size: 12px;
+    font-size: 14px;
     font-family: "Poppins";
     font-weight: 400;
   }

@@ -60,6 +60,12 @@ export const StyledDataGrid = styled(DataGrid)(({ theme }) => ({
     fontSize: "18px",
     fontWeight: "500",
     padding: "0px 15px",
+    "@media (max-width: 992px)": {
+      fontSize: "16px",
+    },
+    "@media (max-width: 480px)": {
+      fontSize: "10px",
+    },
   },
   "& .MuiDataGrid-row": {
     background: "#F9F9F9",

@@ -106,39 +106,37 @@ const FinancialTools = () => {
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
-  const [packageList, setPackageList] = useState(
-    [
-      {
-        id: 1,
-        title: "Gold",
-        price: "0",
-        post: "0",
-        benefits: "Add Benefit",
-        benefitPost: "Add Benefit",
-        placeholder: "Add benefit",
-      },
-      {
-        id: 2,
-        title: "Silver",
-        price: "0",
-        post: "0",
-        benefits: "Add Benefit",
-        benefitPost: "Add Benefit",
-        benefits3: "Add Benefit",
-        placeholder: "Add Benefit",
-      },
-      {
-        id: 3,
-        title: "Copper",
-        price: "0",
-        post: "0",
-        benefits: "Add Benefit",
-        benefitPost: "Add Benefit",
-        benefits3: "Add Benefit",
-        benefitPost4: "Add Benefit",
-      },
-    ]
-  );
+  const [packageList, setPackageList] = useState([
+    {
+      id: 1,
+      title: "Gold",
+      price: "0",
+      post: "0",
+      benefits: "Add Benefit",
+      benefitPost: "Add Benefit",
+      placeholder: "Add benefit",
+    },
+    {
+      id: 2,
+      title: "Silver",
+      price: "0",
+      post: "0",
+      benefits: "Add Benefit",
+      benefitPost: "Add Benefit",
+      benefits3: "Add Benefit",
+      placeholder: "Add Benefit",
+    },
+    {
+      id: 3,
+      title: "Copper",
+      price: "0",
+      post: "0",
+      benefits: "Add Benefit",
+      benefitPost: "Add Benefit",
+      benefits3: "Add Benefit",
+      benefitPost4: "Add Benefit",
+    },
+  ]);
 
   const getPlans = async () => {
     const resp = await getPlansAPI();
@@ -183,7 +181,10 @@ const FinancialTools = () => {
               <AntTab label="Invoices" {...a11yProps(2)} />
             </AntTabs>
             <TabPanel value={value} index={0}>
-              <PackageManagement packageList={packageList} refreshList={() => getPlans()} />
+              <PackageManagement
+                packageList={packageList}
+                refreshList={() => getPlans()}
+              />
             </TabPanel>
             <TabPanel value={value} index={1}>
               <Recharge />
@@ -230,8 +231,8 @@ const FinancialTools = () => {
           </div>
         </CardContent>
         {/* {
-          value === 4 && <Stack direction="row" spacing={2} alignItems="center">
-            <span>Items per page:</span>{" "}
+          value ==direction="row" spacing={2} alignItems="center">
+            <span>aa:</span>{" "}
             <FormControl
               sx={{
                 "& .MuiSelect-select": {
@@ -253,7 +254,6 @@ const FinancialTools = () => {
             </FormControl>
           </Stack>
         } */}
-
       </Card>
 
       {/* <TabPanel className="pagination-custom" value={value} index={3}>
