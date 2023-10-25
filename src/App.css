@@ -87,8 +87,7 @@
    display: flex;
    align-items: center;
    justify-content: center;
-   margin-top: 0px;
-   padding-bottom: 67px;
+   margin-top: 25px;
  }
 
  body {
@@ -343,4 +342,8 @@
 
  .right-pull {
    float: right;
+ }
+
+
+ @media (max-width: 991px) {
  }

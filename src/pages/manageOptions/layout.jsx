@@ -140,6 +140,8 @@ function Layout({
             loader={loading}
             page={page}
           />
+        </CardContent>
+      </Card>
           <div className="pagination-custom">
             <TablePagination
               count={totalCount || 0}
@@ -148,8 +150,6 @@ function Layout({
               shape="rounded"
             />
           </div>
-        </CardContent>
-      </Card>
     </>
   );
 }

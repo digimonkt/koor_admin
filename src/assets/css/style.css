@@ -1922,6 +1922,7 @@ input.employersearch {
 /* IPAD START */
 
 @media (max-width: 991) {
+
   .MuiDataGrid-columnHeaders {
     font-size: 11px !important;
   }
@@ -1971,10 +1972,6 @@ input.employersearch {
 
   .navbar-brand {
     margin-left: 20px;
-  }
-
-  .header_header__g\+JC6 {
-    padding: 22.99px 0px;
   }
 
   .table_Select_Page {
