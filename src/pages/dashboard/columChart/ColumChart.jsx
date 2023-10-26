@@ -237,7 +237,7 @@ const ColumChart = () => {
               className={`${styles.blueView}`}
               style={{ borderColor: "#4CAF50" }}
             ></span>
-            <b>{isApplication} </b>jobs
+            <b>{isApplication}</b>jobs
           </div>
         </Stack>
         <ReactApexChart
