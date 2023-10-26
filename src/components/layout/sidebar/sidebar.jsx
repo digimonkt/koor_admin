@@ -61,7 +61,7 @@ function Sidebar() {
   const container =
     window !== undefined ? () => window.document.body : undefined;
   return (
-    <Box sx={{ display: "flex" }}>
+    <Box sx={{ display: "flex" }} className="sidebar__box">
       <Box
         component="nav"
         sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
@@ -75,7 +75,7 @@ function Sidebar() {
             keepMounted: true, // Better open performance on mobile.
           }}
           sx={{
-            display: { xs: "block", sm: "none" },
+            display: { xs: "block", sm: "block" },
             "& .MuiDrawer-paper": {
               boxSizing: "border-box",
               width: drawerWidth,
@@ -133,32 +133,34 @@ function Sidebar() {
           minHeight: "calc(100vh - 84px)",
         }}
       >
-        <IconButton
-          color="inherit"
-          aria-label="open drawer"
-          edge="start"
-          onClick={handleDrawerToggle}
-          sx={{ mr: 2, display: { sm: "none" } }}
-        >
-          <MenuOpenIcon />
-        </IconButton>
+        <Box sx={{ padding: "20px" }}>
+          <IconButton
+            color="inherit"
+            aria-label="open drawer"
+            edge="start"
+            onClick={handleDrawerToggle}
+            sx={{ mr: 2, display: { lg: "none" } }}
+          >
+            <MenuOpenIcon />
+          </IconButton>
 
-        <Routes>
-          {AUTHENTICATED_ROUTE.map((route, index) => {
-            return (
-              <Route
-                path={route.path}
-                element={
-                  <AuthenticatedRoute redirectURL="/">
-                    <route.element />
-                  </AuthenticatedRoute>
-                }
-                key={index}
-              />
-            );
-          })}
-          {/* <Route path="/" element={<Navigate to="/dashboard" />} /> */}
-        </Routes>
+          <Routes>
+            {AUTHENTICATED_ROUTE.map((route, index) => {
+              return (
+                <Route
+                  path={route.path}
+                  element={
+                    <AuthenticatedRoute redirectURL="/">
+                      <route.element />
+                    </AuthenticatedRoute>
+                  }
+                  key={index}
+                />
+              );
+            })}
+            {/* <Route path="/" element={<Navigate to="/dashboard" />} /> */}
+          </Routes>
+        </Box>
       </Box>
     </Box>
   );

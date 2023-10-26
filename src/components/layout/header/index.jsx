@@ -3,7 +3,7 @@ import * as React from "react";
 import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import CssBaseline from "@mui/material/CssBaseline";
-import Divider from "@mui/material/Divider";
+// import Divider from "@mui/material/Divider";
 import Drawer from "@mui/material/Drawer";
 import IconButton from "@mui/material/IconButton";
 import List from "@mui/material/List";
@@ -16,7 +16,9 @@ import Typography from "@mui/material/Typography";
 
 import { Link } from "react-router-dom";
 import { SVG } from "@assets/svg";
-// import styles from "./header.module.css";
+import { SolidButton } from "@components/button";
+import { IMAGES } from "@assets/images";
+import styles from "./header.module.css";
 
 const drawerWidth = 240;
 const navItems = [
@@ -36,22 +38,43 @@ function Header(props) {
 
   const drawer = (
     <Box onClick={handleDrawerToggle} sx={{ textAlign: "center" }}>
-      <Typography variant="h6" sx={{ my: 2 }}>
-        MUI
-      </Typography>
-      <Divider />
       <List>
         {navItems.map((item) => (
           <ListItem key={item} disablePadding>
             <ListItemButton sx={{ textAlign: "center" }}>
-              <Link to={item.path} style={{ color: "#fff !important" }}>
-                <ListItemText style={{ color: "#fff !important" }}>
+              <ListItemText>
+                <Link
+                  to={item.path}
+                  style={{
+                    color: "#274593",
+                    fontWeight: "500",
+                    fontSize: "16px",
+                  }}
+                >
                   {item.menu}
-                </ListItemText>
-              </Link>
+                </Link>
+              </ListItemText>
             </ListItemButton>
           </ListItem>
         ))}
+        <SolidButton
+          title="ADMIN PANEL"
+          sx={{
+            background: "#fff",
+            borderRadius: "73px",
+            border: `1px solid ${"#274593"}`,
+            fontFamily: "Bahnschrift",
+            fontSize: "16px",
+            color: "#274593",
+            padding: "10px 30px",
+            fontWeight: 600,
+            "&:hover": {
+              background: "#f7f7f7",
+              borderColor: "#f7f7f7",
+              //   color: hoverColor,
+            },
+          }}
+        />
       </List>
     </Box>
   );
@@ -69,7 +92,9 @@ function Header(props) {
             component="div"
             sx={{ flexGrow: 1, display: { xs: "block", sm: "block" } }}
           >
-            MUI
+            <Link to="/" className="navbar-brand">
+              <img src={IMAGES.Logo} alt="logo" />
+            </Link>
           </Typography>
           <Box
             sx={{
@@ -77,7 +102,7 @@ function Header(props) {
             }}
           >
             {navItems.map((item) => (
-              <Link key={item} to={item.path} style={{ color: "#fff" }}>
+              <Link key={item} to={item.path} className={styles.header_menu}>
                 {item.menu}
               </Link>
             ))}
@@ -95,7 +120,42 @@ function Header(props) {
             >
               <SVG.Notification />
             </IconButton>
+            <SolidButton
+              title="ADMIN PANEL"
+              sx={{
+                background: "#fff",
+                borderRadius: "73px",
+                border: `1px solid ${"#fff"}`,
+                fontFamily: "Bahnschrift",
+                fontSize: "16px",
+                color: "#274593",
+                padding: "10px 30px",
+                fontWeight: 600,
+                "&:hover": {
+                  background: "#f7f7f7",
+                  borderColor: "#f7f7f7",
+                  //   color: hoverColor,
+                },
+              }}
+            />
           </Box>
+          <IconButton
+            disableFocusRipple={false}
+            sx={{
+              "&.MuiIconButton-root": {
+                color: "#fff",
+                display: "none",
+                "&:hover": {
+                  background: "none",
+                },
+                "@media (max-width: 480px)": {
+                  display: "block",
+                },
+              },
+            }}
+          >
+            <SVG.Notification />
+          </IconButton>
           <IconButton
             color="inherit"
             aria-label="open drawer"

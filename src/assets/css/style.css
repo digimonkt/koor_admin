@@ -1516,6 +1516,7 @@ span.count {
 }
 .sidebar-scroll {
   height: calc(100vh - 135px);
+  padding-bottom: 10px !important;
 }
 body {
   padding: 0px !important;
@@ -1545,6 +1546,10 @@ body {
   .menu.menu-selected {
     visibility: visible;
     opacity: 1;
+  }
+
+  .sidebar-scroll {
+    margin-top: 20px !important;
   }
 
   ul.menu li {
@@ -1683,25 +1688,25 @@ input.employersearch {
   white-space: pre-line;
 }
 
-.close_icon_circle svg{
-color: red;
-margin-left: 5px;
+.close_icon_circle svg {
+  color: red;
+  margin-left: 5px;
 }
-.save_btn{
+.save_btn {
   display: flex;
   justify-content: space-between;
   width: 145px;
   align-items: center;
 }
 
-.textEditor{
+.textEditor {
   margin-top: 50px;
   display: flex;
   justify-content: center;
   padding-bottom: 30px;
 }
 
-.accordion-class .MuiAccordionSummary-content{
+.accordion-class .MuiAccordionSummary-content {
   display: flex;
   justify-content: space-between;
 }
@@ -1713,5 +1718,5 @@ margin-left: 5px;
   padding: 10px 12px 10px 30px;
   color: #848484;
   font-weight: 400;
-  height:50px
+  height: 50px;
 }

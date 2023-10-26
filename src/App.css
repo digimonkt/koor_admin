@@ -1,8 +1,17 @@
 .arrow_box {
   position: relative;
-
   padding: 10px 20px;
 }
+
+/* .main-admin {
+  padding: 20px 20px 20px 20px;
+} */
+
+main {
+  padding: 0px !important;
+  margin-top: 0px !important;
+}
+
 .arrow_box:after,
 .arrow_box:before {
   right: 50%;
@@ -14,6 +23,15 @@
   position: absolute;
   pointer-events: none;
   transform: translate(50%, 0%);
+}
+
+.MuiDrawer-docked .MuiDrawer-paper {
+  top: 64px !important;
+}
+
+.header .MuiPaper-root.MuiAppBar-root {
+  background-color: #274593 !important;
+  box-shadow: none !important;
 }
 
 .arrow_box:after {
@@ -324,6 +342,14 @@ input::-webkit-inner-spin-button {
 @media screen and (max-width: 992px) {
   .pagination-custom {
     margin-top: 20px;
+  }
+
+  .MuiDrawer-docked .MuiDrawer-paper {
+    display: none;
+  }
+
+  .sidebar__box nav {
+    width: 0px;
   }
 }
 
