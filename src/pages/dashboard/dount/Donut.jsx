@@ -102,6 +102,11 @@ const Donut = ({ title, total, user, series, colors, content }) => {
               fontFamily: "Poppins",
               fontSize: "12px",
             },
+            "@media (max-width: 480px)": {
+              "&.MuiSelect-select": {
+                fontSize: "10px !important",
+              },
+            },
           }}
           size="small"
         >

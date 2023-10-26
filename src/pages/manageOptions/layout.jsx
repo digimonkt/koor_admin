@@ -13,6 +13,10 @@ const TablePagination = styled(Pagination)(() => ({
     fontSize: "16px",
     color: "#000",
     fontWeight: "400",
+
+    "@media (max-width: 480px)": {
+      fontSize: "14px",
+    },
   },
   " &.MuiPagination-root .MuiPaginationItem-root.Mui-selected": {
     background: "#fff",

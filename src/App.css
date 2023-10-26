@@ -299,6 +299,7 @@ img {
   padding: 10px 30px !important;
   font-weight: 600 !important;
 }
+
 .csvButton:hover {
   background: #f7f7f7 !important;
   border-color: #f7f7f7 !important;
@@ -356,5 +357,9 @@ input::-webkit-inner-spin-button {
 @media screen and (max-width: 480px) {
   .pagination-custom {
     margin-top: 20px;
+  }
+
+  .csvButton {
+    font-size: 14px !important;
   }
 }
