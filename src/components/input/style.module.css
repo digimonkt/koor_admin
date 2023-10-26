@@ -42,3 +42,11 @@
 .widthinput .FormControl {
   width: 100%;
 }
+
+
+
+@media screen and (max-width: 480px) {
+  .FormControl {
+    font-size: 14px;
+  }
+}

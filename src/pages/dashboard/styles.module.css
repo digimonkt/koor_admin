@@ -7,6 +7,15 @@
     letter-spacing: 0.02em;
     color: #FFFFFF;
 }
+@media screen and (max-width: 992px) {
+    .user h2 {
+        font-size: 20px;
+    }
+
+    .userCounter p {
+        font-size: 12px  !important;
+    }
+}
 
 .userCounter {
     background: #EEA23D;
