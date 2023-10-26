@@ -1,94 +1,136 @@
-import { IconButton } from "@mui/material";
-import { Container, Stack } from "@mui/system";
-import React, { useEffect, useRef, useState } from "react";
-import { Link } from "react-router-dom";
+import * as React from "react";
+// import PropTypes from "prop-types";
+import AppBar from "@mui/material/AppBar";
+import Box from "@mui/material/Box";
+import CssBaseline from "@mui/material/CssBaseline";
+import Divider from "@mui/material/Divider";
+import Drawer from "@mui/material/Drawer";
+import IconButton from "@mui/material/IconButton";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import ListItemButton from "@mui/material/ListItemButton";
+import ListItemText from "@mui/material/ListItemText";
 import MenuIcon from "@mui/icons-material/Menu";
+import Toolbar from "@mui/material/Toolbar";
+import Typography from "@mui/material/Typography";
+
+import { Link } from "react-router-dom";
 import { SVG } from "@assets/svg";
-import styles from "./header.module.css";
-import { IMAGES } from "@assets/images";
-import { SolidButton } from "@components/button";
+// import styles from "./header.module.css";
 
-function Header() {
-  const [isMenu, setIsMenu] = useState(false);
-  const menu = useRef(null);
-  const handleClickOutside = (event) => {
-    if (menu.current && !menu.current.contains(event.target)) {
-      setIsMenu(false);
-    }
+const drawerWidth = 240;
+const navItems = [
+  {
+    menu: "Home",
+    path: "/",
+  },
+];
+
+function Header(props) {
+  const { window } = props;
+  const [mobileOpen, setMobileOpen] = React.useState(false);
+
+  const handleDrawerToggle = () => {
+    setMobileOpen((prevState) => !prevState);
   };
-  useEffect(() => {
-    document.addEventListener("mousedown", handleClickOutside);
 
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  });
+  const drawer = (
+    <Box onClick={handleDrawerToggle} sx={{ textAlign: "center" }}>
+      <Typography variant="h6" sx={{ my: 2 }}>
+        MUI
+      </Typography>
+      <Divider />
+      <List>
+        {navItems.map((item) => (
+          <ListItem key={item} disablePadding>
+            <ListItemButton sx={{ textAlign: "center" }}>
+              <Link to={item.path} style={{ color: "#fff !important" }}>
+                <ListItemText style={{ color: "#fff !important" }}>
+                  {item.menu}
+                </ListItemText>
+              </Link>
+            </ListItemButton>
+          </ListItem>
+        ))}
+      </List>
+    </Box>
+  );
+
+  const container =
+    window !== undefined ? () => window().document.body : undefined;
+
   return (
-    <header className={`${styles.header}`}>
-      <Container>
-        <Stack
-          direction="row"
-          spacing="3"
-          alignItems={{ xs: "start", lg: "center" }}
-        >
-          <Link to="/" className="navbar-brand">
-            <img src={IMAGES.Logo} alt="logo" />
-          </Link>
-
-          <div className="ms-auto" ref={menu}>
+    <Box sx={{ display: "flex" }} className="header">
+      <CssBaseline />
+      <AppBar component="nav">
+        <Toolbar>
+          <Typography
+            variant="h6"
+            component="div"
+            sx={{ flexGrow: 1, display: { xs: "block", sm: "block" } }}
+          >
+            MUI
+          </Typography>
+          <Box
+            sx={{
+              display: { xs: "none", sm: "block", "& a": { color: "#fff" } },
+            }}
+          >
+            {navItems.map((item) => (
+              <Link key={item} to={item.path} style={{ color: "#fff" }}>
+                {item.menu}
+              </Link>
+            ))}
             <IconButton
-              color="#fff"
-              edge="start"
-              sx={{ mr: 2, fontSize: "14px", display: { sm: "none" } }}
+              disableFocusRipple={false}
+              sx={{
+                "&.MuiIconButton-root": {
+                  px: 3,
+                  color: "#fff",
+                  "&:hover": {
+                    background: "none",
+                  },
+                },
+              }}
             >
-              <MenuIcon />
+              <SVG.Notification />
             </IconButton>
-            <ul className={` ${styles.menu} ${isMenu && styles.menuSelected}`}>
-              <li>
-                <Link to="/">Home</Link>
-              </li>
-              <li>
-                <Link to="#!">Resources</Link>
-              </li>
-              <li>
-                <IconButton
-                  disableFocusRipple={false}
-                  sx={{
-                    "&.MuiIconButton-root": {
-                      p: 0,
-                      color: "#fff",
-                    },
-                  }}
-                >
-                  <SVG.Notification />
-                </IconButton>
-              </li>
-              <li>
-                <SolidButton
-                  title="ADMIN PANEL"
-                  sx={{
-                    background: "#fff",
-                    borderRadius: "73px",
-                    border: `1px solid ${"#fff"}`,
-                    fontFamily: "Bahnschrift",
-                    fontSize: "16px",
-                    color: "#274593",
-                    padding: "10px 30px",
-                    fontWeight: 600,
-                    "&:hover": {
-                      background: "#f7f7f7",
-                      borderColor: "#f7f7f7",
-                      //   color: hoverColor,
-                    },
-                  }}
-                />
-              </li>
-            </ul>
-          </div>
-        </Stack>
-      </Container>
-    </header>
+          </Box>
+          <IconButton
+            color="inherit"
+            aria-label="open drawer"
+            edge="start"
+            onClick={handleDrawerToggle}
+            sx={{ ml: 1, display: { lg: "none", sm: "block" } }}
+          >
+            <MenuIcon />
+          </IconButton>
+        </Toolbar>
+      </AppBar>
+      <nav>
+        <Drawer
+          container={container}
+          variant="temporary"
+          open={mobileOpen}
+          onClose={handleDrawerToggle}
+          ModalProps={{
+            keepMounted: true, // Better open performance on mobile.
+          }}
+          sx={{
+            display: { xs: "block", sm: "block" },
+            "& .MuiDrawer-paper": {
+              boxSizing: "border-box",
+              width: drawerWidth,
+            },
+          }}
+        >
+          {drawer}
+        </Drawer>
+      </nav>
+      <Box component="main" sx={{ p: 3 }}>
+        <Toolbar />
+      </Box>
+    </Box>
   );
 }
-
 export default Header;
