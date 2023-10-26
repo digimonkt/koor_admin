@@ -59,7 +59,12 @@ const SelectDropDown = ({ content, setContentId, padding, faq, value, action }) 
           "&.MuiSelect-select": {
             fontFamily: "Poppins",
             fontSize: "16px",
+
           },
+
+          "@media (max-width: 990)": {
+            fontSize: "12px",
+         }
         }}
         size="small"
       >
@@ -76,7 +81,7 @@ const SelectDropDown = ({ content, setContentId, padding, faq, value, action }) 
             <MenuItem value="" disabled >
               Select an option
             </MenuItem>
-            <MenuItem value="job_seeker">job Seeker</MenuItem>
+            <MenuItem value="job_seeker">job Seekeraa</MenuItem>
             <MenuItem value="employer">Employer</MenuItem>
             <MenuItem value="vendor">vendor</MenuItem>
           </SelectBox>

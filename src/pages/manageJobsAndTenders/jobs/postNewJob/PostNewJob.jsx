@@ -43,7 +43,13 @@ import { ErrorMessage } from "@components/caption";
 import SelectWithSearch from "@components/input/selectWithsearch";
 import { manageEmployer } from "@api/employers";
 import { useDebounce } from "usehooks-ts";
-import { GetSuggestedAddressAPI, createJobAPI, getCountriesName, getJobDetailsByIdAPI, updateEmployerJobAPI } from "@api/jobs";
+import {
+  GetSuggestedAddressAPI,
+  createJobAPI,
+  getCountriesName,
+  getJobDetailsByIdAPI,
+  updateEmployerJobAPI,
+} from "@api/jobs";
 import { validateCreateJobInput } from "@pages/manageJobsAndTenders/validator";
 import dayjs from "dayjs";
 import { DATABASE_DATE_FORMAT } from "@utils/constants/constants";
@@ -59,7 +65,7 @@ const PostNewJob = () => {
     skills,
     cities,
     // worldCities,
-    employers
+    employers,
   } = useSelector(({ choice }) => choice);
   const dispatch = useDispatch();
   const [selectedValue, setSelectedValue] = React.useState("exist");
@@ -86,7 +92,10 @@ const PostNewJob = () => {
     if (jobId) {
       limitParam = 500;
     }
-    const response = await manageEmployer({ search: searchTerm, limit: limitParam });
+    const response = await manageEmployer({
+      search: searchTerm,
+      limit: limitParam,
+    });
     if (response.remote === "success") {
       setEmployersData(response.data.results);
     }
@@ -96,7 +105,10 @@ const PostNewJob = () => {
     if (jobId) {
       limitParam = 500;
     }
-    const response = await getCountriesName({ search: searchCountry, limit: limitParam });
+    const response = await getCountriesName({
+      search: searchCountry,
+      limit: limitParam,
+    });
     if (response.remote === "success") {
       setCountriesData(response.data.results);
     }
@@ -257,13 +269,19 @@ const PostNewJob = () => {
       setCompanyAttachments(data.attachments);
       formik.setFieldValue("companyType", selectedValue);
       formik.setFieldValue("company", data.company);
-      formik.setFieldValue("existCompany", { value: data.user?.id || "", label: data.user?.name || "" });
+      formik.setFieldValue("existCompany", {
+        value: data.user?.id || "",
+        label: data.user?.name || "",
+      });
       formik.setFieldValue("title", data.title);
       formik.setFieldValue("budgetCurrency", data.budgetCurrency);
       formik.setFieldValue("budgetAmount", data.budgetAmount);
       formik.setFieldValue("budgetPayPeriod", data.budgetPayPeriod);
       formik.setFieldValue("description", data.description);
-      formik.setFieldValue("country", { value: data.country.id, label: data.country.title });
+      formik.setFieldValue("country", {
+        value: data.country.id,
+        label: data.country.title,
+      });
       formik.setFieldValue("city", data.city.id);
       formik.setFieldValue("address", data.address);
       formik.setFieldValue("duration", data.duration);
@@ -287,19 +305,19 @@ const PostNewJob = () => {
         "languages",
         data.languages.map && data.languages.length
           ? [
-            ...data.languages.map((language) => ({
-              language: language.language.id,
-            })),
-            {
-              language: "",
-            },
-            {
-              language: "",
-            },
-          ]
+              ...data.languages.map((language) => ({
+                language: language.language.id,
+              })),
+              {
+                language: "",
+              },
+              {
+                language: "",
+              },
+            ]
           : [1, 2, 3].map(() => ({
-            language: "",
-          }))
+              language: "",
+            }))
       );
       formik.setFieldValue("highestEducation", data.highestEducation.id);
       formik.setFieldValue(
@@ -363,9 +381,7 @@ const PostNewJob = () => {
       formik.values.jobCategories &&
       !subCategories.data[formik.values.jobCategories]?.length
     ) {
-      dispatch(
-        getSubCategories({ categoryId: formik.values.jobCategories })
-      );
+      dispatch(getSubCategories({ categoryId: formik.values.jobCategories }));
     }
   }, [formik.values.jobCategories]);
   useEffect(() => {
@@ -531,7 +547,9 @@ const PostNewJob = () => {
                                 image={companyLogo}
                                 loading={"loading"}
                                 newLogo={handleProfilePicSave}
-                                handleSaveCroppedImg={file => formik.setFieldValue("companyLogo", [file])}
+                                handleSaveCroppedImg={(file) =>
+                                  formik.setFieldValue("companyLogo", [file])
+                                }
                               />
                             </CardContent>
                           </Card>
@@ -694,7 +712,9 @@ const PostNewJob = () => {
                         className="add-form-control"
                         name={formik.getFieldProps("address").name}
                         onBlur={(e) => formik.getFieldProps("address").onBlur}
-                        onChange={(e) => setSuggestedAddressValue(e.target.value)}
+                        onChange={(e) =>
+                          setSuggestedAddressValue(e.target.value)
+                        }
                         value={suggestedAddressValue}
                       />
                       {debouncedSearchValue &&
@@ -710,7 +730,9 @@ const PostNewJob = () => {
                                       "address",
                                       address.description
                                     );
-                                    setSuggestedAddressValue(address.description);
+                                    setSuggestedAddressValue(
+                                      address.description
+                                    );
                                   }}
                                 >
                                   {address.description}
@@ -744,7 +766,7 @@ const PostNewJob = () => {
                           onBlur={formik.handleBlur}
                         />
                         {formik.touched.jobCategories &&
-                          formik.errors.jobCategories ? (
+                        formik.errors.jobCategories ? (
                           <ErrorMessage>
                             {formik.errors.jobCategories}
                           </ErrorMessage>
@@ -759,9 +781,8 @@ const PostNewJob = () => {
                               : "Select Category first"
                           }
                           options={(
-                            subCategories.data[
-                            formik.values.jobCategories
-                            ] || []
+                            subCategories.data[formik.values.jobCategories] ||
+                            []
                           ).map((subCategory) => ({
                             value: subCategory.id,
                             label: subCategory.title,
@@ -769,7 +790,7 @@ const PostNewJob = () => {
                           {...formik.getFieldProps("jobSubCategory")}
                         />
                         {formik.touched.jobSubCategory &&
-                          formik.errors.jobSubCategory ? (
+                        formik.errors.jobSubCategory ? (
                           <ErrorMessage>
                             {formik.errors.jobSubCategory}
                           </ErrorMessage>
@@ -880,7 +901,7 @@ const PostNewJob = () => {
                       {...formik.getFieldProps("contactEmail")}
                     />
                     {formik.touched.contactEmail &&
-                      formik.errors.contactEmail ? (
+                    formik.errors.contactEmail ? (
                       <ErrorMessage>{formik.errors.contactEmail}</ErrorMessage>
                     ) : null}
                   </Grid>
@@ -932,7 +953,7 @@ const PostNewJob = () => {
                       {...formik.getFieldProps("highestEducation")}
                     />
                     {formik.touched.highestEducation &&
-                      formik.errors.highestEducation ? (
+                    formik.errors.highestEducation ? (
                       <ErrorMessage>
                         {formik.errors.highestEducation}
                       </ErrorMessage>
@@ -964,7 +985,7 @@ const PostNewJob = () => {
                             {i === 0 ? (
                               <>
                                 {formik.touched.languages &&
-                                  formik.errors.languages ? (
+                                formik.errors.languages ? (
                                   <ErrorMessage>
                                     {formik.errors.languages}
                                   </ErrorMessage>
@@ -1041,7 +1062,10 @@ const PostNewJob = () => {
                 <Grid item xl={12} lg={12} xs={12}>
                   <h2 className="mt-3 mb-3">Attach files</h2>
                   <AttachmentDragNDropInput
-                    files={companyAttachments || formik.getFieldProps("attachments").value}
+                    files={
+                      companyAttachments ||
+                      formik.getFieldProps("attachments").value
+                    }
                     handleDrop={(file) => {
                       formik.setValues({
                         ...formik.values,
@@ -1057,8 +1081,17 @@ const PostNewJob = () => {
                           ...formik.values.attachmentsRemove,
                           file.id,
                         ]);
-                        formik.setFieldValue("attachments", formik.values.attachments.filter((attachment) => attachment.id !== file.id));
-                        setCompanyAttachments(companyAttachments.filter((attachment) => attachment.id !== file.id));
+                        formik.setFieldValue(
+                          "attachments",
+                          formik.values.attachments.filter(
+                            (attachment) => attachment.id !== file.id
+                          )
+                        );
+                        setCompanyAttachments(
+                          companyAttachments.filter(
+                            (attachment) => attachment.id !== file.id
+                          )
+                        );
                       } else {
                         formik.setFieldValue(
                           "attachments",
@@ -1077,8 +1110,8 @@ const PostNewJob = () => {
                           ? "Updating..."
                           : "Posting..."
                         : jobId
-                          ? "UPDATE THE JOB"
-                          : "POST THE JOB"
+                        ? "UPDATE THE JOB"
+                        : "POST THE JOB"
                     }
                     type="submit"
                   />
