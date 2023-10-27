@@ -92,7 +92,7 @@ function Sidebar() {
             "& .MuiDrawer-paper": {
               boxSizing: "border-box",
               width: drawerWidth,
-              top: "84px",
+              top: "80px",
             },
           }}
           open

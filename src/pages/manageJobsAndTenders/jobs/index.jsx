@@ -3,7 +3,12 @@ import { SVG } from "@assets/svg";
 import { IconButton } from "@mui/material";
 import { Stack } from "@mui/system";
 import Layout from "../layout";
-import { activeInactiveJob, deleteJob, getCountriesName, manageJobData } from "@api/jobs";
+import {
+  activeInactiveJob,
+  deleteJob,
+  getCountriesName,
+  manageJobData,
+} from "@api/jobs";
 import DialogBox from "@components/dialogBox";
 import DeleteCard from "@components/card/deleteCard";
 import { useDispatch, useSelector } from "react-redux";
