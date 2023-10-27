@@ -3,13 +3,16 @@
   padding: 10px 20px;
 }
 
-/* .main-admin {
-  padding: 20px 20px 20px 20px;
-} */
-
 main {
   padding: 0px !important;
   margin-top: 0px !important;
+}
+
+.header .MuiToolbar-root {
+  height: 80px;
+  display: flex;
+  align-items: center;
+  min-height: 80px;
 }
 
 .arrow_box:after,
@@ -23,10 +26,6 @@ main {
   position: absolute;
   pointer-events: none;
   transform: translate(50%, 0%);
-}
-
-.MuiDrawer-docked .MuiDrawer-paper {
-  top: 64px !important;
 }
 
 .header .MuiPaper-root.MuiAppBar-root {
@@ -351,6 +350,7 @@ input::-webkit-inner-spin-button {
 
   .sidebar__box nav {
     width: 0px;
+    display: contents;
   }
 }
 
