@@ -9,9 +9,14 @@
   border: 1px solid #cacaca;
   box-shadow: 0px 15px 40px rgba(0, 0, 0, 0.05);
   border-radius: 100px;
-  padding: 10px 12px 10px 30px;
+  padding: 10px 10px 10px 12px;
   color: #848484;
 }
+
+.search_box input {
+  width: 102px;
+}
+
 .FormControl {
   font-family: "Poppins";
   font-style: normal;
@@ -42,8 +47,6 @@
 .widthinput .FormControl {
   width: 100%;
 }
-
-
 
 @media screen and (max-width: 480px) {
   .FormControl {
