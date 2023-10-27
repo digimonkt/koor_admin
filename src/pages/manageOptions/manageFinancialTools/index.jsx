@@ -50,6 +50,13 @@ const AntTab = styled((props) => <Tab disableRipple {...props} />)(
       color: "#121212",
       opacity: 1,
     },
+    "@media (max-width: 992px)": {
+      fontSize: "16px",
+      fontWeight: "400",
+    },
+    "@media (max-width: 480px)": {
+      fontSize: "14px",
+    },
     "&.Mui-selected": {
       color: "#121212",
       opacity: 1,

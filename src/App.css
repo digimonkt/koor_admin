@@ -352,6 +352,10 @@ input::-webkit-inner-spin-button {
     width: 0px;
     display: contents;
   }
+
+  .report h2 {
+    font-size: 24px;
+  }
 }
 
 @media screen and (max-width: 480px) {
@@ -361,5 +365,9 @@ input::-webkit-inner-spin-button {
 
   .csvButton {
     font-size: 14px !important;
+  }
+
+  .report h2 {
+    font-size: 20px;
   }
 }

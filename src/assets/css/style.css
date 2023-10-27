@@ -389,7 +389,8 @@ header {
 }
 .form-content {
   font-family: "Poppins";
-  font-weight: 300;
+  font-weight: 500;
+  color: #121212;
 }
 .text-gray {
   color: #848484;

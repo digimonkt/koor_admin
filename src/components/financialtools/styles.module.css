@@ -58,7 +58,9 @@
     letter-spacing: 0.02em;
 
 /* Black #121212 */
-    color: #121212;
+    /* color: #121212; */
+    color: #848484;
+    
 }
 .MT15{margin-top:15px;}
 
@@ -267,3 +269,34 @@
 
     color: #121212;
 }
+
+
+@media screen and (max-width: 992px) {
+    .packageManagement h3 {
+        font-size: 16px;
+        line-height: 24px;
+    }
+
+    .formGroupBg span {
+        font-size: 12px;
+    }
+
+    .usdform {
+        font-size: 14px;
+    }
+}
+
+
+@media screen and (max-width: 480px) {
+    .formGroupBg span {
+        font-size: 10px;
+    }
+
+    .usdform {
+        font-size: 12px;
+    }
+
+    .packageManagement h3 {
+        font-size: 14px;
+    }
+} 
