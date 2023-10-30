@@ -41,6 +41,13 @@ const AntTab = styled((props) => <Tab disableRipple {...props} />)(
     opacity: 0.5,
     fontSize: "18px",
     fontFamily: ["Poppins"].join(","),
+    "@media (max-width: 992px)": {
+      fontSize: "16px",
+      fontWeight: "500",
+    },
+    "@media (max-width: 480 px)": {
+      fontSize: "12px",
+    },
     "&:hover": {
       color: "#121212",
       opacity: 1,

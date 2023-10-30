@@ -24,7 +24,7 @@
 
     letter-spacing: 0.02em;
 
-    color: #121212;
+    color: #848484;
     outline: none;
 }
 .showButton {
@@ -33,3 +33,26 @@
    
 }
 .Mt_41{margin-top: 41px;}
+
+@media screen and (max-width: 992px) {
+    .formGroup label {
+        font-size: 14px;
+    }
+
+    .formControl {
+        width: 635px;
+        height: 46px;
+        font-size: 14px;
+    }
+}
+
+    @media screen and (max-width: 480px) {
+        .formGroup label {
+            font-size: 12px;
+        }
+
+
+        .formControl {
+            font-size: 12px;
+        }
+}

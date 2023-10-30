@@ -356,6 +356,10 @@ input::-webkit-inner-spin-button {
   .report h2 {
     font-size: 24px;
   }
+
+  .userright h2 {
+    font-size: 24px;
+  }
 }
 
 @media screen and (max-width: 480px) {
@@ -369,5 +373,13 @@ input::-webkit-inner-spin-button {
 
   .report h2 {
     font-size: 20px;
+  }
+
+  .userright h2 {
+    font-size: 20px;
+  }
+
+  .userright p {
+    font-size: 12px;
   }
 }

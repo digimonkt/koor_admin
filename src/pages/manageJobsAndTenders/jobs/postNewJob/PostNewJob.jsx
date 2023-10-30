@@ -463,7 +463,7 @@ const PostNewJob = () => {
                               "& .MuiFormLabel-root": {
                                 fontSize: "16px",
                                 color: "#848484",
-                                fontFamily: "Poppins",
+                                fontFamily: "Poppins !important",
                                 transform: "translate(14px, 12px) scale(1)",
                               },
                               "& .MuiInputLabel-shrink": {
@@ -648,7 +648,7 @@ const PostNewJob = () => {
                             "& .MuiFormLabel-root": {
                               fontSize: "16px",
                               color: "#848484",
-                              fontFamily: "Poppins",
+                              fontFamily: "Poppins !important",
                               transform: "translate(14px, 12px) scale(1)",
                             },
                             "& .MuiInputLabel-shrink": {
