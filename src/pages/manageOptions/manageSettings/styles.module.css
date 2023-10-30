@@ -148,4 +148,28 @@
     }
     .addbtnlink{margin-top: 20px;}
 
+    @media screen and (max-width: 992px ) {
+        .title h2 {
+            font-size: 24px;
+        }
+
+        .subtitle h3 {
+            font-size: 16px;
+        }
+    }
+
+
+      @media screen and (max-width: 480px) {
+        .title h2 {
+            font-size: 20px;
+        }
+
+        .subtitle h3 {
+            font-size: 14px;
+        }
+
+        .settingDescription p {
+            font-size: 12px;
+        }
+      }
    

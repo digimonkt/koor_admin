@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Card, CardContent, Stack } from "@mui/material";
+import { Box, Card, CardContent, Stack } from "@mui/material";
 import { SVG } from "@assets/svg";
 import { OutlinedButton } from "@components/button";
 import UpdateContent from "@components/editor/UpdateContent";
@@ -42,7 +42,7 @@ const ManagePrivacyPolicyComponent = () => {
       dispatch(setLoading(false));
       getPrivacyData();
       setActiveEditor(false);
-      dispatch(setSuccessToast("Update User Rights SuccessFully"));
+      dispatch(setSuccessToast("Update ly"));
     } else {
       dispatch(setErrorToast("Something went wrong"));
       console.log(response.error);
@@ -78,6 +78,9 @@ const ManagePrivacyPolicyComponent = () => {
             sx={{
               "&.MuiCardContent-root": {
                 padding: "35px 30px 30px 30px",
+                "@media (max-width: 480px)": {
+                  padding: "35px 15px 30px 15px",
+                },
               },
             }}
           >
@@ -87,8 +90,25 @@ const ManagePrivacyPolicyComponent = () => {
                 spacing={2}
                 justifyContent="space-between"
                 alignItems="center"
-                sx={{ float: "right" }}
               >
+                <Box
+                  sx={{
+                    fontSize: "28px",
+                    fontWeight: "600",
+                    color: "#121212",
+
+                    fontFamily: "Bahnschrift",
+                    "@media (max-width: 992px)": {
+                      fontSize: "24px",
+                    },
+                    "@media (max-width: 480px)": {
+                      fontSize: "20px",
+                      fontWeight: "600",
+                    },
+                  }}
+                >
+                  Koor Privacy Policy
+                </Box>
                 <OutlinedButton
                   title={
                     <div onClick={() => handleEdit()}>
@@ -97,12 +117,33 @@ const ManagePrivacyPolicyComponent = () => {
                     </div>
                   }
                   sx={{
-                    color: "#274593",
-                    borderColor: "#274593",
+                    color: "#274593 !important",
+                    borderColor: "#274593 !important",
+                    fontSize: "16px !important",
+
+                    "@media (max-width: 480px)": {
+                      fontSize: "14px  !important",
+                    },
                   }}
                 ></OutlinedButton>
               </Stack>
-              <div dangerouslySetInnerHTML={{ __html: value }}></div>
+              <Box
+                sx={{
+                  fontSize: "14px",
+                  fontWeight: "400",
+                  fontFamily: "Poppins",
+                  color: "#121212",
+
+                  "@media (max-width: 992px)": {
+                    fontSize: "14px",
+                  },
+
+                  "@media (max-width: 480px)": {
+                    fontSize: "12px",
+                  },
+                }}
+                dangerouslySetInnerHTML={{ __html: value }}
+              ></Box>
             </div>
           </CardContent>
         )}

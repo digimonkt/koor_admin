@@ -17,7 +17,7 @@ function SelectWithSearch({ options, title, ...rest }) {
         "& .MuiFormLabel-root": {
           fontSize: "16px",
           color: "#848484",
-          fontFamily: "Poppins",
+          fontFamily: "Poppins !important",
         },
       }}
       options={options}

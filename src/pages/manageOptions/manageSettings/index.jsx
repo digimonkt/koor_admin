@@ -147,7 +147,7 @@ const ManageSettingsComponent = () => {
                     borderRadius: "73px",
                     border: "1px solid #274593",
                     color: "#274593",
-                    fontWeight: "500",
+                    fontWeight: "600",
                     fontSize: "16px",
                     fontFamily: "Bahnschrift",
                     padding: "10px 30px",

@@ -35,7 +35,7 @@
   display: none !important;
 }
 .paginations
-  button.MuiButtonBase-root.MuiPaginationItem-root.MuiPaginationItem-sizeMedium.MuiPaginationItem-text.MuiPaginationItem-rounded.MuiPaginationItem-previousNext.css-10w330c-MuiButtonBase-root-MuiPaginationItem-root {
+  button.MuiButtonBase-root.MuiPaginationItem-root.MuiPaginationItem-sizeMedium.MuiPaginationItem-text.MuiPaginationItem-rounded.MuiPaginationItem-previousNext.css-10w330c--MuiPaginationItem-root {
   display: none !important;
 }
 .paginations .MuiPagination-ul.css-wjh20t-MuiPagination-ul {
@@ -51,7 +51,7 @@
 .message {
   text-align: center;
 }
-.formCHeck .css-12wnr2w-MuiButtonBase-root-MuiCheckbox-root {
+.formCHeck .css-12wnr2w--MuiCheckbox-root {
   color: #cacaca;
 }
 .formCHeck .css-12wnr2w-MuiButtonBase-root-MuiCheckbox-root.Mui-checked,

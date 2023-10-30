@@ -21,6 +21,15 @@ export const FormLabelBox = styled(FormControlLabel)`
     letter-spacing: 0.02em;
 
     color: #121212;
+ 
+    @media (max-width: 992px) {
+      fontSize: 14px,
+    },
+
+    @media (max-width: 480px) {
+      fontSize: 12px,
+    },
+
   }
 `;
 
