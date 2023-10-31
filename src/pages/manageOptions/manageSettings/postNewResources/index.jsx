@@ -7,6 +7,7 @@ import {
   CardContent,
   IconButton,
   Stack,
+  Typography,
 } from "@mui/material";
 import { SVG } from "@assets/svg";
 import styles from "../styles.module.css";
@@ -235,7 +236,7 @@ const NewPostResource = () => {
           <IconButton LinkComponent={Link} to="/settings">
             <SVG.ArrowLeftIcon />
           </IconButton>{" "}
-          <h2>Content management</h2>
+          <h2>Create a new post</h2>
         </Stack>
         <Stack
           direction={{ xs: "column", sm: "row" }}
@@ -267,10 +268,22 @@ const NewPostResource = () => {
               accept="image/*"
               onChange={handleFiles}
             />
-            <p style={{ textAlign: "center", cursor: "pointer" }}>
+            <Typography
+              sx={{
+                textAlign: "center",
+                cursor: "pointer",
+                fontSize: "16px",
+                "@media (max-width: 992px)": {
+                  fontSize: "14px",
+                },
+                "@media (max-width: 480px)": {
+                  fontSize: "14px",
+                },
+              }}
+            >
               Drag here or
-              <span style={{ color: "blue" }}> upload a post cover image</span>
-            </p>
+              <span style={{ color: "#274593" }}> upload a post cover image</span>
+            </Typography>
           </label>
           {newImage && <>{thumbs}</>}
         </div>
@@ -309,7 +322,7 @@ const NewPostResource = () => {
         alignItems={"center"}
         spacing={2}
         justifyContent={"center"}
-        sx={{ marginBottom: "8px" }}
+        sx={{ marginBottom: "8px", color: "#848484" }}
       >
         <Button
           variant="link"
@@ -318,7 +331,7 @@ const NewPostResource = () => {
             fontFamily: "Poppins",
           }}
         >
-          <SVG.AddCircleIcon style={{ marginRight: "8px" }} />
+          <SVG.AddCircleIcon style={{ marginRight: "8px", color: "#848484" }} />
           <Box component={"span"}> Add one more Paragraph</Box>
         </Button>
       </Stack>
@@ -357,6 +370,13 @@ const NewPostResource = () => {
             sx={{
               color: "#274593",
               borderColor: "#274593",
+              "@media (max-width: 990px)": {
+                fontSize: "16px",
+              },
+
+              "@media (max-width: 480px)": {
+                   fontWeight: "600",
+              }
             }}
           />
         </Stack>
