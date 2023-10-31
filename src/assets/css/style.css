@@ -54,8 +54,8 @@
 .formCHeck .css-12wnr2w--MuiCheckbox-root {
   color: #cacaca;
 }
-.formCHeck .css-12wnr2w-MuiButtonBase-root-MuiCheckbox-root.Mui-checked,
-.css-12wnr2w-MuiButtonBase-root-MuiCheckbox-root.MuiCheckbox-indeterminate {
+.formCHeck .css-12wnr2w-Checkbox-root.Mui-checked,
+.css-12wnr2w-Checkbox-root.MuiCheckbox-indeterminate {
   color: #eea23d;
 }
 .lables p {

@@ -139,7 +139,7 @@ const ManageSettingsComponent = () => {
               <OutlinedButton
                 title={
                   <Stack direction={"row"} spacing={1} alignItems={"center"}>
-                    <SVG.EditNoteIcon /> <span>create a new post</span>
+                    <SVG.EditNoteIcon /> <span> post</span>
                   </Stack>
                 }
                 sx={{
