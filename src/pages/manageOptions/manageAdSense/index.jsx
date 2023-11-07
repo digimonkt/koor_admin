@@ -11,7 +11,8 @@ import { setErrorToast, setSuccessToast } from "@redux/slice/toast";
 import DeleteCard from "@components/card/deleteCard";
 import EditCard from "@components/card/editCard";
 import { useDebounce } from "usehooks-ts";
-import { addAdSenseAPI, deleteAdSenseAPI, getAdSenseAPI, updateAdSenseAPI } from "@api/adsense";
+import { addAdSenseAPI, getAdSenseAPI, updateAdSenseAPI } from "@api/adsense";
+// deleteAdSenseAPI
 import { AddCard } from "@components/card";
 function ManageAdSenseComponent() {
     const dispatch = useDispatch();
@@ -50,7 +51,7 @@ function ManageAdSenseComponent() {
             renderCell: (item) => {
                 return (
                     <Stack direction="row" spacing={1} alignItems="center">
-                        <IconButton
+                        {/* <IconButton
                             onClick={() => setDeleteAdSense(item.row.id)}
                             sx={{
                                 "&.MuiIconButton-root": {
@@ -62,7 +63,7 @@ function ManageAdSenseComponent() {
                             }}
                         >
                             <SVG.DeleteIcon />
-                        </IconButton>
+                        </IconButton> */}
 
                         <IconButton
                             onClick={() => handleEdit(item.row)}
@@ -150,19 +151,19 @@ function ManageAdSenseComponent() {
         setPages(page);
     }, []);
 
-    const handleDelete = async () => {
-        setLoading(false);
-        const response = await deleteAdSenseAPI({ deleteAdSense });
-        if (response.remote === "success") {
-            const newAdSenseTable = adSenseTable.filter((emp) => emp.id !== deleteAdSense);
-            setAdSenseTable(newAdSenseTable);
-            setDeleteAdSense("");
-            dispatch(setSuccessToast("Delete AdSense SuccessFully"));
-        } else {
-            dispatch(setErrorToast("Something went wrong"));
-            console.log(response.error);
-        }
-    };
+    // const handleDelete = async () => {
+    //     setLoading(false);
+    //     const response = await deleteAdSenseAPI({ deleteAdSense });
+    //     if (response.remote === "success") {
+    //         const newAdSenseTable = adSenseTable.filter((emp) => emp.id !== deleteAdSense);
+    //         setAdSenseTable(newAdSenseTable);
+    //         setDeleteAdSense("");
+    //         dispatch(setSuccessToast("Delete AdSense SuccessFully"));
+    //     } else {
+    //         dispatch(setErrorToast("Something went wrong"));
+    //         console.log(response.error);
+    //     }
+    // };
 
     const handleEdit = async (item) => {
         setEditAdSense(item.id);
@@ -228,13 +229,13 @@ function ManageAdSenseComponent() {
                     title="Delete AdSense"
                     content="Are you sure you want to delete AdSense?"
                     handleCancel={() => setDeleteAdSense("")}
-                    handleDelete={handleDelete}
+                // handleDelete={handleDelete}
                 />
             </DialogBox>
 
             <DialogBox open={!!editAdSense} handleClose={() => setEditAdSense("")}>
                 <EditCard
-                    title="Edit AdSense"
+                    title="Edit AdSense Code"
                     handleCancel={() => setEditAdSense("")}
                     setEditValue={setEditAdSenseValue}
                     editValue={editAdSenseValue}

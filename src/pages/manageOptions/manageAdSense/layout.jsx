@@ -1,27 +1,28 @@
 import React from "react";
 // import { SearchInput } from "@components/input";
-import { SolidButton } from "@components/button";
-import { Card, CardContent, Pagination, Stack } from "@mui/material";
-import styled from "@emotion/styled";
+// import { SolidButton } from "@components/button";
+import { Card, CardContent, Stack } from "@mui/material";
+// Pagination
+// import styled from "@emotion/styled";
 import DataTable from "@components/dataTable";
 const loading = false;
-const TablePagination = styled(Pagination)(() => ({
-    " &.MuiPagination-root .MuiPaginationItem-root": {
-        minWidth: "36px",
-        fontFamily: "Bahnschrift",
-        fontSize: "16px",
-        color: "#000",
-        fontWeight: "400",
-    },
-    " &.MuiPagination-root .MuiPaginationItem-root.Mui-selected": {
-        background: "#fff",
-        borderRadius: "5px",
-        boxShadow: "0px 2px 6px rgba(0, 0, 0, 0.15)",
-    },
-    " &.MuiPagination-root .MuiPaginationItem-root .MuiPaginationItem-icon": {
-        display: "none",
-    },
-}));
+// const TablePagination = styled(Pagination)(() => ({
+//     " &.MuiPagination-root .MuiPaginationItem-root": {
+//         minWidth: "36px",
+//         fontFamily: "Bahnschrift",
+//         fontSize: "16px",
+//         color: "#000",
+//         fontWeight: "400",
+//     },
+//     " &.MuiPagination-root .MuiPaginationItem-root.Mui-selected": {
+//         background: "#fff",
+//         borderRadius: "5px",
+//         boxShadow: "0px 2px 6px rgba(0, 0, 0, 0.15)",
+//     },
+//     " &.MuiPagination-root .MuiPaginationItem-root .MuiPaginationItem-icon": {
+//         display: "none",
+//     },
+// }));
 
 const Layout = ({
     children,
@@ -48,7 +49,7 @@ const Layout = ({
                 alignItems={{ xs: "start", sm: "center" }}
                 sx={{ marginBottom: 2.5 }}
             >
-                {/* <SearchInput widthInput="100%" {...searchProps} /> */}
+                {/* <SearchInput widthInput="100%" {...searchProps} />
                 <SolidButton
                     align="right"
                     sx={{
@@ -70,7 +71,8 @@ const Layout = ({
                     }}
                     title={addBtnTitle}
                     onClick={onAddItems}
-                />
+                /> */}
+
             </Stack>
             <Card
                 sx={{
@@ -87,6 +89,7 @@ const Layout = ({
                         },
                     }}
                 >
+                    <h2>Manage AdSense</h2>
                     <DataTable
                         rows={rows || []}
                         columns={columns || []}
@@ -95,14 +98,14 @@ const Layout = ({
                         loader={loading}
                         page={page}
                     />
-                    <div className="pagination-custom">
+                    {/* <div className="pagination-custom">
                         <TablePagination
                             count={totalCount || 0}
                             page={page}
                             onChange={handlePageChange}
                             shape="rounded"
                         />
-                    </div>
+                    </div> */}
                 </CardContent>
             </Card>
         </>
