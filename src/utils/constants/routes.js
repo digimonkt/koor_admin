@@ -28,6 +28,7 @@ import {
   financialTools,
   manageFAQ,
   showFAQ,
+  ManageAdSense,
   // addFAQ,
 } from "@pages/manageOptions";
 import ManageCountry from "@pages/manageOptions/manageCountry";
@@ -199,6 +200,11 @@ export const AUTHENTICATED_ROUTE = [
     id: "view-invoice",
     path: "/financial-tools/view-invoice/:invoiceId",
     element: ViewInvoices,
+  },
+  {
+    id: "manage-adsense",
+    path: "/manage-adsense",
+    element: ManageAdSense,
   },
 ];
 
