@@ -112,7 +112,18 @@ function ManageAdSenseComponent() {
             if (!formatData.length) {
                 dispatch(setLoading(false));
             }
-            setAdSenseTable(formatData);
+            const formattedData = formatData.map(item => {
+                // Split the pageName by capital letters and join with a space
+                const formattedPageName = item.pageName.replace(/([a-z])([A-Z])/g, "$1 $2");
+                // Uppercase the first letter of the formatted pageName
+                const uppercasedPageName = formattedPageName.charAt(0).toUpperCase() + formattedPageName.slice(1);
+
+                return {
+                    ...item,
+                    pageName: uppercasedPageName
+                };
+            });
+            setAdSenseTable(formattedData);
             const totalCounts = Math.ceil(response.data.count / limit);
             setTotalCount(totalCounts);
         } else {
