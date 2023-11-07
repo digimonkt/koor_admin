@@ -8,6 +8,14 @@ main {
   margin-top: 0px !important;
 }
 
+input::placeholder {
+  color: #848484;
+  font-weight: 300;
+  font-size: 16px;
+  font-family: "Poppins";
+  letter-spacing: 0.28px;
+}
+
 .header .MuiToolbar-root {
   height: 80px;
   display: flex;
@@ -102,7 +110,8 @@ main {
   align-items: center;
   justify-content: center;
   margin-top: 0px;
-  padding-bottom: 67px;
+  padding-bottom: 60px;
+  padding-top: 20px;
 }
 .pagination-custom
   .MuiPagination-root.MuiPagination-root
@@ -344,10 +353,6 @@ input::-webkit-inner-spin-button {
 }
 
 @media screen and (max-width: 992px) {
-  .pagination-custom {
-    margin-top: 20px;
-  }
-
   .MuiDrawer-docked .MuiDrawer-paper {
     display: none;
   }

@@ -10,7 +10,7 @@
 }
 
 .job_search_box .job_search {
-  width: 103px;
+  width: 100%;
   border: 0;
   font-size: 16px;
 }
@@ -34,10 +34,6 @@
   font-weight: 400;
   color: #121212;
   font-family: "Poppins";
-}
-
-.job_location_box .loca_job .MuiSelect-select {
-  border-radius: 30px !important;
 }
 
 .lables .MuiList-root.MuiList-padding.css-h4y409-MuiList-root {

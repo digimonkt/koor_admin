@@ -1,302 +1,292 @@
 .formGroupBg {
-    background: #F0F0F0;
-    border-radius: 10px;
+  background: #f0f0f0;
+  border-radius: 10px;
 }
 
 .formGroupBg span {
-    background: rgb(202 202 202 / 25%);
-    opacity: 0.5;
-    border-radius: 10px;
-    display: inline-flex;
-    font-family: 'Poppins';
-    font-style: normal;
-    font-weight: 400;
-    font-size: 14px;
-    line-height: 21px;
-/* identical to box height */
-    text-align: center;
-    letter-spacing: 0.02em;
+  background: rgb(202 202 202 / 25%);
+  opacity: 0.5;
+  border-radius: 10px;
+  display: inline-flex;
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 21px;
+  /* identical to box height */
+  text-align: center;
+  letter-spacing: 0.02em;
 
-/* Black #121212 */
-    color: #121212;
-    padding: 13.3px;
-    height: 46px;
-    align-items: center;
-    justify-content: center;
+  /* Black #121212 */
+  color: #121212;
+  padding: 13.3px;
+  height: 46px;
+  align-items: center;
+  justify-content: center;
 }
 
 .usdform {
-    width: 100%;
-    background: transparent;
-    border: 0;
-    font-family: 'Poppins';
-    font-style: normal;
-    font-weight: 500;
-    font-size: 16px;
-    line-height: 24px;
+  width: 100%;
+  background: transparent;
+  border: 0;
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 24px;
 
-    letter-spacing: 0.02em;
+  letter-spacing: 0.02em;
 
-
-    color: #121212;
-    outline: none;
+  color: #121212;
+  outline: none;
 }
 .textType {
-    background: #F0F0F0;
-    border-radius: 10px;
-    padding: 13px 15px;
-    width: 100%;
-    border: 0px;
-    outline: none;
-    height: 46px;
-    font-family: 'Poppins';
-    font-style: normal;
-    font-weight: 500;
-    font-size: 16px;
-    line-height: 20px;
-/* identical to box height, or 125% */
-    letter-spacing: 0.02em;
-
-/* Black #121212 */
-    /* color: #121212; */
-    color: #848484;
-    
+  background: #f0f0f0;
+  border-radius: 10px;
+  padding: 13px 15px;
+  width: 100%;
+  border: 0px;
+  outline: none;
+  height: 46px;
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 16px;
+  line-height: 20px;
+  letter-spacing: 0.02em;
+  color: #121212;
 }
-.MT15{margin-top:15px;}
-
+.MT15 {
+  margin-top: 15px;
+}
 
 .packageManagement h3 {
-    margin: 0px 0px 15px 0px;
-    font-family: 'Poppins';
-    font-style: normal;
-    font-weight: 500;
-    font-size: 20px;
-    line-height: 30px;
-/* identical to box height */
+  margin: 0px 0px 15px 0px;
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 30px;
+  /* identical to box height */
 
-
-/* Black #121212 */
-    color: #121212;
+  /* Black #121212 */
+  color: #121212;
 }
 
 .textarea {
-    background: #F0F0F0;
-    border-radius: 10px;
-    height: 82px;
-    resize: none;
-    width: 100%;
-    outline: none;
-    border: 0px;
-    padding: 11px 15px;
-    font-family: 'Poppins';
-    font-style: normal;
-    font-weight: 300;
-    font-size: 16px;
-    line-height: 20px;
-/* or 125% */
-    letter-spacing: 0.02em;
+  background: #f0f0f0;
+  border-radius: 10px;
+  height: 82px;
+  resize: none;
+  width: 100%;
+  outline: none;
+  border: 0px;
+  padding: 11px 15px;
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 300;
+  font-size: 16px;
+  line-height: 20px;
+  /* or 125% */
+  letter-spacing: 0.02em;
 
-/* Dark grey */
-    color: #848484;
+  /* Dark grey */
+  color: #848484;
 }
 
 .title h2 {
-    font-family: 'Bahnschrift';
-    font-style: normal;
-    font-weight: 600;
-    font-size: 28px;
-    line-height: 34px;
+  font-family: "Bahnschrift";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 28px;
+  line-height: 34px;
 
-    color: #121212;
-    margin: 0px;
+  color: #121212;
+  margin: 0px;
 }
 .invoiceTitle h3 {
-    font-family: 'Bahnschrift';
-    font-style: normal;
-    font-weight: 600;
-    font-size: 32px;
-    line-height: 38px;
-    text-align: right;
-    letter-spacing: 0.02em;
-    margin: 0px 0px 30px;
-    color: #121212;
+  font-family: "Bahnschrift";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 32px;
+  line-height: 38px;
+  text-align: right;
+  letter-spacing: 0.02em;
+  margin: 0px 0px 30px;
+  color: #121212;
 }
 .address {
-    font-family: 'Poppins';
-    font-style: normal;
-    font-weight: 400;
-    font-size: 18px;
-    line-height: 27px;
-/* identical to box height */
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 27px;
+  /* identical to box height */
 
-
-/* Black #121212 */
-    color: #121212;
+  /* Black #121212 */
+  color: #121212;
 }
 
 .address b {
-    font-family: 'Poppins';
-    font-style: normal;
-    font-weight: 600;
-    font-size: 18px;
-    line-height: 27px;
-/* identical to box height */
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 27px;
+  /* identical to box height */
 
-
-/* Black #121212 */
-    color: #121212;
+  /* Black #121212 */
+  color: #121212;
 }
 
 .address p {
-    margin: 0px 0px 5px;
+  margin: 0px 0px 5px;
 }
 
 .address p:last-child {
-    margin: 0px;
+  margin: 0px;
 }
 .bankDetails {
-    margin: 15px 0px 0px 0px;
-    padding: 0px;
-    list-style: none;
+  margin: 15px 0px 0px 0px;
+  padding: 0px;
+  list-style: none;
 }
 
 .bankDetails li {
-    font-family: 'Poppins';
-    font-style: normal;
-    font-weight: 400;
-    font-size: 14px;
-    line-height: 21px;
-/* identical to box height */
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 21px;
+  /* identical to box height */
 
-
-/* Black #121212 */
-    color: #121212;
+  /* Black #121212 */
+  color: #121212;
 }
 
 .bankDetails li b {
-    display: inline-block;
-    font-weight: 600;
-    margin-left: 5px;
+  display: inline-block;
+  font-weight: 600;
+  margin-left: 5px;
 }
-.topBorder{ border-top: 1px solid #121212; padding-top: 10px;}
+.topBorder {
+  border-top: 1px solid #121212;
+  padding-top: 10px;
+}
 .totalBox {
-   
-   
-    border-collapse: collapse;
+  border-collapse: collapse;
 }
 
 .totalBox td {
-    padding: 5px 10px;
-    font-family: 'Poppins';
-    font-style: normal;
-    font-weight: 400;
-    font-size: 14px;
-    line-height: 21px;
-/* identical to box height */
+  padding: 5px 10px;
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 21px;
+  /* identical to box height */
 
-
-/* Black #121212 */
-    color: #121212;
-    border-bottom: 1px solid #CACACA;
+  /* Black #121212 */
+  color: #121212;
+  border-bottom: 1px solid #cacaca;
 }
-.totalBox td.td_last{border-bottom: 0px;}
+.totalBox td.td_last {
+  border-bottom: 0px;
+}
 
 .totalBox td b {
-    font-weight: 500;
+  font-weight: 500;
 }
-.totalBox strong{font-weight: 700;}
+.totalBox strong {
+  font-weight: 700;
+}
 .thanksMessage {
-    font-family: 'Poppins';
-    font-style: normal;
-    font-weight: 600;
-    font-size: 18px;
-    line-height: 27px;
-/* identical to box height */
-    text-align: center;
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 27px;
+  /* identical to box height */
+  text-align: center;
 
-/* Black #121212 */
-    color: #121212;
+  /* Black #121212 */
+  color: #121212;
 }
-
 
 .bottomAddres h5 {
-    margin: 0px 0px 0px 0px;
-    font-family: 'Poppins';
-    font-style: normal;
-    font-weight: 600;
-    font-size: 18px;
-    line-height: 27px;
-/* identical to box height */
+  margin: 0px 0px 0px 0px;
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 27px;
+  /* identical to box height */
 
-
-/* Black #121212 */
-    color: #121212;
+  /* Black #121212 */
+  color: #121212;
 }
 
 .bottomAddres ul {
-    margin: 0px;
-    padding: 0px;
-    list-style: none;
+  margin: 0px;
+  padding: 0px;
+  list-style: none;
 }
 
 .bottomAddres ul li {
-    font-family: 'Poppins';
-    font-style: normal;
-    font-weight: 400;
-    font-size: 18px;
-    line-height: 27px;
-/* identical to box height */
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 18px;
+  line-height: 27px;
+  /* identical to box height */
 
-
-/* Black #121212 */
-    color: #121212;
+  /* Black #121212 */
+  color: #121212;
 }
 .emailId {
-    font-family: 'Poppins';
-    font-style: normal;
-    font-weight: 500;
-    font-size: 18px;
-    line-height: 27px;
-    color: #121212;
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 27px;
+  color: #121212;
 }
 .invoiceTerms h5 {
-    margin: 0px 0px 20px;
-    font-family: 'Poppins';
-    font-style: normal;
-    font-weight: 500;
-    font-size: 20px;
-    line-height: 30px;
+  margin: 0px 0px 20px;
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 30px;
 
-    color: #121212;
+  color: #121212;
 }
-
 
 @media screen and (max-width: 992px) {
-    .packageManagement h3 {
-        font-size: 16px;
-        line-height: 24px;
-    }
+  .packageManagement h3 {
+    font-size: 16px;
+    line-height: 24px;
+  }
 
-    .formGroupBg span {
-        font-size: 12px;
-    }
+  .formGroupBg span {
+    font-size: 12px;
+  }
 
-    .usdform {
-        font-size: 14px;
-    }
+  .usdform {
+    font-size: 14px;
+  }
 }
 
-
 @media screen and (max-width: 480px) {
-    .formGroupBg span {
-        font-size: 10px;
-    }
+  .formGroupBg span {
+    font-size: 10px;
+  }
 
-    .usdform {
-        font-size: 12px;
-    }
+  .usdform {
+    font-size: 12px;
+  }
 
-    .packageManagement h3 {
-        font-size: 14px;
-    }
-} 
+  .packageManagement h3 {
+    font-size: 14px;
+  }
+}
