@@ -154,4 +154,10 @@ export const MENU_ITEM = [
     page: "Settings",
     url: "/settings",
   },
+  {
+    id: "20",
+    icon: <SVG.Settings />,
+    page: "AdSense",
+    url: "/manage-adsense",
+  },
 ];

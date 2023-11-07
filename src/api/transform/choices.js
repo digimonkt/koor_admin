@@ -165,3 +165,11 @@ export const transformEmployerData = (data) => {
     value: data.id,
   }));
 };
+
+export const transformAdSenseResponse = (data) => {
+  return data.map((data) => ({
+    id: data.id || "",
+    pageName: data.page_title || "",
+    code: data.code || "",
+  }));
+};

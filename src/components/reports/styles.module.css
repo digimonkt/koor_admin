@@ -30,3 +30,21 @@
     margin:30px auto auto;
     max-width: 270px;
 }
+
+@media screen  and (max-width: 992px) {
+    .listall {
+        font-size: 14px;
+    }
+
+
+    @media screen and (max-width: 480px) {
+        .commonReport h3 {
+        font-size: 14px;
+        }
+
+        .listall {
+            font-size: 12px;
+        }
+    
+    }
+}

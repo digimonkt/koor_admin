@@ -9,6 +9,33 @@
   font-family: "Poppins";
 }
 
+.job_search_box .job_search {
+  width: 100%;
+  border: 0;
+  font-size: 16px;
+}
+
+.job_search_box .job_search:focus-visible {
+  outline: 0;
+}
+
+.job_search_box input::placeholder {
+  font-size: 16px !important;
+  color: #848484;
+  font-family: "Poppins";
+}
+
+.job_location_box .loca_job {
+  width: 200px;
+}
+
+.peritemview span {
+  font-size: 14px;
+  font-weight: 400;
+  color: #121212;
+  font-family: "Poppins";
+}
+
 .lables .MuiList-root.MuiList-padding.css-h4y409-MuiList-root {
   display: flex;
   justify-content: flex-start;
@@ -35,7 +62,7 @@
   display: none !important;
 }
 .paginations
-  button.MuiButtonBase-root.MuiPaginationItem-root.MuiPaginationItem-sizeMedium.MuiPaginationItem-text.MuiPaginationItem-rounded.MuiPaginationItem-previousNext.css-10w330c-MuiButtonBase-root-MuiPaginationItem-root {
+  button.MuiButtonBase-root.MuiPaginationItem-root.MuiPaginationItem-sizeMedium.MuiPaginationItem-text.MuiPaginationItem-rounded.MuiPaginationItem-previousNext.css-10w330c--MuiPaginationItem-root {
   display: none !important;
 }
 .paginations .MuiPagination-ul.css-wjh20t-MuiPagination-ul {
@@ -51,11 +78,11 @@
 .message {
   text-align: center;
 }
-.formCHeck .css-12wnr2w-MuiButtonBase-root-MuiCheckbox-root {
+.formCHeck .css-12wnr2w--MuiCheckbox-root {
   color: #cacaca;
 }
-.formCHeck .css-12wnr2w-MuiButtonBase-root-MuiCheckbox-root.Mui-checked,
-.css-12wnr2w-MuiButtonBase-root-MuiCheckbox-root.MuiCheckbox-indeterminate {
+.formCHeck .css-12wnr2w-Checkbox-root.Mui-checked,
+.css-12wnr2w-Checkbox-root.MuiCheckbox-indeterminate {
   color: #eea23d;
 }
 .lables p {
@@ -389,7 +416,8 @@ header {
 }
 .form-content {
   font-family: "Poppins";
-  font-weight: 300;
+  font-weight: 500;
+  color: #121212;
 }
 .text-gray {
   color: #848484;
@@ -1516,6 +1544,7 @@ span.count {
 }
 .sidebar-scroll {
   height: calc(100vh - 135px);
+  padding-bottom: 10px !important;
 }
 body {
   padding: 0px !important;
@@ -1545,6 +1574,19 @@ body {
   .menu.menu-selected {
     visibility: visible;
     opacity: 1;
+  }
+
+  .job_location_box .loca_job {
+    width: 200px;
+  }
+
+  .job_search_box .job_search {
+    width: 100%;
+    border: 0;
+  }
+
+  .sidebar-scroll {
+    margin-top: 20px !important;
   }
 
   ul.menu li {
@@ -1683,25 +1725,25 @@ input.employersearch {
   white-space: pre-line;
 }
 
-.close_icon_circle svg{
-color: red;
-margin-left: 5px;
+.close_icon_circle svg {
+  color: red;
+  margin-left: 5px;
 }
-.save_btn{
+.save_btn {
   display: flex;
   justify-content: space-between;
   width: 145px;
   align-items: center;
 }
 
-.textEditor{
+.textEditor {
   margin-top: 50px;
   display: flex;
   justify-content: center;
   padding-bottom: 30px;
 }
 
-.accordion-class .MuiAccordionSummary-content{
+.accordion-class .MuiAccordionSummary-content {
   display: flex;
   justify-content: space-between;
 }
@@ -1713,5 +1755,24 @@ margin-left: 5px;
   padding: 10px 12px 10px 30px;
   color: #848484;
   font-weight: 400;
-  height:50px
+  height: 50px;
+}
+
+@media screen and (max-width: 480px) {
+  .job_location_box .loca_job {
+    width: 200px;
+  }
+
+  .job_search_box input::placeholder {
+    font-size: 14px !important;
+    color: #848484;
+  }
+
+  .job_search_box .job_search {
+    font-size: 14px;
+  }
+
+  .peritemview span {
+    font-size: 12px;
+  }
 }

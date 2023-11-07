@@ -41,7 +41,7 @@ const ManageUserRightsComponent = () => {
       dispatch(setLoading(false));
       getUserData();
       setActiveEditor(false);
-      dispatch(setSuccessToast("Update User Rights SuccessFully"));
+      dispatch(setSuccessToast("Update User Rights De SuccessFully"));
     } else {
       dispatch(setErrorToast("Something went wrong"));
       console.log(response.error);

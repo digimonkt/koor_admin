@@ -16,6 +16,14 @@ const StyledFormLabel = styled(FormLabel)(() => ({
   fontWeight: "300",
   marginBottom: 10,
   display: "block",
+
+  "@media (max-width: 992px)": {
+    fontSize: "14px",
+  },
+
+  "@media (max-width: 480px)": {
+    fontSize: "12px",
+  },
 }));
 
 const PackageManagement = ({ packageList, refreshList }) => {
@@ -50,19 +58,21 @@ const PackageManagement = ({ packageList, refreshList }) => {
           price: values.goldPrice,
           credit: values.goldCredit,
           benefit: values.goldBenefit,
-        }, {
+        },
+        {
           id: values.silverPlanId,
           title: "Silver",
           price: values.silverPrice,
           credit: values.silverCredit,
           benefit: values.silverBenefit,
-        }, {
+        },
+        {
           id: values.copperPlanId,
           title: "Copper",
           price: values.copperPrice,
           credit: values.copperCredit,
           benefit: values.copperBenefit,
-        }
+        },
       ];
       const res = await updatePlansAPI(payload);
       if (res.remote === "success") {
@@ -72,7 +82,7 @@ const PackageManagement = ({ packageList, refreshList }) => {
       } else {
         dispatch(setErrorToast("Something Went Wrong"));
       }
-    }
+    },
   });
   const fieldName = (planName, field) => {
     return planName.toLowerCase() + field;
@@ -95,7 +105,7 @@ const PackageManagement = ({ packageList, refreshList }) => {
   return (
     <>
       <div className="form-content">
-        <form >
+        <form>
           {packageList?.map((item) => (
             <div className={`${styles.packageManagement}`} key={item.id}>
               <h3>{item.title}</h3>
@@ -117,6 +127,7 @@ const PackageManagement = ({ packageList, refreshList }) => {
                 <Grid item lg={6} xs={12}>
                   <StyledFormLabel>Number of job posts</StyledFormLabel>
                   <input
+                    placeholder="Number of job posts"
                     className={`${styles.textType}`}
                     {...formik.getFieldProps(fieldName(item.title, "Credit"))}
                   />
@@ -132,12 +143,21 @@ const PackageManagement = ({ packageList, refreshList }) => {
                         <input
                           className={`${styles.textType}`}
                           value={
-                            formik.getFieldProps(fieldName(item.title, "Benefit")).value?.[0] || ""
+                            formik.getFieldProps(
+                              fieldName(item.title, "Benefit")
+                            ).value?.[0] || ""
                           }
                           onChange={(e) => {
-                            const updatedArray = [...formik.getFieldProps(fieldName(item.title, "Benefit")).value];
+                            const updatedArray = [
+                              ...formik.getFieldProps(
+                                fieldName(item.title, "Benefit")
+                              ).value,
+                            ];
                             updatedArray[0] = e.target.value;
-                            formik.setFieldValue(fieldName(item.title, "Benefit"), updatedArray);
+                            formik.setFieldValue(
+                              fieldName(item.title, "Benefit"),
+                              updatedArray
+                            );
                           }}
                           placeholder={item.placeholder}
                         />
@@ -149,12 +169,21 @@ const PackageManagement = ({ packageList, refreshList }) => {
                         <input
                           className={`${styles.textType}`}
                           value={
-                            formik.getFieldProps(fieldName(item.title, "Benefit")).value?.[1] || ""
+                            formik.getFieldProps(
+                              fieldName(item.title, "Benefit")
+                            ).value?.[1] || ""
                           }
                           onChange={(e) => {
-                            const updatedArray = [...formik.getFieldProps(fieldName(item.title, "Benefit")).value];
+                            const updatedArray = [
+                              ...formik.getFieldProps(
+                                fieldName(item.title, "Benefit")
+                              ).value,
+                            ];
                             updatedArray[1] = e.target.value;
-                            formik.setFieldValue(fieldName(item.title, "Benefit"), updatedArray);
+                            formik.setFieldValue(
+                              fieldName(item.title, "Benefit"),
+                              updatedArray
+                            );
                           }}
                           placeholder={item.placeholder}
                         />
@@ -167,12 +196,21 @@ const PackageManagement = ({ packageList, refreshList }) => {
                         <input
                           className={`${styles.textType}`}
                           value={
-                            formik.getFieldProps(fieldName(item.title, "Benefit")).value?.[2] || ""
+                            formik.getFieldProps(
+                              fieldName(item.title, "Benefit")
+                            ).value?.[2] || ""
                           }
                           onChange={(e) => {
-                            const updatedArray = [...formik.getFieldProps(fieldName(item.title, "Benefit")).value];
+                            const updatedArray = [
+                              ...formik.getFieldProps(
+                                fieldName(item.title, "Benefit")
+                              ).value,
+                            ];
                             updatedArray[2] = e.target.value;
-                            formik.setFieldValue(fieldName(item.title, "Benefit"), updatedArray);
+                            formik.setFieldValue(
+                              fieldName(item.title, "Benefit"),
+                              updatedArray
+                            );
                           }}
                           placeholder={item.placeholder}
                         />
@@ -184,22 +222,32 @@ const PackageManagement = ({ packageList, refreshList }) => {
                         <input
                           className={`${styles.textType}`}
                           value={
-                            formik.getFieldProps(fieldName(item.title, "Benefit")).value?.[3] || ""
+                            formik.getFieldProps(
+                              fieldName(item.title, "Benefit")
+                            ).value?.[3] || ""
                           }
                           onChange={(e) => {
-                            const updatedArray = [...formik.getFieldProps(fieldName(item.title, "Benefit")).value];
+                            const updatedArray = [
+                              ...formik.getFieldProps(
+                                fieldName(item.title, "Benefit")
+                              ).value,
+                            ];
                             updatedArray[3] = e.target.value;
-                            formik.setFieldValue(fieldName(item.title, "Benefit"), updatedArray);
+                            formik.setFieldValue(
+                              fieldName(item.title, "Benefit"),
+                              updatedArray
+                            );
                           }}
                           placeholder={item.placeholder}
                         />
                       </Stack>
                     </Grid>
                   </Grid>
-                  <Divider sx={{ my: 3.5, opacity: 1, borderColor: "#CACACA" }} />
+                  <Divider
+                    sx={{ my: 3.5, opacity: 1, borderColor: "#CACACA" }}
+                  />
                 </div>
               </div>
-
             </div>
           ))}
           <Stack direction="row" justifyContent="center" sx={{ mt: 3.75 }}>

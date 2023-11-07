@@ -19,7 +19,7 @@ const TablePagination = styled(Pagination)(() => ({
     borderRadius: "5px",
     boxShadow: "0px 2px 6px rgba(0, 0, 0, 0.15)",
   },
-  " &.MuiPagination-root .MuiPaginationItem-root .MuiPaginationItem-icon": {
+  " &.MuiPagination-root .": {
     display: "none",
   },
 }));
@@ -61,10 +61,12 @@ function Layout({
   return (
     <>
       <Stack
-        direction={{ xs: "column", sm: "row" }}
-        spacing={{ xs: 1.25, sm: 2.5 }}
+        direction={{ xs: "row", sm: "row" }}
+        spacing={{ xs: 1.25, sm: 1 }}
         alignItems={{ xs: "start", sm: "center" }}
         sx={{ marginBottom: 2.5 }}
+        flexWrap="wrap"
+        useFlexGap
       >
         <TableFilter
           jobPost={{ ...(jobPost || {}) }}
@@ -104,16 +106,16 @@ function Layout({
             page={page}
             loader={loading}
           />
-          <div className="pagination-custom">
-            <TablePagination
-              count={totalCount || 0}
-              page={page}
-              onChange={handlePageChange}
-              shape="rounded"
-            />
-          </div>
         </CardContent>
       </Card>
+      <div className="pagination-custom">
+        <TablePagination
+          count={totalCount || 0}
+          page={page}
+          onChange={handlePageChange}
+          shape="rounded"
+        />
+      </div>
     </>
   );
 }

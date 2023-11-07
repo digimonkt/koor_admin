@@ -15,16 +15,16 @@
     border: 0px;
     padding: 13px 15px;
     width: 100%;
-    height: 46px;
+    height: 42px;
     font-family: 'Poppins';
     font-style: normal;
-    font-weight: 300;
-    font-size: 16px;
+    font-weight: 500;
+    font-size: 20px;
     line-height: 20px;
 
     letter-spacing: 0.02em;
 
-    color: #121212;
+    color: #848484;
     outline: none;
 }
 .showButton {
@@ -33,3 +33,26 @@
    
 }
 .Mt_41{margin-top: 41px;}
+
+@media screen and (max-width: 992px) {
+    .formGroup label {
+        font-size: 14px;
+    }
+
+    .formControl {
+        width: 635px;
+        height: 46px;
+        font-size: 14px;
+    }
+}
+
+    @media screen and (max-width: 480px) {
+        .formGroup label {
+            font-size: 12px;
+        }
+
+
+        .formControl {
+            font-size: 12px;
+        }
+}

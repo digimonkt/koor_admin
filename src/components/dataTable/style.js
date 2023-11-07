@@ -9,6 +9,12 @@ export const StyledDataGrid = styled(DataGrid)(({ theme }) => ({
   letterSpacing: "normal",
   fontSize: "14px",
   fontWeight: "500",
+  "@media (max-width: 992px)": {
+    fontSize: "12px",
+  },
+  "@media (max-width: 480px)": {
+    fontSize: "10px",
+  },
 
   "& .MuiDataGrid-iconSeparator": {
     color: "#274593",
@@ -60,6 +66,16 @@ export const StyledDataGrid = styled(DataGrid)(({ theme }) => ({
     fontSize: "18px",
     fontWeight: "500",
     padding: "0px 15px",
+    "@media (max-width: 992px)": {
+      fontSize: "16px",
+    },
+    "@media (max-width: 480px)": {
+      fontSize: "10px",
+    },
+  },
+  "& .MuiDataGrid-root-MuiDataGrid-columnSeparator--sideRight": {
+    display: "block !important",
+    right: "0px",
   },
   "& .MuiDataGrid-row": {
     background: "#F9F9F9",

@@ -32,8 +32,17 @@ function DataTable({ rows, columns, limitProps, loader, page }) {
             sx={{
               "& .MuiSelect-select": {
                 fontFamily: "Poppins",
-                fontSize: "16px",
+                fontSize: "14px",
+                color: "#121212 !important",
                 padding: "7px 40px 5px 15px !important",
+
+                "@media (max-width: 992px)": {
+                  fontSize: "14px",
+                },
+
+                "@media (max-width: 480px)": {
+                  fontSize: "12px",
+                },
               },
             }}
             size="small"

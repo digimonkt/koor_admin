@@ -13,6 +13,10 @@ const TablePagination = styled(Pagination)(() => ({
     fontSize: "16px",
     color: "#000",
     fontWeight: "400",
+
+    "@media (max-width: 480px)": {
+      fontSize: "14px",
+    },
   },
   " &.MuiPagination-root .MuiPaginationItem-root.Mui-selected": {
     background: "#fff",
@@ -140,16 +144,24 @@ function Layout({
             loader={loading}
             page={page}
           />
-          <div className="pagination-custom">
+          {/* <div className="pagination-custom">
             <TablePagination
               count={totalCount || 0}
               page={page}
               onChange={handlePageChange}
               shape="rounded"
             />
-          </div>
+          </div> */}
         </CardContent>
       </Card>
+      <div className="pagination-custom">
+        <TablePagination
+          count={totalCount || 0}
+          page={page}
+          onChange={handlePageChange}
+          shape="rounded"
+        />
+      </div>
     </>
   );
 }

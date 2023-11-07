@@ -5,12 +5,17 @@ import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import { Grid, FormLabel, Pagination, Stack, IconButton, Tooltip } from "@mui/material";
+import {
+  Grid,
+  FormLabel,
+  Pagination,
+  Stack,
+  IconButton,
+  Tooltip,
+} from "@mui/material";
 import SelectDropDown from "./SelectDropDown";
 import { getInvoiceListApi, mailSendInvoiceAPI } from "@api/manageoptions";
-import {
-  transformEmployerData,
-} from "@api/transform/choices";
+import { transformEmployerData } from "@api/transform/choices";
 import { manageEmployer } from "@api/employers";
 import DataTable from "@components/dataTable";
 import { setErrorToast, setSuccessToast } from "@redux/slice/toast";
@@ -65,7 +70,15 @@ const Invoices = () => {
         renderCell: (item) => {
           return (
             <Tooltip title="Click here for view details">
-              <Stack direction="row" spacing={1} style={{ cursor: "pointer" }} alignItems="center" onClick={() => { handleRedirectDetails(item.row.invoiceId); }}>
+              <Stack
+                direction="row"
+                spacing={1}
+                style={{ cursor: "pointer" }}
+                alignItems="center"
+                onClick={() => {
+                  handleRedirectDetails(item.row.invoiceId);
+                }}
+              >
                 {item.row.invoiceId}
               </Stack>
             </Tooltip>
@@ -94,7 +107,9 @@ const Invoices = () => {
             <Stack direction="row" spacing={1} alignItems="center">
               <Tooltip title="Click here to download">
                 <IconButton
-                  onClick={() => { handleDownload(item.row.invoiceId); }}
+                  onClick={() => {
+                    handleDownload(item.row.invoiceId);
+                  }}
                   sx={{
                     "&.MuiIconButton-root": {
                       background: "#D5E3F7",
@@ -132,8 +147,16 @@ const Invoices = () => {
   );
   const [listInvoice, setListInvoice] = useState([]);
   const today = new Date();
-  const lastMonth = new Date(today.getFullYear(), today.getMonth() - 1, today.getDate());
-  const currMonth = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+  const lastMonth = new Date(
+    today.getFullYear(),
+    today.getMonth() - 1,
+    today.getDate()
+  );
+  const currMonth = new Date(
+    today.getFullYear(),
+    today.getMonth(),
+    today.getDate()
+  );
   const [employerId, setEmployerId] = useState("");
   const [employerData, setEmployerData] = useState([]);
   const [dateTo, setDateTo] = useState(currMonth);
@@ -150,9 +173,14 @@ const Invoices = () => {
     setLoading(true);
     const fromDate = dayjs(dateFrom).format("YYYY-MM-DD");
     const toDate = dayjs(dateTo).format("YYYY-MM-DD");
-    const response = await getInvoiceListApi(
-      { employerId, limit, fromDate, toDate, invoiceId, page }
-    );
+    const response = await getInvoiceListApi({
+      employerId,
+      limit,
+      fromDate,
+      toDate,
+      invoiceId,
+      page,
+    });
     if (response.remote === "success") {
       setListInvoice(response.data.results);
       const startIndex = (page - 1) * 10;
@@ -173,7 +201,7 @@ const Invoices = () => {
     }
   };
   const TablePagination = styled(Pagination)(() => ({
-    " &.MuiPagination-root .MuiPaginationItem-root": {
+    " &.MuiPagination-root .MuiPonItem-root": {
       minWidth: "36px",
       fontFamily: "Bahnschrift",
       fontSize: "16px",
@@ -201,14 +229,18 @@ const Invoices = () => {
   }, [dateTo, dateFrom, employerId, debouncedSearchCountryValue, limit, page]);
   return (
     <>
-      <div className={`${styles.packageManagement}`}>
+      <div className={`${styles.Management}`}>
         <h3>Invoices </h3>
         <Grid container spacing={2.5}>
           <Grid item lg={6} xs={12}>
             <FormLabel>Invoice date from</FormLabel>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DemoContainer components={["DatePicker"]}>
-                <DatePicker label="Select Date" value={dayjs(dateFrom)} onChange={(value) => setDateFrom(value)} />
+                <DatePicker
+                  label="Select Date"
+                  value={dayjs(dateFrom)}
+                  onChange={(value) => setDateFrom(value)}
+                />
               </DemoContainer>
             </LocalizationProvider>
           </Grid>
@@ -216,15 +248,25 @@ const Invoices = () => {
             <FormLabel>To date</FormLabel>
             <LocalizationProvider dateAdapter={AdapterDayjs}>
               <DemoContainer components={["DatePicker"]}>
-                <DatePicker label="Select Date" value={dayjs(dateTo)} onChange={(value) => setDateTo(value)} />
+                <DatePicker
+                  label="Select Date"
+                  value={dayjs(dateTo)}
+                  onChange={(value) => setDateTo(value)}
+                />
               </DemoContainer>
             </LocalizationProvider>
           </Grid>
 
           <Grid item lg={4} xs={12}>
             <StyledFormLabel>Invoice-ID</StyledFormLabel>
-            <input type="text" className={`${styles.textType}`} value={invoiceId} onChange={(e) => { setInvoiceId(e.target.value); }}></input>
-
+            <input
+              type="text"
+              className={`${styles.textType}`}
+              value={invoiceId}
+              onChange={(e) => {
+                setInvoiceId(e.target.value);
+              }}
+            ></input>
           </Grid>
           <Grid item lg={5} xs={12}>
             <StyledFormLabel>Employer </StyledFormLabel>
@@ -248,7 +290,8 @@ const Invoices = () => {
                 hoverborderColor="#b4d2fe"
                 padding="7px 30px"
                 marginTop="10px"
-                onClick={() => handleFormReset()}>
+                onClick={() => handleFormReset()}
+              >
                 Reset
               </Cbutton>
             </div>

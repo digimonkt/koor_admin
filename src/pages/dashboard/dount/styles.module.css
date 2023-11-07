@@ -1,73 +1,112 @@
 .chartContent h2 {
-    margin: 0;
-    font-family: 'Bahnschrift';
-    font-style: normal;
-    font-weight: 600;
-    font-size: 28px;
-    line-height: 28px;
-    color: #121212;
+  margin: 0;
+  font-family: "Bahnschrift";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 28px;
+  line-height: 28px;
+  color: #121212;
 }
-.seriesBox h2{font-family: 'Poppins';
-    font-style: normal;
-    font-weight: 600;
-    font-size: 20px;
-    line-height: 30px;
-    /* identical to box height */
-    
-    letter-spacing: 0.02em;
-    
-    /* Black #121212 */
-    
-    color: #121212;}
+.seriesBox h2 {
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 600;
+  font-size: 20px;
+  line-height: 30px;
+  /* identical to box height */
+
+  letter-spacing: 0.02em;
+
+  /* Black #121212 */
+
+  color: #121212;
+}
 .seriesBox span {
-    font-weight: 400;
-    font-size: 14px;
-    line-height: 21px;
-    letter-spacing: 0.02em;
-    color: #121212;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 21px;
+  letter-spacing: 0.02em;
+  color: #121212;
 }
 
 .seriesBox ul {
-    margin: 16px 0px 0px 0px;
-    list-style: none;
-    padding: 0;
-    color:rgb(18 18 18 / 75%);
+  margin: 16px 0px 0px 0px;
+  list-style: none;
+  padding: 0;
+  color: rgb(18 18 18 / 75%);
 }
-.seriesBox ul li{padding: 2px 0px;}
-
-.seriesBox ul li small{font-family: 'Poppins';
-    font-style: normal;
-    font-weight: 400;
-    font-size: 14px;
-    line-height: 21px;
-   letter-spacing: 0.02em; color:#848484;
+.seriesBox ul li {
+  padding: 2px 0px;
+  font-size: 14px;
+  color: #121212;
+  font-family: "Poppins";
+  font-weight: 400;
 }
 
+.seriesBox ul li b {
+  font-weight: 600;
+}
+
+.seriesBox ul li small {
+  font-size: 14px;
+  font-style: normal;
+  font-size: 14px;
+  line-height: 21px;
+  letter-spacing: 0.02em;
+  color: #848484;
+}
 
 .views {
-    display: flex;
-    align-items: center;
-    font-family: 'Poppins';
-    font-style: normal;
-    font-weight: 400;
+  display: flex;
+  align-items: center;
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 24px;
+
+  letter-spacing: 0.02em;
+
+  color: #121212;
+}
+
+.views b {
+  font-weight: 600;
+  margin-right: 4px;
+}
+.blueView {
+  width: 16px;
+  height: 16px;
+
+  border: 4px solid;
+  border-radius: 100%;
+  display: inline-block;
+  margin-right: 5px;
+}
+
+.chartContent h2 {
+  font-size: 20px;
+  font-weight: 600;
+  font-family: "Poppins";
+}
+
+@media screen and (max-width: 992px) {
+}
+
+@media screen and (max-width: 480px) {
+  .chartContent h2 {
     font-size: 16px;
-    line-height: 24px;
-  
-    letter-spacing: 0.02em;
-  
-    color: #121212;
   }
-  
-  .views b {
-    font-weight: 600;
-    margin-right: 4px;
+
+  .seriesBox ul li {
+    font-size: 10px;
   }
-  .blueView {
-    width: 16px;
-    height: 16px;
-  
-    border: 4px solid ;
-    border-radius: 100%;
-    display: inline-block;
-    margin-right: 5px;
+
+  .seriesBox ul li small {
+    font-size: 10px;
   }
+
+  .seriesBox span {
+    font-size: 12px;
+  }
+}

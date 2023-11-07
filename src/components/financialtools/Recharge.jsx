@@ -17,6 +17,14 @@ const StyledFormLabel = styled(FormLabel)(() => ({
   fontWeight: "300",
   marginBottom: 10,
   display: "block",
+
+  "@media (max-width: 990px)": {
+    fontSize: "14px",
+  },
+
+  "@media (max-width: 480px)": {
+    fontSize: "12px",
+  },
 }));
 
 const Recharge = () => {
@@ -96,7 +104,7 @@ const Recharge = () => {
                   "& .MuiFormLabel-root": {
                     fontSize: "16px",
                     color: "#848484",
-                    fontFamily: "Poppins",
+                    fontFamily: "Poppins !important",
                     transform: "translate(14px, 12px) scale(1)",
                   },
                   "& .MuiInputLabel-shrink": {
@@ -127,7 +135,7 @@ const Recharge = () => {
             </Grid>
           </Grid>
           <Stack direction="row" justifyContent="center" sx={{ mt: 3.75 }}>
-            <div >
+            <div>
               <Cbutton
                 bgcolor="#D5E3F7"
                 color="#274593"
