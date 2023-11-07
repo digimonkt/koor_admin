@@ -16,11 +16,9 @@ export const SelectBox = styled(Select)`
     font-family: "Poppins";
     font-style: normal;
     font-weight: 400;
-    font-size: 12px;
+    font-size: 14px;
     line-height: 22px;
-
     letter-spacing: 0.02em;
-
     color: #121212;
   }
   & fieldset {
@@ -116,6 +114,14 @@ const Donut = ({ title, total, user, series, colors, content }) => {
             inputProps={{ "aria-label": "Without label" }}
             IconComponent={KeyboardArrowUpIcon}
             displayEmpty
+            sx={{
+              "@media (max-width: 992px)": {
+                fontSize: "12px !important",
+              },
+              "@media (max-width: 480px)": {
+                fontSize: "10px !important",
+              },
+            }}
           >
             <MenuItem value="">This Week</MenuItem>
             <MenuItem value={20}>Last Month</MenuItem>
@@ -125,7 +131,7 @@ const Donut = ({ title, total, user, series, colors, content }) => {
       </Stack>
 
       <Grid container spacing={2}>
-        <Grid item lg={4} xl={4} xs={12}>
+        <Grid item lg={4} xl={4} sm={6} xs={12}>
           <ReactApexChart
             options={state.options}
             series={state.series}
@@ -133,7 +139,7 @@ const Donut = ({ title, total, user, series, colors, content }) => {
             height={300}
           />
         </Grid>
-        <Grid item xl={8} lg={8} xs={12}>
+        <Grid item xl={8} lg={8} sm={6} xs={12}>
           <div className={`${styles.seriesBox}`}>
             <h2>{total}</h2>
             <span>{user}</span>

@@ -61,7 +61,9 @@ import { ReactComponent as ReceiptIcon } from "./receipt.svg";
 import { ReactComponent as ArrowForward } from "./arrow_forward.svg";
 import { ReactComponent as UserIcon } from "./user.svg";
 import { ReactComponent as KoorLogo } from "./logo.svg";
+import { ReactComponent as WhiteFile } from "./white-file.svg";
 export const SVG = {
+  WhiteFile,
   polygon,
   LocationIcon,
   EyeOff,
@@ -124,5 +126,5 @@ export const SVG = {
   ReceiptIcon,
   ArrowForward,
   UserIcon,
-  KoorLogo
+  KoorLogo,
 };
