@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { SVG } from "@assets/svg";
-import { IconButton } from "@mui/material";
+import { IconButton, Box } from "@mui/material";
 import { Stack } from "@mui/system";
 import Layout from "../layout";
 import {
@@ -18,6 +18,7 @@ import env from "@utils/validateEnv";
 import { useDebounce } from "usehooks-ts";
 import { transformJobAPIResponse } from "@api/transform/choices";
 import { useNavigate } from "react-router-dom";
+import { RestartAlt } from "@mui/icons-material";
 
 function ManageJobsComponent() {
   const dispatch = useDispatch();
@@ -70,7 +71,7 @@ function ManageJobsComponent() {
         sortable: true,
         renderCell: (item) => {
           return (
-            <Stack direction="row" spacing={1} alignItems="center">
+            <Stack direction="row" alignItems="center">
               <IconButton
                 onClick={() => handleRedirectDetails(item.row.id)}
                 sx={{
@@ -286,28 +287,41 @@ function ManageJobsComponent() {
         }}
         csvProps={{
           title: (
-            <div onClick={() => downloadJobCSV()}>
+            <Box
+              onClick={() => downloadJobCSV()}
+              sx={{ display: "flex", alignItems: "center" }}
+            >
               <span className="d-inline-flex align-items-center me-2">
                 <SVG.ExportIcon />
               </span>
               Export CSV
-            </div>
+            </Box>
           ),
         }}
         jobPost={{
           title: (
-            <div onClick={() => PostNewJob()}>
-              <span className="d-inline-flex align-items-center me-2"></span>
+            <Box
+              onClick={() => PostNewJob()}
+              sx={{ display: "flex", alignItems: "center" }}
+            >
+              <span className="d-inline-flex align-items-center me-2">
+                <SVG.WhiteFile />
+              </span>
               New Job Post
-            </div>
+            </Box>
           ),
         }}
         jobProps={{
           title: (
-            <div onClick={() => resetFilterJob()}>
-              <span className="d-inline-flex align-items-center me-2"></span>{" "}
+            <Box
+              onClick={() => resetFilterJob()}
+              sx={{ display: "flex", alignItems: "center" }}
+            >
+              <span className="d-inline-flex align-items-center me-2">
+                <RestartAlt />
+              </span>
               Reset Filter
-            </div>
+            </Box>
           ),
         }}
       />

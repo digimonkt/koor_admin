@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { SVG } from "@assets/svg";
-import { IconButton, Stack } from "@mui/material";
+import { IconButton, Stack, Box } from "@mui/material";
 import Layout from "../layout";
 import { activeInactiveUser, deleteUser, manageEmployer } from "@api/employers";
 import DialogBox from "@components/dialogBox";
@@ -50,18 +50,19 @@ function ManageEmployerComponent() {
         field: "credits",
         headerName: "Credits",
         sortable: true,
-        width: 300,
+        width: 200,
       },
       {
         field: "mobileNumber",
         headerName: "Mobile number",
         sortable: true,
-        width: 180,
+        width: 200,
       },
       {
         field: "action",
         headerName: "Action",
         sortable: false,
+        width: 150,
         renderCell: (item) => {
           return (
             <Stack direction="row" spacing={1} alignItems="center">
@@ -90,6 +91,9 @@ function ManageEmployerComponent() {
                   <IconButton
                     onClick={() => {
                       handleRedirectDetails(item.row.id);
+                    }}
+                    sx={{
+                      padding: "0px",
                     }}
                   >
                     {<SVG.unVerify />}
@@ -257,20 +261,28 @@ function ManageEmployerComponent() {
         }}
         csvProps={{
           title: (
-            <div onClick={() => downloadEmployerCSV()}>
+            <Box
+              onClick={() => downloadEmployerCSV()}
+              sx={{ display: "flex", alignItems: "center" }}
+            >
               <span className="d-inline-flex align-items-center me-2">
                 <SVG.ExportIcon />
               </span>
               Export CSV
-            </div>
+            </Box>
           ),
         }}
         jobProps={{
           title: (
-            <div onClick={() => resetFilterEmployer()}>
-              <span className="d-inline-flex align-items-center me-2"></span>{" "}
+            <Box
+              onClick={() => resetFilterEmployer()}
+              sx={{ display: "flex", alignItems: "center" }}
+            >
+              <span className="d-inline-flex align-items-center me-2">
+                <SVG.WhiteFile />
+              </span>{" "}
               Reset Filter
-            </div>
+            </Box>
           ),
         }}
         job

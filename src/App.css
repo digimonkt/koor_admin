@@ -8,11 +8,21 @@ main {
   margin-top: 0px !important;
 }
 
+input::placeholder {
+  color: #848484;
+  font-weight: 300;
+  font-size: 16px;
+  font-family: "Poppins";
+  letter-spacing: 0.28px;
+}
+
 .header .MuiToolbar-root {
   height: 80px;
   display: flex;
   align-items: center;
   min-height: 80px;
+  padding-left: 50px;
+  padding-right: 50px;
 }
 
 .arrow_box:after,
@@ -82,8 +92,8 @@ main {
 
 .search-icon {
   position: absolute;
-  left: 30px;
-  top: 20px;
+  left: 12px;
+  top: 16px;
   z-index: 1;
   color: #848484;
 }
@@ -100,7 +110,8 @@ main {
   align-items: center;
   justify-content: center;
   margin-top: 0px;
-  padding-bottom: 67px;
+  padding-bottom: 60px;
+  padding-top: 20px;
 }
 .pagination-custom
   .MuiPagination-root.MuiPagination-root
@@ -289,14 +300,15 @@ img {
 }
 
 .csvButton {
-  width: 100% !important;
+  height: 54px;
   background: #fff !important;
   border-radius: 73px !important;
   border: solid 1px !important;
   font-size: 16px !important;
   color: #274593 !important;
-  padding: 10px 30px !important;
+  padding: 10px 25px !important;
   font-weight: 600 !important;
+  white-space: nowrap;
 }
 
 .csvButton:hover {
@@ -304,14 +316,15 @@ img {
   border-color: #f7f7f7 !important;
 }
 .resetButton {
-  width: 100% !important;
+  height: 54px;
   background: #274593 !important;
   border-radius: 73px !important;
   border: solid 1px !important;
   font-size: 16px !important;
   color: #fff !important;
-  padding: 10px 24px !important;
+  padding: 10px 25px !important;
   font-weight: 600 !important;
+  white-space: nowrap;
 }
 .resetButton:hover {
   background: #274593 !important;
@@ -340,10 +353,6 @@ input::-webkit-inner-spin-button {
 }
 
 @media screen and (max-width: 992px) {
-  .pagination-custom {
-    margin-top: 20px;
-  }
-
   .MuiDrawer-docked .MuiDrawer-paper {
     display: none;
   }
@@ -365,6 +374,16 @@ input::-webkit-inner-spin-button {
 @media screen and (max-width: 480px) {
   .pagination-custom {
     margin-top: 20px;
+  }
+
+  .pagination-custom
+    .MuiPagination-root.MuiPagination-root
+    .MuiPaginationItem-root {
+    font-size: 14px;
+  }
+
+  .resetButton {
+    font-size: 14px !important;
   }
 
   .csvButton {

@@ -16,7 +16,7 @@ export const SelectBox = styled(Select)`
     font-family: "Poppins";
     font-style: normal;
     font-weight: 400;
-    font-size: 12px;
+    font-size: 14px;
     line-height: 22px;
 
     letter-spacing: 0.02em;
@@ -217,6 +217,14 @@ const ColumChart = () => {
               inputProps={{ "aria-label": "Without label" }}
               IconComponent={KeyboardArrowUpIcon}
               displayEmpty
+              sx={{
+                "@media (max-width: 992px)": {
+                  fontSize: "12px !important",
+                },
+                "@media (max-width: 480px)": {
+                  fontSize: "10px !important",
+                },
+              }}
             >
               <MenuItem value="this_week">This Week</MenuItem>
               <MenuItem value="last_month">Last Month</MenuItem>

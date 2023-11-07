@@ -1,4 +1,5 @@
 import React from "react";
+import { Box } from "@mui/material";
 import { SolidButton } from "@components/button";
 import { SearchInput, SelectInput } from "@components/input";
 
@@ -13,13 +14,24 @@ function TableFilter({
 }) {
   return (
     <>
-      <SearchInput
-        placeholder="Search jobs"
-        widthInput="100%"
-        {...searchProps}
-      />
-      <SelectInput placeholder="Location" value="" search {...selectProps} />
-      <div className="w-100">
+      <Box className="job_search_box">
+        <SearchInput
+          className="job_search"
+          placeholder="Search jobs"
+          widthInput="100%"
+          {...searchProps}
+        />
+      </Box>
+      <Box className="job_location_box">
+        <SelectInput
+          placeholder="Location"
+          value=""
+          search
+          {...selectProps}
+          className="loca_job"
+        />
+      </Box>
+      <Box>
         <SolidButton
           className="csvButton"
           sx={{
@@ -27,11 +39,11 @@ function TableFilter({
           }}
           {...csvProps}
         />
-      </div>
+      </Box>
 
       {job && (
         <>
-          <div className="w-100">
+          <Box>
             <SolidButton
               title={(jobProps || {}).title}
               className="resetButton"
@@ -40,11 +52,11 @@ function TableFilter({
               }}
               {...jobProps}
             />
-          </div>
+          </Box>
         </>
       )}
       {newJob && (
-        <div className="w-100">
+        <Box>
           <SolidButton
             title={(jobPost || {}).title}
             className="resetButton"
@@ -53,7 +65,7 @@ function TableFilter({
             }}
             {...jobPost}
           />
-        </div>
+        </Box>
       )}
     </>
   );

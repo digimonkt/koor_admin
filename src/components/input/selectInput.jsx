@@ -7,8 +7,8 @@ import { SVG } from "@assets/svg";
 
 export const SelectBox = styled(Select)`
   & .MuiSelect-select {
-    background: #f0f0f0;
-    border-radius: 10px;
+    background: #ffffff;
+    border-radius: 30px;
     color: #121212;
     font-size: 14px;
     font-family: "Poppins";

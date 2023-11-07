@@ -127,6 +127,7 @@ const PackageManagement = ({ packageList, refreshList }) => {
                 <Grid item lg={6} xs={12}>
                   <StyledFormLabel>Number of job posts</StyledFormLabel>
                   <input
+                    placeholder="Number of job posts"
                     className={`${styles.textType}`}
                     {...formik.getFieldProps(fieldName(item.title, "Credit"))}
                   />
