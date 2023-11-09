@@ -67,9 +67,6 @@
   font-weight: 500;
   font-size: 20px;
   line-height: 30px;
-  /* identical to box height */
-
-  /* Black #121212 */
   color: #121212;
 }
 
@@ -268,6 +265,10 @@
     line-height: 24px;
   }
 
+  .textType {
+    font-size: 14px;
+  }
+
   .formGroupBg span {
     font-size: 12px;
   }
@@ -282,11 +283,16 @@
     font-size: 10px;
   }
 
-  .usdform {
+  .packageManagement h3 {
+    font-size: 14px;
+    line-height: 21px;
+  }
+
+  .textType {
     font-size: 12px;
   }
 
-  .packageManagement h3 {
-    font-size: 14px;
+  .usdform {
+    font-size: 12px;
   }
 }

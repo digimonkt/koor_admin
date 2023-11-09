@@ -112,17 +112,19 @@ const ManagePrivacyPolicyComponent = () => {
                 <OutlinedButton
                   title={
                     <div onClick={() => handleEdit()}>
-                      <SVG.EditIcon />
+                      <SVG.EditIcon className="me-2" />
                       Edit
                     </div>
                   }
                   sx={{
+                    padding: "8px 30px 10px 20px !important",
+                    fontSize: "16px",
                     color: "#274593 !important",
                     borderColor: "#274593 !important",
-                    fontSize: "16px !important",
-
+                    width: "117px",
+                    height: "44px",
                     "@media (max-width: 480px)": {
-                      fontSize: "14px  !important",
+                      width: "109px",
                     },
                   }}
                 ></OutlinedButton>
