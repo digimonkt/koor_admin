@@ -232,7 +232,8 @@ const Report = () => {
                 direction="row"
                 spacing={2}
                 alignItems="center"
-                sx={{ mb: 4.5 }}
+                sx={{ mb: 4.5, flexWrap: "wrap" }}
+                useFlexGap
               >
                 <span className={`${styles.general}`}>Use data from past:</span>
                 <Stack
@@ -276,6 +277,12 @@ const Report = () => {
                   hoverBgColor="#d5e3f754"
                   borderColor="#D5E3F7"
                   hoverBorderColor="#d5e3f754"
+                  sx={{
+                    padding: "10px 25px",
+                    "@media (max-width: 480px)": {
+                      fontSize: "14px",
+                    },
+                  }}
                 >
                   <span className="me-2 d-inline-flex">
                     <SVG.DescriptionIcon />

@@ -23,7 +23,7 @@ function SelectWithSearch({ options, title, ...rest }) {
       options={options}
       getOptionLabel={(option) => option.label}
       renderInput={(params) => {
-        return <TextField {...params} label={title} />;
+        return <TextField {...params} placeholder={title} />;
       }}
       renderOption={(props, option) => {
         return (
