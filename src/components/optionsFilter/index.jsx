@@ -10,6 +10,7 @@ const OptionsFilter = ({
   tender,
   csvProps,
   inputPropsRole,
+  tenderPost,
   faq,
   news,
 }) => {
@@ -59,7 +60,6 @@ const OptionsFilter = ({
           ) : (
             ""
           )}
-
           <SolidButton
             sx={{
               background: "#fff",
@@ -78,6 +78,16 @@ const OptionsFilter = ({
             {...optionsProps}
           />
         </>
+      )}
+      {tenderPost && (
+        <SolidButton
+          title={(tenderPost || {}).title}
+          className="resetButton"
+          sx={{
+            fontFamily: "Bahnschrift",
+          }}
+          {...tenderPost}
+        />
       )}
     </Stack>
   );

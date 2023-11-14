@@ -4,7 +4,7 @@ import { StyledDataGrid } from "./style";
 import { useEffect } from "react";
 import { incrementPage } from "@utils/common";
 
-function DataTable({ rows, columns, limitProps, loader, page }) {
+function DataTable({ rows, columns, limitProps, loader, page, NoFoundText }) {
   useEffect(() => {
     if (rows.length) {
       incrementPage({ page, rows });
@@ -20,6 +20,7 @@ function DataTable({ rows, columns, limitProps, loader, page }) {
           loading={loader}
           disableHeight={false}
           disableColumnSelector={false}
+          localeText={NoFoundText ?? { noRowsLabel: "No job found" }}
           getRowClassName={(params) =>
             params.indexRelativeToCurrentPage % 2 === 0 ? "even" : "odd"
           }

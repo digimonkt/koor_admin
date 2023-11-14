@@ -40,20 +40,17 @@ function TableFilter({
           {...csvProps}
         />
       </Box>
-
       {job && (
-        <>
-          <Box>
-            <SolidButton
-              title={(jobProps || {}).title}
-              className="resetButton"
-              sx={{
-                fontFamily: "Bahnschrift",
-              }}
-              {...jobProps}
-            />
-          </Box>
-        </>
+        <Box>
+          <SolidButton
+            title={(jobProps || {}).title}
+            className="resetButton"
+            sx={{
+              fontFamily: "Bahnschrift",
+            }}
+            {...jobProps}
+          />
+        </Box>
       )}
       {newJob && (
         <Box>

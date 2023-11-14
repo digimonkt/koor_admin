@@ -5,6 +5,7 @@ import {
   DateInput,
   CheckboxInput,
   LabeledInput,
+  SelectInput,
   AttachmentDragNDropInput,
   ProfilePicInput,
 } from "@components/input";
@@ -12,7 +13,6 @@ import CloseIcon from "@mui/icons-material/Close";
 import CurrencyInput from "./currencyInput";
 import { PAY_PERIOD, SUBMITTING_STATUS_ENUM } from "@utils/enum";
 import { useFormik } from "formik";
-
 import {
   Card,
   CardContent,
@@ -24,6 +24,7 @@ import {
   FormControlLabel,
   RadioGroup,
   IconButton,
+  Switch,
 } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -39,7 +40,6 @@ import {
 import { Link, useSearchParams } from "react-router-dom";
 import { FilledButton } from "@components/button";
 import { ErrorMessage } from "@components/caption";
-import SelectWithSearch from "@components/input/selectWithsearch";
 import { manageEmployer } from "@api/employers";
 import { useDebounce } from "usehooks-ts";
 import {
@@ -86,6 +86,7 @@ const PostNewJob = () => {
   const [submitting, setSubmitting] = useState(SUBMITTING_STATUS_ENUM.null);
   const [jobId, setJobId] = useState(null);
   const [searchParams] = useSearchParams();
+
   const getEmployerList = async () => {
     let limitParam = 10;
     if (jobId) {
@@ -141,9 +142,14 @@ const PostNewJob = () => {
       cc1: "",
       cc2: "",
       isContactWhatsapp: false,
+      applicationInstruction: "",
+      isApplyThroughEmail: false,
+      isApplyThroughKoor: false,
+      isApplyThroughWebsite: false,
       duration: 0,
       experience: "",
       countryCodeContactWhatsapp: "",
+      websiteLink: "",
       contactWhatsapp: "",
       highestEducation: "",
       languages: [{ language: "" }, { language: "" }, { language: "" }],
@@ -153,6 +159,7 @@ const PostNewJob = () => {
     },
     validationSchema: validateCreateJobInput,
     onSubmit: async (values, { resetForm }) => {
+      console.log({ values }, "here");
       setSubmitting(SUBMITTING_STATUS_ENUM.loading);
       const payload = {
         company_type: selectedValue,
@@ -176,15 +183,20 @@ const PostNewJob = () => {
         start_date: values.startDate
           ? dayjs(values.startDate).format(DATABASE_DATE_FORMAT)
           : "",
-        contact_email: values.isContactEmail ? values.contactEmail : "",
-        cc1: values.isContactEmail ? values.cc1 : "",
-        cc2: values.isContactEmail ? values.cc2 : "",
+        contact_email: values?.contactEmail || "",
+        cc1: values?.cc1 || "",
+        cc2: values?.cc2 || "",
         contact_whatsapp: values.isContactWhatsapp
           ? values.contactWhatsapp
           : "",
+        apply_through_koor: values.isApplyThroughKoor || "false",
+        apply_through_email: values.isApplyThroughEmail || "false",
+        apply_through_website: values.isApplyThroughWebsite || "false",
+        website_link: values.websiteLink,
         highest_education: values.highestEducation || "",
         language: values.languages,
         skill: values.skills,
+        application_instruction: values.applicationInstruction,
         attachments: values.attachments,
         attachments_remove: values.attachmentsRemove,
         duration: values.duration,
@@ -260,6 +272,7 @@ const PostNewJob = () => {
   const getJobDetailsById = useCallback(async (jobId) => {
     const response = await getJobDetailsByIdAPI({ jobId });
     if (response.remote === "success") {
+      console.log({ data: response.data });
       const { data } = response;
       if (!data.user?.id) {
         setSelectedValue("new");
@@ -274,7 +287,10 @@ const PostNewJob = () => {
       });
       formik.setFieldValue("title", data.title);
       formik.setFieldValue("budgetCurrency", data.budgetCurrency);
-      formik.setFieldValue("budgetAmount", data.budgetAmount);
+      formik.setFieldValue(
+        "budgetAmount",
+        parseInt(data.budgetAmount.replace(/,/g, ""), 10)
+      );
       formik.setFieldValue("budgetPayPeriod", data.budgetPayPeriod);
       formik.setFieldValue("description", data.description);
       formik.setFieldValue("country", {
@@ -286,20 +302,37 @@ const PostNewJob = () => {
       formik.setFieldValue("duration", data.duration);
       formik.setFieldValue("experience", data.experience);
       setSuggestedAddress(data.address);
+      formik.setFieldValue("websiteLink", data.websiteLink);
       formik.setFieldValue("jobCategories", data.jobCategories.id);
       formik.setFieldValue("jobSubCategory", data.jobSubCategory.id);
+      formik.setFieldValue(
+        "isApplyThroughEmail",
+        Boolean(data.isApplyThroughEmail)
+      );
       formik.setFieldValue("isFullTime", data.isFullTime);
       formik.setFieldValue("isPartTime", data.isPartTime);
       formik.setFieldValue("hasContract", data.hasContract);
       formik.setFieldValue("deadline", dayjs(data.deadline));
       formik.setFieldValue("startDate", dayjs(data.startDate));
       formik.setFieldValue("isContactEmail", Boolean(data.contactEmail));
+      formik.setFieldValue(
+        "isApplyThroughKoor",
+        Boolean(data.isApplyThroughKoor)
+      );
       formik.setFieldValue("contactEmail", data.contactEmail);
       formik.setFieldValue("cc1", data.cc1);
       formik.setFieldValue("cc2", data.cc2);
       formik.setFieldValue("isContactWhatsapp", Boolean(data.contactWhatsapp));
       formik.setFieldValue("contactWhatsapp", data.contactWhatsapp);
+      formik.setFieldValue(
+        "applicationInstruction",
+        data.applicationInstruction
+      );
       formik.setFieldValue("highestEducation", data.highestEducation.id || "");
+      formik.setFieldValue(
+        "isApplyThroughWebsite",
+        Boolean(data.isApplyThroughWebsite)
+      );
       formik.setFieldValue(
         "languages",
         data.languages.map && data.languages.length
@@ -387,7 +420,7 @@ const PostNewJob = () => {
     const newJobId = searchParams.get("jobId");
     if (newJobId && jobId !== newJobId) setJobId(newJobId);
   }, [searchParams.get("jobId")]);
-  console.log("formik", formik.values);
+  console.log(formik.getFieldProps("city"), "city");
   return (
     <div className="job-application">
       <Card
@@ -443,7 +476,7 @@ const PostNewJob = () => {
                             Select Company
                             <span className="required-field">*</span>
                           </label>
-                          <SelectWithSearch
+                          <SelectInput
                             className="my-2"
                             sx={{
                               borderRadius: "10px",
@@ -630,7 +663,7 @@ const PostNewJob = () => {
                     </label>
                     <Grid container spacing={2}>
                       <Grid item xl={6} lg={6} xs={12}>
-                        <SelectWithSearch
+                        <SelectInput
                           sx={{
                             mt: 1,
                             borderRadius: "10px",
@@ -681,7 +714,7 @@ const PostNewJob = () => {
                         ) : null}
                       </Grid>
                       <Grid item xl={6} lg={6} xs={12}>
-                        <SelectWithSearch
+                        <SelectInput
                           sx={{
                             mt: 1,
                             borderRadius: "10px",
@@ -783,7 +816,7 @@ const PostNewJob = () => {
                     </label>
                     <Grid container spacing={2}>
                       <Grid item xl={6} lg={6} xs={12}>
-                        <SelectWithSearch
+                        <SelectInput
                           sx={{
                             mt: 1,
                             borderRadius: "10px",
@@ -829,7 +862,7 @@ const PostNewJob = () => {
                         ) : null}
                       </Grid>
                       <Grid item xl={6} lg={6} xs={12}>
-                        <SelectWithSearch
+                        <SelectInput
                           sx={{
                             mt: 1,
                             borderRadius: "10px",
@@ -934,9 +967,11 @@ const PostNewJob = () => {
                         </label>
                       </Stack>
                       <DateInput
+                        className="smallfont"
                         onChange={(e) => formik.setFieldValue("startDate", e)}
                         value={formik.values.startDate}
                         onBlur={formik.getFieldProps("startDate").onBlur}
+                        minDate={dayjs()}
                       />
                       {formik.touched.startDate && formik.errors.startDate ? (
                         <ErrorMessage>{formik.errors.startDate}</ErrorMessage>
@@ -956,9 +991,11 @@ const PostNewJob = () => {
                         </label>
                       </Stack>
                       <DateInput
+                        className="smallfont"
                         onChange={(e) => formik.setFieldValue("deadline", e)}
                         value={formik.values.deadline}
                         onBlur={formik.getFieldProps("deadline").onBlur}
+                        minDate={formik.values.startDate}
                       />
                       {formik.touched.deadline && formik.errors.deadline ? (
                         <ErrorMessage>{formik.errors.deadline}</ErrorMessage>
@@ -968,15 +1005,28 @@ const PostNewJob = () => {
                   <Grid item xl={12} lg={12} xs={12}>
                     <Divider sx={{ borderColor: "#CACACA", opacity: "1" }} />
                   </Grid>
-                  <Grid xl={12} lg={12} xs={12}>
-                    <h2 className="mt-3">Additional ways to apply</h2>
+                  <Grid item xl={12} lg={12} xs={12}>
+                    <h2 className="mt-3">Ways to apply</h2>
                   </Grid>
-                  <Grid item xl={4} lg={4} xs={12}>
-                    <JobFormControl
-                      control={<CheckboxInput />}
-                      label="Apply by email"
-                      {...formik.getFieldProps("isContactEmail")}
-                    />
+                  <Grid item xl={12} lg={12} sm={12} xs={12}>
+                    <FormGroup>
+                      <FormControlLabel
+                        control={<Switch />}
+                        label="Apply through Koor"
+                        checked={formik.values.isApplyThroughKoor}
+                        {...formik.getFieldProps("isApplyThroughKoor")}
+                      />
+                    </FormGroup>
+                  </Grid>
+                  <Grid item xl={4} lg={4} sm={4} xs={12}>
+                    <FormGroup>
+                      <FormControlLabel
+                        control={<Switch />}
+                        label="Apply by email"
+                        checked={formik.values.isApplyThroughEmail}
+                        {...formik.getFieldProps("isApplyThroughEmail")}
+                      />
+                    </FormGroup>
                     <input
                       className="add-form-control"
                       placeholder="Your email address"
@@ -991,9 +1041,13 @@ const PostNewJob = () => {
                     item
                     xl={4}
                     lg={4}
+                    sm={4}
                     xs={12}
                     sx={{
                       marginTop: "41px",
+                      "@media (max-width: 480px)": {
+                        marginTop: "0px",
+                      },
                     }}
                   >
                     <input
@@ -1006,9 +1060,13 @@ const PostNewJob = () => {
                     item
                     xl={4}
                     lg={4}
+                    sm={4}
                     xs={12}
                     sx={{
                       marginTop: "41px",
+                      "@media (max-width: 480px)": {
+                        marginTop: "0px",
+                      },
                     }}
                   >
                     <input
@@ -1018,6 +1076,41 @@ const PostNewJob = () => {
                     />
                   </Grid>
                   <Grid item xl={12} lg={12} xs={12}>
+                    <LabeledInput
+                      title="Application Instructions"
+                      className="add-form-control"
+                      placeholder="Write a brief text overview of your application process. You can also include links, emails, etc."
+                      required
+                      {...formik.getFieldProps("applicationInstruction")}
+                    />
+                    {formik.touched.applicationInstruction &&
+                    formik.errors.applicationInstruction ? (
+                      <ErrorMessage>
+                        {formik.errors.applicationInstruction}
+                      </ErrorMessage>
+                    ) : null}
+                  </Grid>
+                  <Grid item xl={12} lg={12} xs={12}>
+                    <FormGroup>
+                      <FormControlLabel
+                        control={<Switch />}
+                        label="Apply through your website"
+                        checked={formik.values.isApplyThroughWebsite}
+                        {...formik.getFieldProps("isApplyThroughWebsite")}
+                      />
+                    </FormGroup>
+                    <LabeledInput
+                      title=""
+                      className="add-form-control"
+                      placeholder="Paste a link to your website’s application form"
+                      required
+                      {...formik.getFieldProps("websiteLink")}
+                    />
+                    {formik.touched.websiteLink && formik.errors.websiteLink ? (
+                      <ErrorMessage>{formik.errors.websiteLink}</ErrorMessage>
+                    ) : null}
+                  </Grid>
+                  <Grid item xl={12} lg={12} xs={12}>
                     <Divider sx={{ borderColor: "#CACACA", opacity: "1" }} />
                   </Grid>
                   <Grid item xl={12} lg={12} xs={12}>
@@ -1025,7 +1118,7 @@ const PostNewJob = () => {
                   </Grid>
                   <Grid item xl={4} lg={4} xs={12}>
                     <label>Education level</label>
-                    <SelectWithSearch
+                    <SelectInput
                       sx={{
                         mt: 1,
                         borderRadius: "10px",
@@ -1077,7 +1170,7 @@ const PostNewJob = () => {
                       {[0, 1, 2].map((i) => {
                         return (
                           <Grid item xl={4} lg={4} xs={12} key={i}>
-                            <SelectWithSearch
+                            <SelectInput
                               sx={{
                                 mt: 1,
                                 borderRadius: "10px",
@@ -1143,7 +1236,7 @@ const PostNewJob = () => {
                   </label>
                   <Grid container spacing={2}>
                     <Grid item xl={4} lg={4} xs={12}>
-                      <SelectWithSearch
+                      <SelectInput
                         sx={{
                           mt: 1,
                           borderRadius: "10px",
@@ -1187,7 +1280,7 @@ const PostNewJob = () => {
                       ) : null}
                     </Grid>
                     <Grid item xl={4} lg={4} xs={12}>
-                      <SelectWithSearch
+                      <SelectInput
                         sx={{
                           mt: 1,
                           borderRadius: "10px",
@@ -1227,7 +1320,7 @@ const PostNewJob = () => {
                       />
                     </Grid>
                     <Grid item xl={4} lg={4} xs={12}>
-                      <SelectWithSearch
+                      <SelectInput
                         sx={{
                           mt: 1,
                           borderRadius: "10px",
@@ -1271,7 +1364,6 @@ const PostNewJob = () => {
                 <Grid item xl={12} lg={12} xs={12}>
                   <Divider sx={{ borderColor: "#CACACA", opacity: "1" }} />
                 </Grid>
-
                 <Grid item xl={12} lg={12} xs={12}>
                   <h2 className="mt-3 mb-3">Attach files</h2>
                   <AttachmentDragNDropInput

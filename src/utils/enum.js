@@ -25,3 +25,7 @@ export const SUBMITTING_STATUS_ENUM = Object.freeze({
   error: "error",
   null: "",
 });
+
+export const REGEX = Object.freeze({
+  email: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+});
