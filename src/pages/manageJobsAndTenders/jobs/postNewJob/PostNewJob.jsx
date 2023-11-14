@@ -5,6 +5,7 @@ import {
   DateInput,
   CheckboxInput,
   LabeledInput,
+  SelectInput,
   AttachmentDragNDropInput,
   ProfilePicInput,
 } from "@components/input";
@@ -39,7 +40,6 @@ import {
 import { Link, useSearchParams } from "react-router-dom";
 import { FilledButton } from "@components/button";
 import { ErrorMessage } from "@components/caption";
-import SelectWithSearch from "@components/input/selectWithsearch";
 import { manageEmployer } from "@api/employers";
 import { useDebounce } from "usehooks-ts";
 import {
@@ -476,7 +476,7 @@ const PostNewJob = () => {
                             Select Company
                             <span className="required-field">*</span>
                           </label>
-                          <SelectWithSearch
+                          <SelectInput
                             className="my-2"
                             sx={{
                               borderRadius: "10px",
@@ -663,7 +663,7 @@ const PostNewJob = () => {
                     </label>
                     <Grid container spacing={2}>
                       <Grid item xl={6} lg={6} xs={12}>
-                        <SelectWithSearch
+                        <SelectInput
                           sx={{
                             mt: 1,
                             borderRadius: "10px",
@@ -714,7 +714,7 @@ const PostNewJob = () => {
                         ) : null}
                       </Grid>
                       <Grid item xl={6} lg={6} xs={12}>
-                        <SelectWithSearch
+                        <SelectInput
                           sx={{
                             mt: 1,
                             borderRadius: "10px",
@@ -816,7 +816,7 @@ const PostNewJob = () => {
                     </label>
                     <Grid container spacing={2}>
                       <Grid item xl={6} lg={6} xs={12}>
-                        <SelectWithSearch
+                        <SelectInput
                           sx={{
                             mt: 1,
                             borderRadius: "10px",
@@ -862,7 +862,7 @@ const PostNewJob = () => {
                         ) : null}
                       </Grid>
                       <Grid item xl={6} lg={6} xs={12}>
-                        <SelectWithSearch
+                        <SelectInput
                           sx={{
                             mt: 1,
                             borderRadius: "10px",
@@ -1118,7 +1118,7 @@ const PostNewJob = () => {
                   </Grid>
                   <Grid item xl={4} lg={4} xs={12}>
                     <label>Education level</label>
-                    <SelectWithSearch
+                    <SelectInput
                       sx={{
                         mt: 1,
                         borderRadius: "10px",
@@ -1170,7 +1170,7 @@ const PostNewJob = () => {
                       {[0, 1, 2].map((i) => {
                         return (
                           <Grid item xl={4} lg={4} xs={12} key={i}>
-                            <SelectWithSearch
+                            <SelectInput
                               sx={{
                                 mt: 1,
                                 borderRadius: "10px",
@@ -1236,7 +1236,7 @@ const PostNewJob = () => {
                   </label>
                   <Grid container spacing={2}>
                     <Grid item xl={4} lg={4} xs={12}>
-                      <SelectWithSearch
+                      <SelectInput
                         sx={{
                           mt: 1,
                           borderRadius: "10px",
@@ -1280,7 +1280,7 @@ const PostNewJob = () => {
                       ) : null}
                     </Grid>
                     <Grid item xl={4} lg={4} xs={12}>
-                      <SelectWithSearch
+                      <SelectInput
                         sx={{
                           mt: 1,
                           borderRadius: "10px",
@@ -1320,7 +1320,7 @@ const PostNewJob = () => {
                       />
                     </Grid>
                     <Grid item xl={4} lg={4} xs={12}>
-                      <SelectWithSearch
+                      <SelectInput
                         sx={{
                           mt: 1,
                           borderRadius: "10px",
