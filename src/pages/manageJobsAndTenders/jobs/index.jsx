@@ -167,7 +167,9 @@ function ManageJobsComponent() {
       const totalCounts = Math.ceil(response.data.count / limit);
       setTotalCount(totalCounts);
     } else {
-      dispatch(setErrorToast("Something went wrong"));
+      dispatch(setLoading(false));
+      // dispatch(setErrorToast("Something went wrong"));
+      console.log({ response });
     }
   }, [country, debouncedSearchJobsValue, pages, limit]);
 

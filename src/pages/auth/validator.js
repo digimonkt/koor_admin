@@ -1,6 +1,10 @@
 import * as Yup from "yup";
+import { REGEX } from "@utils/enum";
+
 export const validateLoginForm = Yup.object({
-  email: Yup.string().email(" Invalid e-mail").required("Email is Required"),
+  email: Yup.string()
+    .matches(REGEX.email, "Invalid e-mail")
+    .required("Email is Required"),
   password: Yup.string().required("Password is Required"),
 });
 

@@ -16,10 +16,11 @@
   background: #eea23d !important;
   border-radius: 73px !important;
   padding: 10px 30px !important;
+  margin-top: 30px !important;
   font-size: 16px !important;
   font-weight: 600 !important;
   color: #121212 !important;
-  font-family: "Bahnschrift" !important;
+  font-family: "Bahnschrift", sans-serif !important;
   letter-spacing: 0.03em !important;
 }
 
@@ -72,7 +73,6 @@
   .login_btn_div {
     margin-top: 25px;
   }
-
 
   .login_btn {
     padding: 8px 40px !important;

@@ -59,14 +59,7 @@ function App() {
             />
           );
         })}
-        <Route
-          path={"/*"}
-          element={
-            <>
-              <Layout />
-            </>
-          }
-        />
+        <Route path={"/*"} element={<Layout />} />
       </Routes>
       <SuccessToast
         open={toastType === MESSAGE_TYPE.success}

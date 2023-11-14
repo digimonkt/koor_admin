@@ -7,24 +7,25 @@ import { SVG } from "@assets/svg";
 
 export const SelectBox = styled(Select)`
   & .MuiSelect-select {
-    background: #ffffff;
-    border-radius: 30px;
+    background: #f0f0f0;
+    border-radius: 10px;
     color: #121212;
-    font-size: 14px;
+    font-size: 16px;
     font-family: "Poppins";
-    font-weight: 400;
+    font-weight: 500;
   }
   & .Mui-disabled {
-    color: #121212;
-    -webkit-text-fill-color: #121212;
+    color: #848484 !important;
+    -webkit-text-fill-color: #848484;
+    font-weight: 300;
   }
 
   & .MuiInputBase-root {
     border-radius: 0px;
     font-family: "Poppins";
     font-style: normal;
-    font-weight: 400;
-    font-size: 12px;
+    font-weight: 300;
+    font-size: 16px;
     line-height: 22px;
 
     letter-spacing: 0.02em;
@@ -34,40 +35,11 @@ export const SelectBox = styled(Select)`
   & fieldset {
     display: none;
   }
+  & .MuiSelect-icon {
+    top: calc(50% - 0.2em);
+    right: 11px;
   }
 `;
-
-/*
- background: #ffffff;
-    border-radius: 100px;
-    padding: 14px 34px 14px 60px;
-    border: 1px solid #cacaca;
-    color: #848484;
-  }
-  & .MuiSelect-select:focus {
-    border-radius: 100px;
-  }
-  & .MuiSelect-icon {
-    right: 15px;
-    color: #848484;
-  }
-  ,
-  &.MuiInputBase-root {
-    border-radius: 100px;
-    font-family: "Poppins";
-    font-style: normal;
-    font-weight: 400;
-    font-size: 16px;
-    line-height: 24px;
-
-    letter-spacing: 0.02em;
-
-    color: #848484;
-  }
-  & fieldset {
-    display: none;
-  }
-*/
 
 function SelectInputComponent({
   title,
@@ -122,9 +94,13 @@ function SelectInputComponent({
             },
           }}
           renderValue={
-            value !== ""
+            value && value.length !== 0
               ? undefined
-              : () => <div className={styles.placeholder}>{placeholder}</div>
+              : () => {
+                  return (
+                    <div className={styles.placeholder}>{placeholder}</div>
+                  );
+                }
           }
           {...rest}
         >
