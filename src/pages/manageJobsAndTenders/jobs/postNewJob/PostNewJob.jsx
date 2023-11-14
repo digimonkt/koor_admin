@@ -12,7 +12,6 @@ import CloseIcon from "@mui/icons-material/Close";
 import CurrencyInput from "./currencyInput";
 import { PAY_PERIOD, SUBMITTING_STATUS_ENUM } from "@utils/enum";
 import { useFormik } from "formik";
-
 import {
   Card,
   CardContent,
@@ -421,7 +420,7 @@ const PostNewJob = () => {
     const newJobId = searchParams.get("jobId");
     if (newJobId && jobId !== newJobId) setJobId(newJobId);
   }, [searchParams.get("jobId")]);
-  console.log("formik", formik.values);
+  console.log(formik.getFieldProps("city"), "city");
   return (
     <div className="job-application">
       <Card
@@ -1365,7 +1364,6 @@ const PostNewJob = () => {
                 <Grid item xl={12} lg={12} xs={12}>
                   <Divider sx={{ borderColor: "#CACACA", opacity: "1" }} />
                 </Grid>
-
                 <Grid item xl={12} lg={12} xs={12}>
                   <h2 className="mt-3 mb-3">Attach files</h2>
                   <AttachmentDragNDropInput

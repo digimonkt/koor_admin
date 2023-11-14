@@ -34,13 +34,13 @@ import { ErrorMessage } from "@components/caption";
 import { useDebounce } from "usehooks-ts";
 import {
   GetSuggestedAddressAPI,
-  // createJobAPI,
+  createTenderAPI,
   // updateEmployerJobAPI,
 } from "@api/jobs";
 import { validateCreateTenderInput } from "@pages/manageJobsAndTenders/validator";
 import dayjs from "dayjs";
 import { DATABASE_DATE_FORMAT } from "@utils/constants/constants";
-// import { setErrorToast, setSuccessToast } from "@redux/slice/toast";
+import { setErrorToast, setSuccessToast } from "@redux/slice/toast";
 
 const PostNewJob = () => {
   const {
@@ -79,7 +79,7 @@ const PostNewJob = () => {
       attachmentsRemove: [],
     },
     validationSchema: validateCreateTenderInput,
-    onSubmit: async (values) => {
+    onSubmit: async (values, { resetForm }) => {
       const payload = {
         title: values.title,
         budget_currency: values.budgetCurrency,
@@ -114,32 +114,13 @@ const PostNewJob = () => {
           newFormData.append(key, payload[key]);
         }
       }
-
-      //   let res;
-      //   if (!jobId) {
-      //     // create
-      //     res = await createJobAPI(newFormData);
-      //     if (res.remote === "success") {
-      //       // dispatch(setJobPostUpdate(true));
-      //       setSubmitting(SUBMITTING_STATUS_ENUM.submitted);
-      //       dispatch(setSuccessToast("Job Post Successfully"));
-      //       resetForm();
-      //     } else {
-      //       dispatch(setErrorToast("Something went wrong"));
-      //       setSubmitting(SUBMITTING_STATUS_ENUM.error);
-      //     }
-      //   } else {
-      //     // update
-      //     res = await updateEmployerJobAPI(jobId, newFormData);
-      //     if (res.remote === "success") {
-      //       // dispatch(setJobPostUpdate(true));
-      //       setSubmitting(SUBMITTING_STATUS_ENUM.updated);
-      //       dispatch(setSuccessToast("Job Updated Successfully"));
-      //     } else {
-      //       setSubmitting(SUBMITTING_STATUS_ENUM.error);
-      //       dispatch(setErrorToast("Something went wrong"));
-      //     }
-      //   }
+      const res = await createTenderAPI(newFormData);
+      if (res.remote === "success") {
+        dispatch(setSuccessToast("Job Post Successfully"));
+        resetForm();
+      } else {
+        dispatch(setErrorToast("Something went wrong"));
+      }
     },
   });
 
@@ -212,10 +193,7 @@ const PostNewJob = () => {
             <h2>
               {tenderId ? "Update tender" : "Post new tender"}
               <span className="right-pull">
-                <IconButton
-                  LinkComponent={Link}
-                  to={"/employer/manage-tenders"}
-                >
+                <IconButton LinkComponent={Link} to={"/manage-tenders"}>
                   <CloseIcon />
                 </IconButton>
               </span>
