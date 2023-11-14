@@ -1,5 +1,6 @@
 import { Autocomplete, Box, TextField } from "@mui/material";
 function SelectWithSearch({ options, title, ...rest }) {
+  console.log({ options, title, ...rest });
   return (
     <Autocomplete
       sx={{
@@ -23,7 +24,7 @@ function SelectWithSearch({ options, title, ...rest }) {
       options={options}
       getOptionLabel={(option) => option.label}
       renderInput={(params) => {
-        return <TextField {...params} label={title} />;
+        return <TextField {...params} placeholder={title} />;
       }}
       renderOption={(props, option) => {
         return (

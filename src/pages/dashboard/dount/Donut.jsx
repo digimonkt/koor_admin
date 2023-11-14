@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import ReactApexChart from "react-apexcharts";
 import { styled } from "@mui/material/styles";
-import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import { FormControl, Grid, MenuItem, Select, Stack } from "@mui/material";
 import styles from "./styles.module.css";
 
@@ -112,7 +112,7 @@ const Donut = ({ title, total, user, series, colors, content }) => {
             value={isSelect}
             onChange={handleChange}
             inputProps={{ "aria-label": "Without label" }}
-            IconComponent={KeyboardArrowUpIcon}
+            IconComponent={KeyboardArrowDownIcon}
             displayEmpty
             sx={{
               "@media (max-width: 992px)": {

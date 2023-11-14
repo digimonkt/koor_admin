@@ -8,7 +8,7 @@ import { deleteNewsLetterApi, getNewsletterApi } from "@api/manageoptions";
 import { transformNewsLetterResponse } from "@api/transform/choices";
 import DialogBox from "@components/dialogBox";
 import { DeleteCard } from "@components/card";
-import { IconButton, Stack } from "@mui/material";
+import { Box, IconButton, Stack } from "@mui/material";
 import { setErrorToast, setSuccessToast } from "@redux/slice/toast";
 
 function ManageNewsLetter() {
@@ -147,12 +147,12 @@ function ManageNewsLetter() {
         }}
         csvProps={{
           title: (
-            <div onClick={() => downloadNewsCSV()}>
+            <Box onClick={() => downloadNewsCSV()} sx={{ display: "flex" }}>
               <span className="d-inline-flex align-items-center me-2">
                 <SVG.ExportIcon />
               </span>
               Export CSV
-            </div>
+            </Box>
           ),
         }}
         limitProps={{

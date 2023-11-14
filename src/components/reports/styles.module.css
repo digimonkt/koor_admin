@@ -1,50 +1,57 @@
 .general {
-    font-family: 'Poppins';
-    font-style: normal;
-    font-weight: 400;
-    font-size: 14px;
-    line-height: 21px;
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 21px;
 
-    color: #121212;
+  color: #121212;
 }
 .commonReport h3 {
-    font-family: 'Poppins';
-    font-style: normal;
-    font-weight: 500;
-    font-size: 18px;
-    line-height: 27px;
-    color: #121212;
-    margin: 0 0px 23px;
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 500;
+  font-size: 18px;
+  line-height: 27px;
+  color: #121212;
+  margin: 0 0px 23px;
 }
 .listall {
-    font-family: 'Poppins';
-    font-style: normal;
-    font-weight: 400;
-    font-size: 16px;
-    line-height: 24px;
+  font-family: "Poppins";
+  font-style: normal;
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 24px;
 
-    color: #121212;
-    opacity: 0.7;
+  color: #121212;
+  opacity: 0.7;
 }
 .cbutton {
-    margin:30px auto auto;
-    max-width: 270px;
+  margin: 30px auto auto;
+  max-width: 273px;
 }
 
-@media screen  and (max-width: 992px) {
-    .listall {
-        font-size: 14px;
-    }
+@media screen and (max-width: 992px) {
+  .listall {
+    font-size: 14px;
+  }
+  .cbutton {
+    margin: 30px auto auto;
+    max-width: 291px;
+  }
+}
 
+@media screen and (max-width: 480px) {
+  .commonReport h3 {
+    font-size: 14px;
+  }
 
-    @media screen and (max-width: 480px) {
-        .commonReport h3 {
-        font-size: 14px;
-        }
+  .cbutton {
+    margin: 30px auto auto;
+    max-width: 261px;
+  }
 
-        .listall {
-            font-size: 12px;
-        }
-    
-    }
+  .listall {
+    font-size: 12px;
+  }
 }

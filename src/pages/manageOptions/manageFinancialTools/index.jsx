@@ -41,10 +41,10 @@ const AntTab = styled((props) => <Tab disableRipple {...props} />)(
     [theme.breakpoints.up("sm")]: {
       minWidth: 0,
     },
-    fontWeight: 600,
     color: "#121212",
     opacity: 0.5,
     fontSize: "18px",
+    fontWeight: "400",
     fontFamily: ["Poppins"].join(","),
     "&:hover": {
       color: "#121212",
@@ -52,7 +52,6 @@ const AntTab = styled((props) => <Tab disableRipple {...props} />)(
     },
     "@media (max-width: 992px)": {
       fontSize: "16px",
-      fontWeight: "400",
     },
     "@media (max-width: 480px)": {
       fontSize: "14px",
@@ -60,6 +59,7 @@ const AntTab = styled((props) => <Tab disableRipple {...props} />)(
     "&.Mui-selected": {
       color: "#121212",
       opacity: 1,
+      fontWeight: "500",
       backgroundColor: "#fff",
     },
     "&.Mui-focusVisible": {
@@ -166,8 +166,8 @@ const FinancialTools = () => {
           sx={{
             "&.MuiCardContent-root": {
               p: {
-                xs: 2,
-                sm: 1,
+                xs: 2.5,
+                sm: 3.75,
                 md: 3.75,
                 lg: 3.75,
                 xl: 3.75,

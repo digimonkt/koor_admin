@@ -5,6 +5,12 @@ import {
   getLanguagesAPI,
   getSkillsAPI,
 } from "@api/jobs";
+import {
+  getTenderCategoryAPI,
+  getTenderOpportunityTypeAPI,
+  getTenderSectorAPI,
+  getTenderTagsAPI,
+} from "@api/tender";
 import { getCityApi, getWorldCityApi } from "@api/manageCountryCity";
 import { getJobSubCategoryApi } from "@api/managejobSubCategory";
 import { manageCategoryApi } from "@api/manageoptions";
@@ -48,7 +54,24 @@ const initialState = {
   employers: {
     loading: false,
     data: [],
-  }
+  },
+  sectors: {
+    loading: false,
+    data: [],
+  },
+
+  tags: {
+    loading: false,
+    data: [],
+  },
+  opportunityTypes: {
+    loading: false,
+    data: [],
+  },
+  tenderCategories: {
+    loading: false,
+    data: [],
+  },
 };
 // counties
 export const getCountries = createAsyncThunk(
@@ -117,6 +140,58 @@ export const getSubCategories = createAsyncThunk(
         categoryId: data.categoryId,
         data: res.data.results,
       };
+    } else {
+      return rejectWithValue(res.error);
+    }
+  }
+);
+
+// Sectors
+export const getTenderSector = createAsyncThunk(
+  "choices/sectors",
+  async (data, { rejectWithValue }) => {
+    const res = await getTenderSectorAPI(data);
+    if (res.remote === "success") {
+      return res.data;
+    } else {
+      return rejectWithValue(res.error);
+    }
+  }
+);
+
+// TenderOrganizationType
+export const getTenderOpportunityType = createAsyncThunk(
+  "choices/opportunityTypes",
+  async (_, { rejectWithValue }) => {
+    const res = await getTenderOpportunityTypeAPI();
+    if (res.remote === "success") {
+      return res.data;
+    } else {
+      return rejectWithValue(res.error);
+    }
+  }
+);
+
+// TenderTags
+export const getTenderTags = createAsyncThunk(
+  "choices/tags",
+  async (_, { rejectWithValue }) => {
+    const res = await getTenderTagsAPI();
+    if (res.remote === "success") {
+      return res.data;
+    } else {
+      return rejectWithValue(res.error);
+    }
+  }
+);
+
+// TenderCategory
+export const getTenderCategories = createAsyncThunk(
+  "choices/tenderCategories",
+  async (_, { rejectWithValue }) => {
+    const res = await getTenderCategoryAPI();
+    if (res.remote === "success") {
+      return res.data;
     } else {
       return rejectWithValue(res.error);
     }
@@ -427,6 +502,81 @@ export const choiceSlice = createSlice({
         loading: false,
       };
     });
+    builder.addCase(getTenderSector.pending, (state) => {
+      state.sectors = {
+        ...state.sectors,
+        loading: true,
+      };
+    });
+    builder.addCase(getTenderSector.fulfilled, (state, action) => {
+      state.sectors = {
+        loading: false,
+        data: action.payload,
+      };
+    });
+    builder.addCase(getTenderSector.rejected, (state) => {
+      state.sectors = {
+        ...state.sectors,
+        loading: false,
+      };
+    });
+    builder.addCase(getTenderOpportunityType.fulfilled, (state, action) => {
+      state.opportunityTypes = {
+        loading: false,
+        data: action.payload,
+      };
+    });
+    builder.addCase(getTenderOpportunityType.pending, (state) => {
+      state.opportunityTypes = {
+        ...state.opportunityTypes,
+        loading: true,
+        data: [],
+      };
+    });
+    builder.addCase(getTenderOpportunityType.rejected, (state) => {
+      state.opportunityTypes = {
+        ...state.opportunityTypes,
+        loading: false,
+      };
+    });
+    builder.addCase(getTenderTags.fulfilled, (state, action) => {
+      state.tags = {
+        loading: false,
+        data: action.payload,
+      };
+    });
+    builder.addCase(getTenderTags.pending, (state) => {
+      state.tags = {
+        ...state.tags,
+        loading: true,
+        data: [],
+      };
+    });
+    builder.addCase(getTenderTags.rejected, (state) => {
+      state.tags = {
+        ...state.tags,
+        loading: false,
+      };
+    });
+    builder.addCase(getTenderCategories.fulfilled, (state, action) => {
+      state.tenderCategories = {
+        loading: false,
+        data: action.payload,
+      };
+    });
+    builder.addCase(getTenderCategories.pending, (state) => {
+      state.tenderCategories = {
+        ...state.tenderCategories,
+        loading: true,
+        data: [],
+      };
+    });
+    builder.addCase(getTenderCategories.rejected, (state) => {
+      state.tenderCategories = {
+        ...state.tenderCategories,
+        loading: false,
+      };
+    });
   },
 });
 // Language
@@ -465,7 +615,8 @@ export const getSkills = createAsyncThunk(
     }
   }
 );
-export const getEmployers = createAsyncThunk("choice/employers",
+export const getEmployers = createAsyncThunk(
+  "choice/employers",
   async (_, { rejectWithValue }) => {
     const res = await manageEmployer();
     if (res.remote === "success") {
@@ -473,7 +624,8 @@ export const getEmployers = createAsyncThunk("choice/employers",
     } else {
       return rejectWithValue(res.error);
     }
-  });
+  }
+);
 export const {
   addCountry,
   addCategories,

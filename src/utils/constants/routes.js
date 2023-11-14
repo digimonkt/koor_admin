@@ -8,6 +8,7 @@ import {
   employerDetails,
 } from "@pages/manageJobsAndTenders";
 import PostNewJob from "@pages/manageJobsAndTenders/jobs/postNewJob/PostNewJob";
+import PostTender from "@pages/manageJobsAndTenders/tenders/postTender/postTender";
 import {
   ManageSkills,
   ManageSettings,
@@ -52,6 +53,11 @@ export const AUTHENTICATED_ROUTE = [
     id: "post-new-job",
     path: "/post-newJob",
     element: PostNewJob,
+  },
+  {
+    id: "manage-tenders",
+    path: "/manage-tenders/post-tender",
+    element: PostTender,
   },
   {
     id: "manage-tenders",

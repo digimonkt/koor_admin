@@ -102,6 +102,7 @@ const PackageManagement = ({ packageList, refreshList }) => {
     formik.setFieldValue("copperCredit", filterPlanDataSet("Copper").credit);
     formik.setFieldValue("copperBenefit", filterPlanDataSet("Copper").benefit);
   }, []);
+  console.log({ packageList });
   return (
     <>
       <div className="form-content">
@@ -159,7 +160,7 @@ const PackageManagement = ({ packageList, refreshList }) => {
                               updatedArray
                             );
                           }}
-                          placeholder={item.placeholder}
+                          placeholder="Add Benefit"
                         />
                       </Stack>
                     </Grid>
@@ -185,7 +186,7 @@ const PackageManagement = ({ packageList, refreshList }) => {
                               updatedArray
                             );
                           }}
-                          placeholder={item.placeholder}
+                          placeholder="Add Benefit"
                         />
                       </Stack>
                     </Grid>
@@ -212,7 +213,7 @@ const PackageManagement = ({ packageList, refreshList }) => {
                               updatedArray
                             );
                           }}
-                          placeholder={item.placeholder}
+                          placeholder="Add Benefit"
                         />
                       </Stack>
                     </Grid>
@@ -238,7 +239,7 @@ const PackageManagement = ({ packageList, refreshList }) => {
                               updatedArray
                             );
                           }}
-                          placeholder={item.placeholder}
+                          placeholder="Add Benefit"
                         />
                       </Stack>
                     </Grid>
@@ -250,7 +251,16 @@ const PackageManagement = ({ packageList, refreshList }) => {
               </div>
             </div>
           ))}
-          <Stack direction="row" justifyContent="center" sx={{ mt: 3.75 }}>
+          <Stack
+            direction="row"
+            sx={{
+              mt: 3.75,
+              justifyContent: "center",
+              "@media (max-width: 480px)": {
+                justifyContent: "start",
+              },
+            }}
+          >
             <div>
               <Cbutton
                 type="button"
@@ -261,11 +271,18 @@ const PackageManagement = ({ packageList, refreshList }) => {
                 hoverborderColor="#b4d2fe"
                 padding="7px 30px"
                 onClick={() => formik.handleSubmit()}
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  "@media (max-width: 480px)": {
+                    fontSize: "14px",
+                  },
+                }}
               >
                 <span className="d-inline-flex me-2">
                   <SVG.PriorityIcon />
                 </span>
-                {submitting}
+                <span>{submitting}</span>
               </Cbutton>
             </div>
           </Stack>

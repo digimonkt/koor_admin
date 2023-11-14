@@ -1,4 +1,4 @@
-import { Stack } from "@mui/material";
+import { Stack, IconButton } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { SVG } from "@assets/svg";
 
@@ -63,8 +63,14 @@ function LabeledInputComponent({
             {...rest}
           />
           {type === "password" ? (
-            <div onClick={handleChangePasswordVisibility}>
-              {!isVisiblePassword ? <SVG.EyeIcon /> : <SVG.EyeOff />}
+            <div className="password_eye">
+              <IconButton
+                sx={{ padding: "0px" }}
+                disableRipple={true}
+                onClick={handleChangePasswordVisibility}
+              >
+                {!isVisiblePassword ? <SVG.EyeIcon /> : <SVG.EyeOff />}
+              </IconButton>
             </div>
           ) : (
             ""
