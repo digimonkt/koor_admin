@@ -1,6 +1,6 @@
 import { SolidButton } from "@components/button";
-import { SearchInput, LabeledInput, SelectInput } from "@components/input";
-import { Box, Stack } from "@mui/material";
+import { SearchInput, LabeledInput } from "@components/input";
+import { Stack } from "@mui/material";
 import SelectDropDown from "@components/financialtools/SelectDropDown";
 
 const OptionsFilter = ({
@@ -14,7 +14,6 @@ const OptionsFilter = ({
   faq,
   news,
   selectPropsCountry,
-  country,
 }) => {
   console.log({
     tender,
@@ -24,7 +23,6 @@ const OptionsFilter = ({
     faq,
     inputPropsRole,
     selectPropsCountry,
-    country,
   });
   return (
     <Stack direction={"row"} alignItems={"center"} spacing={1}>
@@ -50,32 +48,7 @@ const OptionsFilter = ({
             widthInput="100%"
             {...searchProps}
           />
-          <Box className="job_location_box">
-            <SelectInput
-              placeholder="Location"
-              value=""
-              search
-              {...selectPropsCountry}
-              className="loca_job"
-            />
-          </Box>
-          <SolidButton
-            className="csvButton"
-            sx={{
-              fontFamily: "Bahnschrift",
-            }}
-            {...csvProps}
-          />
-          <Box>
-            <SolidButton
-              title={(tender || {}).title}
-              className="resetButton"
-              sx={{
-                fontFamily: "Bahnschrift",
-              }}
-              {...inputProps}
-            />
-          </Box>
+
           <SolidButton
             title={(tenderPost || {}).title}
             className="resetButton"

@@ -13,6 +13,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import CurrencyInput from "./currencyInput";
 import { PAY_PERIOD, SUBMITTING_STATUS_ENUM } from "@utils/enum";
 import { useFormik } from "formik";
+
 import {
   Card,
   CardContent,
@@ -40,6 +41,7 @@ import {
 import { Link, useSearchParams } from "react-router-dom";
 import { FilledButton } from "@components/button";
 import { ErrorMessage } from "@components/caption";
+import SelectWithSearch from "@components/input/selectWithsearch";
 import { manageEmployer } from "@api/employers";
 import { useDebounce } from "usehooks-ts";
 import {
@@ -301,7 +303,7 @@ const PostNewJob = () => {
       formik.setFieldValue("address", data.address);
       formik.setFieldValue("duration", data.duration);
       formik.setFieldValue("experience", data.experience);
-      setSuggestedAddress(data.address);
+      setSuggestedAddressValue(data.address);
       formik.setFieldValue("websiteLink", data.websiteLink);
       formik.setFieldValue("jobCategories", data.jobCategories.id);
       formik.setFieldValue("jobSubCategory", data.jobSubCategory.id);
@@ -420,7 +422,7 @@ const PostNewJob = () => {
     const newJobId = searchParams.get("jobId");
     if (newJobId && jobId !== newJobId) setJobId(newJobId);
   }, [searchParams.get("jobId")]);
-  console.log(formik.getFieldProps("city"), "city");
+  console.log("formik", formik.values);
   return (
     <div className="job-application">
       <Card
@@ -471,13 +473,12 @@ const PostNewJob = () => {
                     </Grid>
                     <Grid item xl={12} lg={12} xs={12}>
                       <Grid container spacing={2}>
-                        <Grid item xl={4} lg={5} xs={12}>
-                          <label>
+                        <Grid item xl={4} lg={4} xs={12}>
+                          <label className="mb-2">
                             Select Company
                             <span className="required-field">*</span>
                           </label>
-                          <SelectInput
-                            className="my-2"
+                          <SelectWithSearch
                             sx={{
                               borderRadius: "10px",
                               background: "#F0F0F0",
@@ -492,7 +493,6 @@ const PostNewJob = () => {
                               "& .MuiOutlinedInput-root": {
                                 fontFamily: "Poppins",
                                 padding: "4px 9px",
-                                fontWeight: "500 !important",
                               },
                               "& .MuiFormLabel-root": {
                                 fontSize: "16px",
@@ -663,9 +663,8 @@ const PostNewJob = () => {
                     </label>
                     <Grid container spacing={2}>
                       <Grid item xl={6} lg={6} xs={12}>
-                        <SelectInput
+                        <SelectWithSearch
                           sx={{
-                            mt: 1,
                             borderRadius: "10px",
                             background: "#F0F0F0",
                             fontFamily: "Poppins",
@@ -744,7 +743,7 @@ const PostNewJob = () => {
                       <input
                         type="text"
                         placeholder="Address"
-                        className="add-form-control mt-2"
+                        className="add-form-control"
                         name={formik.getFieldProps("address").name}
                         onBlur={(e) => formik.getFieldProps("address").onBlur}
                         onChange={(e) =>
@@ -755,7 +754,7 @@ const PostNewJob = () => {
                       {debouncedSearchValue &&
                         suggestedAddressValue !== formik.values.address && (
                           <div className={styles.search_results_box}>
-                            {suggestedAddress.map((address) => {
+                            {suggestedAddress?.map((address) => {
                               return (
                                 <div
                                   key={address.description}
@@ -789,32 +788,6 @@ const PostNewJob = () => {
                     <Grid container spacing={2}>
                       <Grid item xl={6} lg={6} xs={12}>
                         <SelectInput
-                          sx={{
-                            mt: 1,
-                            borderRadius: "10px",
-                            background: "#F0F0F0",
-                            fontFamily: "Poppins",
-
-                            "& fieldset": {
-                              border: "1px solid #cacaca",
-                              borderRadius: "93px",
-                              display: "none",
-                              "&:hover": { borderColor: "#cacaca" },
-                            },
-                            "& .MuiOutlinedInput-root": {
-                              fontFamily: "Poppins",
-                              padding: "4px 9px",
-                            },
-                            "& .MuiFormLabel-root": {
-                              fontSize: "16px",
-                              color: "#848484",
-                              fontFamily: "Poppins !important",
-                              transform: "translate(14px, 12px) scale(1)",
-                            },
-                            "& .MuiInputLabel-shrink": {
-                              transform: "translate(14px, -9px) scale(0.75)",
-                            },
-                          }}
                           defaultValue=""
                           placeholder="Select a Job category"
                           options={categories.data.map((jobCategory) => ({
@@ -835,32 +808,6 @@ const PostNewJob = () => {
                       </Grid>
                       <Grid item xl={6} lg={6} xs={12}>
                         <SelectInput
-                          sx={{
-                            mt: 1,
-                            borderRadius: "10px",
-                            background: "#F0F0F0",
-                            fontFamily: "Poppins",
-
-                            "& fieldset": {
-                              border: "1px solid #cacaca",
-                              borderRadius: "93px",
-                              display: "none",
-                              "&:hover": { borderColor: "#cacaca" },
-                            },
-                            "& .MuiOutlinedInput-root": {
-                              fontFamily: "Poppins",
-                              padding: "4px 9px",
-                            },
-                            "& .MuiFormLabel-root": {
-                              fontSize: "16px",
-                              color: "#848484",
-                              fontFamily: "Poppins !important",
-                              transform: "translate(14px, 12px) scale(1)",
-                            },
-                            "& .MuiInputLabel-shrink": {
-                              transform: "translate(14px, -9px) scale(0.75)",
-                            },
-                          }}
                           defaultValue=""
                           placeholder={
                             formik.values.jobCategories
@@ -1091,32 +1038,6 @@ const PostNewJob = () => {
                   <Grid item xl={4} lg={4} xs={12}>
                     <label>Education level</label>
                     <SelectInput
-                      sx={{
-                        mt: 1,
-                        borderRadius: "10px",
-                        background: "#F0F0F0",
-                        fontFamily: "Poppins",
-
-                        "& fieldset": {
-                          border: "1px solid #cacaca",
-                          borderRadius: "93px",
-                          display: "none",
-                          "&:hover": { borderColor: "#cacaca" },
-                        },
-                        "& .MuiOutlinedInput-root": {
-                          fontFamily: "Poppins",
-                          padding: "4px 9px",
-                        },
-                        "& .MuiFormLabel-root": {
-                          fontSize: "16px",
-                          color: "#848484",
-                          fontFamily: "Poppins !important",
-                          transform: "translate(14px, 12px) scale(1)",
-                        },
-                        "& .MuiInputLabel-shrink": {
-                          transform: "translate(14px, -9px) scale(0.75)",
-                        },
-                      }}
                       defaultValue=""
                       placeholder="Choose an education level"
                       options={educationLevels.data.map((educationLevel) => ({
@@ -1182,32 +1103,6 @@ const PostNewJob = () => {
                   <Grid container spacing={2}>
                     <Grid item xl={4} lg={4} xs={12}>
                       <SelectInput
-                        sx={{
-                          mt: 1,
-                          borderRadius: "10px",
-                          background: "#F0F0F0",
-                          fontFamily: "Poppins",
-
-                          "& fieldset": {
-                            border: "1px solid #cacaca",
-                            borderRadius: "93px",
-                            display: "none",
-                            "&:hover": { borderColor: "#cacaca" },
-                          },
-                          "& .MuiOutlinedInput-root": {
-                            fontFamily: "Poppins",
-                            padding: "4px 9px",
-                          },
-                          "& .MuiFormLabel-root": {
-                            fontSize: "16px",
-                            color: "#848484",
-                            fontFamily: "Poppins !important",
-                            transform: "translate(14px, 12px) scale(1)",
-                          },
-                          "& .MuiInputLabel-shrink": {
-                            transform: "translate(14px, -9px) scale(0.75)",
-                          },
-                        }}
                         className="mb-3"
                         defaultValue=""
                         placeholder="Select a Skill"
@@ -1226,32 +1121,6 @@ const PostNewJob = () => {
                     </Grid>
                     <Grid item xl={4} lg={4} xs={12}>
                       <SelectInput
-                        sx={{
-                          mt: 1,
-                          borderRadius: "10px",
-                          background: "#F0F0F0",
-                          fontFamily: "Poppins",
-
-                          "& fieldset": {
-                            border: "1px solid #cacaca",
-                            borderRadius: "93px",
-                            display: "none",
-                            "&:hover": { borderColor: "#cacaca" },
-                          },
-                          "& .MuiOutlinedInput-root": {
-                            fontFamily: "Poppins",
-                            padding: "4px 9px",
-                          },
-                          "& .MuiFormLabel-root": {
-                            fontSize: "16px",
-                            color: "#848484",
-                            fontFamily: "Poppins !important",
-                            transform: "translate(14px, 12px) scale(1)",
-                          },
-                          "& .MuiInputLabel-shrink": {
-                            transform: "translate(14px, -9px) scale(0.75)",
-                          },
-                        }}
                         defaultValue=""
                         placeholder="Select a Skill"
                         options={skills.data.map((skill) => ({
@@ -1266,32 +1135,6 @@ const PostNewJob = () => {
                     </Grid>
                     <Grid item xl={4} lg={4} xs={12}>
                       <SelectInput
-                        sx={{
-                          mt: 1,
-                          borderRadius: "10px",
-                          background: "#F0F0F0",
-                          fontFamily: "Poppins",
-
-                          "& fieldset": {
-                            border: "1px solid #cacaca",
-                            borderRadius: "93px",
-                            display: "none",
-                            "&:hover": { borderColor: "#cacaca" },
-                          },
-                          "& .MuiOutlinedInput-root": {
-                            fontFamily: "Poppins",
-                            padding: "4px 9px",
-                          },
-                          "& .MuiFormLabel-root": {
-                            fontSize: "16px",
-                            color: "#848484",
-                            fontFamily: "Poppins !important",
-                            transform: "translate(14px, 12px) scale(1)",
-                          },
-                          "& .MuiInputLabel-shrink": {
-                            transform: "translate(14px, -9px) scale(0.75)",
-                          },
-                        }}
                         defaultValue=""
                         placeholder="Select a Skill"
                         options={skills.data.map((skill) => ({
@@ -1309,6 +1152,7 @@ const PostNewJob = () => {
                 <Grid item xl={12} lg={12} xs={12}>
                   <Divider sx={{ borderColor: "#CACACA", opacity: "1" }} />
                 </Grid>
+
                 <Grid item xl={12} lg={12} xs={12}>
                   <h2 className="mt-3 mb-3">Attach files</h2>
                   <AttachmentDragNDropInput
@@ -1353,9 +1197,6 @@ const PostNewJob = () => {
                     }}
                   />
                   <FilledButton
-                    sx={{
-                      marginTop: "20px",
-                    }}
                     disabled={submitting === SUBMITTING_STATUS_ENUM.loading}
                     title={
                       submitting === SUBMITTING_STATUS_ENUM.loading
