@@ -28,6 +28,10 @@ function ManageTendersComponent() {
     navigate("./post-tender");
   };
 
+  const PostNewTender = () => {
+    navigate("./post-tender");
+  };
+
   const columns = useMemo(
     () => [
       {
@@ -179,13 +183,13 @@ function ManageTendersComponent() {
         tenderPost={{
           title: (
             <Box
-              onClick={() => PostNewJob()}
+              onClick={() => PostNewTender()}
               sx={{ display: "flex", alignItems: "center" }}
             >
               <span className="d-inline-flex align-items-center me-2">
                 <SVG.WhiteFile />
               </span>
-              New Job Tender
+              Post New Tender
             </Box>
           ),
         }}
