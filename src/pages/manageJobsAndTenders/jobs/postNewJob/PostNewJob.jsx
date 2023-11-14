@@ -420,7 +420,6 @@ const PostNewJob = () => {
     const newJobId = searchParams.get("jobId");
     if (newJobId && jobId !== newJobId) setJobId(newJobId);
   }, [searchParams.get("jobId")]);
-  console.log(formik.getFieldProps("city"), "city");
   return (
     <div className="job-application">
       <Card
@@ -694,7 +693,7 @@ const PostNewJob = () => {
                             value: country.id,
                             label: country.title,
                           }))}
-                          title={"select the options"}
+                          placeholder={"select the options"}
                           onChange={(_, value) => {
                             if (value) {
                               formik.setFieldValue("country", value);
