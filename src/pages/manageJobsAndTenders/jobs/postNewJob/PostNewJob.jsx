@@ -715,42 +715,14 @@ const PostNewJob = () => {
                       </Grid>
                       <Grid item xl={6} lg={6} xs={12}>
                         <SelectInput
-                          sx={{
-                            mt: 1,
-                            borderRadius: "10px",
-                            background: "#F0F0F0",
-                            fontFamily: "Poppins",
-
-                            "& fieldset": {
-                              border: "1px solid #cacaca",
-                              borderRadius: "93px",
-                              display: "none",
-                              "&:hover": { borderColor: "#cacaca" },
-                            },
-                            "& .MuiOutlinedInput-root": {
-                              fontFamily: "Poppins",
-                              padding: "4px 9px",
-                            },
-                            "& .MuiFormLabel-root": {
-                              fontSize: "16px",
-                              color: "#848484",
-                              fontFamily: "Poppins !important",
-                              transform: "translate(14px, 12px) scale(1)",
-                            },
-                            "& .MuiInputLabel-shrink": {
-                              transform: "translate(14px, -9px) scale(0.75)",
-                            },
-                          }}
-                          title={
+                          placeholder={
                             formik.values.country
                               ? "City"
                               : "Select Country first"
                           }
                           disabled={!formik.values.country}
                           options={(
-                            cities.data[formik.values.country?.value] || [
-                              "Select Country first",
-                            ]
+                            cities.data[formik.values.country?.value] || []
                           ).map((country) => ({
                             value: country.id,
                             label: country.title,
@@ -844,7 +816,7 @@ const PostNewJob = () => {
                             },
                           }}
                           defaultValue=""
-                          title={"Select a Job category"}
+                          placeholder="Select a Job category"
                           options={categories.data.map((jobCategory) => ({
                             value: jobCategory.id,
                             label: jobCategory.title,
@@ -890,7 +862,7 @@ const PostNewJob = () => {
                             },
                           }}
                           defaultValue=""
-                          title={
+                          placeholder={
                             formik.values.jobCategories
                               ? "Job Sub Category"
                               : "Select Category first"
@@ -1146,7 +1118,7 @@ const PostNewJob = () => {
                         },
                       }}
                       defaultValue=""
-                      title="Choose an education level"
+                      placeholder="Choose an education level"
                       options={educationLevels.data.map((educationLevel) => ({
                         value: educationLevel.id,
                         label: educationLevel.title,
@@ -1171,34 +1143,7 @@ const PostNewJob = () => {
                         return (
                           <Grid item xl={4} lg={4} xs={12} key={i}>
                             <SelectInput
-                              sx={{
-                                mt: 1,
-                                borderRadius: "10px",
-                                background: "#F0F0F0",
-                                fontFamily: "Poppins",
-
-                                "& fieldset": {
-                                  border: "1px solid #cacaca",
-                                  borderRadius: "93px",
-                                  display: "none",
-                                  "&:hover": { borderColor: "#cacaca" },
-                                },
-                                "& .MuiOutlinedInput-root": {
-                                  fontFamily: "Poppins",
-                                  padding: "4px 9px",
-                                },
-                                "& .MuiFormLabel-root": {
-                                  fontSize: "16px",
-                                  color: "#848484",
-                                  fontFamily: "Poppins !important",
-                                  transform: "translate(14px, 12px) scale(1)",
-                                },
-                                "& .MuiInputLabel-shrink": {
-                                  transform:
-                                    "translate(14px, -9px) scale(0.75)",
-                                },
-                              }}
-                              title="Select a Language"
+                              placeholder="Select a Language"
                               className="mb-3"
                               options={languages.data.map((language) => ({
                                 value: language.id,
@@ -1265,7 +1210,7 @@ const PostNewJob = () => {
                         }}
                         className="mb-3"
                         defaultValue=""
-                        title="Select a Skill"
+                        placeholder="Select a Skill"
                         options={skills.data.map((skill) => ({
                           value: skill.id,
                           label: skill.title,
@@ -1308,7 +1253,7 @@ const PostNewJob = () => {
                           },
                         }}
                         defaultValue=""
-                        title="Select a Skill"
+                        placeholder="Select a Skill"
                         options={skills.data.map((skill) => ({
                           value: skill.id,
                           label: skill.title,
@@ -1348,7 +1293,7 @@ const PostNewJob = () => {
                           },
                         }}
                         defaultValue=""
-                        title="Select a Skill"
+                        placeholder="Select a Skill"
                         options={skills.data.map((skill) => ({
                           value: skill.id,
                           label: skill.title,

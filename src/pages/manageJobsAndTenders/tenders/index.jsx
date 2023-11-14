@@ -16,6 +16,7 @@ import { useNavigate } from "react-router-dom";
 function ManageTendersComponent() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
   const [totalCount, setTotalCount] = useState(0);
   const [tenderTable, setTenderTable] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -144,6 +145,7 @@ function ManageTendersComponent() {
       dispatch(setLoading(false));
     }
   }, [tenderTable]);
+
   return (
     <>
       <Layout

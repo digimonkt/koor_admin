@@ -66,6 +66,7 @@ function Layout({
       })),
     [dropDownList]
   );
+  console.log(memoizedCountryOptions);
   const memoizedCityOptions = useMemo(
     () =>
       cityValueList.map((city) => ({
@@ -75,12 +76,12 @@ function Layout({
       })),
     [cityValueList]
   );
-
   useEffect(() => {
     if (!countries.data.length) {
       dispatch(getCountries());
     }
   }, []);
+
   useEffect(() => {
     if (dropDownValue) {
       setDropDownList(dropDownValue);
