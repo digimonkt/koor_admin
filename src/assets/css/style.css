@@ -29,11 +29,33 @@
   width: 200px;
 }
 
+.employer_client_input .MuiFormControl-root {
+  width: 100%;
+}
+
+.invoice_date .MuiStack-root > .MuiTextField-root {
+  min-width: 100% !important;
+}
+
+.invoice_date .MuiInputBase-input.MuiOutlinedInput-input {
+  font-size: 16px !important;
+  font-weight: 500 !important;
+  color: #121212 !important;
+  font-family: "Poppins" !important;
+}
+
 .peritemview span {
   font-size: 14px;
   font-weight: 400;
   color: #121212;
   font-family: "Poppins";
+}
+
+.MuiFormLabel-root {
+  font-size: 16px !important;
+  font-weight: 300 !important;
+  color: #121212 !important;
+  font-family: "Poppins" !important;
 }
 
 .lables .MuiList-root.MuiList-padding.css-h4y409-MuiList-root {
@@ -438,12 +460,12 @@ header {
 .showpassword {
   position: relative;
 }
-.showpassword > div > svg {
+.showpassword .password_eye {
   cursor: pointer;
   position: absolute;
   width: 20px;
-  right: 14px;
-  top: 14px;
+  right: 15px;
+  top: 10px;
 }
 
 .spaceor {
@@ -1576,6 +1598,14 @@ body {
     opacity: 1;
   }
 
+  .invoice_date .MuiInputBase-input.MuiOutlinedInput-input {
+    font-size: 14px !important;
+  }
+
+  .MuiFormLabel-root {
+    font-size: 14px !important;
+  }
+
   .job_location_box .loca_job {
     width: 200px;
   }
@@ -1763,6 +1793,10 @@ input.employersearch {
     width: 200px;
   }
 
+  .MuiFormLabel-root {
+    font-size: 12px !important;
+  }
+
   .job_search_box input::placeholder {
     font-size: 14px !important;
     color: #848484;
@@ -1774,5 +1808,9 @@ input.employersearch {
 
   .peritemview span {
     font-size: 12px;
+  }
+
+  .invoice_date .MuiInputBase-input.MuiOutlinedInput-input {
+    font-size: 12px !important;
   }
 }

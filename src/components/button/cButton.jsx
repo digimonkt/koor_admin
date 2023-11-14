@@ -13,7 +13,8 @@ const Cbutton = ({
   padding,
   url,
   bordercolor,
-  onClick
+  onClick,
+  sx,
 }) => {
   return (
     <>
@@ -38,6 +39,7 @@ const Cbutton = ({
             borderColor: hoverborderColor,
             color: hoverColor,
           },
+          ...(sx || {}),
         }}
       >
         {children}

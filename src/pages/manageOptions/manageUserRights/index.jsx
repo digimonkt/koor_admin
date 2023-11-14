@@ -91,13 +91,20 @@ const ManageUserRightsComponent = () => {
                   <OutlinedButton
                     title={
                       <>
-                        <SVG.EditIcon />
+                        <SVG.EditIcon className="me-2" />
                         Edit
                       </>
                     }
                     sx={{
-                      color: "#274593",
-                      borderColor: "#274593",
+                      padding: "8px 30px 10px 20px !important",
+                      fontSize: "16px",
+                      color: "#274593 !important",
+                      borderColor: "#274593 !important",
+                      width: "117px",
+                      height: "44px",
+                      "@media (max-width: 480px)": {
+                        width: "109px",
+                      },
                     }}
                   ></OutlinedButton>
                 </div>

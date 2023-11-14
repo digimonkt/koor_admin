@@ -12,6 +12,7 @@ import {
   Stack,
   IconButton,
   Tooltip,
+  Box,
 } from "@mui/material";
 import SelectDropDown from "./SelectDropDown";
 import { getInvoiceListApi, mailSendInvoiceAPI } from "@api/manageoptions";
@@ -64,7 +65,7 @@ const Invoices = () => {
       },
       {
         field: "invoiceId",
-        headerName: "Invoice-ID",
+        headerName: "Number / ID",
         width: "220",
         sortable: true,
         renderCell: (item) => {
@@ -229,36 +230,40 @@ const Invoices = () => {
   }, [dateTo, dateFrom, employerId, debouncedSearchCountryValue, limit, page]);
   return (
     <>
-      <div className={`${styles.Management}`}>
+      <div className={`${styles.packageManagement}`}>
         <h3>Invoices </h3>
         <Grid container spacing={2.5}>
           <Grid item lg={6} xs={12}>
             <FormLabel>Invoice date from</FormLabel>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DemoContainer components={["DatePicker"]}>
-                <DatePicker
-                  label="Select Date"
-                  value={dayjs(dateFrom)}
-                  onChange={(value) => setDateFrom(value)}
-                />
-              </DemoContainer>
-            </LocalizationProvider>
+            <Box className="invoice_date">
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DemoContainer components={["DatePicker"]}>
+                  <DatePicker
+                    label="Select Date"
+                    value={dayjs(dateFrom)}
+                    onChange={(value) => setDateFrom(value)}
+                  />
+                </DemoContainer>
+              </LocalizationProvider>
+            </Box>
           </Grid>
           <Grid item lg={6} xs={12}>
             <FormLabel>To date</FormLabel>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DemoContainer components={["DatePicker"]}>
-                <DatePicker
-                  label="Select Date"
-                  value={dayjs(dateTo)}
-                  onChange={(value) => setDateTo(value)}
-                />
-              </DemoContainer>
-            </LocalizationProvider>
+            <Box className="invoice_date">
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DemoContainer components={["DatePicker"]}>
+                  <DatePicker
+                    label="Select Date"
+                    value={dayjs(dateTo)}
+                    onChange={(value) => setDateTo(value)}
+                  />
+                </DemoContainer>
+              </LocalizationProvider>
+            </Box>
           </Grid>
 
-          <Grid item lg={4} xs={12}>
-            <StyledFormLabel>Invoice-ID</StyledFormLabel>
+          <Grid item lg={4} sm={4} xs={12}>
+            <StyledFormLabel>Number / ID</StyledFormLabel>
             <input
               type="text"
               className={`${styles.textType}`}
@@ -268,18 +273,21 @@ const Invoices = () => {
               }}
             ></input>
           </Grid>
-          <Grid item lg={5} xs={12}>
-            <StyledFormLabel>Employer </StyledFormLabel>
-            <SelectDropDown
-              padding="11px 15px"
-              content={employerData}
-              setContentId={setEmployerId}
-              onChange={(e) => setEmployerId(e.target.value)}
-              action="isBlank"
-              value={employerId}
-            />
+          <Grid item lg={4} sm={4} xs={12}>
+            <Box className="employer_client_input">
+              <StyledFormLabel>Employer / Client </StyledFormLabel>
+              <SelectDropDown
+                padding="11px 15px"
+                content={employerData}
+                setContentId={setEmployerId}
+                onChange={(e) => setEmployerId(e.target.value)}
+                action="isBlank"
+                value={employerId}
+                sx={{ width: "100%" }}
+              />
+            </Box>
           </Grid>
-          <Grid item lg={3} xs={12}>
+          <Grid item lg={4} sm={4} xs={12}>
             <div style={{ marginTop: "30px" }}>
               <Cbutton
                 type="button"

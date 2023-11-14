@@ -1,4 +1,4 @@
-import { FormLabel, Grid, Stack } from "@mui/material";
+import { FormLabel, Grid, Stack, Box } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import styles from "./styles.module.css";
 import { styled } from "@mui/material/styles";
@@ -89,7 +89,7 @@ const Recharge = () => {
                 sx={{
                   borderRadius: "10px",
                   background: "#F0F0F0",
-                  fontFamily: "Poppins",
+                  fontFamily: "Poppins !important",
 
                   "& fieldset": {
                     border: "1px solid #cacaca",
@@ -98,8 +98,16 @@ const Recharge = () => {
                     "&:hover": { borderColor: "#cacaca" },
                   },
                   "& .MuiOutlinedInput-root": {
-                    fontFamily: "Poppins",
-                    padding: "4px 9px",
+                    color: "#121212",
+                    fontFamily: "Poppins !important",
+                    padding: "4px 9px !important",
+                    fontWeight: "500 !important",
+                    "@media (max-width: 992px)": {
+                      fontSize: "14px !important",
+                    },
+                    "@media (max-width: 480px)": {
+                      fontSize: "12px !important",
+                    },
                   },
                   "& .MuiFormLabel-root": {
                     fontSize: "16px",
@@ -143,6 +151,12 @@ const Recharge = () => {
                 hoverBgColor="#b4d2fe"
                 hoverborderColor="#b4d2fe"
                 padding="7px 30px"
+                sx={{
+                  "@media (max-width: 480px)": {
+                    fontSize: "14px",
+                    padding: "10px 18px",
+                  },
+                }}
                 onClick={handleSubmit}
               >
                 <span className="d-inline-flex me-2">
@@ -153,9 +167,11 @@ const Recharge = () => {
             </div>
           </Stack>
           {userPoints && (
-            <span className="text-center">
-              Currently have <b>{userPoints} credits</b> remaining.
-            </span>
+            <Box className="text-center mt-3">
+              <span>
+                Currently have <b>{userPoints} credits</b> remaining.
+              </span>
+            </Box>
           )}
         </form>
       </div>
