@@ -10,9 +10,20 @@ const OptionsFilter = ({
   tender,
   csvProps,
   inputPropsRole,
+  tenderPost,
   faq,
   news,
+  selectPropsCountry,
 }) => {
+  console.log({
+    tender,
+    news,
+    inputProps,
+    optionsProps,
+    faq,
+    inputPropsRole,
+    selectPropsCountry,
+  });
   return (
     <Stack direction={"row"} alignItems={"center"} spacing={1}>
       {news && tender ? (
@@ -31,11 +42,22 @@ const OptionsFilter = ({
           />
         </>
       ) : tender ? (
-        <SearchInput
-          placeholder="Search skills"
-          widthInput="100%"
-          {...searchProps}
-        />
+        <>
+          <SearchInput
+            placeholder="Search skills"
+            widthInput="100%"
+            {...searchProps}
+          />
+
+          <SolidButton
+            title={(tenderPost || {}).title}
+            className="resetButton"
+            sx={{
+              fontFamily: "Bahnschrift",
+            }}
+            {...tenderPost}
+          />
+        </>
       ) : (
         <>
           <SearchInput
@@ -59,7 +81,6 @@ const OptionsFilter = ({
           ) : (
             ""
           )}
-
           <SolidButton
             sx={{
               background: "#fff",

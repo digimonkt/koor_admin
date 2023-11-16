@@ -48,6 +48,7 @@ function Layout({
   cityValue,
   inputPropsRole,
   tender,
+  tenderPost,
   faq,
   news,
 }) {
@@ -65,6 +66,7 @@ function Layout({
       })),
     [dropDownList]
   );
+  console.log(memoizedCountryOptions);
   const memoizedCityOptions = useMemo(
     () =>
       cityValueList.map((city) => ({
@@ -74,12 +76,12 @@ function Layout({
       })),
     [cityValueList]
   );
-
   useEffect(() => {
     if (!countries.data.length) {
       dispatch(getCountries());
     }
   }, []);
+
   useEffect(() => {
     if (dropDownValue) {
       setDropDownList(dropDownValue);
@@ -116,6 +118,7 @@ function Layout({
             options: memoizedCityOptions,
           }}
           country={country}
+          tenderPost={tenderPost}
           city={city}
           SubCategory={SubCategory}
           tender={tender}
@@ -143,6 +146,7 @@ function Layout({
             getRowId={(rows) => rows.id || Math.random()}
             loader={loading}
             page={page}
+            NoFoundText={{ noRowsLabel: "No Tender found" }}
           />
           {/* <div className="pagination-custom">
             <TablePagination

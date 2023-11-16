@@ -2,7 +2,7 @@ import { FormControl, MenuItem, Select, Stack } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import ReactApexChart from "react-apexcharts";
 import { styled } from "@mui/material/styles";
-import KeyboardArrowUpIcon from "@mui/icons-material/KeyboardArrowUp";
+import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import styles from "../dount/styles.module.css";
 import { getDashboardApi } from "@api/dashboard";
 export const SelectBox = styled(Select)`
@@ -215,7 +215,7 @@ const ColumChart = () => {
               value={isSelect}
               onChange={handleChange}
               inputProps={{ "aria-label": "Without label" }}
-              IconComponent={KeyboardArrowUpIcon}
+              IconComponent={KeyboardArrowDownIcon}
               displayEmpty
               sx={{
                 "@media (max-width: 992px)": {
@@ -238,14 +238,14 @@ const ColumChart = () => {
               className={`${styles.blueView}`}
               style={{ borderColor: "#274593" }}
             ></span>
-            <b>345 </b>employers
+            <b>{isApplication?.employers || 0}</b>employers
           </div>
           <div className={`${styles.views}`}>
             <span
               className={`${styles.blueView}`}
               style={{ borderColor: "#4CAF50" }}
             ></span>
-            <b>{isApplication}</b>jobs
+            <b>{isApplication?.jobs || 0}</b>jobs
           </div>
         </Stack>
         <ReactApexChart

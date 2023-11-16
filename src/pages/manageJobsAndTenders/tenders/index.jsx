@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { SVG } from "@assets/svg";
-import { IconButton } from "@mui/material";
+import { Box, IconButton } from "@mui/material";
 import { Stack } from "@mui/system";
 import Layout from "../../manageOptions/layout";
 import { setLoading } from "@redux/slice/jobsAndTenders";
@@ -11,9 +11,12 @@ import { transformOptionsResponse } from "@api/transform/choices";
 import DialogBox from "@components/dialogBox";
 import { DeleteCard } from "@components/card";
 import { setErrorToast } from "@redux/slice/toast";
+import { useNavigate } from "react-router-dom";
 
 function ManageTendersComponent() {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
+
   const [totalCount, setTotalCount] = useState(0);
   const [tenderTable, setTenderTable] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
@@ -21,6 +24,14 @@ function ManageTendersComponent() {
   const [limit, setLimit] = useState(10);
   const [deleteTender, setDeleteTender] = useState("");
   const debouncedSearchTenderValue = useDebounce(searchTerm, 500);
+
+  const PostNewJob = () => {
+    navigate("./post-tender");
+  };
+
+  const PostNewTender = () => {
+    navigate("./post-tender");
+  };
 
   const columns = useMemo(
     () => [
@@ -134,6 +145,7 @@ function ManageTendersComponent() {
       dispatch(setLoading(false));
     }
   }, [tenderTable]);
+
   return (
     <>
       <Layout
@@ -148,6 +160,19 @@ function ManageTendersComponent() {
           onChange: (e) => setSearchTerm(e.target.value),
           value: searchTerm,
         }}
+        faq={{
+          title: (
+            <Box
+              onClick={() => PostNewJob()}
+              sx={{ display: "flex", alignItems: "center" }}
+            >
+              <span className="d-inline-flex align-items-center me-2">
+                <SVG.WhiteFile />
+              </span>
+              New Job Tender
+            </Box>
+          ),
+        }}
         limitProps={{
           value: limit,
           options: [
@@ -156,6 +181,19 @@ function ManageTendersComponent() {
             { label: 15, value: 15 },
           ],
           onChange: (e) => setLimit(e.target.value),
+        }}
+        tenderPost={{
+          title: (
+            <Box
+              onClick={() => PostNewTender()}
+              sx={{ display: "flex", alignItems: "center" }}
+            >
+              <span className="d-inline-flex align-items-center me-2">
+                <SVG.WhiteFile />
+              </span>
+              Post New Tender
+            </Box>
+          ),
         }}
       />
       {deleteTender && (

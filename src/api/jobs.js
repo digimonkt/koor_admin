@@ -27,6 +27,7 @@ export const manageJobData = async ({
   return response;
 };
 
+// DeleteJob
 export const deleteJob = async (jobId) => {
   const response = await api.request({
     url: urlcat("/v1/admin/jobs/:jobId", { jobId }),
@@ -35,6 +36,7 @@ export const deleteJob = async (jobId) => {
   return response;
 };
 
+// ToggleJobStatus
 export const activeInactiveJob = async (jobId) => {
   const response = await api.request({
     url: urlcat("/v1/admin/jobs/:jobId", { jobId }),
@@ -43,6 +45,7 @@ export const activeInactiveJob = async (jobId) => {
   return response;
 };
 
+// CountriesName
 export const getCountriesName = async ({ search, limit, page }) => {
   const response = await api.request({
     url: urlcat("/v1/admin/country", { search, limit, page }),
@@ -51,6 +54,7 @@ export const getCountriesName = async ({ search, limit, page }) => {
   return response;
 };
 
+// Languages
 export const getLanguagesAPI = async (data) => {
   const response = await api.request({
     url: urlcat("/v1/admin/language", data || {}),
@@ -64,6 +68,8 @@ export const getLanguagesAPI = async (data) => {
   }
   return response;
 };
+
+// EducationLevel
 export const getEducationLevelsAPI = async (data) => {
   const response = await api.request({
     url: urlcat("/v1/admin/education-level", data || {}),
@@ -78,6 +84,7 @@ export const getEducationLevelsAPI = async (data) => {
   return response;
 };
 
+// Skills
 export const getSkillsAPI = async (data) => {
   const response = await api.request({
     url: urlcat("/v1/admin/skills", data || {}),
@@ -92,6 +99,7 @@ export const getSkillsAPI = async (data) => {
   return response;
 };
 
+// GoogleMapAddress
 export const GetSuggestedAddressAPI = async (search) => {
   return await api.request({
     url: urlcat("v1/users/get-location", { search }),
@@ -99,6 +107,7 @@ export const GetSuggestedAddressAPI = async (search) => {
   });
 };
 
+// CreateJob
 export const createJobAPI = async (data) => {
   const res = await api.request({
     url: urlcat("/v1/admin/jobs/create"),
@@ -110,6 +119,8 @@ export const createJobAPI = async (data) => {
   });
   return res;
 };
+
+// UpdateEmployeeJob
 export const updateEmployerJobAPI = async (jobId, data) => {
   const response = await api.request({
     url: urlcat("/v1/admin/jobs/create/:jobId", { jobId }),
@@ -122,6 +133,7 @@ export const updateEmployerJobAPI = async (jobId, data) => {
   return response;
 };
 
+// JobDetails
 export const getJobDetailsByIdAPI = async (data) => {
   const response = await api.request({
     url: urlcat("/v1/jobs/:jobId", data),
@@ -134,4 +146,17 @@ export const getJobDetailsByIdAPI = async (data) => {
     };
   }
   return response;
+};
+
+// CreateTender
+export const createTenderAPI = async (data) => {
+  const res = await api.request({
+    url: urlcat("/v1/admin/tender/create"),
+    method: "POST",
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+    data,
+  });
+  return res;
 };
