@@ -12,6 +12,8 @@ const DashboardComponent = () => {
   const [userList, setUserList] = useState([]);
   const [userData, setUserData] = useState({
     totalUser: 0,
+    activeUsers: 0,
+    totalJobs: 0,
     jobSeekersCount: 0,
     employersCount: 0,
     vendorsCount: 10,
@@ -25,7 +27,7 @@ const DashboardComponent = () => {
       const NewUserList = [
         {
           icon: <SVG.CreditIcon />,
-          title: response.data.active_jobs,
+          title: response.data.active_user,
           subtitle: "active users",
         },
         {
@@ -35,18 +37,20 @@ const DashboardComponent = () => {
         },
         {
           icon: <SVG.WorkIcon />,
-          title: response.data.active_user,
+          title: response.data.active_jobs,
           subtitle: "active posts",
         },
         {
           icon: <SVG.GroupUser />,
-          title: employers,
+          title: response.data.total_jobs,
           subtitle: "jobs posted",
         },
       ];
       setUserList(NewUserList);
       setUserData({
         totalUsers: response.data.total_user,
+        activeUsers: response.data.active_user,
+        totalJobs: response.data.total_jobs,
         vendorsCount: vendors,
         jobSeekersCount: response.data.job_seekers,
         employersCount: employers,

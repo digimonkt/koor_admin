@@ -339,19 +339,19 @@ const PostNewJob = () => {
         "languages",
         data.languages.map && data.languages.length
           ? [
-              ...data.languages.map((language) => ({
-                language: language.language.id,
-              })),
-              {
-                language: "",
-              },
-              {
-                language: "",
-              },
-            ]
-          : [1, 2, 3].map(() => ({
+            ...data.languages.map((language) => ({
+              language: language.language.id,
+            })),
+            {
               language: "",
-            }))
+            },
+            {
+              language: "",
+            },
+          ]
+          : [1, 2, 3].map(() => ({
+            language: "",
+          }))
       );
       formik.setFieldValue("highestEducation", data.highestEducation.id);
       formik.setFieldValue(
@@ -800,7 +800,7 @@ const PostNewJob = () => {
                           onBlur={formik.handleBlur}
                         />
                         {formik.touched.jobCategories &&
-                        formik.errors.jobCategories ? (
+                          formik.errors.jobCategories ? (
                           <ErrorMessage>
                             {formik.errors.jobCategories}
                           </ErrorMessage>
@@ -824,7 +824,7 @@ const PostNewJob = () => {
                           {...formik.getFieldProps("jobSubCategory")}
                         />
                         {formik.touched.jobSubCategory &&
-                        formik.errors.jobSubCategory ? (
+                          formik.errors.jobSubCategory ? (
                           <ErrorMessage>
                             {formik.errors.jobSubCategory}
                           </ErrorMessage>
@@ -952,7 +952,7 @@ const PostNewJob = () => {
                       {...formik.getFieldProps("contactEmail")}
                     />
                     {formik.touched.contactEmail &&
-                    formik.errors.contactEmail ? (
+                      formik.errors.contactEmail ? (
                       <ErrorMessage>{formik.errors.contactEmail}</ErrorMessage>
                     ) : null}
                   </Grid>
@@ -1003,7 +1003,7 @@ const PostNewJob = () => {
                       {...formik.getFieldProps("applicationInstruction")}
                     />
                     {formik.touched.applicationInstruction &&
-                    formik.errors.applicationInstruction ? (
+                      formik.errors.applicationInstruction ? (
                       <ErrorMessage>
                         {formik.errors.applicationInstruction}
                       </ErrorMessage>
@@ -1047,7 +1047,7 @@ const PostNewJob = () => {
                       {...formik.getFieldProps("highestEducation")}
                     />
                     {formik.touched.highestEducation &&
-                    formik.errors.highestEducation ? (
+                      formik.errors.highestEducation ? (
                       <ErrorMessage>
                         {formik.errors.highestEducation}
                       </ErrorMessage>
@@ -1079,7 +1079,7 @@ const PostNewJob = () => {
                             {i === 0 ? (
                               <>
                                 {formik.touched.languages &&
-                                formik.errors.languages ? (
+                                  formik.errors.languages ? (
                                   <ErrorMessage>
                                     {formik.errors.languages}
                                   </ErrorMessage>
@@ -1204,10 +1204,11 @@ const PostNewJob = () => {
                           ? "Updating..."
                           : "Posting..."
                         : jobId
-                        ? "UPDATE THE JOB"
-                        : "POST THE JOB"
+                          ? "UPDATE THE JOB"
+                          : "POST THE JOB"
                     }
                     type="submit"
+                    className="mt-2"
                   />
                 </Grid>
               </form>
