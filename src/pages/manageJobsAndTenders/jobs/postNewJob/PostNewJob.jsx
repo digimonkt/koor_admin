@@ -133,7 +133,7 @@ const PostNewJob = () => {
       city: { label: "", value: "" },
       address: "",
       jobCategories: "",
-      jobSubCategory: "",
+      jobSubCategory: { label: "", value: "" },
       isFullTime: false,
       isPartTime: false,
       hasContract: false,
@@ -312,7 +312,10 @@ const PostNewJob = () => {
       setSuggestedAddressValue(data.address);
       formik.setFieldValue("websiteLink", data.websiteLink);
       formik.setFieldValue("jobCategories", data.jobCategories.id);
-      formik.setFieldValue("jobSubCategory", data.jobSubCategory.id);
+      formik.setFieldValue("jobSubCategory", {
+        value: data.jobSubCategory.id,
+        label: data.jobSubCategory.title,
+      });
       formik.setFieldValue(
         "isApplyThroughEmail",
         Boolean(data.isApplyThroughEmail)
@@ -345,19 +348,19 @@ const PostNewJob = () => {
         "languages",
         data.languages.map && data.languages.length
           ? [
-            ...data.languages.map((language) => ({
-              language: language.language.id,
-            })),
-            {
-              language: "",
-            },
-            {
-              language: "",
-            },
-          ]
+              ...data.languages.map((language) => ({
+                language: language.language.id,
+              })),
+              {
+                language: "",
+              },
+              {
+                language: "",
+              },
+            ]
           : [1, 2, 3].map(() => ({
-            language: "",
-          }))
+              language: "",
+            }))
       );
       formik.setFieldValue("highestEducation", data.highestEducation.id);
       formik.setFieldValue(
@@ -751,7 +754,6 @@ const PostNewJob = () => {
                               : "Select Country first"
                           }
                           disabled={!formik.values.country}
-
                           options={(
                             cities.data[formik.values.country?.value] || [
                               "Select Country first",
@@ -834,14 +836,39 @@ const PostNewJob = () => {
                           onBlur={formik.handleBlur}
                         />
                         {formik.touched.jobCategories &&
-                          formik.errors.jobCategories ? (
+                        formik.errors.jobCategories ? (
                           <ErrorMessage>
                             {formik.errors.jobCategories}
                           </ErrorMessage>
                         ) : null}
                       </Grid>
                       <Grid item xl={6} lg={6} xs={12}>
-                        <SelectInput
+                        <SelectWithSearch
+                          sx={{
+                            borderRadius: "10px",
+                            background: "#F0F0F0",
+                            fontFamily: "Poppins",
+
+                            "& fieldset": {
+                              border: "1px solid #cacaca",
+                              borderRadius: "93px",
+                              display: "none",
+                              "&:hover": { borderColor: "#cacaca" },
+                            },
+                            "& .MuiOutlinedInput-root": {
+                              fontFamily: "Poppins",
+                              padding: "4px 9px",
+                            },
+                            "& .MuiFormLabel-root": {
+                              fontSize: "16px",
+                              color: "#848484",
+                              fontFamily: "Poppins !important",
+                              transform: "translate(14px, 12px) scale(1)",
+                            },
+                            "& .MuiInputLabel-shrink": {
+                              transform: "translate(14px, -9px) scale(0.75)",
+                            },
+                          }}
                           defaultValue=""
                           placeholder={
                             formik.values.jobCategories
@@ -858,7 +885,7 @@ const PostNewJob = () => {
                           {...formik.getFieldProps("jobSubCategory")}
                         />
                         {formik.touched.jobSubCategory &&
-                          formik.errors.jobSubCategory ? (
+                        formik.errors.jobSubCategory ? (
                           <ErrorMessage>
                             {formik.errors.jobSubCategory}
                           </ErrorMessage>
@@ -986,7 +1013,7 @@ const PostNewJob = () => {
                       {...formik.getFieldProps("contactEmail")}
                     />
                     {formik.touched.contactEmail &&
-                      formik.errors.contactEmail ? (
+                    formik.errors.contactEmail ? (
                       <ErrorMessage>{formik.errors.contactEmail}</ErrorMessage>
                     ) : null}
                   </Grid>
@@ -1037,7 +1064,7 @@ const PostNewJob = () => {
                       {...formik.getFieldProps("applicationInstruction")}
                     />
                     {formik.touched.applicationInstruction &&
-                      formik.errors.applicationInstruction ? (
+                    formik.errors.applicationInstruction ? (
                       <ErrorMessage>
                         {formik.errors.applicationInstruction}
                       </ErrorMessage>
@@ -1081,7 +1108,7 @@ const PostNewJob = () => {
                       {...formik.getFieldProps("highestEducation")}
                     />
                     {formik.touched.highestEducation &&
-                      formik.errors.highestEducation ? (
+                    formik.errors.highestEducation ? (
                       <ErrorMessage>
                         {formik.errors.highestEducation}
                       </ErrorMessage>
@@ -1113,7 +1140,7 @@ const PostNewJob = () => {
                             {i === 0 ? (
                               <>
                                 {formik.touched.languages &&
-                                  formik.errors.languages ? (
+                                formik.errors.languages ? (
                                   <ErrorMessage>
                                     {formik.errors.languages}
                                   </ErrorMessage>
@@ -1238,8 +1265,8 @@ const PostNewJob = () => {
                           ? "Updating..."
                           : "Posting..."
                         : jobId
-                          ? "UPDATE THE JOB"
-                          : "POST THE JOB"
+                        ? "UPDATE THE JOB"
+                        : "POST THE JOB"
                     }
                     type="submit"
                     className="mt-2"
