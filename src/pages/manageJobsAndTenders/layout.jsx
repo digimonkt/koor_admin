@@ -1,11 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import DataTable from "@components/dataTable";
 import TableFilter from "@components/tableFilter";
 import { Card, CardContent, Pagination } from "@mui/material";
 import { Stack, styled } from "@mui/system";
-import { getCountries } from "@redux/slice/choices";
-import { useDispatch, useSelector } from "react-redux";
-import { getCountriesName } from "@api/jobs";
+import { useSelector } from "react-redux";
 const TablePagination = styled(Pagination)(() => ({
   " &.MuiPagination-root .MuiPaginationItem-root": {
     minWidth: "36px",
@@ -35,29 +33,14 @@ function Layout({
   totalCount,
   handlePageChange,
   page,
+  dropDownList,
   limitProps,
+  NoFoundText,
   jobPost,
   newJob,
 }) {
-  const dispatch = useDispatch();
   const { loading } = useSelector(({ jobsAndTenders }) => jobsAndTenders);
-  const { countries } = useSelector(({ choice }) => choice);
-  const [countriesData, setCountriesData] = useState(countries.data);
-  const getCountryList = async () => {
-    const limitParam = 500;
-    const response = await getCountriesName({ limit: limitParam });
-    if (response.remote === "success") {
-      setCountriesData(response.data.results);
-    }
-  };
-  useEffect(() => {
-    if (!countries.data.length) {
-      dispatch(getCountries());
-    }
-  }, [dispatch, countries.data.length]);
-  useEffect(() => {
-    getCountryList();
-  }, []);
+
   return (
     <>
       <Stack
@@ -75,7 +58,7 @@ function Layout({
           searchProps={{ ...(searchProps || {}) }}
           selectProps={{
             ...(selectProps || {}),
-            options: (countriesData || []).map((country) => ({
+            options: (dropDownList || []).map((country) => ({
               value: country.id,
               label: country.title,
             })),
@@ -105,6 +88,7 @@ function Layout({
             limitProps={limitProps}
             page={page}
             loader={loading}
+            NoFoundText={NoFoundText}
           />
         </CardContent>
       </Card>

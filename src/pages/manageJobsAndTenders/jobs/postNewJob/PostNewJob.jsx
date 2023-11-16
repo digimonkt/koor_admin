@@ -161,7 +161,6 @@ const PostNewJob = () => {
     },
     validationSchema: validateCreateJobInput,
     onSubmit: async (values, { resetForm }) => {
-      console.log({ values }, "here");
       setSubmitting(SUBMITTING_STATUS_ENUM.loading);
       const payload = {
         company_type: selectedValue,
@@ -245,6 +244,10 @@ const PostNewJob = () => {
           setSubmitting(SUBMITTING_STATUS_ENUM.submitted);
           dispatch(setSuccessToast("Job Post Successfully"));
           resetForm();
+          setSuggestedAddressValue("");
+          setSuggestedAddress([]);
+          setCompanyLogo();
+          setCompanyAttachments("");
         } else {
           dispatch(setErrorToast("Something went wrong"));
           setSubmitting(SUBMITTING_STATUS_ENUM.error);
@@ -274,7 +277,6 @@ const PostNewJob = () => {
   const getJobDetailsById = useCallback(async (jobId) => {
     const response = await getJobDetailsByIdAPI({ jobId });
     if (response.remote === "success") {
-      console.log({ data: response.data });
       const { data } = response;
       if (!data.user?.id) {
         setSelectedValue("new");
@@ -422,7 +424,6 @@ const PostNewJob = () => {
     const newJobId = searchParams.get("jobId");
     if (newJobId && jobId !== newJobId) setJobId(newJobId);
   }, [searchParams.get("jobId")]);
-  console.log("formik", formik.values);
   return (
     <div className="job-application">
       <Card

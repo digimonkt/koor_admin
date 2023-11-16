@@ -13,6 +13,7 @@ import { useDebounce } from "usehooks-ts";
 import { transformCandidatesAPIResponse } from "@api/transform/choices";
 import env from "@utils/validateEnv";
 import { USER_ROLES } from "@utils/enum";
+import { getCountriesName } from "@api/jobs";
 function ManageCandidatesComponent() {
   const dispatch = useDispatch();
   const { countries } = useSelector((state) => state.choice);
@@ -23,6 +24,7 @@ function ManageCandidatesComponent() {
   const [totalCount, setTotalCount] = useState(0);
   const [searchTerm, setSearchTerm] = useState("");
   const [country, setCountry] = useState({});
+  const [countriesData, setCountriesData] = useState(countries.data);
   const debouncedSearchCandidatesValue = useDebounce(searchTerm, 500);
 
   const columns = useMemo(
@@ -166,7 +168,7 @@ function ManageCandidatesComponent() {
 
   const filterJobsCountry = (e) => {
     const countryId = e.target.value;
-    const country = countries.data.find((country) => country.id === countryId);
+    const country = countriesData.find((country) => country.id === countryId);
     setCountry(country);
   };
 
@@ -210,7 +212,13 @@ function ManageCandidatesComponent() {
     setSearchTerm("");
     setCountry({});
   };
-
+  const getCountryList = async () => {
+    const limitParam = 500;
+    const response = await getCountriesName({ limit: limitParam });
+    if (response.remote === "success") {
+      setCountriesData(response.data.results);
+    }
+  };
   const downloadCandidatesCSV = useCallback(async () => {
     const action = "download";
     const response = await manageCandidate({ action });
@@ -233,6 +241,9 @@ function ManageCandidatesComponent() {
   useEffect(() => {
     candidateList();
   }, [candidateList]);
+  useEffect(() => {
+    getCountryList();
+  }, []);
   return (
     <>
       <Layout
@@ -240,7 +251,9 @@ function ManageCandidatesComponent() {
         columns={columns}
         totalCount={totalCount}
         handlePageChange={getPage}
+        NoFoundText={{ noRowsLabel: "No candidate found" }}
         page={pages}
+        dropDownList={countriesData}
         searchProps={{
           placeholder: "Search Candidates",
           onChange: (e) => setSearchTerm(e.target.value),

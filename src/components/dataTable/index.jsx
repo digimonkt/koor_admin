@@ -20,7 +20,7 @@ function DataTable({ rows, columns, limitProps, loader, page, NoFoundText }) {
           loading={loader}
           disableHeight={false}
           disableColumnSelector={false}
-          localeText={NoFoundText ?? { noRowsLabel: "No job found" }}
+          localeText={NoFoundText ?? { noRowsLabel: "No rows found" }}
           getRowClassName={(params) =>
             params.indexRelativeToCurrentPage % 2 === 0 ? "even" : "odd"
           }

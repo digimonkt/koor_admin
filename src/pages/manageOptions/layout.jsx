@@ -3,8 +3,7 @@ import DataTable from "@components/dataTable";
 import OptionsFilter from "@components/optionsFilter";
 import { Card, CardContent, Pagination } from "@mui/material";
 import { Stack, styled } from "@mui/system";
-import { useSelector, useDispatch } from "react-redux";
-import { getCountries } from "@redux/slice/choices";
+import { useSelector } from "react-redux";
 
 const TablePagination = styled(Pagination)(() => ({
   " &.MuiPagination-root .MuiPaginationItem-root": {
@@ -47,16 +46,16 @@ function Layout({
   SubCategory,
   cityValue,
   inputPropsRole,
+  NoFoundText,
   tender,
   tenderPost,
   faq,
+  tenderProps,
   news,
 }) {
   const { loading } = useSelector(({ jobsAndTenders }) => jobsAndTenders);
-  const { countries } = useSelector(({ choice }) => choice);
   const [dropDownList, setDropDownList] = useState([]);
   const [cityValueList, setCityValueList] = useState([]);
-  const dispatch = useDispatch();
   const memoizedCountryOptions = useMemo(
     () =>
       dropDownList.map((country) => ({
@@ -66,7 +65,6 @@ function Layout({
       })),
     [dropDownList]
   );
-  console.log(memoizedCountryOptions);
   const memoizedCityOptions = useMemo(
     () =>
       cityValueList.map((city) => ({
@@ -76,11 +74,6 @@ function Layout({
       })),
     [cityValueList]
   );
-  useEffect(() => {
-    if (!countries.data.length) {
-      dispatch(getCountries());
-    }
-  }, []);
 
   useEffect(() => {
     if (dropDownValue) {
@@ -93,6 +86,7 @@ function Layout({
       setCityValueList(cityValue);
     }
   }, [cityValue]);
+
   return (
     <>
       <Stack
@@ -122,6 +116,7 @@ function Layout({
           city={city}
           SubCategory={SubCategory}
           tender={tender}
+          tenderProps={tenderProps}
         />
       </Stack>
       <Card
@@ -146,7 +141,7 @@ function Layout({
             getRowId={(rows) => rows.id || Math.random()}
             loader={loading}
             page={page}
-            NoFoundText={{ noRowsLabel: "No Tender found" }}
+            NoFoundText={NoFoundText}
           />
           {/* <div className="pagination-custom">
             <TablePagination

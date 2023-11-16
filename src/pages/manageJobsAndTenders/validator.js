@@ -38,7 +38,7 @@ export const validateCreateJobInput = Yup.object().shape({
     }),
   startDate: Yup.string().nullable().required("Start Date is required"),
   contactEmail: Yup.string()
-    .email("Invalid Email")
+    .email("Contact email must be a valid")
     .test(
       "atLeastOneContactMethod",
       "At least one email is required",
@@ -50,8 +50,8 @@ export const validateCreateJobInput = Yup.object().shape({
         return true;
       }
     ),
-  cc1: Yup.string().email("Invalid Email"),
-  cc2: Yup.string().email("Invalid Email"),
+  cc1: Yup.string().email("CC1 email must be a valid"),
+  cc2: Yup.string().email("CC2 email must be a valid"),
   isContactWhatsapp: Yup.boolean(),
   contactWhatsapp: Yup.string().test(
     "ifPresent",
@@ -66,22 +66,12 @@ export const validateCreateJobInput = Yup.object().shape({
     }
   ),
   highestEducation: Yup.string(),
-  languages: Yup.array()
-    .of(
-      Yup.object().shape({
-        id: Yup.string(),
-      })
-    )
-    .test("atLeastOneLanguage", "At Least one Language required", (value) => {
-      let isPresent = false;
-      value.forEach((val) => {
-        if (val.language) {
-          isPresent = true;
-        }
-      });
-      return isPresent;
-    }),
-  skills: Yup.array().of(Yup.string()).min(1, "At Least one Skill is required"),
+  languages: Yup.array().of(
+    Yup.object().shape({
+      id: Yup.string(),
+    })
+  ),
+  skills: Yup.array().of(Yup.string()),
 });
 
 export const validateCreateTenderInput = Yup.object().shape({
@@ -106,7 +96,7 @@ export const validateCreateTenderInput = Yup.object().shape({
   startDate: Yup.string().test(
     "isFuture",
     "Date Must be of Future",
-    (value, context) => {
+    (value) => {
       if (!value) {
         return true;
       }
