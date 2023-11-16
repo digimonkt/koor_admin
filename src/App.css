@@ -361,6 +361,10 @@ input::-webkit-inner-spin-button {
     display: contents;
   }
 
+  input::placeholder {
+    font-size: 14px;
+  }
+
   .report h2 {
     font-size: 24px;
   }
@@ -373,6 +377,10 @@ input::-webkit-inner-spin-button {
 @media screen and (max-width: 480px) {
   .pagination-custom {
     margin-top: 20px;
+  }
+
+  input::placeholder {
+    font-size: 12px;
   }
 
   .pagination-custom
