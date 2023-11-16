@@ -130,7 +130,7 @@ const PostNewJob = () => {
       budgetPayPeriod: PAY_PERIOD.month,
       description: "",
       country: { label: "", value: "" },
-      city: "",
+      city: { label: "", value: "" },
       address: "",
       jobCategories: "",
       jobSubCategory: "",
@@ -299,7 +299,11 @@ const PostNewJob = () => {
         value: data.country.id,
         label: data.country.title,
       });
-      formik.setFieldValue("city", data.city.id);
+      // formik.setFieldValue("city", data.city.id);
+      formik.setFieldValue("city", {
+        value: data.city.id,
+        label: data.city.title,
+      });
       formik.setFieldValue("address", data.address);
       formik.setFieldValue("duration", data.duration);
       formik.setFieldValue("experience", data.experience);
@@ -713,20 +717,49 @@ const PostNewJob = () => {
                         ) : null}
                       </Grid>
                       <Grid item xl={6} lg={6} xs={12}>
-                        <SelectInput
-                          placeholder={
+                        <SelectWithSearch
+                          sx={{
+                            mt: 1,
+                            borderRadius: "10px",
+                            background: "#F0F0F0",
+                            fontFamily: "Poppins",
+
+                            "& fieldset": {
+                              border: "1px solid #cacaca",
+                              borderRadius: "93px",
+                              display: "none",
+                              "&:hover": { borderColor: "#cacaca" },
+                            },
+                            "& .MuiOutlinedInput-root": {
+                              fontFamily: "Poppins",
+                              padding: "4px 9px",
+                            },
+                            "& .MuiFormLabel-root": {
+                              fontSize: "16px",
+                              color: "#848484",
+                              fontFamily: "Poppins !important",
+                              transform: "translate(14px, 12px) scale(1)",
+                            },
+                            "& .MuiInputLabel-shrink": {
+                              transform: "translate(14px, -9px) scale(0.75)",
+                            },
+                          }}
+                          title={
                             formik.values.country
                               ? "City"
                               : "Select Country first"
                           }
                           disabled={!formik.values.country}
+
                           options={(
-                            cities.data[formik.values.country?.value] || []
+                            cities.data[formik.values.country?.value] || [
+                              "Select Country first",
+                            ]
                           ).map((country) => ({
                             value: country.id,
                             label: country.title,
                           }))}
-                          {...formik.getFieldProps("city")}
+                          value={formik.values.city || "HI"}
                         />
                         {formik.touched.city && formik.errors.city ? (
                           <ErrorMessage>{formik.errors.city}</ErrorMessage>
