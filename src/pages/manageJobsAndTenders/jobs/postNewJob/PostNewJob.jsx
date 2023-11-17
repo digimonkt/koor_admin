@@ -301,7 +301,6 @@ const PostNewJob = () => {
         value: data.country.id,
         label: data.country.title,
       });
-      // formik.setFieldValue("city", data.city.id);
       formik.setFieldValue("city", {
         value: data.city.id,
         label: data.city.title,
@@ -429,14 +428,16 @@ const PostNewJob = () => {
       formik.values.jobCategories &&
       !subCategories.data[formik.values.jobCategories]?.length
     ) {
-      dispatch(getSubCategories({ categoryId: formik.values.jobCategories }));
+      dispatch(
+        getSubCategories({ categoryId: formik.values.jobCategories.value })
+      );
     }
   }, [formik.values.jobCategories]);
   useEffect(() => {
     const newJobId = searchParams.get("jobId");
     if (newJobId && jobId !== newJobId) setJobId(newJobId);
   }, [searchParams.get("jobId")]);
-
+  console.log({ subCategories });
   return (
     <div className="job-application">
       <Card
@@ -729,9 +730,23 @@ const PostNewJob = () => {
                         ) : null}
                       </Grid>
                       <Grid item xl={6} lg={6} xs={12}>
+                        {/* <SelectInput
+                          placeholder={
+                            formik.values.country
+                              ? "City"
+                              : "Select Country first"
+                          }
+                          disabled={!formik.values.country}
+                          options={(
+                            cities.data[formik.values.country?.value] || []
+                          ).map((country) => ({
+                            value: country.id,
+                            label: country.title,
+                          }))}
+                          {...formik.getFieldProps("city")}
+                        /> */}
                         <SelectWithSearch
                           sx={{
-                            mt: 1,
                             borderRadius: "10px",
                             background: "#F0F0F0",
                             fontFamily: "Poppins",
@@ -756,24 +771,20 @@ const PostNewJob = () => {
                               transform: "translate(14px, -9px) scale(0.75)",
                             },
                           }}
-                          title={
-                            formik.values.country
-                              ? "City"
-                              : "Select Country first"
-                          }
-                          disabled={!formik.values.country}
                           options={(
-                            cities.data[formik.values.country?.value] || [
-                              "Select Country first",
-                            ]
+                            cities.data[formik.values.country.value] || []
                           ).map((city) => ({
                             value: city.id,
                             label: city.title,
                           }))}
+                          title={
+                            formik.values.city ? "city" : "Select country first"
+                          }
                           onChange={(_, value) => {
                             if (value) {
                               formik.setFieldValue("city", value);
                             } else {
+                              // setSearchCountry("");
                               formik.setFieldValue("city", {
                                 value: "",
                                 label: "",
@@ -781,6 +792,7 @@ const PostNewJob = () => {
                             }
                           }}
                           value={formik.values.city}
+                          // onKeyUp={(e) => setSearchCountry(e.target.value)}
                         />
                         {formik.touched.city && formik.errors.city ? (
                           <ErrorMessage>
@@ -843,33 +855,7 @@ const PostNewJob = () => {
                     </label>
                     <Grid container spacing={2}>
                       <Grid item xl={6} lg={6} xs={12}>
-                        <SelectWithSearch
-                          sx={{
-                            mt: 1,
-                            borderRadius: "10px",
-                            background: "#F0F0F0",
-                            fontFamily: "Poppins",
-
-                            "& fieldset": {
-                              border: "1px solid #cacaca",
-                              borderRadius: "93px",
-                              display: "none",
-                              "&:hover": { borderColor: "#cacaca" },
-                            },
-                            "& .MuiOutlinedInput-root": {
-                              fontFamily: "Poppins",
-                              padding: "4px 9px",
-                            },
-                            "& .MuiFormLabel-root": {
-                              fontSize: "16px",
-                              color: "#848484",
-                              fontFamily: "Poppins !important",
-                              transform: "translate(14px, 12px) scale(1)",
-                            },
-                            "& .MuiInputLabel-shrink": {
-                              transform: "translate(14px, -9px) scale(0.75)",
-                            },
-                          }}
+                        {/* <SelectInput
                           defaultValue=""
                           title="Select a Job category"
                           options={categories.data.map((jobCategory) => ({
@@ -889,18 +875,9 @@ const PostNewJob = () => {
                           }}
                           value={formik.values.jobCategories}
                           onBlur={formik.handleBlur}
-                        />
-                        {formik.touched.jobCategories &&
-                        formik.errors.jobCategories ? (
-                          <ErrorMessage>
-                            {formik.errors.jobCategories.value}
-                          </ErrorMessage>
-                        ) : null}
-                      </Grid>
-                      <Grid item xl={6} lg={6} xs={12}>
+                        /> */}
                         <SelectWithSearch
                           sx={{
-                            mt: 1,
                             borderRadius: "10px",
                             background: "#F0F0F0",
                             fontFamily: "Poppins",
@@ -925,6 +902,34 @@ const PostNewJob = () => {
                               transform: "translate(14px, -9px) scale(0.75)",
                             },
                           }}
+                          options={categories.data.map((jobCategory) => ({
+                            value: jobCategory.id,
+                            label: jobCategory.title,
+                          }))}
+                          title={"select the options"}
+                          onChange={(_, value) => {
+                            if (value) {
+                              formik.setFieldValue("jobCategories", value);
+                            } else {
+                              // setSearchCountry("");
+                              formik.setFieldValue("jobCategories", {
+                                value: "",
+                                label: "",
+                              });
+                            }
+                          }}
+                          value={formik.values.jobCategories}
+                          // onKeyUp={(e) => setSearchCountry(e.target.value)}
+                        />
+                        {formik.touched.jobCategories &&
+                        formik.errors.jobCategories ? (
+                          <ErrorMessage>
+                            {formik.errors.jobCategories.value}
+                          </ErrorMessage>
+                        ) : null}
+                      </Grid>
+                      <Grid item xl={6} lg={6} xs={12}>
+                        {/* <SelectInput
                           defaultValue=""
                           title={
                             formik.values.jobCategories
@@ -939,11 +944,52 @@ const PostNewJob = () => {
                             value: subCategory.id,
                             label: subCategory.title,
                           }))}
-                          disabled={!formik.values.jobCategories.value}
+                          {...formik.getFieldProps("jobSubCategory")}
+                        /> */}
+                        <SelectWithSearch
+                          sx={{
+                            borderRadius: "10px",
+                            background: "#F0F0F0",
+                            fontFamily: "Poppins",
+
+                            "& fieldset": {
+                              border: "1px solid #cacaca",
+                              borderRadius: "93px",
+                              display: "none",
+                              "&:hover": { borderColor: "#cacaca" },
+                            },
+                            "& .MuiOutlinedInput-root": {
+                              fontFamily: "Poppins",
+                              padding: "4px 9px",
+                            },
+                            "& .MuiFormLabel-root": {
+                              fontSize: "16px",
+                              color: "#848484",
+                              fontFamily: "Poppins !important",
+                              transform: "translate(14px, 12px) scale(1)",
+                            },
+                            "& .MuiInputLabel-shrink": {
+                              transform: "translate(14px, -9px) scale(0.75)",
+                            },
+                          }}
+                          options={(
+                            subCategories.data[
+                              formik.values.jobCategories.value
+                            ] || []
+                          ).map((jobSubCategory) => ({
+                            value: jobSubCategory.id,
+                            label: jobSubCategory.title,
+                          }))}
+                          title={
+                            formik.values.jobCategories
+                              ? "Job Sub Category"
+                              : "Select Category first"
+                          }
                           onChange={(_, value) => {
                             if (value) {
                               formik.setFieldValue("jobSubCategory", value);
                             } else {
+                              // setSearchCountry("");
                               formik.setFieldValue("jobSubCategory", {
                                 value: "",
                                 label: "",
@@ -951,6 +997,7 @@ const PostNewJob = () => {
                             }
                           }}
                           value={formik.values.jobSubCategory}
+                          // onKeyUp={(e) => setSearchCountry(e.target.value)}
                         />
                         {formik.touched.jobSubCategory &&
                         formik.errors.jobSubCategory ? (

@@ -10,10 +10,11 @@ import { manageTenderApi } from "@api/manageoptions";
 import { transformOptionsResponse } from "@api/transform/choices";
 import DialogBox from "@components/dialogBox";
 import { DeleteCard } from "@components/card";
-import { setErrorToast } from "@redux/slice/toast";
+import { setErrorToast, setSuccessToast } from "@redux/slice/toast";
 import { useNavigate } from "react-router-dom";
 import { RestartAlt } from "@mui/icons-material";
 import { getCountriesName } from "@api/jobs";
+import { deleteTenderAPI } from "@api/tender";
 
 function ManageTendersComponent() {
   const dispatch = useDispatch();
@@ -119,6 +120,20 @@ function ManageTendersComponent() {
     ],
     []
   );
+  const handleDelete = useCallback(async () => {
+    const response = await deleteTenderAPI(deleteTender);
+    if (response.remote === "success") {
+      const newTenderTable = tenderTable.filter(
+        (tender) => tender.id !== deleteTender
+      );
+      setTenderTable(newTenderTable);
+      setDeleteTender("");
+      dispatch(setSuccessToast("Tender Delete SuccessFully"));
+    } else {
+      setDeleteTender("");
+      dispatch(setErrorToast("Something went wrong"));
+    }
+  }, [tenderTable, dispatch, deleteTender]);
   const tenderList = useCallback(async () => {
     dispatch(setLoading(true));
     const page = pages;
@@ -282,6 +297,7 @@ function ManageTendersComponent() {
             title="Delete Tender"
             content="Are you sure you want to delete Tender?"
             handleCancel={() => setDeleteTender("")}
+            handleDelete={handleDelete}
           />
         </DialogBox>
       )}

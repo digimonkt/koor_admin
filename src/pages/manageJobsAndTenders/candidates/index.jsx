@@ -158,6 +158,7 @@ function ManageCandidatesComponent() {
       const totalCounts = Math.ceil(response.data.count / limit);
       setTotalCount(totalCounts);
     } else {
+      dispatch(setLoading(false));
       console.log(response.error);
     }
   }, [country, debouncedSearchCandidatesValue, pages, limit]);

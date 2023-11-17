@@ -14,22 +14,8 @@ export const validateCreateJobInput = Yup.object().shape({
     value: Yup.string().required("Country is required"),
   }),
   address: Yup.string().required("Address is required"),
-  city: Yup.object().shape({
-    label: Yup.string().required("Country is required"),
-    value: Yup.string().required("Country is required"),
-  }),
-  jobCategories: Yup.object().shape({
-    label: Yup.string().required("Country is required"),
-    value: Yup.string().required("Country is required"),
-  }),
-  jobSubCategory: Yup.object().shape({
-    label: Yup.string().required("Country is required"),
-    value: Yup.string().required("Country is required"),
-  }),
-  highestEducation: Yup.object().shape({
-    label: Yup.string().required("Country is required"),
-    value: Yup.string().required("Country is required"),
-  }),
+  jobCategories: Yup.object().required("Job Category is required"),
+  jobSubCategory: Yup.object().required("Job Sub Category is required"),
   isFullTime: Yup.boolean(),
   isPartTime: Yup.boolean(),
   hasContract: Yup.boolean(),
@@ -92,17 +78,18 @@ export const validateCreateJobInput = Yup.object().shape({
 
 export const validateCreateTenderInput = Yup.object().shape({
   title: Yup.string().required("Title is required"),
-  opportunityType: Yup.string().required("Type is required"),
+  opportunityType: Yup.object().required("Type is required"),
   budgetCurrency: Yup.string(),
   budgetAmount: Yup.number(),
   budgetPayPeriod: Yup.string(),
   description: Yup.string().required("Description is required"),
-  country: Yup.string().required("Country is required"),
+  country: Yup.object().required("Country is required"),
+  city: Yup.object().required("City is required"),
   categories: Yup.array()
     .of(Yup.string())
     .min(1, "At Least one category is required"),
-  sectors: Yup.string().required(" Sector is required"),
-  tag: Yup.string().required(" Tag is required"),
+  sectors: Yup.object().required(" Sector is required"),
+  tag: Yup.object().required(" Tag is required"),
   address: Yup.string().required("Address is required"),
   deadline: Yup.string()
     .required("Deadline is required")

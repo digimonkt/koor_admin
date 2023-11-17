@@ -46,14 +46,17 @@ const OptionsFilter = ({
           />
         </>
       ) : tender ? (
-        <>
-          <Box className="job_search_box">
-            <SearchInput
-              placeholder="Search skills"
-              widthInput="100%"
-              {...searchProps}
-            />
-          </Box>
+        <Stack
+          direction={"row"}
+          sx={{ flexWrap: "wrap", gap: 2 }}
+          alignItems={"center"}
+          spacing={1}
+        >
+          <SearchInput
+            placeholder="Search tender"
+            widthInput="100%"
+            {...searchProps}
+          />
           <Box className="job_location_box">
             <SelectInput
               placeholder="Location"
@@ -63,36 +66,30 @@ const OptionsFilter = ({
               className="loca_job"
             />
           </Box>
-          <Box>
-            <SolidButton
-              className="csvButton"
-              sx={{
-                fontFamily: "Bahnschrift",
-              }}
-              {...csvProps}
-            />
-          </Box>
-          <Box>
-            <SolidButton
-              title={(tenderProps || {}).title}
-              className="resetButton"
-              sx={{
-                fontFamily: "Bahnschrift",
-              }}
-              {...tenderProps}
-            />
-          </Box>
-          <Box>
-            <SolidButton
-              title={(tenderPost || {}).title}
-              className="resetButton"
-              sx={{
-                fontFamily: "Bahnschrift",
-              }}
-              {...tenderPost}
-            />
-          </Box>
-        </>
+          <SolidButton
+            className="csvButton"
+            sx={{
+              fontFamily: "Bahnschrift",
+            }}
+            {...csvProps}
+          />
+          <SolidButton
+            title={(tenderProps || {}).title}
+            className="resetButton"
+            sx={{
+              fontFamily: "Bahnschrift",
+            }}
+            {...tenderProps}
+          />
+          <SolidButton
+            title={(tenderPost || {}).title}
+            className="resetButton"
+            sx={{
+              fontFamily: "Bahnschrift",
+            }}
+            {...tenderPost}
+          />
+        </Stack>
       ) : (
         <>
           <SearchInput
