@@ -9,11 +9,27 @@ export const validateCreateJobInput = Yup.object().shape({
   budgetAmount: Yup.number().required("Amount is required"),
   budgetPayPeriod: Yup.string().required("Pay period is required"),
   description: Yup.string().required("Description is required"),
-  country: Yup.object().required("Country is required"),
-  // city: Yup.string().required("City is required"),
+  country: Yup.object().shape({
+    label: Yup.string().required("Country is required"),
+    value: Yup.string().required("Country is required"),
+  }),
   address: Yup.string().required("Address is required"),
-  jobCategories: Yup.string().required("Job Category is required"),
-  jobSubCategory: Yup.string().required("Job Sub Category is required"),
+  city: Yup.object().shape({
+    label: Yup.string().required("Country is required"),
+    value: Yup.string().required("Country is required"),
+  }),
+  jobCategories: Yup.object().shape({
+    label: Yup.string().required("Country is required"),
+    value: Yup.string().required("Country is required"),
+  }),
+  jobSubCategory: Yup.object().shape({
+    label: Yup.string().required("Country is required"),
+    value: Yup.string().required("Country is required"),
+  }),
+  highestEducation: Yup.object().shape({
+    label: Yup.string().required("Country is required"),
+    value: Yup.string().required("Country is required"),
+  }),
   isFullTime: Yup.boolean(),
   isPartTime: Yup.boolean(),
   hasContract: Yup.boolean(),
@@ -65,7 +81,7 @@ export const validateCreateJobInput = Yup.object().shape({
       }
     }
   ),
-  highestEducation: Yup.string(),
+
   languages: Yup.array().of(
     Yup.object().shape({
       id: Yup.string(),

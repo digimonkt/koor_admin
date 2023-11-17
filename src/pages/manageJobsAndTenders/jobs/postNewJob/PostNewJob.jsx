@@ -132,7 +132,7 @@ const PostNewJob = () => {
       country: { label: "", value: "" },
       city: { label: "", value: "" },
       address: "",
-      jobCategories: "",
+      jobCategories: { label: "", value: "" },
       jobSubCategory: { label: "", value: "" },
       isFullTime: false,
       isPartTime: false,
@@ -153,7 +153,7 @@ const PostNewJob = () => {
       countryCodeContactWhatsapp: "",
       websiteLink: "",
       contactWhatsapp: "",
-      highestEducation: "",
+      highestEducation: { label: "", value: "" },
       languages: [{ language: "" }, { language: "" }, { language: "" }],
       skills: [],
       attachments: [],
@@ -173,10 +173,10 @@ const PostNewJob = () => {
         budget_pay_period: values.budgetPayPeriod,
         description: values.description,
         country: values.country.value,
-        city: values.city,
+        city: values.city.value,
         address: values.address,
-        job_category: values.jobCategories,
-        job_sub_category: values.jobSubCategory,
+        job_category: values.jobCategories.value,
+        job_sub_category: values.jobSubCategory.value,
         is_full_time: values.isFullTime,
         is_part_time: values.isPartTime,
         has_contract: values.hasContract,
@@ -194,7 +194,7 @@ const PostNewJob = () => {
         apply_through_email: values.isApplyThroughEmail || "false",
         apply_through_website: values.isApplyThroughWebsite || "false",
         website_link: values.websiteLink,
-        highest_education: values.highestEducation || "",
+        highest_education: values.highestEducation.value || "",
         language: values.languages,
         skill: values.skills,
         application_instruction: values.applicationInstruction,
@@ -311,7 +311,10 @@ const PostNewJob = () => {
       formik.setFieldValue("experience", data.experience);
       setSuggestedAddressValue(data.address);
       formik.setFieldValue("websiteLink", data.websiteLink);
-      formik.setFieldValue("jobCategories", data.jobCategories.id);
+      formik.setFieldValue("jobCategories", {
+        value: data.jobCategories.id,
+        label: data.jobCategories.title,
+      });
       formik.setFieldValue("jobSubCategory", {
         value: data.jobSubCategory.id,
         label: data.jobSubCategory.title,
@@ -339,7 +342,6 @@ const PostNewJob = () => {
         "applicationInstruction",
         data.applicationInstruction
       );
-      formik.setFieldValue("highestEducation", data.highestEducation.id || "");
       formik.setFieldValue(
         "isApplyThroughWebsite",
         Boolean(data.isApplyThroughWebsite)
@@ -362,7 +364,10 @@ const PostNewJob = () => {
               language: "",
             }))
       );
-      formik.setFieldValue("highestEducation", data.highestEducation.id);
+      formik.setFieldValue("highestEducation", {
+        value: data.highestEducation.id,
+        label: data.highestEducation.title,
+      });
       formik.setFieldValue(
         "skills",
         data.skills.map ? data.skills.map((skill) => skill.id) : []
@@ -431,6 +436,7 @@ const PostNewJob = () => {
     const newJobId = searchParams.get("jobId");
     if (newJobId && jobId !== newJobId) setJobId(newJobId);
   }, [searchParams.get("jobId")]);
+
   return (
     <div className="job-application">
       <Card
@@ -717,7 +723,9 @@ const PostNewJob = () => {
                           onKeyUp={(e) => setSearchCountry(e.target.value)}
                         />
                         {formik.touched.country && formik.errors.country ? (
-                          <ErrorMessage>{formik.errors.country}</ErrorMessage>
+                          <ErrorMessage>
+                            {formik.errors.country.value}
+                          </ErrorMessage>
                         ) : null}
                       </Grid>
                       <Grid item xl={6} lg={6} xs={12}>
@@ -758,14 +766,26 @@ const PostNewJob = () => {
                             cities.data[formik.values.country?.value] || [
                               "Select Country first",
                             ]
-                          ).map((country) => ({
-                            value: country.id,
-                            label: country.title,
+                          ).map((city) => ({
+                            value: city.id,
+                            label: city.title,
                           }))}
-                          value={formik.values.city || "HI"}
+                          onChange={(_, value) => {
+                            if (value) {
+                              formik.setFieldValue("city", value);
+                            } else {
+                              formik.setFieldValue("city", {
+                                value: "",
+                                label: "",
+                              });
+                            }
+                          }}
+                          value={formik.values.city}
                         />
                         {formik.touched.city && formik.errors.city ? (
-                          <ErrorMessage>{formik.errors.city}</ErrorMessage>
+                          <ErrorMessage>
+                            {formik.errors.city.value}
+                          </ErrorMessage>
                         ) : null}
                       </Grid>
                     </Grid>
@@ -823,28 +843,9 @@ const PostNewJob = () => {
                     </label>
                     <Grid container spacing={2}>
                       <Grid item xl={6} lg={6} xs={12}>
-                        <SelectInput
-                          defaultValue=""
-                          placeholder="Select a Job category"
-                          options={categories.data.map((jobCategory) => ({
-                            value: jobCategory.id,
-                            label: jobCategory.title,
-                          }))}
-                          name={"jobCategories"}
-                          value={formik.values.jobCategories || ""}
-                          onChange={formik.handleChange}
-                          onBlur={formik.handleBlur}
-                        />
-                        {formik.touched.jobCategories &&
-                        formik.errors.jobCategories ? (
-                          <ErrorMessage>
-                            {formik.errors.jobCategories}
-                          </ErrorMessage>
-                        ) : null}
-                      </Grid>
-                      <Grid item xl={6} lg={6} xs={12}>
                         <SelectWithSearch
                           sx={{
+                            mt: 1,
                             borderRadius: "10px",
                             background: "#F0F0F0",
                             fontFamily: "Poppins",
@@ -870,24 +871,91 @@ const PostNewJob = () => {
                             },
                           }}
                           defaultValue=""
-                          placeholder={
+                          title="Select a Job category"
+                          options={categories.data.map((jobCategory) => ({
+                            value: jobCategory.id,
+                            label: jobCategory.title,
+                          }))}
+                          name={"jobCategories"}
+                          onChange={(_, value) => {
+                            if (value) {
+                              formik.setFieldValue("jobCategories", value);
+                            } else {
+                              formik.setFieldValue("jobCategories", {
+                                value: "",
+                                label: "",
+                              });
+                            }
+                          }}
+                          value={formik.values.jobCategories}
+                          onBlur={formik.handleBlur}
+                        />
+                        {formik.touched.jobCategories &&
+                        formik.errors.jobCategories ? (
+                          <ErrorMessage>
+                            {formik.errors.jobCategories.value}
+                          </ErrorMessage>
+                        ) : null}
+                      </Grid>
+                      <Grid item xl={6} lg={6} xs={12}>
+                        <SelectWithSearch
+                          sx={{
+                            mt: 1,
+                            borderRadius: "10px",
+                            background: "#F0F0F0",
+                            fontFamily: "Poppins",
+
+                            "& fieldset": {
+                              border: "1px solid #cacaca",
+                              borderRadius: "93px",
+                              display: "none",
+                              "&:hover": { borderColor: "#cacaca" },
+                            },
+                            "& .MuiOutlinedInput-root": {
+                              fontFamily: "Poppins",
+                              padding: "4px 9px",
+                            },
+                            "& .MuiFormLabel-root": {
+                              fontSize: "16px",
+                              color: "#848484",
+                              fontFamily: "Poppins !important",
+                              transform: "translate(14px, 12px) scale(1)",
+                            },
+                            "& .MuiInputLabel-shrink": {
+                              transform: "translate(14px, -9px) scale(0.75)",
+                            },
+                          }}
+                          defaultValue=""
+                          title={
                             formik.values.jobCategories
                               ? "Job Sub Category"
                               : "Select Category first"
                           }
                           options={(
-                            subCategories.data[formik.values.jobCategories] ||
-                            []
+                            subCategories.data[
+                              formik.values.jobCategories.label
+                            ] || ["Select Category first"]
                           ).map((subCategory) => ({
                             value: subCategory.id,
                             label: subCategory.title,
                           }))}
-                          {...formik.getFieldProps("jobSubCategory")}
+                          disabled={!formik.values.jobCategories.value}
+                          onChange={(_, value) => {
+                            if (value) {
+                              formik.setFieldValue("jobSubCategory", value);
+                            } else {
+                              formik.setFieldValue("jobSubCategory", {
+                                value: "",
+                                label: "",
+                              });
+                            }
+                          }}
+                          value={formik.values.jobSubCategory}
                         />
                         {formik.touched.jobSubCategory &&
                         formik.errors.jobSubCategory ? (
                           <ErrorMessage>
-                            {formik.errors.jobSubCategory}
+                            {formik.errors.jobSubCategory.value}
                           </ErrorMessage>
                         ) : null}
                       </Grid>
@@ -1098,19 +1166,55 @@ const PostNewJob = () => {
                   </Grid>
                   <Grid item xl={4} lg={4} xs={12}>
                     <label>Education level</label>
-                    <SelectInput
+                    <SelectWithSearch
+                      sx={{
+                        mt: 1,
+                        borderRadius: "10px",
+                        background: "#F0F0F0",
+                        fontFamily: "Poppins",
+
+                        "& fieldset": {
+                          border: "1px solid #cacaca",
+                          borderRadius: "93px",
+                          display: "none",
+                          "&:hover": { borderColor: "#cacaca" },
+                        },
+                        "& .MuiOutlinedInput-root": {
+                          fontFamily: "Poppins",
+                          padding: "4px 9px",
+                        },
+                        "& .MuiFormLabel-root": {
+                          fontSize: "16px",
+                          color: "#848484",
+                          fontFamily: "Poppins !important",
+                          transform: "translate(14px, 12px) scale(1)",
+                        },
+                        "& .MuiInputLabel-shrink": {
+                          transform: "translate(14px, -9px) scale(0.75)",
+                        },
+                      }}
                       defaultValue=""
-                      placeholder="Choose an education level"
+                      title="Choose an education level"
                       options={educationLevels.data.map((educationLevel) => ({
                         value: educationLevel.id,
                         label: educationLevel.title,
                       }))}
-                      {...formik.getFieldProps("highestEducation")}
+                      onChange={(_, value) => {
+                        if (value) {
+                          formik.setFieldValue("highestEducation", value);
+                        } else {
+                          formik.setFieldValue("highestEducation", {
+                            value: "",
+                            label: "",
+                          });
+                        }
+                      }}
+                      value={formik.values.highestEducation}
                     />
                     {formik.touched.highestEducation &&
                     formik.errors.highestEducation ? (
                       <ErrorMessage>
-                        {formik.errors.highestEducation}
+                        {formik.errors.highestEducation.value}
                       </ErrorMessage>
                     ) : null}
                   </Grid>
