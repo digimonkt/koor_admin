@@ -102,7 +102,6 @@ const PackageManagement = ({ packageList, refreshList }) => {
     formik.setFieldValue("copperCredit", filterPlanDataSet("Copper").credit);
     formik.setFieldValue("copperBenefit", filterPlanDataSet("Copper").benefit);
   }, []);
-  console.log({ packageList });
   return (
     <>
       <div className="form-content">

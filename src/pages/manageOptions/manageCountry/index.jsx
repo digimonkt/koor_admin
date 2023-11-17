@@ -260,7 +260,7 @@ const ManageCountry = () => {
           </Accordion>
         ))}
       </Layout>
-      <DialogBox open={!!deleting} handleClose={() => setDeleting("")}>
+      <DialogBox open={!!deleting}>
         <DeleteCard
           title="Delete Category"
           content="Are you sure you want to delete category?"
@@ -268,7 +268,6 @@ const ManageCountry = () => {
           handleDelete={handleDelete}
         />
       </DialogBox>
-
       <DialogBox
         open={!!citesDeleting}
         handleClose={() => setCitesDeleting("")}

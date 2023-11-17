@@ -437,7 +437,6 @@ const PostNewJob = () => {
     const newJobId = searchParams.get("jobId");
     if (newJobId && jobId !== newJobId) setJobId(newJobId);
   }, [searchParams.get("jobId")]);
-  console.log({ subCategories });
   return (
     <div className="job-application">
       <Card

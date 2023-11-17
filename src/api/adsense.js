@@ -10,7 +10,6 @@ export const getAdSenseAPI = async ({ pageTitle }) => {
 };
 
 export const addAdSenseAPI = async (data) => {
-    console.log({ data });
     const response = await api.request({
         url: urlcat("v1/admin/google-add-sense-code"),
         method: "POST",
@@ -27,7 +26,6 @@ export const deleteAdSenseAPI = async ({ deleteAdSense }) => {
 };
 
 export const updateAdSenseAPI = async ({ editAdSense, editAdSenseValue }) => {
-    console.log({ editAdSense, editAdSenseValue });
     const response = await api.request({
         url: urlcat("v1/admin/google-add-sense-code/:codeId", { codeId: editAdSense }),
         method: "PUT",

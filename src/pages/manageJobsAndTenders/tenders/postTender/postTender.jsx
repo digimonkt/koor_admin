@@ -188,7 +188,6 @@ const PostNewJob = () => {
     const newTenderId = searchParams.get("tenderId");
     if (newTenderId && tenderId !== newTenderId) setTenderId(newTenderId);
   }, [searchParams.get("tenderId")]);
-  console.log({ cities });
   return (
     <div className="job-application">
       <Card
