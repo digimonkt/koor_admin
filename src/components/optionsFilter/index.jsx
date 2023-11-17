@@ -15,15 +15,6 @@ const OptionsFilter = ({
   news,
   selectPropsCountry,
 }) => {
-  console.log({
-    tender,
-    news,
-    inputProps,
-    optionsProps,
-    faq,
-    inputPropsRole,
-    selectPropsCountry,
-  });
   return (
     <Stack direction={"row"} alignItems={"center"} spacing={1}>
       {news && tender ? (

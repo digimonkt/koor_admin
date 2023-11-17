@@ -66,7 +66,6 @@ function Layout({
       })),
     [dropDownList]
   );
-  console.log(memoizedCountryOptions);
   const memoizedCityOptions = useMemo(
     () =>
       cityValueList.map((city) => ({

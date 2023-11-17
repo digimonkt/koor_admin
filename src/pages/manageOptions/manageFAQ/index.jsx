@@ -17,6 +17,7 @@ import {
   editFaqCategoryApi,
   getFAQCategoryApi,
 } from "@api/manageFAQ";
+import { showRole } from "@utils/common";
 function ManageFQL() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -53,6 +54,7 @@ function ManageFQL() {
       headerName: "Role",
       width: 300,
       sortable: true,
+      renderCell: (item) => showRole(item.row.role),
     },
     {
       field: "action",
@@ -221,6 +223,7 @@ function ManageFQL() {
           placeholder: "Add FAQ Category",
           onChange: (e) => setAddFAQCategory(e.target.value),
           value: addFAQCategory,
+          style: { marginLeft: "-6px" }
         }}
         inputPropsRole={{
           content: { faqCategoryTable },
