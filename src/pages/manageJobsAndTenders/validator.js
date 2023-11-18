@@ -87,23 +87,16 @@ export const validateCreateTenderInput = Yup.object().shape({
   city: Yup.object().required("City is required"),
   categories: Yup.array()
     .of(Yup.string())
-    .min(1, "At Least one category is required"),
+    .min(1, "At Least one category is required")
+    .max(3, "Maximum 3 categories"),
   sectors: Yup.object().required(" Sector is required"),
   tag: Yup.object().required(" Tag is required"),
   address: Yup.string().required("Address is required"),
   deadline: Yup.string()
+    .nullable()
     .required("Deadline is required")
-    .test("isFuture", "Date Must be of Future", (value) => {
-      return dayjs(value).isSameOrAfter(dayjs());
+    .test("startDate", "Date Must be of Future", (value) => {
+      return dayjs(value).isSameOrAfter(dayjs(), "days");
     }),
-  startDate: Yup.string().test(
-    "isFuture",
-    "Date Must be of Future",
-    (value) => {
-      if (!value) {
-        return true;
-      }
-      return dayjs(value).isSameOrAfter(dayjs());
-    }
-  ),
+  startDate: Yup.string().nullable().required("Start Date is required"),
 });

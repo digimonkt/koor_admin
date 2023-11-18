@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import CloseIcon from "@mui/icons-material/Close";
 import styles from "./postTender.module.css";
 import {
@@ -36,7 +36,8 @@ import {
   GetSuggestedAddressAPI,
   createTenderAPI,
   getCountriesName,
-  // updateEmployerJobAPI,
+  getTenderDetailsByIdAPI,
+  updateTenderAPI,
 } from "@api/jobs";
 import { validateCreateTenderInput } from "@pages/manageJobsAndTenders/validator";
 import dayjs from "dayjs";
@@ -119,17 +120,75 @@ const PostNewJob = () => {
           newFormData.append(key, payload[key]);
         }
       }
-      const res = await createTenderAPI(newFormData);
-      if (res.remote === "success") {
-        dispatch(setSuccessToast("Job Post Successfully"));
-        setSuggestedAddress([]);
-        setSearchValue("");
-        resetForm();
+      let res;
+      if (!tenderId) {
+        // createTender
+        res = await createTenderAPI(newFormData);
+        if (res.remote === "success") {
+          dispatch(setSuccessToast("Job Post Successfully"));
+          setSuggestedAddress([]);
+          setSearchValue("");
+          resetForm();
+        } else {
+          dispatch(setErrorToast("Something went wrong"));
+        }
       } else {
-        dispatch(setErrorToast("Something went wrong"));
+        // updateTenders
+        res = await updateTenderAPI(tenderId, newFormData);
+        if (res.remote === "success") {
+          dispatch(setSuccessToast("Tender Updated Successfully"));
+        } else {
+          dispatch(setErrorToast("Something went wrong"));
+        }
       }
     },
   });
+
+  const getTenderDetailsById = useCallback(async (tenderId) => {
+    const response = await getTenderDetailsByIdAPI({ tenderId });
+    if (response.remote === "success") {
+      const { data } = response;
+      console.log({ data });
+      if (data.address) {
+        setSearchValue(data.address);
+      }
+      formik.setFieldValue("address", data.address);
+      formik.setFieldValue("title", data.title);
+      formik.setFieldValue("budgetCurrency", data.budgetCurrency);
+      formik.setFieldValue(
+        "budgetAmount",
+        parseInt(data.budgetAmount.replace(/,/g, ""), 10)
+      );
+      formik.setFieldValue("description", data.description);
+      formik.setFieldValue("country", {
+        value: data.country.id,
+        label: data.country.title,
+      });
+      formik.setFieldValue("city", {
+        value: data.city.id,
+        label: data.city.title,
+      });
+      formik.setFieldValue(
+        "categories",
+        data.categories.map((category) => category.id)
+      );
+      formik.setFieldValue("sectors", {
+        value: data.sectors.id,
+        label: data.sectors.title,
+      });
+      formik.setFieldValue("opportunityType", {
+        value: data.opportunityType.id,
+        label: data.opportunityType.title,
+      });
+      formik.setFieldValue("tag", {
+        value: data.tag[0].id,
+        label: data.tag[0].title,
+      });
+      formik.setFieldValue("deadline", dayjs(data.deadline));
+      formik.setFieldValue("startDate", dayjs(data.startDate));
+      formik.setFieldValue("attachments", data.attachments);
+    }
+  }, []);
 
   // Address
   const getSuggestedAddress = async (search) => {
@@ -181,6 +240,12 @@ const PostNewJob = () => {
       dispatch(getTenderTags());
     }
   }, []);
+
+  useEffect(() => {
+    if (tenderId) {
+      getTenderDetailsById(tenderId);
+    }
+  }, [tenderId]);
   useEffect(() => {
     getCountryList();
   }, [debouncedSearchCountryValue, !formik.values.country]);
@@ -665,7 +730,7 @@ const PostNewJob = () => {
                             }
                             value={formik.values.deadline}
                             onBlur={formik.getFieldProps("deadline").onBlur}
-                            minDate={formik.values.startDate || dayjs()}
+                            minDate={formik.values.startDate}
                           />
                           {formik.touched.deadline && formik.errors.deadline ? (
                             <ErrorMessage>

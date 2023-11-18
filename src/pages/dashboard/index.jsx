@@ -10,7 +10,7 @@ import { useDispatch } from "react-redux";
 const DashboardComponent = () => {
   const dispatch = useDispatch;
   const [userList, setUserList] = useState([]);
-  const [isSelect, setIsSelect] = useState("this_week");
+  const [isSelect, setIsSelect] = useState("this week");
   const [userData, setUserData] = useState({
     totalUsers: 0,
     activeUsers: 0,
@@ -22,7 +22,7 @@ const DashboardComponent = () => {
   });
 
   const userCount = async () => {
-    const response = await getUserCountApi();
+    const response = await getUserCountApi(isSelect);
     if (response.remote === "success") {
       const NewUserList = [
         {

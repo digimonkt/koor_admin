@@ -13,6 +13,7 @@ import { DeleteCard } from "@components/card";
 import { setErrorToast, setSuccessToast } from "@redux/slice/toast";
 import { useNavigate } from "react-router-dom";
 import { RestartAlt } from "@mui/icons-material";
+import env from "@utils/validateEnv";
 import { getCountriesName } from "@api/jobs";
 import { deleteTenderAPI } from "@api/tender";
 
@@ -101,6 +102,20 @@ function ManageTendersComponent() {
           return (
             <Stack direction="row" spacing={1} alignItems="center">
               <IconButton
+                onClick={() => handleRedirectDetails(item.row.id)}
+                sx={{
+                  "&.MuiIconButton-root": {
+                    background: "#D5E3F7",
+                  },
+
+                  width: 30,
+                  height: 30,
+                  color: "#274593",
+                }}
+              >
+                <SVG.EyeIcon />
+              </IconButton>
+              <IconButton
                 onClick={() => setDeleteTender(item.row.id)}
                 sx={{
                   "&.MuiIconButton-root": {
@@ -112,6 +127,19 @@ function ManageTendersComponent() {
                 }}
               >
                 <SVG.DeleteIcon />
+              </IconButton>
+              <IconButton
+                onClick={() => handleEdit(item.row.id)}
+                sx={{
+                  "&.MuiIconButton-root": {
+                    background: "#D5E3F7",
+                  },
+                  width: 30,
+                  height: 30,
+                  color: "#274593",
+                }}
+              >
+                <SVG.EditIcon />
               </IconButton>
             </Stack>
           );
@@ -134,6 +162,16 @@ function ManageTendersComponent() {
       dispatch(setErrorToast("Something went wrong"));
     }
   }, [tenderTable, dispatch, deleteTender]);
+
+  const handleEdit = async (item) => {
+    navigate(`./post-tender?tenderId=${item}`);
+  };
+
+  const handleRedirectDetails = useCallback((item) => {
+    const url = `${env.REACT_APP_REDIRECT_URL}/tender/details/${item}`;
+    window.open(url, "_blank");
+  }, []);
+
   const tenderList = useCallback(async () => {
     dispatch(setLoading(true));
     const page = pages;

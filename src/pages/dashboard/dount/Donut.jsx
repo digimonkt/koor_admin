@@ -26,7 +26,16 @@ export const SelectBox = styled(Select)`
   }
 `;
 
-const Donut = ({ title, total, user, series, colors, content, handleChange, isSelect }) => {
+const Donut = ({
+  title,
+  total,
+  user,
+  series,
+  colors,
+  content,
+  handleChange,
+  isSelect,
+}) => {
   const [state] = useState({
     series,
     options: {
@@ -117,9 +126,9 @@ const Donut = ({ title, total, user, series, colors, content, handleChange, isSe
               },
             }}
           >
-            <MenuItem value="this_week">This Week</MenuItem>
-            <MenuItem value="last_month">Last Month</MenuItem>
-            <MenuItem value="this_year">This Year</MenuItem>
+            <MenuItem value="this week">This Week</MenuItem>
+            <MenuItem value="last month">Last Month</MenuItem>
+            <MenuItem value="this year">This Year</MenuItem>
           </SelectBox>
         </FormControl>
       </Stack>
