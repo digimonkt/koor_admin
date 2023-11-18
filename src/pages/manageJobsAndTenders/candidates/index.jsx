@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { SVG } from "@assets/svg";
-import { IconButton, Stack, Box } from "@mui/material";
+import { IconButton, Stack, Box, Tooltip } from "@mui/material";
 import Layout from "../layout";
 import { manageCandidate } from "@api/candidate";
 import { activeInactiveUser, deleteUser } from "@api/employers";
@@ -14,6 +14,7 @@ import { transformCandidatesAPIResponse } from "@api/transform/choices";
 import env from "@utils/validateEnv";
 import { USER_ROLES } from "@utils/enum";
 import { getCountriesName } from "@api/jobs";
+import { showRole } from "@utils/common";
 function ManageCandidatesComponent() {
   const dispatch = useDispatch();
   const { countries } = useSelector((state) => state.choice);
@@ -41,6 +42,7 @@ function ManageCandidatesComponent() {
         headerName: "Role",
         sortable: true,
         width: 200,
+        renderCell: (item) => showRole(item.row.role),
       },
 
       {
@@ -85,11 +87,18 @@ function ManageCandidatesComponent() {
                     color: "#274593",
                   }}
                 >
-                  {item.row.action ? (
-                    <SVG.ToggleOffIcon />
-                  ) : (
-                    <SVG.ToggleOnIcon />
-                  )}
+                  <Tooltip
+                    title={
+                      item.row.action ? "Deactivate User" : "Activate User"
+                    }
+                    arrow
+                  >
+                    {item.row.action ? (
+                      <SVG.ToggleOffIcon />
+                    ) : (
+                      <SVG.ToggleOnIcon />
+                    )}
+                  </Tooltip>
                 </IconButton>
               </>
 
@@ -106,7 +115,9 @@ function ManageCandidatesComponent() {
                   color: "#274593",
                 }}
               >
-                <SVG.EyeIcon />
+                <Tooltip title={"View Profile"} arrow>
+                  <SVG.EyeIcon />
+                </Tooltip>
               </IconButton>
               <IconButton
                 onClick={() => setDeleting(item.row.id)}
@@ -119,7 +130,9 @@ function ManageCandidatesComponent() {
                   color: "#274593",
                 }}
               >
-                <SVG.DeleteIcon />
+                <Tooltip title={"Delete"} arrow>
+                  <SVG.DeleteIcon />
+                </Tooltip>
               </IconButton>
             </Stack>
           );

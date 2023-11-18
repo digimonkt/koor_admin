@@ -76,7 +76,6 @@ function Accordion({ title, onOpen, handleDelete, handleEdit, children }) {
                     background: "#D5E3F7",
                   },
                   pointerEvents: "auto",
-
                   width: 30,
                   height: 30,
                   marginRight: "16px",

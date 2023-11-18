@@ -1,9 +1,9 @@
 import api from ".";
 import urlcat from "urlcat";
 
-export const getUserCountApi = async () => {
+export const getUserCountApi = async (period) => {
   const response = await api.request({
-    url: urlcat("/v1/admin/users-count"),
+    url: urlcat("/v1/admin/users-count", { period }),
     method: "GET",
   });
   return response;

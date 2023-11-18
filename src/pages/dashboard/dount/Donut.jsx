@@ -26,14 +26,8 @@ export const SelectBox = styled(Select)`
   }
 `;
 
-const Donut = ({ title, total, user, series, colors, content }) => {
-  const [isSelect, setIsSelect] = useState("");
-
-  const handleChange = (event) => {
-    setIsSelect(event.target.value);
-  };
-
-  const [state] = React.useState({
+const Donut = ({ title, total, user, series, colors, content, handleChange, isSelect }) => {
+  const [state] = useState({
     series,
     options: {
       chart: {
@@ -123,9 +117,9 @@ const Donut = ({ title, total, user, series, colors, content }) => {
               },
             }}
           >
-            <MenuItem value="">This Week</MenuItem>
-            <MenuItem value={20}>Last Month</MenuItem>
-            <MenuItem value={30}>year</MenuItem>
+            <MenuItem value="this_week">This Week</MenuItem>
+            <MenuItem value="last_month">Last Month</MenuItem>
+            <MenuItem value="this_year">This Year</MenuItem>
           </SelectBox>
         </FormControl>
       </Stack>
