@@ -40,7 +40,6 @@ function Layout({
   newJob,
 }) {
   const { loading } = useSelector(({ jobsAndTenders }) => jobsAndTenders);
-
   return (
     <>
       <Stack
@@ -87,6 +86,7 @@ function Layout({
             columns={columns || []}
             limitProps={limitProps}
             page={page}
+            getRowId={(rows) => rows.id || Math.random()}
             loader={loading}
             NoFoundText={NoFoundText}
           />
