@@ -13,6 +13,7 @@ import { useDebounce } from "usehooks-ts";
 import { transformCandidatesAPIResponse } from "@api/transform/choices";
 import env from "@utils/validateEnv";
 import { USER_ROLES } from "@utils/enum";
+import { getCountriesName } from "@api/jobs";
 import { showRole } from "@utils/common";
 function ManageCandidatesComponent() {
   const dispatch = useDispatch();
@@ -24,6 +25,7 @@ function ManageCandidatesComponent() {
   const [totalCount, setTotalCount] = useState(0);
   const [searchTerm, setSearchTerm] = useState("");
   const [country, setCountry] = useState({});
+  const [countriesData, setCountriesData] = useState(countries.data);
   const debouncedSearchCandidatesValue = useDebounce(searchTerm, 500);
 
   const columns = useMemo(
@@ -85,7 +87,12 @@ function ManageCandidatesComponent() {
                     color: "#274593",
                   }}
                 >
-                  <Tooltip title={item.row.action ? "Deactivate User" : "Activate User"} arrow>
+                  <Tooltip
+                    title={
+                      item.row.action ? "Deactivate User" : "Activate User"
+                    }
+                    arrow
+                  >
                     {item.row.action ? (
                       <SVG.ToggleOffIcon />
                     ) : (
@@ -122,7 +129,8 @@ function ManageCandidatesComponent() {
                   height: 30,
                   color: "#274593",
                 }}
-              ><Tooltip title={"Delete"} arrow>
+              >
+                <Tooltip title={"Delete"} arrow>
                   <SVG.DeleteIcon />
                 </Tooltip>
               </IconButton>
@@ -163,6 +171,7 @@ function ManageCandidatesComponent() {
       const totalCounts = Math.ceil(response.data.count / limit);
       setTotalCount(totalCounts);
     } else {
+      dispatch(setLoading(false));
       console.log(response.error);
     }
   }, [country, debouncedSearchCandidatesValue, pages, limit]);
@@ -173,7 +182,7 @@ function ManageCandidatesComponent() {
 
   const filterJobsCountry = (e) => {
     const countryId = e.target.value;
-    const country = countries.data.find((country) => country.id === countryId);
+    const country = countriesData.find((country) => country.id === countryId);
     setCountry(country);
   };
 
@@ -217,7 +226,13 @@ function ManageCandidatesComponent() {
     setSearchTerm("");
     setCountry({});
   };
-
+  const getCountryList = async () => {
+    const limitParam = 500;
+    const response = await getCountriesName({ limit: limitParam });
+    if (response.remote === "success") {
+      setCountriesData(response.data.results);
+    }
+  };
   const downloadCandidatesCSV = useCallback(async () => {
     const action = "download";
     const response = await manageCandidate({ action });
@@ -240,6 +255,9 @@ function ManageCandidatesComponent() {
   useEffect(() => {
     candidateList();
   }, [candidateList]);
+  useEffect(() => {
+    getCountryList();
+  }, []);
   return (
     <>
       <Layout
@@ -247,7 +265,9 @@ function ManageCandidatesComponent() {
         columns={columns}
         totalCount={totalCount}
         handlePageChange={getPage}
+        NoFoundText={{ noRowsLabel: "No candidate found" }}
         page={pages}
+        dropDownList={countriesData}
         searchProps={{
           placeholder: "Search Candidates",
           onChange: (e) => setSearchTerm(e.target.value),

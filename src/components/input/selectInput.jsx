@@ -79,7 +79,7 @@ function SelectInputComponent({
         fullWidth
       >
         {search && (
-          <span className="search-icon">
+          <span className="search-icon ">
             <SVG.LocationIcon />
           </span>
         )}

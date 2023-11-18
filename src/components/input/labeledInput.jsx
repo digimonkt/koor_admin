@@ -52,6 +52,7 @@ function LabeledInputComponent({
       ) : (
         <div className="showpassword">
           <input
+            style={{ width: "100px" }}
             className={`form-control ${inputstyles}`}
             type={
               type === "password"

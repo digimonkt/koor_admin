@@ -9,8 +9,10 @@ export const validateCreateJobInput = Yup.object().shape({
   budgetAmount: Yup.number().required("Amount is required"),
   budgetPayPeriod: Yup.string().required("Pay period is required"),
   description: Yup.string().required("Description is required"),
-  country: Yup.object().required("Country is required"),
-  // city: Yup.string().required("City is required"),
+  country: Yup.object().shape({
+    label: Yup.string().required("Country is required"),
+    value: Yup.string().required("Country is required"),
+  }),
   address: Yup.string().required("Address is required"),
   jobCategories: Yup.object().required("Job Category is required"),
   jobSubCategory: Yup.object().required("Job Sub Category is required"),
@@ -38,7 +40,7 @@ export const validateCreateJobInput = Yup.object().shape({
     }),
   startDate: Yup.string().nullable().required("Start Date is required"),
   contactEmail: Yup.string()
-    .email("Invalid Email")
+    .email("Contact email must be a valid")
     .test(
       "atLeastOneContactMethod",
       "At least one email is required",
@@ -50,8 +52,8 @@ export const validateCreateJobInput = Yup.object().shape({
         return true;
       }
     ),
-  cc1: Yup.string().email("Invalid Email"),
-  cc2: Yup.string().email("Invalid Email"),
+  cc1: Yup.string().email("CC1 email must be a valid"),
+  cc2: Yup.string().email("CC2 email must be a valid"),
   isContactWhatsapp: Yup.boolean(),
   contactWhatsapp: Yup.string().test(
     "ifPresent",
@@ -65,38 +67,29 @@ export const validateCreateJobInput = Yup.object().shape({
       }
     }
   ),
-  highestEducation: Yup.string(),
-  languages: Yup.array()
-    .of(
-      Yup.object().shape({
-        id: Yup.string(),
-      })
-    )
-    .test("atLeastOneLanguage", "At Least one Language required", (value) => {
-      let isPresent = false;
-      value.forEach((val) => {
-        if (val.language) {
-          isPresent = true;
-        }
-      });
-      return isPresent;
-    }),
-  skills: Yup.array().of(Yup.string()).min(1, "At Least one Skill is required"),
+
+  languages: Yup.array().of(
+    Yup.object().shape({
+      id: Yup.string(),
+    })
+  ),
+  skills: Yup.array().of(Yup.string()),
 });
 
 export const validateCreateTenderInput = Yup.object().shape({
   title: Yup.string().required("Title is required"),
-  opportunityType: Yup.string().required("Type is required"),
+  opportunityType: Yup.object().required("Type is required"),
   budgetCurrency: Yup.string(),
   budgetAmount: Yup.number(),
   budgetPayPeriod: Yup.string(),
   description: Yup.string().required("Description is required"),
-  country: Yup.string().required("Country is required"),
+  country: Yup.object().required("Country is required"),
+  city: Yup.object().required("City is required"),
   categories: Yup.array()
     .of(Yup.string())
     .min(1, "At Least one category is required"),
-  sectors: Yup.string().required(" Sector is required"),
-  tag: Yup.string().required(" Tag is required"),
+  sectors: Yup.object().required(" Sector is required"),
+  tag: Yup.object().required(" Tag is required"),
   address: Yup.string().required("Address is required"),
   deadline: Yup.string()
     .required("Deadline is required")
@@ -106,7 +99,7 @@ export const validateCreateTenderInput = Yup.object().shape({
   startDate: Yup.string().test(
     "isFuture",
     "Date Must be of Future",
-    (value, context) => {
+    (value) => {
       if (!value) {
         return true;
       }

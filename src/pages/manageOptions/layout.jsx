@@ -3,8 +3,7 @@ import DataTable from "@components/dataTable";
 import OptionsFilter from "@components/optionsFilter";
 import { Card, CardContent, Pagination } from "@mui/material";
 import { Stack, styled } from "@mui/system";
-import { useSelector, useDispatch } from "react-redux";
-import { getCountries } from "@redux/slice/choices";
+import { useSelector } from "react-redux";
 
 const TablePagination = styled(Pagination)(() => ({
   " &.MuiPagination-root .MuiPaginationItem-root": {
@@ -47,16 +46,16 @@ function Layout({
   SubCategory,
   cityValue,
   inputPropsRole,
+  NoFoundText,
   tender,
   tenderPost,
   faq,
+  tenderProps,
   news,
 }) {
   const { loading } = useSelector(({ jobsAndTenders }) => jobsAndTenders);
-  const { countries } = useSelector(({ choice }) => choice);
   const [dropDownList, setDropDownList] = useState([]);
   const [cityValueList, setCityValueList] = useState([]);
-  const dispatch = useDispatch();
   const memoizedCountryOptions = useMemo(
     () =>
       dropDownList.map((country) => ({
@@ -75,11 +74,6 @@ function Layout({
       })),
     [cityValueList]
   );
-  useEffect(() => {
-    if (!countries.data.length) {
-      dispatch(getCountries());
-    }
-  }, []);
 
   useEffect(() => {
     if (dropDownValue) {
@@ -92,13 +86,16 @@ function Layout({
       setCityValueList(cityValue);
     }
   }, [cityValue]);
+
   return (
     <>
       <Stack
-        direction={{ xs: "column", sm: "row" }}
-        spacing={{ xs: 1.25, sm: 2.5 }}
+        direction={{ xs: "row", sm: "row" }}
+        spacing={{ xs: 1.25, sm: 1 }}
         alignItems={{ xs: "start", sm: "center" }}
         sx={{ marginBottom: 2.5 }}
+        flexWrap="wrap"
+        useFlexGap
       >
         <OptionsFilter
           news={news}
@@ -121,6 +118,7 @@ function Layout({
           city={city}
           SubCategory={SubCategory}
           tender={tender}
+          tenderProps={tenderProps}
         />
       </Stack>
       <Card
@@ -145,7 +143,7 @@ function Layout({
             getRowId={(rows) => rows.id || Math.random()}
             loader={loading}
             page={page}
-            NoFoundText={{ noRowsLabel: "No Tender found" }}
+            NoFoundText={NoFoundText}
           />
           {/* <div className="pagination-custom">
             <TablePagination

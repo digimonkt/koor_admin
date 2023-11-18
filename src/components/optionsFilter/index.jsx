@@ -1,6 +1,6 @@
 import { SolidButton } from "@components/button";
-import { SearchInput, LabeledInput } from "@components/input";
-import { Stack } from "@mui/material";
+import { SearchInput, LabeledInput, SelectInput } from "@components/input";
+import { Box, Stack } from "@mui/material";
 import SelectDropDown from "@components/financialtools/SelectDropDown";
 
 const OptionsFilter = ({
@@ -14,6 +14,8 @@ const OptionsFilter = ({
   faq,
   news,
   selectPropsCountry,
+  country,
+  tenderProps,
 }) => {
   return (
     <Stack direction={"row"} alignItems={"center"} spacing={1}>
@@ -33,13 +35,41 @@ const OptionsFilter = ({
           />
         </>
       ) : tender ? (
-        <>
+        <Stack
+          direction={"row"}
+          sx={{ flexWrap: "wrap", gap: 2 }}
+          alignItems={"center"}
+          spacing={1}
+        >
           <SearchInput
-            placeholder="Search skills"
+            placeholder="Search tender"
             widthInput="100%"
             {...searchProps}
           />
-
+          <Box className="job_location_box">
+            <SelectInput
+              placeholder="Location"
+              search
+              value=""
+              {...selectPropsCountry}
+              className="loca_job"
+            />
+          </Box>
+          <SolidButton
+            className="csvButton"
+            sx={{
+              fontFamily: "Bahnschrift",
+            }}
+            {...csvProps}
+          />
+          <SolidButton
+            title={(tenderProps || {}).title}
+            className="resetButton"
+            sx={{
+              fontFamily: "Bahnschrift",
+            }}
+            {...tenderProps}
+          />
           <SolidButton
             title={(tenderPost || {}).title}
             className="resetButton"
@@ -48,7 +78,7 @@ const OptionsFilter = ({
             }}
             {...tenderPost}
           />
-        </>
+        </Stack>
       ) : (
         <>
           <SearchInput

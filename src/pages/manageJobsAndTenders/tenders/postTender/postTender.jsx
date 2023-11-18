@@ -35,12 +35,14 @@ import { useDebounce } from "usehooks-ts";
 import {
   GetSuggestedAddressAPI,
   createTenderAPI,
+  getCountriesName,
   // updateEmployerJobAPI,
 } from "@api/jobs";
 import { validateCreateTenderInput } from "@pages/manageJobsAndTenders/validator";
 import dayjs from "dayjs";
 import { DATABASE_DATE_FORMAT } from "@utils/constants/constants";
 import { setErrorToast, setSuccessToast } from "@redux/slice/toast";
+import SelectWithSearch from "@components/input/selectWithsearch";
 
 const PostNewJob = () => {
   const {
@@ -58,6 +60,9 @@ const PostNewJob = () => {
   const [searchValue, setSearchValue] = useState("");
   const debouncedSearchValue = useDebounce(searchValue, 500);
   const [suggestedAddress, setSuggestedAddress] = useState([]);
+  const [searchCountry, setSearchCountry] = useState("");
+  const debouncedSearchCountryValue = useDebounce(searchCountry, 500);
+  const [countriesData, setCountriesData] = useState(countries.data);
 
   const formik = useFormik({
     initialValues: {
@@ -66,13 +71,13 @@ const PostNewJob = () => {
       budgetAmount: 0,
       budgetPayPeriod: PAY_PERIOD.month,
       description: "",
-      country: "",
-      city: "",
+      country: { label: "", value: "" },
+      city: { label: "", value: "" },
       address: "",
       categories: [],
-      sectors: "",
-      opportunityType: "",
-      tag: "",
+      sectors: { label: "", value: "" },
+      opportunityType: { label: "", value: "" },
+      tag: { label: "", value: "" },
       startDate: "",
       deadline: "",
       attachments: [],
@@ -86,10 +91,10 @@ const PostNewJob = () => {
         budget_amount: values.budgetAmount,
         budget_pay_period: values.budgetPayPeriod,
         description: values.description,
-        country: values.country,
-        sector: values.sectors,
-        tender_type: values.opportunityType,
-        city: values.city,
+        country: values.country.value,
+        city: values.city.value,
+        sector: values.sectors.value,
+        tender_type: values.opportunityType.value,
         tender_category: values.categories,
         deadline: dayjs(values.deadline).format(DATABASE_DATE_FORMAT),
         address: values.address,
@@ -98,7 +103,7 @@ const PostNewJob = () => {
           : "",
         attachments: values.attachments,
         attachments_remove: values.attachmentsRemove,
-        tag: values.tag,
+        tag: values.tag.value,
       };
       const newFormData = new FormData();
       for (const key in payload) {
@@ -117,6 +122,8 @@ const PostNewJob = () => {
       const res = await createTenderAPI(newFormData);
       if (res.remote === "success") {
         dispatch(setSuccessToast("Job Post Successfully"));
+        setSuggestedAddress([]);
+        setSearchValue("");
         resetForm();
       } else {
         dispatch(setErrorToast("Something went wrong"));
@@ -131,10 +138,19 @@ const PostNewJob = () => {
       setSuggestedAddress(res.data.predictions);
     }
   };
-
+  const getCountryList = async () => {
+    const limitParam = 10;
+    const response = await getCountriesName({
+      search: searchCountry,
+      limit: limitParam,
+    });
+    if (response.remote === "success") {
+      setCountriesData(response.data.results);
+    }
+  };
   useEffect(() => {
     if (formik.values.country && !cities.data[formik.values.country]?.length) {
-      dispatch(getCitiesByCountry({ countryId: formik.values.country }));
+      dispatch(getCitiesByCountry({ countryId: formik.values.country?.value }));
     }
   }, [formik.values.country]);
 
@@ -165,12 +181,13 @@ const PostNewJob = () => {
       dispatch(getTenderTags());
     }
   }, []);
-
+  useEffect(() => {
+    getCountryList();
+  }, [debouncedSearchCountryValue, !formik.values.country]);
   useEffect(() => {
     const newTenderId = searchParams.get("tenderId");
     if (newTenderId && tenderId !== newTenderId) setTenderId(newTenderId);
   }, [searchParams.get("tenderId")]);
-
   return (
     <div className="job-application">
       <Card
@@ -255,37 +272,111 @@ const PostNewJob = () => {
                     </label>
                     <Grid container spacing={2}>
                       <Grid item xl={6} lg={6} sm={6} xs={12}>
-                        <SelectInput
+                        <SelectWithSearch
                           placeholder="Country"
+                          sx={{
+                            borderRadius: "10px",
+                            background: "#F0F0F0",
+                            fontFamily: "Poppins",
+
+                            "& fieldset": {
+                              border: "1px solid #cacaca",
+                              borderRadius: "93px",
+                              display: "none",
+                              "&:hover": { borderColor: "#cacaca" },
+                            },
+                            "& .MuiOutlinedInput-root": {
+                              fontFamily: "Poppins",
+                              padding: "4px 9px",
+                            },
+                            "& .MuiFormLabel-root": {
+                              fontSize: "16px",
+                              color: "#848484",
+                              fontFamily: "Poppins !important",
+                              transform: "translate(14px, 12px) scale(1)",
+                            },
+                            "& .MuiInputLabel-shrink": {
+                              transform: "translate(14px, -9px) scale(0.75)",
+                            },
+                          }}
                           defaultValue=""
-                          options={countries.data.map((country) => ({
+                          options={(countriesData || []).map((country) => ({
                             value: country.id,
                             label: country.title,
                           }))}
-                          {...formik.getFieldProps("country")}
+                          title={"select the options"}
+                          onChange={(_, value) => {
+                            if (value) {
+                              formik.setFieldValue("country", value);
+                            } else {
+                              setSearchCountry("");
+                              formik.setFieldValue("country", {
+                                value: "",
+                                label: "",
+                              });
+                            }
+                          }}
+                          value={formik.values.country}
+                          onKeyUp={(e) => setSearchCountry(e.target.value)}
                         />
                         {formik.touched.country && formik.errors.country ? (
                           <ErrorMessage>{formik.errors.country}</ErrorMessage>
                         ) : null}
                       </Grid>
                       <Grid item xl={6} lg={6} sm={6} xs={12}>
-                        <SelectInput
-                          placeholder={
-                            formik.values.country
-                              ? "City"
-                              : "Select Country first"
-                          }
-                          disabled={!formik.values.country}
+                        <SelectWithSearch
+                          sx={{
+                            borderRadius: "10px",
+                            background: "#F0F0F0",
+                            fontFamily: "Poppins",
+
+                            "& fieldset": {
+                              border: "1px solid #cacaca",
+                              borderRadius: "93px",
+                              display: "none",
+                              "&:hover": { borderColor: "#cacaca" },
+                            },
+                            "& .MuiOutlinedInput-root": {
+                              fontFamily: "Poppins",
+                              padding: "4px 9px",
+                            },
+                            "& .MuiFormLabel-root": {
+                              fontSize: "16px",
+                              color: "#848484",
+                              fontFamily: "Poppins !important",
+                              transform: "translate(14px, 12px) scale(1)",
+                            },
+                            "& .MuiInputLabel-shrink": {
+                              transform: "translate(14px, -9px) scale(0.75)",
+                            },
+                          }}
                           options={(
-                            cities.data[formik.values.country] || []
-                          ).map((country) => ({
-                            value: country.id,
-                            label: country.title,
+                            cities.data[formik.values.country.value] || []
+                          ).map((city) => ({
+                            value: city.id,
+                            label: city.title,
                           }))}
-                          {...formik.getFieldProps("city")}
+                          title={
+                            formik.values.city ? "city" : "Select country first"
+                          }
+                          onChange={(_, value) => {
+                            if (value) {
+                              formik.setFieldValue("city", value);
+                            } else {
+                              // setSearchCountry("");
+                              formik.setFieldValue("city", {
+                                value: "",
+                                label: "",
+                              });
+                            }
+                          }}
+                          value={formik.values.city}
+                          // onKeyUp={(e) => setSearchCountry(e.target.value)}
                         />
                         {formik.touched.city && formik.errors.city ? (
-                          <ErrorMessage>{formik.errors.city}</ErrorMessage>
+                          <ErrorMessage>
+                            {formik.errors.city.value}
+                          </ErrorMessage>
                         ) : null}
                       </Grid>
                     </Grid>
@@ -332,7 +423,6 @@ const PostNewJob = () => {
                       <ErrorMessage>{formik.errors.address}</ErrorMessage>
                     ) : null}
                   </Grid>
-
                   <Grid item xl={12} lg={12} sm={12} xs={12}>
                     <label>
                       Category <span className="required-field">*</span>
@@ -367,17 +457,49 @@ const PostNewJob = () => {
                         <label>
                           Sector <span className="required-field">*</span>
                         </label>
-                        <SelectInput
+                        <SelectWithSearch
+                          sx={{
+                            borderRadius: "10px",
+                            background: "#F0F0F0",
+                            fontFamily: "Poppins",
+
+                            "& fieldset": {
+                              border: "1px solid #cacaca",
+                              borderRadius: "93px",
+                              display: "none",
+                              "&:hover": { borderColor: "#cacaca" },
+                            },
+                            "& .MuiOutlinedInput-root": {
+                              fontFamily: "Poppins",
+                              padding: "4px 9px",
+                            },
+                            "& .MuiFormLabel-root": {
+                              fontSize: "16px",
+                              color: "#848484",
+                              fontFamily: "Poppins !important",
+                              transform: "translate(14px, 12px) scale(1)",
+                            },
+                            "& .MuiInputLabel-shrink": {
+                              transform: "translate(14px, -9px) scale(0.75)",
+                            },
+                          }}
                           defaultValue=""
-                          placeholder="Select a Sector"
-                          options={sectors.data.map((sector) => ({
-                            value: sector.id,
-                            label: sector.title,
+                          options={(sectors.data || []).map((employer) => ({
+                            value: employer.id,
+                            label: employer.title,
                           }))}
-                          name="sectors"
-                          value={formik.values.sectors || ""}
-                          onChange={formik.handleChange}
-                          onBlur={formik.handleBlur}
+                          title="Select a Sector"
+                          onChange={(_, value) => {
+                            if (value) {
+                              formik.setFieldValue("sectors", value);
+                            } else {
+                              formik.setFieldValue("sectors", {
+                                value: "",
+                                label: "",
+                              });
+                            }
+                          }}
+                          value={formik.values.sectors}
                         />
                         {formik.touched.sectors && formik.errors.sectors ? (
                           <ErrorMessage>{formik.errors.sectors}</ErrorMessage>
@@ -387,16 +509,51 @@ const PostNewJob = () => {
                         <label>
                           Type <span className="required-field">*</span>
                         </label>
-                        <SelectInput
-                          placeholder="Select a type of opportunity"
+                        <SelectWithSearch
+                          title="Select a type of opportunity"
                           defaultValue=""
-                          options={opportunityTypes.data.map(
+                          sx={{
+                            borderRadius: "10px",
+                            background: "#F0F0F0",
+                            fontFamily: "Poppins",
+
+                            "& fieldset": {
+                              border: "1px solid #cacaca",
+                              borderRadius: "93px",
+                              display: "none",
+                              "&:hover": { borderColor: "#cacaca" },
+                            },
+                            "& .MuiOutlinedInput-root": {
+                              fontFamily: "Poppins",
+                              padding: "4px 9px",
+                            },
+                            "& .MuiFormLabel-root": {
+                              fontSize: "16px",
+                              color: "#848484",
+                              fontFamily: "Poppins !important",
+                              transform: "translate(14px, 12px) scale(1)",
+                            },
+                            "& .MuiInputLabel-shrink": {
+                              transform: "translate(14px, -9px) scale(0.75)",
+                            },
+                          }}
+                          options={(opportunityTypes.data || []).map(
                             (opportunityType) => ({
                               value: opportunityType.id,
                               label: opportunityType.title,
                             })
                           )}
-                          {...formik.getFieldProps("opportunityType")}
+                          onChange={(_, value) => {
+                            if (value) {
+                              formik.setFieldValue("opportunityType", value);
+                            } else {
+                              formik.setFieldValue("opportunityType", {
+                                value: "",
+                                label: "",
+                              });
+                            }
+                          }}
+                          value={formik.values.opportunityType}
                         />
                         {formik.touched.opportunityType &&
                         formik.errors.opportunityType ? (
@@ -409,17 +566,49 @@ const PostNewJob = () => {
                         <label>
                           Tag <span className="required-field">*</span>
                         </label>
-                        <SelectInput
+                        <SelectWithSearch
                           defaultValue=""
-                          placeholder="Select a Tag"
-                          options={tags.data.map((tag) => ({
+                          sx={{
+                            borderRadius: "10px",
+                            background: "#F0F0F0",
+                            fontFamily: "Poppins",
+
+                            "& fieldset": {
+                              border: "1px solid #cacaca",
+                              borderRadius: "93px",
+                              display: "none",
+                              "&:hover": { borderColor: "#cacaca" },
+                            },
+                            "& .MuiOutlinedInput-root": {
+                              fontFamily: "Poppins",
+                              padding: "4px 9px",
+                            },
+                            "& .MuiFormLabel-root": {
+                              fontSize: "16px",
+                              color: "#848484",
+                              fontFamily: "Poppins !important",
+                              transform: "translate(14px, 12px) scale(1)",
+                            },
+                            "& .MuiInputLabel-shrink": {
+                              transform: "translate(14px, -9px) scale(0.75)",
+                            },
+                          }}
+                          title="Select a Tag"
+                          options={(tags.data || []).map((tag) => ({
                             value: tag.id,
                             label: tag.title,
                           }))}
-                          name={"tag"}
-                          value={formik.values.tag || ""}
-                          onChange={formik.handleChange}
-                          onBlur={formik.handleBlur}
+                          onChange={(_, value) => {
+                            if (value) {
+                              formik.setFieldValue("tag", value);
+                            } else {
+                              formik.setFieldValue("tag", {
+                                value: "",
+                                label: "",
+                              });
+                            }
+                          }}
+                          value={formik.values.tag}
                         />
                         {formik.touched.tag && formik.errors.tag ? (
                           <ErrorMessage>{formik.errors.tag}</ErrorMessage>
