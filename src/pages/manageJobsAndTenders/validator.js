@@ -81,7 +81,6 @@ export const validateCreateTenderInput = Yup.object().shape({
   opportunityType: Yup.object().required("Type is required"),
   budgetCurrency: Yup.string(),
   budgetAmount: Yup.number(),
-  budgetPayPeriod: Yup.string(),
   description: Yup.string().required("Description is required"),
   country: Yup.object().required("Country is required"),
   city: Yup.object().required("City is required"),
