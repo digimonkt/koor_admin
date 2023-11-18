@@ -181,7 +181,6 @@ export const getTenderDetailsByIdAPI = async (data) => {
 
 // UpdateTender
 export const updateTenderAPI = async (tenderId, data) => {
-  console.log({ tenderId, data });
   const response = await api.request({
     url: urlcat("/v1/admin/tender/create/:tenderId", { tenderId }),
     method: "PUT",

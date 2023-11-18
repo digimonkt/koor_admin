@@ -2,7 +2,6 @@ import api from ".";
 import urlcat from "urlcat";
 
 export const getUserCountApi = async (period) => {
-  console.log({ period });
   const response = await api.request({
     url: urlcat("/v1/admin/users-count", { period }),
     method: "GET",
