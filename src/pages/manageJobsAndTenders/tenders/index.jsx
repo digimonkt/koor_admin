@@ -113,6 +113,19 @@ function ManageTendersComponent() {
               >
                 <SVG.DeleteIcon />
               </IconButton>
+              <IconButton
+                onClick={() => handleEdit(item.row.id)}
+                sx={{
+                  "&.MuiIconButton-root": {
+                    background: "#D5E3F7",
+                  },
+                  width: 30,
+                  height: 30,
+                  color: "#274593",
+                }}
+              >
+                <SVG.EditIcon />
+              </IconButton>
             </Stack>
           );
         },
@@ -134,6 +147,11 @@ function ManageTendersComponent() {
       dispatch(setErrorToast("Something went wrong"));
     }
   }, [tenderTable, dispatch, deleteTender]);
+
+  const handleEdit = async (item) => {
+    navigate(`./post-tender?tenderId=${item}`);
+  };
+
   const tenderList = useCallback(async () => {
     dispatch(setLoading(true));
     const page = pages;
