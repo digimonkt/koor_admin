@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ReactApexChart from "react-apexcharts";
 import { styled } from "@mui/material/styles";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
@@ -36,7 +36,7 @@ const Donut = ({
   handleChange,
   isSelect,
 }) => {
-  const [state] = useState({
+  const [state, setState] = useState({
     series,
     options: {
       chart: {
@@ -85,6 +85,13 @@ const Donut = ({
       ],
     },
   });
+
+  useEffect(() => {
+    setState((prevState) => ({
+      ...prevState,
+      series,
+    }));
+  }, [series]);
 
   return (
     <div className={`${styles.chartContent}`}>
@@ -145,8 +152,8 @@ const Donut = ({
         <Grid item xl={8} lg={8} sm={6} xs={12}>
           <div className={`${styles.seriesBox}`}>
             <h2>{total}</h2>
-            <span>{user}</span>
-            <ul>{content}</ul>
+            <span>{user || 0}</span>
+            <ul>{content || 0}</ul>
           </div>
         </Grid>
       </Grid>

@@ -1,12 +1,12 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { SVG } from "@assets/svg";
-import { Box, IconButton } from "@mui/material";
+import { Box, IconButton, Tooltip } from "@mui/material";
 import { Stack } from "@mui/system";
 import Layout from "../../manageOptions/layout";
 import { setLoading } from "@redux/slice/jobsAndTenders";
 import { useDispatch, useSelector } from "react-redux";
 import { useDebounce } from "usehooks-ts";
-import { manageTenderApi } from "@api/manageoptions";
+import { manageTenderApi, activeInactiveTenderAPI } from "@api/manageoptions";
 import { transformOptionsResponse } from "@api/transform/choices";
 import DialogBox from "@components/dialogBox";
 import { DeleteCard } from "@components/card";
@@ -99,48 +99,81 @@ function ManageTendersComponent() {
         width: 120,
         sortable: true,
         renderCell: (item) => {
+          console.log({ item });
           return (
             <Stack direction="row" spacing={1} alignItems="center">
-              <IconButton
-                onClick={() => handleRedirectDetails(item.row.id)}
-                sx={{
-                  "&.MuiIconButton-root": {
-                    background: "#D5E3F7",
-                  },
+              <Tooltip title="View Details">
+                <IconButton
+                  onClick={() => handleRedirectDetails(item.row.id)}
+                  sx={{
+                    "&.MuiIconButton-root": {
+                      background: "#D5E3F7",
+                    },
 
-                  width: 30,
-                  height: 30,
-                  color: "#274593",
-                }}
+                    width: 30,
+                    height: 30,
+                    color: "#274593",
+                  }}
+                >
+                  <SVG.EyeIcon />
+                </IconButton>
+              </Tooltip>
+              <Tooltip
+                title={item.row.status === "active" ? "Deactivate" : "active"}
               >
-                <SVG.EyeIcon />
-              </IconButton>
-              <IconButton
-                onClick={() => setDeleteTender(item.row.id)}
-                sx={{
-                  "&.MuiIconButton-root": {
-                    background: "#D5E3F7",
-                  },
-                  width: 30,
-                  height: 30,
-                  color: "#274593",
-                }}
-              >
-                <SVG.DeleteIcon />
-              </IconButton>
-              <IconButton
-                onClick={() => handleEdit(item.row.id)}
-                sx={{
-                  "&.MuiIconButton-root": {
-                    background: "#D5E3F7",
-                  },
-                  width: 30,
-                  height: 30,
-                  color: "#274593",
-                }}
-              >
-                <SVG.EditIcon />
-              </IconButton>
+                <IconButton
+                  onClick={() => {
+                    handleHoldTender(
+                      item,
+                      item.row.status === "active" ? "inActive" : "active"
+                    );
+                  }}
+                  sx={{
+                    "&.MuiIconButton-root": {
+                      background: "#D5E3F7",
+                    },
+                    width: 30,
+                    height: 30,
+                    color: "#274593",
+                  }}
+                >
+                  {item.row.status === "active" ? (
+                    <SVG.HoldIcon />
+                  ) : (
+                    <SVG.polygon />
+                  )}
+                </IconButton>
+              </Tooltip>
+              <Tooltip title="Delete">
+                <IconButton
+                  onClick={() => setDeleteTender(item.row.id)}
+                  sx={{
+                    "&.MuiIconButton-root": {
+                      background: "#D5E3F7",
+                    },
+                    width: 30,
+                    height: 30,
+                    color: "#274593",
+                  }}
+                >
+                  <SVG.DeleteIcon />
+                </IconButton>
+              </Tooltip>
+              <Tooltip title="Edit">
+                <IconButton
+                  onClick={() => handleEdit(item.row.id)}
+                  sx={{
+                    "&.MuiIconButton-root": {
+                      background: "#D5E3F7",
+                    },
+                    width: 30,
+                    height: 30,
+                    color: "#274593",
+                  }}
+                >
+                  <SVG.EditIcon />
+                </IconButton>
+              </Tooltip>
             </Stack>
           );
         },
@@ -148,6 +181,7 @@ function ManageTendersComponent() {
     ],
     []
   );
+
   const handleDelete = useCallback(async () => {
     const response = await deleteTenderAPI(deleteTender);
     if (response.remote === "success") {
@@ -225,6 +259,22 @@ function ManageTendersComponent() {
   const getPage = useCallback((_, page) => {
     setPages(page);
   }, []);
+
+  const handleHoldTender = useCallback(
+    async (item, action) => {
+      const id = item.row.id;
+      const updatedTenderTable = tenderTable.map((job) => {
+        if (job.id === id) {
+          return { ...job, action };
+        }
+        return job;
+      });
+      setTenderTable(updatedTenderTable);
+      await activeInactiveTenderAPI(id);
+      tenderList();
+    },
+    [tenderTable, dispatch]
+  );
 
   useEffect(() => {
     tenderList();

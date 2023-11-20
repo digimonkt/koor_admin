@@ -34,7 +34,7 @@ function ImageCropper({ open, handleClose, image, handleSave }) {
     setCrop(crop);
   };
 
-  const onCropComplete = useCallback((croppedArea, croppedAreaPixels) => {
+  const onCropComplete = useCallback((_, croppedAreaPixels) => {
     setCroppedAreaPixels(croppedAreaPixels);
   }, []);
 
@@ -57,7 +57,7 @@ function ImageCropper({ open, handleClose, image, handleSave }) {
     }
   }, [croppedAreaPixels, rotation, image]);
 
-  const onZoomChange = (zoom, e) => {
+  const onZoomChange = (zoom, _) => {
     setZoom(zoom);
   };
   return (
@@ -68,15 +68,14 @@ function ImageCropper({ open, handleClose, image, handleSave }) {
             <Cropper
               image={imageSrc}
               crop={crop}
-              zoom={zoom}
               rotation={rotation}
-              cropShape={"round"}
+              zoom={zoom}
               aspect={1}
               showGrid={false}
+              cropShape="round" // Set cropShape to "round" for circular crop
               onCropChange={onCropChange}
               onCropComplete={onCropComplete}
               onZoomChange={onZoomChange}
-              cropSize={{ width: 150, height: 150 }}
             />
           )}
         </div>
