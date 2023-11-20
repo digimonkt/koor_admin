@@ -33,7 +33,7 @@ import {
   getEmployers,
 } from "@redux/slice/choices";
 import { Link, useSearchParams, useNavigate } from "react-router-dom";
-import { FilledButton, OutlinedButton } from "@components/button";
+import { OutlinedButton, SolidButton } from "@components/button";
 import { ErrorMessage } from "@components/caption";
 import { useDebounce } from "usehooks-ts";
 import {
@@ -113,7 +113,6 @@ const PostNewJob = () => {
         title: values.title,
         budget_currency: values.budgetCurrency,
         budget_amount: values.budgetAmount,
-        budget_pay_period: values.budgetPayPeriod,
         description: values.description,
         country: values.country.value,
         city: values.city.value,
@@ -131,7 +130,9 @@ const PostNewJob = () => {
       };
       const newFormData = new FormData();
       for (const key in payload) {
-        if (key === "attachments") {
+        if (!payload[key]) {
+          delete payload[key];
+        } else if (key === "attachments") {
           payload.attachments.forEach((attachment) => {
             if (!attachment.id) {
               newFormData.append(key, attachment);
@@ -143,6 +144,7 @@ const PostNewJob = () => {
           newFormData.append(key, payload[key]);
         }
       }
+
       let res;
       if (!tenderId) {
         // createTender
@@ -169,6 +171,7 @@ const PostNewJob = () => {
     },
   });
 
+  console.log({ formik });
   const getEmployerList = async () => {
     const limitParam = 10;
     const response = await manageEmployer({
@@ -188,7 +191,17 @@ const PostNewJob = () => {
       if (data.address) {
         setSearchValue(data.address);
       }
+      if (data.companyLogo) setCompanyLogo(data.companyLogo);
+      if (!data.user?.id) {
+        setSelectedValue("new");
+      }
       formik.setFieldValue("companyType", selectedValue);
+      formik.setFieldValue("company", data.company);
+
+      formik.setFieldValue("existCompany", {
+        value: data.user?.id || "",
+        label: data.user?.name || "",
+      });
       formik.setFieldValue("address", data.address);
       formik.setFieldValue("title", data.title);
       formik.setFieldValue("budgetCurrency", data.budgetCurrency);
@@ -1028,9 +1041,9 @@ const PostNewJob = () => {
                         },
                       }}
                       disabled={formik.isSubmitting}
-                      onClick={() => navigate("/employer/manage-tenders")}
+                      onClick={() => navigate("/manage-tenders")}
                     />
-                    <FilledButton
+                    <SolidButton
                       sx={{
                         fontSize: "16px !important",
                         "@media (max-width: 480px)": {
@@ -1048,6 +1061,7 @@ const PostNewJob = () => {
                           : "POST THE TENDER"
                       }
                       type="submit"
+                      className="resetButton"
                       disabled={formik.isSubmitting}
                     />
                   </Stack>

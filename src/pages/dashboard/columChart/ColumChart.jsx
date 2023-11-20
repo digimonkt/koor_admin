@@ -29,7 +29,7 @@ export const SelectBox = styled(Select)`
 `;
 
 const ColumChart = () => {
-  const [isSelect, setIsSelect] = useState("this week");
+  const [isSelect, setIsSelect] = useState("this year");
   const [isApplication, setIsApplication] = useState([]);
 
   const employerDetails = async () => {

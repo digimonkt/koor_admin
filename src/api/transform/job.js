@@ -72,6 +72,10 @@ export const transformFullJobDetails = (data) => {
 // TenderTransform
 export const transformFullTenderDetails = (data) => {
   return {
+    company: data.company,
+    companyLogo: data.company_logo?.path
+      ? generateFileUrl(data.company_logo.path)
+      : "",
     id: data.id,
     title: data.title,
     budgetCurrency: data.budget_currency,
@@ -80,6 +84,7 @@ export const transformFullTenderDetails = (data) => {
     country: data.country,
     city: data.city,
     address: data.address,
+    action: data.status,
     categories: data.tender_category,
     sectors: data.sector,
     opportunityType: data.tender_type,

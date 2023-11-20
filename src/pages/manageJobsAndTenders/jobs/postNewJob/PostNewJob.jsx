@@ -38,8 +38,8 @@ import {
   getSkills,
   getEmployers,
 } from "@redux/slice/choices";
-import { Link, useSearchParams } from "react-router-dom";
-import { FilledButton } from "@components/button";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { OutlinedButton, SolidButton } from "@components/button";
 import { ErrorMessage } from "@components/caption";
 import SelectWithSearch from "@components/input/selectWithsearch";
 import { manageEmployer } from "@api/employers";
@@ -69,6 +69,7 @@ const PostNewJob = () => {
     employers,
   } = useSelector(({ choice }) => choice);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [selectedValue, setSelectedValue] = React.useState("exist");
   const handleChange = (event) => {
     setSelectedValue(event.target.value);
@@ -1407,20 +1408,64 @@ const PostNewJob = () => {
                       }
                     }}
                   />
-                  <FilledButton
-                    disabled={submitting === SUBMITTING_STATUS_ENUM.loading}
-                    title={
-                      submitting === SUBMITTING_STATUS_ENUM.loading
-                        ? jobId
-                          ? "Updating..."
-                          : "Posting..."
-                        : jobId
-                        ? "UPDATE THE JOB"
-                        : "POST THE JOB"
-                    }
-                    type="submit"
-                    className="mt-2"
-                  />
+                  <Grid item xl={12} lg={12} xs={12}>
+                    <Divider
+                      sx={{ borderColor: "#CACACA", opacity: "1", my: 2 }}
+                    />
+                  </Grid>
+                  <Grid item xl={12} lg={12} xs={12}>
+                    <Stack
+                      direction="row"
+                      alignItems="center"
+                      justifyContent="space-between"
+                      style={{ flexWrap: "wrap" }}
+                    >
+                      <OutlinedButton
+                        title="Cancel"
+                        sx={{
+                          "&.MuiButton-outlined": {
+                            borderRadius: "73px",
+                            border: "0px",
+                            color: "#848484 !important",
+                            fontWeight: "500",
+                            fontSize: "16px",
+                            fontFamily: "Bahnschrift",
+                            padding: "6px 50px",
+
+                            "&:hover": {
+                              background: "rgba(40, 71, 146, 0.1)",
+                              color: "#274593",
+                            },
+                            "@media (max-width: 992px)": {
+                              padding: "5px 15px",
+                              fontSize: "14px",
+                            },
+                            "@media (max-width: 480px)": {
+                              fontSize: "14px !important",
+                              marginBottom: "10px",
+                              width: "100%",
+                            },
+                          },
+                        }}
+                        disabled={formik.isSubmitting}
+                        onClick={() => navigate("/manage-jobs")}
+                      />
+                      <SolidButton
+                        disabled={submitting === SUBMITTING_STATUS_ENUM.loading}
+                        title={
+                          submitting === SUBMITTING_STATUS_ENUM.loading
+                            ? jobId
+                              ? "Updating..."
+                              : "Posting..."
+                            : jobId
+                            ? "UPDATE THE JOB"
+                            : "POST THE JOB"
+                        }
+                        type="submit"
+                        className="mt-2 resetButton"
+                      />
+                    </Stack>
+                  </Grid>
                 </Grid>
               </form>
             </div>
