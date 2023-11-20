@@ -11,7 +11,7 @@ import {
   IconButton,
   Stack,
 } from "@mui/material";
-import ReactQuill from "react-quill";
+import ReactQuill, { Quill } from "react-quill";
 import ImageCropper from "@components/imageCropper";
 import { LabeledInput } from "@components/input";
 import { Link, useNavigate, useParams } from "react-router-dom";
@@ -168,6 +168,22 @@ const PostTestimonials = () => {
       getFetchData();
     }
   }, [testimonialId]);
+  const Size = Quill.import("formats/size");
+  Size.whitelist = ["extra-small", "small", "medium", "large"];
+  Quill.register(Size, true);
+
+  // Add fonts to whitelist and register them
+  const Font = Quill.import("formats/font");
+  Font.whitelist = [
+    "Poppins",
+    "arial",
+    "comic-sans",
+    "courier-new",
+    "georgia",
+    "helvetica",
+    "lucida",
+  ];
+  Quill.register(Font, true);
   return (
     <Card
       sx={{
@@ -281,18 +297,19 @@ const PostTestimonials = () => {
             </div>
           </Grid>
           <Grid item xs={12} lg={12}>
-            <div>
+            <Box className="react_editor">
               <ReactQuill
                 theme="snow"
                 value={paragraph}
-                style={{
+                sx={{
                   width: "100%",
                   marginTop: "20px",
                   background: "#F0F0F0",
+                  fontFamily: "Poppins !important",
                 }}
                 onChange={(value) => handleParagraph(value)}
               />
-            </div>
+            </Box>
           </Grid>
         </Grid>
         {testimonialId ? (
