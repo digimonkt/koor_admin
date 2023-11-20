@@ -7,7 +7,13 @@ import ImageCropper from "@components/imageCropper";
 import { useSelector } from "react-redux";
 import { USER_ROLES } from "@utils/enum";
 
-const ProfilePicInputComponent = ({ title, handleSave, image, loading, handleSaveCroppedImg }) => {
+const ProfilePicInputComponent = ({
+  title,
+  handleSave,
+  image,
+  loading,
+  handleSaveCroppedImg,
+}) => {
   const { role } = useSelector((state) => state.auth);
   const [files, setFiles] = useState([]);
   const [newImage, setNewImage] = useState("");

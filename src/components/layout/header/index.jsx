@@ -85,7 +85,7 @@ function Header(props) {
   return (
     <Box sx={{ display: "flex" }} className="header">
       <CssBaseline />
-      <AppBar component="nav">
+      <AppBar component="nav" sx={{ paddingRight: "0px !important" }}>
         <Toolbar>
           <Typography
             variant="h6"

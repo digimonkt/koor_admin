@@ -1197,6 +1197,9 @@ const PostNewJob = () => {
                     }}
                   />
                   <FilledButton
+                    sx={{
+                      marginTop: "10px",
+                    }}
                     disabled={submitting === SUBMITTING_STATUS_ENUM.loading}
                     title={
                       submitting === SUBMITTING_STATUS_ENUM.loading

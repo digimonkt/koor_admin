@@ -29,6 +29,11 @@
   width: 200px;
 }
 
+.loca_job .MuiSelect-icon {
+  top: calc(34% - 0.2em) !important;
+  right: 8px !important;
+}
+
 .employer_client_input .MuiFormControl-root {
   width: 100%;
 }
