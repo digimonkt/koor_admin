@@ -1266,7 +1266,7 @@ const PostNewJob = () => {
                     ) : null}
                   </Grid>
                   <Grid item xl={12} lg={12} xs={12}>
-                    <label className="mb-2">
+                    <label className="mb-2 d-block">
                       Required languages
                       <span style={{ opacity: "0.5" }}>(Maximum 3)</span>
                       <span className="required-field">*</span>
@@ -1307,7 +1307,7 @@ const PostNewJob = () => {
                   </Grid>
                 </Grid>
                 <Grid item xl={12} lg={12} xs={12}>
-                  <label className="mb-2">
+                  <label className="mb-2 d-block">
                     Job skills
                     <span style={{ opacity: "0.5" }}>(Maximum 3)</span>
                     <span className="required-field">*</span>

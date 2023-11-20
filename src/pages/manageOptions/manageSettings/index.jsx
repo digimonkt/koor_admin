@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import {
+  Box,
   Card,
   CardContent,
   Divider,
@@ -116,10 +117,15 @@ const ManageSettingsComponent = () => {
               },
             }}
           >
-            <h2>Content management</h2>
+            <Box sx={{ display: "flex", alignItems: "center" }}>
+              <IconButton disableRipple={true} sx={{ padding: "0px" }}>
+                <SVG.ArrowLeftIcon className="me-3" />
+              </IconButton>
+              <h2>Content management</h2>
+            </Box>
           </Stack>
           <Stack
-            direction={{ xs: "column", sm: "row" }}
+            direction={{ xs: "row", sm: "row" }}
             spacing={{ xs: 1, sm: 2, md: 2 }}
             justifyContent="space-between"
             alignItems="center"
@@ -131,6 +137,7 @@ const ManageSettingsComponent = () => {
                 md: 3.75,
                 lg: 3.75,
                 xl: 3.75,
+                marginBottom: "20px !important",
               },
             }}
           >
@@ -139,7 +146,7 @@ const ManageSettingsComponent = () => {
               <OutlinedButton
                 title={
                   <Stack direction={"row"} spacing={1} alignItems={"center"}>
-                    <SVG.EditNoteIcon /> <span> post</span>
+                    <SVG.EditNoteIcon /> <span> Create a new post</span>
                   </Stack>
                 }
                 sx={{
@@ -150,7 +157,13 @@ const ManageSettingsComponent = () => {
                     fontWeight: "600",
                     fontSize: "16px",
                     fontFamily: "Bahnschrift",
-                    padding: "10px 30px",
+                    padding: "10px 28px !important",
+
+                    "@media (max-width: 480px)": {
+                      "&.MuiButton-outlined": {
+                        fontSize: "14px",
+                      },
+                    },
                   },
                 }}
               />
@@ -182,7 +195,7 @@ const ManageSettingsComponent = () => {
                     }}
                   >
                     <Grid container spacing={2.5}>
-                      <Grid item lg={6} xs={12}>
+                      <Grid item lg={6} sm={6} xs={12}>
                         <div className={`${styles.imageBox}`}>
                           <img
                             src={`${process.env.REACT_APP_BACKEND_URL}${item.imgUrl}`}
@@ -191,7 +204,7 @@ const ManageSettingsComponent = () => {
                           {item.playIcon}
                         </div>
                       </Grid>
-                      <Grid item lg={6} xs={12}>
+                      <Grid item lg={6} sm={6} xs={12}>
                         <div className={`${styles.settingDescription}`}>
                           <h2>{item.title}</h2>
 
@@ -215,6 +228,9 @@ const ManageSettingsComponent = () => {
                               mt: {
                                 lg: 1.5,
                                 xs: 1.5,
+                              },
+                              "@media (max-width: 992px)": {
+                                justifyContent: "left",
                               },
                             }}
                           >

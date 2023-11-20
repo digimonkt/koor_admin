@@ -95,8 +95,8 @@ input::placeholder {
 
 .search-icon {
   position: absolute;
-  left: 10px;
-  top: 11px;
+  left: 8px;
+  top: 10px;
   z-index: 1;
   color: #848484;
 }
@@ -118,7 +118,9 @@ input::placeholder {
   padding-top: 20px;
 }
 
-.pagination-custom .MuiPagination-root.MuiPagination-root .MuiPaginationItem-root {
+.pagination-custom
+  .MuiPagination-root.MuiPagination-root
+  .MuiPaginationItem-root {
   margin-left: 10px;
   margin-right: 10px;
 }
@@ -375,9 +377,17 @@ input::-webkit-inner-spin-button {
     display: none;
   }
 
+  .drag-drop {
+    height: 81px;
+  }
+
   .sidebar__box nav {
     width: 0px;
     display: contents;
+  }
+
+  input::placeholder {
+    font-size: 14px;
   }
 
   .report h2 {
@@ -394,7 +404,13 @@ input::-webkit-inner-spin-button {
     margin-top: 20px;
   }
 
-  .pagination-custom .MuiPagination-root.MuiPagination-root .MuiPaginationItem-root {
+  input::placeholder {
+    font-size: 12px;
+  }
+
+  .pagination-custom
+    .MuiPagination-root.MuiPagination-root
+    .MuiPaginationItem-root {
     font-size: 14px;
   }
 

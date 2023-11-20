@@ -76,7 +76,6 @@ function ImageCropper({ open, handleClose, image, handleSave }) {
               onCropChange={onCropChange}
               onCropComplete={onCropComplete}
               onZoomChange={onZoomChange}
-              // style={{ containerStyle: { color: "red" } }
             />
           )}
         </div>

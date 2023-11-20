@@ -62,7 +62,9 @@ import { ReactComponent as ArrowForward } from "./arrow_forward.svg";
 import { ReactComponent as UserIcon } from "./user.svg";
 import { ReactComponent as KoorLogo } from "./logo.svg";
 import { ReactComponent as WhiteFile } from "./white-file.svg";
+import { ReactComponent as RightBox } from "./right_box.svg";
 export const SVG = {
+  RightBox,
   WhiteFile,
   polygon,
   LocationIcon,
