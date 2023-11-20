@@ -1,6 +1,5 @@
 import { Autocomplete, Box, TextField } from "@mui/material";
 function SelectWithSearch({ options, title, ...rest }) {
-  console.log({ options, title, ...rest });
   return (
     <Autocomplete
       sx={{

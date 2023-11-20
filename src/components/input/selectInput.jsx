@@ -38,7 +38,7 @@ export const SelectBox = styled(Select)`
     display: none;
   }
   & .MuiSelect-icon {
-    top: calc(50% - 0.2em);
+    top: calc(36% - 0.2em);
     right: 11px;
   }
 `;
@@ -83,7 +83,7 @@ function SelectInputComponent({
         fullWidth
       >
         {search && (
-          <span className="search-icon">
+          <span className="search-icon ">
             <SVG.LocationIcon />
           </span>
         )}

@@ -36,6 +36,9 @@ const ProfilePicInputComponent = ({
     setFiles([]);
   };
 
+  useEffect(() => {
+    setFiles([]);
+  }, [image]);
   // const handleSaveImage = () => {
   //   if (newImage instanceof File) handleSave(newImage);
   // };

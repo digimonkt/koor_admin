@@ -11,6 +11,7 @@ import { setErrorToast, setSuccessToast } from "@redux/slice/toast";
 import { setLoading } from "@redux/slice/jobsAndTenders";
 import { useDebounce } from "usehooks-ts";
 import { transformEmployerAPIResponse } from "@api/transform/choices";
+import { getCountriesName } from "@api/jobs";
 function ManageEmployerComponent() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -22,8 +23,9 @@ function ManageEmployerComponent() {
   const [totalCount, setTotalCount] = useState(0);
   const [searchTerm, setSearchTerm] = useState("");
   const [country, setCountry] = useState({});
-  const debouncedSearchEmployerValue = useDebounce(searchTerm, 500);
+  const [countriesData, setCountriesData] = useState(countries.data);
 
+  const debouncedSearchEmployerValue = useDebounce(searchTerm, 500);
   const columns = useMemo(
     () => [
       {
@@ -100,7 +102,6 @@ function ManageEmployerComponent() {
                   </IconButton>
                 )}
               </>
-
               <IconButton
                 onClick={() => handleRedirectDetails(item.row.id)}
                 sx={{
@@ -114,7 +115,6 @@ function ManageEmployerComponent() {
               >
                 <SVG.EyeIcon />
               </IconButton>
-
               <IconButton
                 onClick={() => setDeleting(item.row.id)}
                 sx={{
@@ -151,7 +151,7 @@ function ManageEmployerComponent() {
       limit,
       page,
       search,
-      country: country.title,
+      country: country?.title,
     });
     if (response.remote === "success") {
       const formateData = transformEmployerAPIResponse(response.data.results);
@@ -172,10 +172,16 @@ function ManageEmployerComponent() {
 
   const filterJobsCountry = (e) => {
     const countryId = e.target.value;
-    const country = countries.data.find((country) => country.id === countryId);
+    const country = countriesData?.find((country) => country.id === countryId);
     setCountry(country);
   };
-
+  const getCountryList = async () => {
+    const limitParam = 500;
+    const response = await getCountriesName({ limit: limitParam });
+    if (response.remote === "success") {
+      setCountriesData(response.data.results);
+    }
+  };
   const activeDeActiveUser = useCallback(
     async (item) => {
       const id = item.row.id;
@@ -233,12 +239,18 @@ function ManageEmployerComponent() {
   useEffect(() => {
     employerList();
   }, [employerList]);
+
+  useEffect(() => {
+    getCountryList();
+  }, []);
   return (
     <>
       <Layout
         rows={employerTable}
         columns={columns}
+        dropDownList={countriesData}
         totalCount={totalCount}
+        NoFoundText={{ noRowsLabel: "No employer found" }}
         handlePageChange={getPage}
         page={pages}
         searchProps={{
@@ -248,7 +260,7 @@ function ManageEmployerComponent() {
         }}
         selectProps={{
           onChange: (e) => filterJobsCountry(e),
-          value: country.id || "",
+          value: country?.id || "",
         }}
         limitProps={{
           value: limit,

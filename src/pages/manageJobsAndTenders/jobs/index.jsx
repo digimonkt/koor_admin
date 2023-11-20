@@ -168,8 +168,6 @@ function ManageJobsComponent() {
       setTotalCount(totalCounts);
     } else {
       dispatch(setLoading(false));
-      // dispatch(setErrorToast("Something went wrong"));
-      console.log({ response });
     }
   }, [country, debouncedSearchJobsValue, pages, limit]);
 
@@ -268,6 +266,8 @@ function ManageJobsComponent() {
         totalCount={totalCount}
         columns={columns}
         handlePageChange={getPage}
+        NoFoundText={{ noRowsLabel: "No job found" }}
+        dropDownList={countriesData}
         page={pages}
         searchProps={{
           placeholder: "Search Jobs",

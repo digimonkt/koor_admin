@@ -131,10 +131,12 @@ const ManageCategoryComponent = () => {
   const handleDeleteSub = async () => {
     const response = await deleteSubCategoryApi(subCategoryDeleting.id);
     if (response.remote === "success") {
+      const categoryId =
+        subCategoryDeleting.category?.id || subCategoryDeleting.categoryId;
       dispatch(
         removeSubCategory({
           id: subCategoryDeleting.id,
-          categoryId: subCategoryDeleting.category.id,
+          categoryId,
         })
       );
       setSubCategoryDeleting("");
