@@ -60,3 +60,11 @@ export const getTenderCategoryAPI = async (data) => {
   }
   return response;
 };
+
+export const deleteTenderAPI = async (tenderId) => {
+  const response = await api.request({
+    url: urlcat("/v1/admin/tender/:tenderId", { tenderId }),
+    method: "DELETE",
+  });
+  return response;
+};

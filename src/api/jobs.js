@@ -1,6 +1,9 @@
 import api from ".";
 import urlcat from "urlcat";
-import { transformFullJobDetails } from "./transform/job";
+import {
+  transformFullJobDetails,
+  transformFullTenderDetails,
+} from "./transform/job";
 export const manageJobData = async ({
   limit,
   page,
@@ -159,4 +162,32 @@ export const createTenderAPI = async (data) => {
     data,
   });
   return res;
+};
+
+// TenderDetails
+export const getTenderDetailsByIdAPI = async (data) => {
+  const response = await api.request({
+    url: urlcat("/v1/tenders/:tenderId", data),
+    method: "GET",
+  });
+  if (response.remote === "success") {
+    return {
+      remote: "success",
+      data: transformFullTenderDetails(response.data),
+    };
+  }
+  return response;
+};
+
+// UpdateTender
+export const updateTenderAPI = async (tenderId, data) => {
+  const response = await api.request({
+    url: urlcat("/v1/admin/tender/create/:tenderId", { tenderId }),
+    method: "PUT",
+    data,
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+  return response;
 };

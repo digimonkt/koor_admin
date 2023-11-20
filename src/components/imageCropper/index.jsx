@@ -69,11 +69,14 @@ function ImageCropper({ open, handleClose, image, handleSave }) {
               image={imageSrc}
               crop={crop}
               zoom={zoom}
-              aspect={4 / 3}
+              rotation={rotation}
+              cropShape={"round"}
+              aspect={1}
               showGrid={false}
               onCropChange={onCropChange}
               onCropComplete={onCropComplete}
               onZoomChange={onZoomChange}
+              cropSize={{ width: 150, height: 150 }}
             />
           )}
         </div>

@@ -13,11 +13,13 @@ export const SelectBox = styled(Select)`
     font-size: 16px;
     font-family: "Poppins";
     font-weight: 500;
+    padding-left: 30px;
   }
   & .Mui-disabled {
     color: #848484 !important;
     -webkit-text-fill-color: #848484;
     font-weight: 300;
+    padding-left: 16px;
   }
 
   & .MuiInputBase-root {
@@ -36,7 +38,7 @@ export const SelectBox = styled(Select)`
     display: none;
   }
   & .MuiSelect-icon {
-    top: calc(50% - 0.2em);
+    top: calc(36% - 0.2em);
     right: 11px;
   }
 `;
@@ -73,13 +75,15 @@ function SelectInputComponent({
             fontFamily: "Poppins",
             fontSize: "16px",
             padding: `14px 34px 14px ${search ? "60px" : "20px"} !important`,
+            display: "flex",
+            alignItems: "center",
           },
         }}
         size="small"
         fullWidth
       >
         {search && (
-          <span className="search-icon">
+          <span className="search-icon ">
             <SVG.LocationIcon />
           </span>
         )}

@@ -1,6 +1,7 @@
 import { generateFileUrl } from "@utils/generateFileUrl";
 import dayjs from "dayjs";
 
+// JobTransform
 export const transformFullJobDetails = (data) => {
   return {
     id: data.id,
@@ -58,6 +59,33 @@ export const transformFullJobDetails = (data) => {
       mobileNumber: data.user.mobile_number,
       image: data.user.image,
     },
+    attachments:
+      data.attachments?.map((attachment) => ({
+        id: attachment.id,
+        path: attachment.path,
+        type: attachment.type,
+        title: attachment.title,
+      })) || [],
+  };
+};
+
+// TenderTransform
+export const transformFullTenderDetails = (data) => {
+  return {
+    id: data.id,
+    title: data.title,
+    budgetCurrency: data.budget_currency,
+    budgetAmount: Number(data.budget_amount).toLocaleString(),
+    description: data.description,
+    country: data.country,
+    city: data.city,
+    address: data.address,
+    categories: data.tender_category,
+    sectors: data.sector,
+    opportunityType: data.tender_type,
+    tag: data.tag,
+    startDate: data.start_date,
+    deadline: data.deadline,
     attachments:
       data.attachments?.map((attachment) => ({
         id: attachment.id,

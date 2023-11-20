@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useCallback } from "react";
 import {
   AccordionDetails,
   AccordionSummary,
@@ -10,6 +10,16 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import { SVG } from "@assets/svg";
 
 function Accordion({ title, onOpen, handleDelete, handleEdit, children }) {
+  const handleIconClick = useCallback(
+    (e) => {
+      e.stopPropagation();
+      if (handleDelete) {
+        handleDelete();
+      }
+    },
+    [handleDelete]
+  );
+
   const accordionProps = {
     sx: {
       pointerEvents: "none",
@@ -22,63 +32,64 @@ function Accordion({ title, onOpen, handleDelete, handleEdit, children }) {
         }}
       />
     ),
+    IconButtonProps: {
+      onClick: () => handleDelete(),
+    },
   };
   return (
-    <MUIAccordion elevation={0}>
-      <AccordionSummary
-        {...accordionProps}
-        aria-controls="panel1a-content"
-        id="panel1a-header"
-        className="accordion-class"
-      >
-        <Typography
-          sx={{ fontFamily: "Poppins", fontWeight: 500, fontSize: "18px" }}
+    <>
+      <MUIAccordion TransitionProps={{ unmountOnExit: true }} elevation={0}>
+        <AccordionSummary
+          {...accordionProps}
+          aria-controls="panel1a-content"
+          id="panel1a-header"
+          className="accordion-class"
         >
-          {title}
-        </Typography>
-        <div>
-          {handleDelete && (
-            <IconButton
-              onClick={() => {
-                handleDelete();
-              }}
-              sx={{
-                "&.MuiIconButton-root": {
-                  background: "#D5E3F7",
-                },
-                pointerEvents: "auto",
-                width: 30,
-                height: 30,
-                marginRight: "16px",
-                color: "#274593",
-              }}
-            >
-              <SVG.DeleteIcon />
-            </IconButton>
-          )}
-          {handleEdit && (
-            <IconButton
-              sx={{
-                "&.MuiIconButton-root": {
-                  background: "#D5E3F7",
-                },
-                pointerEvents: "auto",
-
-                width: 30,
-                height: 30,
-                marginRight: "16px",
-                color: "#274593",
-              }}
-              onClick={handleEdit}
-            >
-              <SVG.EditIcon />
-            </IconButton>
-          )}
-        </div>
-      </AccordionSummary>
-
-      <AccordionDetails>{children}</AccordionDetails>
-    </MUIAccordion>
+          <Typography
+            sx={{ fontFamily: "Poppins", fontWeight: 500, fontSize: "18px" }}
+          >
+            {title}
+          </Typography>
+          <div>
+            {handleDelete && (
+              <IconButton
+                onClick={(e) => handleIconClick(e)}
+                sx={{
+                  "&.MuiIconButton-root": {
+                    background: "#D5E3F7",
+                  },
+                  pointerEvents: "auto",
+                  width: 30,
+                  height: 30,
+                  marginRight: "16px",
+                  color: "#274593",
+                }}
+              >
+                <SVG.DeleteIcon />
+              </IconButton>
+            )}
+            {handleEdit && (
+              <IconButton
+                onClick={(e) => handleIconClick(e)}
+                sx={{
+                  "&.MuiIconButton-root": {
+                    background: "#D5E3F7",
+                  },
+                  pointerEvents: "auto",
+                  width: 30,
+                  height: 30,
+                  marginRight: "16px",
+                  color: "#274593",
+                }}
+              >
+                <SVG.EditIcon />
+              </IconButton>
+            )}
+          </div>
+        </AccordionSummary>
+        <AccordionDetails>{children}</AccordionDetails>
+      </MUIAccordion>
+    </>
   );
 }
 
