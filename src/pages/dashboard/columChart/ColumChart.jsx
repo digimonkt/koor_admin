@@ -29,13 +29,13 @@ export const SelectBox = styled(Select)`
 `;
 
 const ColumChart = () => {
-  const [isSelect, setIsSelect] = useState("this_week");
+  const [isSelect, setIsSelect] = useState("this year");
   const [isApplication, setIsApplication] = useState([]);
 
   const employerDetails = async () => {
     const response = await getDashboardApi(isSelect);
     if (response.remote === "success") {
-      setIsApplication(response.data.jobs);
+      setIsApplication(response.data);
     }
   };
 
@@ -189,7 +189,7 @@ const ColumChart = () => {
 
   useEffect(() => {
     employerDetails();
-  }, [handleChange]);
+  }, [isSelect]);
   return (
     <>
       <div className={`${styles.chartContent}`}>
@@ -226,9 +226,9 @@ const ColumChart = () => {
                 },
               }}
             >
-              <MenuItem value="this_week">This Week</MenuItem>
-              <MenuItem value="last_month">Last Month</MenuItem>
-              <MenuItem value="this_year">This year</MenuItem>
+              <MenuItem value="this week">This Week</MenuItem>
+              <MenuItem value="last month">Last Month</MenuItem>
+              <MenuItem value="this year">This year</MenuItem>
             </SelectBox>
           </FormControl>
         </Stack>
@@ -238,14 +238,14 @@ const ColumChart = () => {
               className={`${styles.blueView}`}
               style={{ borderColor: "#274593" }}
             ></span>
-            <b>{isApplication?.employers || 0}</b>employers
+            <b>{isApplication?.employers}</b>employers
           </div>
           <div className={`${styles.views}`}>
             <span
               className={`${styles.blueView}`}
               style={{ borderColor: "#4CAF50" }}
             ></span>
-            <b>{isApplication?.jobs || 0}</b>jobs
+            <b>{isApplication?.jobs}</b>jobs
           </div>
         </Stack>
         <ReactApexChart

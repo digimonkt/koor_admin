@@ -13,6 +13,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import CurrencyInput from "./currencyInput";
 import { PAY_PERIOD, SUBMITTING_STATUS_ENUM } from "@utils/enum";
 import { useFormik } from "formik";
+
 import {
   Card,
   CardContent,
@@ -37,9 +38,10 @@ import {
   getSkills,
   getEmployers,
 } from "@redux/slice/choices";
-import { Link, useSearchParams } from "react-router-dom";
-import { FilledButton } from "@components/button";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import { OutlinedButton, SolidButton } from "@components/button";
 import { ErrorMessage } from "@components/caption";
+import SelectWithSearch from "@components/input/selectWithsearch";
 import { manageEmployer } from "@api/employers";
 import { useDebounce } from "usehooks-ts";
 import {
@@ -67,6 +69,7 @@ const PostNewJob = () => {
     employers,
   } = useSelector(({ choice }) => choice);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [selectedValue, setSelectedValue] = React.useState("exist");
   const handleChange = (event) => {
     setSelectedValue(event.target.value);
@@ -128,10 +131,10 @@ const PostNewJob = () => {
       budgetPayPeriod: PAY_PERIOD.month,
       description: "",
       country: { label: "", value: "" },
-      city: "",
+      city: { label: "", value: "" },
       address: "",
-      jobCategories: "",
-      jobSubCategory: "",
+      jobCategories: { label: "", value: "" },
+      jobSubCategory: { label: "", value: "" },
       isFullTime: false,
       isPartTime: false,
       hasContract: false,
@@ -151,7 +154,7 @@ const PostNewJob = () => {
       countryCodeContactWhatsapp: "",
       websiteLink: "",
       contactWhatsapp: "",
-      highestEducation: "",
+      highestEducation: { label: "", value: "" },
       languages: [{ language: "" }, { language: "" }, { language: "" }],
       skills: [],
       attachments: [],
@@ -159,7 +162,6 @@ const PostNewJob = () => {
     },
     validationSchema: validateCreateJobInput,
     onSubmit: async (values, { resetForm }) => {
-      console.log({ values }, "here");
       setSubmitting(SUBMITTING_STATUS_ENUM.loading);
       const payload = {
         company_type: selectedValue,
@@ -172,10 +174,10 @@ const PostNewJob = () => {
         budget_pay_period: values.budgetPayPeriod,
         description: values.description,
         country: values.country.value,
-        city: values.city,
+        city: values.city.value,
         address: values.address,
-        job_category: values.jobCategories,
-        job_sub_category: values.jobSubCategory,
+        job_category: values.jobCategories.value,
+        job_sub_category: values.jobSubCategory.value,
         is_full_time: values.isFullTime,
         is_part_time: values.isPartTime,
         has_contract: values.hasContract,
@@ -193,7 +195,7 @@ const PostNewJob = () => {
         apply_through_email: values.isApplyThroughEmail || "false",
         apply_through_website: values.isApplyThroughWebsite || "false",
         website_link: values.websiteLink,
-        highest_education: values.highestEducation || "",
+        highest_education: values.highestEducation.value || "",
         language: values.languages,
         skill: values.skills,
         application_instruction: values.applicationInstruction,
@@ -243,6 +245,10 @@ const PostNewJob = () => {
           setSubmitting(SUBMITTING_STATUS_ENUM.submitted);
           dispatch(setSuccessToast("Job Post Successfully"));
           resetForm();
+          setSuggestedAddressValue("");
+          setSuggestedAddress([]);
+          setCompanyLogo();
+          setCompanyAttachments("");
         } else {
           dispatch(setErrorToast("Something went wrong"));
           setSubmitting(SUBMITTING_STATUS_ENUM.error);
@@ -272,7 +278,6 @@ const PostNewJob = () => {
   const getJobDetailsById = useCallback(async (jobId) => {
     const response = await getJobDetailsByIdAPI({ jobId });
     if (response.remote === "success") {
-      console.log({ data: response.data });
       const { data } = response;
       if (!data.user?.id) {
         setSelectedValue("new");
@@ -297,14 +302,23 @@ const PostNewJob = () => {
         value: data.country.id,
         label: data.country.title,
       });
-      formik.setFieldValue("city", data.city.id);
+      formik.setFieldValue("city", {
+        value: data.city.id,
+        label: data.city.title,
+      });
       formik.setFieldValue("address", data.address);
       formik.setFieldValue("duration", data.duration);
       formik.setFieldValue("experience", data.experience);
-      setSuggestedAddress(data.address);
+      setSuggestedAddressValue(data.address);
       formik.setFieldValue("websiteLink", data.websiteLink);
-      formik.setFieldValue("jobCategories", data.jobCategories.id);
-      formik.setFieldValue("jobSubCategory", data.jobSubCategory.id);
+      formik.setFieldValue("jobCategories", {
+        value: data.jobCategories.id,
+        label: data.jobCategories.title,
+      });
+      formik.setFieldValue("jobSubCategory", {
+        value: data.jobSubCategory.id,
+        label: data.jobSubCategory.title,
+      });
       formik.setFieldValue(
         "isApplyThroughEmail",
         Boolean(data.isApplyThroughEmail)
@@ -328,7 +342,6 @@ const PostNewJob = () => {
         "applicationInstruction",
         data.applicationInstruction
       );
-      formik.setFieldValue("highestEducation", data.highestEducation.id || "");
       formik.setFieldValue(
         "isApplyThroughWebsite",
         Boolean(data.isApplyThroughWebsite)
@@ -351,7 +364,10 @@ const PostNewJob = () => {
               language: "",
             }))
       );
-      formik.setFieldValue("highestEducation", data.highestEducation.id);
+      formik.setFieldValue("highestEducation", {
+        value: data.highestEducation.id,
+        label: data.highestEducation.title,
+      });
       formik.setFieldValue(
         "skills",
         data.skills.map ? data.skills.map((skill) => skill.id) : []
@@ -413,7 +429,9 @@ const PostNewJob = () => {
       formik.values.jobCategories &&
       !subCategories.data[formik.values.jobCategories]?.length
     ) {
-      dispatch(getSubCategories({ categoryId: formik.values.jobCategories }));
+      dispatch(
+        getSubCategories({ categoryId: formik.values.jobCategories.value })
+      );
     }
   }, [formik.values.jobCategories]);
   useEffect(() => {
@@ -470,13 +488,12 @@ const PostNewJob = () => {
                     </Grid>
                     <Grid item xl={12} lg={12} xs={12}>
                       <Grid container spacing={2}>
-                        <Grid item xl={4} lg={5} xs={12}>
-                          <label>
+                        <Grid item xl={4} lg={4} xs={12}>
+                          <label className="mb-2">
                             Select Company
                             <span className="required-field">*</span>
                           </label>
-                          <SelectInput
-                            className="my-2"
+                          <SelectWithSearch
                             sx={{
                               borderRadius: "10px",
                               background: "#F0F0F0",
@@ -491,7 +508,6 @@ const PostNewJob = () => {
                               "& .MuiOutlinedInput-root": {
                                 fontFamily: "Poppins",
                                 padding: "4px 9px",
-                                fontWeight: "500 !important",
                               },
                               "& .MuiFormLabel-root": {
                                 fontSize: "16px",
@@ -662,9 +678,8 @@ const PostNewJob = () => {
                     </label>
                     <Grid container spacing={2}>
                       <Grid item xl={6} lg={6} xs={12}>
-                        <SelectInput
+                        <SelectWithSearch
                           sx={{
-                            mt: 1,
                             borderRadius: "10px",
                             background: "#F0F0F0",
                             fontFamily: "Poppins",
@@ -709,13 +724,29 @@ const PostNewJob = () => {
                           onKeyUp={(e) => setSearchCountry(e.target.value)}
                         />
                         {formik.touched.country && formik.errors.country ? (
-                          <ErrorMessage>{formik.errors.country}</ErrorMessage>
+                          <ErrorMessage>
+                            {formik.errors.country.value}
+                          </ErrorMessage>
                         ) : null}
                       </Grid>
                       <Grid item xl={6} lg={6} xs={12}>
-                        <SelectInput
+                        {/* <SelectInput
+                          placeholder={
+                            formik.values.country
+                              ? "City"
+                              : "Select Country first"
+                          }
+                          disabled={!formik.values.country}
+                          options={(
+                            cities.data[formik.values.country?.value] || []
+                          ).map((country) => ({
+                            value: country.id,
+                            label: country.title,
+                          }))}
+                          {...formik.getFieldProps("city")}
+                        /> */}
+                        <SelectWithSearch
                           sx={{
-                            mt: 1,
                             borderRadius: "10px",
                             background: "#F0F0F0",
                             fontFamily: "Poppins",
@@ -740,24 +771,33 @@ const PostNewJob = () => {
                               transform: "translate(14px, -9px) scale(0.75)",
                             },
                           }}
-                          title={
-                            formik.values.country
-                              ? "City"
-                              : "Select Country first"
-                          }
-                          disabled={!formik.values.country}
                           options={(
-                            cities.data[formik.values.country?.value] || [
-                              "Select Country first",
-                            ]
-                          ).map((country) => ({
-                            value: country.id,
-                            label: country.title,
+                            cities.data[formik.values.country.value] || []
+                          ).map((city) => ({
+                            value: city.id,
+                            label: city.title,
                           }))}
-                          {...formik.getFieldProps("city")}
+                          title={
+                            formik.values.city ? "city" : "Select country first"
+                          }
+                          onChange={(_, value) => {
+                            if (value) {
+                              formik.setFieldValue("city", value);
+                            } else {
+                              // setSearchCountry("");
+                              formik.setFieldValue("city", {
+                                value: "",
+                                label: "",
+                              });
+                            }
+                          }}
+                          value={formik.values.city}
+                          // onKeyUp={(e) => setSearchCountry(e.target.value)}
                         />
                         {formik.touched.city && formik.errors.city ? (
-                          <ErrorMessage>{formik.errors.city}</ErrorMessage>
+                          <ErrorMessage>
+                            {formik.errors.city.value}
+                          </ErrorMessage>
                         ) : null}
                       </Grid>
                     </Grid>
@@ -771,7 +811,7 @@ const PostNewJob = () => {
                       <input
                         type="text"
                         placeholder="Address"
-                        className="add-form-control mt-2"
+                        className="add-form-control"
                         name={formik.getFieldProps("address").name}
                         onBlur={(e) => formik.getFieldProps("address").onBlur}
                         onChange={(e) =>
@@ -782,7 +822,7 @@ const PostNewJob = () => {
                       {debouncedSearchValue &&
                         suggestedAddressValue !== formik.values.address && (
                           <div className={styles.search_results_box}>
-                            {suggestedAddress.map((address) => {
+                            {suggestedAddress?.map((address) => {
                               return (
                                 <div
                                   key={address.description}
@@ -815,55 +855,29 @@ const PostNewJob = () => {
                     </label>
                     <Grid container spacing={2}>
                       <Grid item xl={6} lg={6} xs={12}>
-                        <SelectInput
-                          sx={{
-                            mt: 1,
-                            borderRadius: "10px",
-                            background: "#F0F0F0",
-                            fontFamily: "Poppins",
-
-                            "& fieldset": {
-                              border: "1px solid #cacaca",
-                              borderRadius: "93px",
-                              display: "none",
-                              "&:hover": { borderColor: "#cacaca" },
-                            },
-                            "& .MuiOutlinedInput-root": {
-                              fontFamily: "Poppins",
-                              padding: "4px 9px",
-                            },
-                            "& .MuiFormLabel-root": {
-                              fontSize: "16px",
-                              color: "#848484",
-                              fontFamily: "Poppins !important",
-                              transform: "translate(14px, 12px) scale(1)",
-                            },
-                            "& .MuiInputLabel-shrink": {
-                              transform: "translate(14px, -9px) scale(0.75)",
-                            },
-                          }}
+                        {/* <SelectInput
                           defaultValue=""
-                          title={"Select a Job category"}
+                          title="Select a Job category"
                           options={categories.data.map((jobCategory) => ({
                             value: jobCategory.id,
                             label: jobCategory.title,
                           }))}
                           name={"jobCategories"}
-                          value={formik.values.jobCategories || ""}
-                          onChange={formik.handleChange}
+                          onChange={(_, value) => {
+                            if (value) {
+                              formik.setFieldValue("jobCategories", value);
+                            } else {
+                              formik.setFieldValue("jobCategories", {
+                                value: "",
+                                label: "",
+                              });
+                            }
+                          }}
+                          value={formik.values.jobCategories}
                           onBlur={formik.handleBlur}
-                        />
-                        {formik.touched.jobCategories &&
-                        formik.errors.jobCategories ? (
-                          <ErrorMessage>
-                            {formik.errors.jobCategories}
-                          </ErrorMessage>
-                        ) : null}
-                      </Grid>
-                      <Grid item xl={6} lg={6} xs={12}>
-                        <SelectInput
+                        /> */}
+                        <SelectWithSearch
                           sx={{
-                            mt: 1,
                             borderRadius: "10px",
                             background: "#F0F0F0",
                             fontFamily: "Poppins",
@@ -888,6 +902,34 @@ const PostNewJob = () => {
                               transform: "translate(14px, -9px) scale(0.75)",
                             },
                           }}
+                          options={categories.data.map((jobCategory) => ({
+                            value: jobCategory.id,
+                            label: jobCategory.title,
+                          }))}
+                          title={"select the options"}
+                          onChange={(_, value) => {
+                            if (value) {
+                              formik.setFieldValue("jobCategories", value);
+                            } else {
+                              // setSearchCountry("");
+                              formik.setFieldValue("jobCategories", {
+                                value: "",
+                                label: "",
+                              });
+                            }
+                          }}
+                          value={formik.values.jobCategories}
+                          // onKeyUp={(e) => setSearchCountry(e.target.value)}
+                        />
+                        {formik.touched.jobCategories &&
+                        formik.errors.jobCategories ? (
+                          <ErrorMessage>
+                            {formik.errors.jobCategories.value}
+                          </ErrorMessage>
+                        ) : null}
+                      </Grid>
+                      <Grid item xl={6} lg={6} xs={12}>
+                        {/* <SelectInput
                           defaultValue=""
                           title={
                             formik.values.jobCategories
@@ -895,18 +937,72 @@ const PostNewJob = () => {
                               : "Select Category first"
                           }
                           options={(
-                            subCategories.data[formik.values.jobCategories] ||
-                            []
+                            subCategories.data[
+                              formik.values.jobCategories.label
+                            ] || ["Select Category first"]
                           ).map((subCategory) => ({
                             value: subCategory.id,
                             label: subCategory.title,
                           }))}
                           {...formik.getFieldProps("jobSubCategory")}
+                        /> */}
+                        <SelectWithSearch
+                          sx={{
+                            borderRadius: "10px",
+                            background: "#F0F0F0",
+                            fontFamily: "Poppins",
+
+                            "& fieldset": {
+                              border: "1px solid #cacaca",
+                              borderRadius: "93px",
+                              display: "none",
+                              "&:hover": { borderColor: "#cacaca" },
+                            },
+                            "& .MuiOutlinedInput-root": {
+                              fontFamily: "Poppins",
+                              padding: "4px 9px",
+                            },
+                            "& .MuiFormLabel-root": {
+                              fontSize: "16px",
+                              color: "#848484",
+                              fontFamily: "Poppins !important",
+                              transform: "translate(14px, 12px) scale(1)",
+                            },
+                            "& .MuiInputLabel-shrink": {
+                              transform: "translate(14px, -9px) scale(0.75)",
+                            },
+                          }}
+                          options={(
+                            subCategories.data[
+                              formik.values.jobCategories.value
+                            ] || []
+                          ).map((jobSubCategory) => ({
+                            value: jobSubCategory.id,
+                            label: jobSubCategory.title,
+                          }))}
+                          title={
+                            formik.values.jobCategories
+                              ? "Job Sub Category"
+                              : "Select Category first"
+                          }
+                          onChange={(_, value) => {
+                            if (value) {
+                              formik.setFieldValue("jobSubCategory", value);
+                            } else {
+                              // setSearchCountry("");
+                              formik.setFieldValue("jobSubCategory", {
+                                value: "",
+                                label: "",
+                              });
+                            }
+                          }}
+                          value={formik.values.jobSubCategory}
+                          // onKeyUp={(e) => setSearchCountry(e.target.value)}
                         />
                         {formik.touched.jobSubCategory &&
                         formik.errors.jobSubCategory ? (
                           <ErrorMessage>
-                            {formik.errors.jobSubCategory}
+                            {formik.errors.jobSubCategory.value}
                           </ErrorMessage>
                         ) : null}
                       </Grid>
@@ -1117,7 +1213,7 @@ const PostNewJob = () => {
                   </Grid>
                   <Grid item xl={4} lg={4} xs={12}>
                     <label>Education level</label>
-                    <SelectInput
+                    <SelectWithSearch
                       sx={{
                         mt: 1,
                         borderRadius: "10px",
@@ -1150,17 +1246,27 @@ const PostNewJob = () => {
                         value: educationLevel.id,
                         label: educationLevel.title,
                       }))}
-                      {...formik.getFieldProps("highestEducation")}
+                      onChange={(_, value) => {
+                        if (value) {
+                          formik.setFieldValue("highestEducation", value);
+                        } else {
+                          formik.setFieldValue("highestEducation", {
+                            value: "",
+                            label: "",
+                          });
+                        }
+                      }}
+                      value={formik.values.highestEducation}
                     />
                     {formik.touched.highestEducation &&
                     formik.errors.highestEducation ? (
                       <ErrorMessage>
-                        {formik.errors.highestEducation}
+                        {formik.errors.highestEducation.value}
                       </ErrorMessage>
                     ) : null}
                   </Grid>
                   <Grid item xl={12} lg={12} xs={12}>
-                    <label className="mb-2">
+                    <label className="mb-2 d-block">
                       Required languages
                       <span style={{ opacity: "0.5" }}>(Maximum 3)</span>
                       <span className="required-field">*</span>
@@ -1170,34 +1276,7 @@ const PostNewJob = () => {
                         return (
                           <Grid item xl={4} lg={4} xs={12} key={i}>
                             <SelectInput
-                              sx={{
-                                mt: 1,
-                                borderRadius: "10px",
-                                background: "#F0F0F0",
-                                fontFamily: "Poppins",
-
-                                "& fieldset": {
-                                  border: "1px solid #cacaca",
-                                  borderRadius: "93px",
-                                  display: "none",
-                                  "&:hover": { borderColor: "#cacaca" },
-                                },
-                                "& .MuiOutlinedInput-root": {
-                                  fontFamily: "Poppins",
-                                  padding: "4px 9px",
-                                },
-                                "& .MuiFormLabel-root": {
-                                  fontSize: "16px",
-                                  color: "#848484",
-                                  fontFamily: "Poppins !important",
-                                  transform: "translate(14px, 12px) scale(1)",
-                                },
-                                "& .MuiInputLabel-shrink": {
-                                  transform:
-                                    "translate(14px, -9px) scale(0.75)",
-                                },
-                              }}
-                              title="Select a Language"
+                              placeholder="Select a Language"
                               className="mb-3"
                               options={languages.data.map((language) => ({
                                 value: language.id,
@@ -1228,7 +1307,7 @@ const PostNewJob = () => {
                   </Grid>
                 </Grid>
                 <Grid item xl={12} lg={12} xs={12}>
-                  <label className="mb-2">
+                  <label className="mb-2 d-block">
                     Job skills
                     <span style={{ opacity: "0.5" }}>(Maximum 3)</span>
                     <span className="required-field">*</span>
@@ -1236,35 +1315,9 @@ const PostNewJob = () => {
                   <Grid container spacing={2}>
                     <Grid item xl={4} lg={4} xs={12}>
                       <SelectInput
-                        sx={{
-                          mt: 1,
-                          borderRadius: "10px",
-                          background: "#F0F0F0",
-                          fontFamily: "Poppins",
-
-                          "& fieldset": {
-                            border: "1px solid #cacaca",
-                            borderRadius: "93px",
-                            display: "none",
-                            "&:hover": { borderColor: "#cacaca" },
-                          },
-                          "& .MuiOutlinedInput-root": {
-                            fontFamily: "Poppins",
-                            padding: "4px 9px",
-                          },
-                          "& .MuiFormLabel-root": {
-                            fontSize: "16px",
-                            color: "#848484",
-                            fontFamily: "Poppins !important",
-                            transform: "translate(14px, 12px) scale(1)",
-                          },
-                          "& .MuiInputLabel-shrink": {
-                            transform: "translate(14px, -9px) scale(0.75)",
-                          },
-                        }}
                         className="mb-3"
                         defaultValue=""
-                        title="Select a Skill"
+                        placeholder="Select a Skill"
                         options={skills.data.map((skill) => ({
                           value: skill.id,
                           label: skill.title,
@@ -1280,34 +1333,8 @@ const PostNewJob = () => {
                     </Grid>
                     <Grid item xl={4} lg={4} xs={12}>
                       <SelectInput
-                        sx={{
-                          mt: 1,
-                          borderRadius: "10px",
-                          background: "#F0F0F0",
-                          fontFamily: "Poppins",
-
-                          "& fieldset": {
-                            border: "1px solid #cacaca",
-                            borderRadius: "93px",
-                            display: "none",
-                            "&:hover": { borderColor: "#cacaca" },
-                          },
-                          "& .MuiOutlinedInput-root": {
-                            fontFamily: "Poppins",
-                            padding: "4px 9px",
-                          },
-                          "& .MuiFormLabel-root": {
-                            fontSize: "16px",
-                            color: "#848484",
-                            fontFamily: "Poppins !important",
-                            transform: "translate(14px, 12px) scale(1)",
-                          },
-                          "& .MuiInputLabel-shrink": {
-                            transform: "translate(14px, -9px) scale(0.75)",
-                          },
-                        }}
                         defaultValue=""
-                        title="Select a Skill"
+                        placeholder="Select a Skill"
                         options={skills.data.map((skill) => ({
                           value: skill.id,
                           label: skill.title,
@@ -1320,34 +1347,8 @@ const PostNewJob = () => {
                     </Grid>
                     <Grid item xl={4} lg={4} xs={12}>
                       <SelectInput
-                        sx={{
-                          mt: 1,
-                          borderRadius: "10px",
-                          background: "#F0F0F0",
-                          fontFamily: "Poppins",
-
-                          "& fieldset": {
-                            border: "1px solid #cacaca",
-                            borderRadius: "93px",
-                            display: "none",
-                            "&:hover": { borderColor: "#cacaca" },
-                          },
-                          "& .MuiOutlinedInput-root": {
-                            fontFamily: "Poppins",
-                            padding: "4px 9px",
-                          },
-                          "& .MuiFormLabel-root": {
-                            fontSize: "16px",
-                            color: "#848484",
-                            fontFamily: "Poppins !important",
-                            transform: "translate(14px, 12px) scale(1)",
-                          },
-                          "& .MuiInputLabel-shrink": {
-                            transform: "translate(14px, -9px) scale(0.75)",
-                          },
-                        }}
                         defaultValue=""
-                        title="Select a Skill"
+                        placeholder="Select a Skill"
                         options={skills.data.map((skill) => ({
                           value: skill.id,
                           label: skill.title,
@@ -1363,6 +1364,7 @@ const PostNewJob = () => {
                 <Grid item xl={12} lg={12} xs={12}>
                   <Divider sx={{ borderColor: "#CACACA", opacity: "1" }} />
                 </Grid>
+
                 <Grid item xl={12} lg={12} xs={12}>
                   <h2 className="mt-3 mb-3">Attach files</h2>
                   <AttachmentDragNDropInput
@@ -1406,22 +1408,64 @@ const PostNewJob = () => {
                       }
                     }}
                   />
-                  <FilledButton
-                    sx={{
-                      marginTop: "20px",
-                    }}
-                    disabled={submitting === SUBMITTING_STATUS_ENUM.loading}
-                    title={
-                      submitting === SUBMITTING_STATUS_ENUM.loading
-                        ? jobId
-                          ? "Updating..."
-                          : "Posting..."
-                        : jobId
-                        ? "UPDATE THE JOB"
-                        : "POST THE JOB"
-                    }
-                    type="submit"
-                  />
+                  <Grid item xl={12} lg={12} xs={12}>
+                    <Divider
+                      sx={{ borderColor: "#CACACA", opacity: "1", my: 2 }}
+                    />
+                  </Grid>
+                  <Grid item xl={12} lg={12} xs={12}>
+                    <Stack
+                      direction="row"
+                      alignItems="center"
+                      justifyContent="space-between"
+                      style={{ flexWrap: "wrap" }}
+                    >
+                      <OutlinedButton
+                        title="Cancel"
+                        sx={{
+                          "&.MuiButton-outlined": {
+                            borderRadius: "73px",
+                            border: "0px",
+                            color: "#848484 !important",
+                            fontWeight: "500",
+                            fontSize: "16px",
+                            fontFamily: "Bahnschrift",
+                            padding: "6px 50px",
+
+                            "&:hover": {
+                              background: "rgba(40, 71, 146, 0.1)",
+                              color: "#274593",
+                            },
+                            "@media (max-width: 992px)": {
+                              padding: "5px 15px",
+                              fontSize: "14px",
+                            },
+                            "@media (max-width: 480px)": {
+                              fontSize: "14px !important",
+                              marginBottom: "10px",
+                              width: "100%",
+                            },
+                          },
+                        }}
+                        disabled={formik.isSubmitting}
+                        onClick={() => navigate("/manage-jobs")}
+                      />
+                      <SolidButton
+                        disabled={submitting === SUBMITTING_STATUS_ENUM.loading}
+                        title={
+                          submitting === SUBMITTING_STATUS_ENUM.loading
+                            ? jobId
+                              ? "Updating..."
+                              : "Posting..."
+                            : jobId
+                            ? "UPDATE THE JOB"
+                            : "POST THE JOB"
+                        }
+                        type="submit"
+                        className="mt-2 resetButton"
+                      />
+                    </Stack>
+                  </Grid>
                 </Grid>
               </form>
             </div>

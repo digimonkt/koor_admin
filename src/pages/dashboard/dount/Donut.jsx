@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import ReactApexChart from "react-apexcharts";
 import { styled } from "@mui/material/styles";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
@@ -26,14 +26,17 @@ export const SelectBox = styled(Select)`
   }
 `;
 
-const Donut = ({ title, total, user, series, colors, content }) => {
-  const [isSelect, setIsSelect] = useState("");
-
-  const handleChange = (event) => {
-    setIsSelect(event.target.value);
-  };
-
-  const [state] = React.useState({
+const Donut = ({
+  title,
+  total,
+  user,
+  series,
+  colors,
+  content,
+  handleChange,
+  isSelect,
+}) => {
+  const [state, setState] = useState({
     series,
     options: {
       chart: {
@@ -83,6 +86,13 @@ const Donut = ({ title, total, user, series, colors, content }) => {
     },
   });
 
+  useEffect(() => {
+    setState((prevState) => ({
+      ...prevState,
+      series,
+    }));
+  }, [series]);
+
   return (
     <div className={`${styles.chartContent}`}>
       <Stack
@@ -123,9 +133,9 @@ const Donut = ({ title, total, user, series, colors, content }) => {
               },
             }}
           >
-            <MenuItem value="">This Week</MenuItem>
-            <MenuItem value={20}>Last Month</MenuItem>
-            <MenuItem value={30}>year</MenuItem>
+            <MenuItem value="this week">This Week</MenuItem>
+            <MenuItem value="last month">Last Month</MenuItem>
+            <MenuItem value="this year">This Year</MenuItem>
           </SelectBox>
         </FormControl>
       </Stack>
@@ -142,8 +152,8 @@ const Donut = ({ title, total, user, series, colors, content }) => {
         <Grid item xl={8} lg={8} sm={6} xs={12}>
           <div className={`${styles.seriesBox}`}>
             <h2>{total}</h2>
-            <span>{user}</span>
-            <ul>{content}</ul>
+            <span>{user || 0}</span>
+            <ul>{content || 0}</ul>
           </div>
         </Grid>
       </Grid>

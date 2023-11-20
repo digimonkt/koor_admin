@@ -273,6 +273,7 @@ const NewPostResource = () => {
                 textAlign: "center",
                 cursor: "pointer",
                 fontSize: "16px",
+                fontFamily: "Poppins",
                 "@media (max-width: 992px)": {
                   fontSize: "14px",
                 },
@@ -282,7 +283,9 @@ const NewPostResource = () => {
               }}
             >
               Drag here or
-              <span style={{ color: "#274593" }}> upload a post cover image</span>
+              <span style={{ color: "#274593" }}>
+                upload a post cover image
+              </span>
             </Typography>
           </label>
           {newImage && <>{thumbs}</>}
@@ -362,21 +365,35 @@ const NewPostResource = () => {
           <OutlinedButton
             onClick={handleSubmit}
             title={
-              <Stack direction={"row"} alignItems={"center"} spacing={1}>
-                <SVG.AddCircleIcon />
+              <Stack
+                direction={"row"}
+                alignItems={"center"}
+                spacing={1}
+                sx={{ display: "flex", alignItems: "normal" }}
+              >
+                <SVG.RightBox />
                 <span>PUBLISH POST</span>
               </Stack>
             }
             sx={{
               color: "#274593",
-              borderColor: "#274593",
+              width: "205px",
+              height: "44px",
+              border: "0px !important",
+              backgroundColor: "#D5E3F7",
+              "&:hover": {
+                backgroundColor: "#D5E3F7",
+              },
               "@media (max-width: 990px)": {
                 fontSize: "16px",
               },
 
               "@media (max-width: 480px)": {
-                   fontWeight: "600",
-              }
+                fontWeight: "600",
+                width: "187px",
+                height: "42px",
+                fontSize: "14px",
+              },
             }}
           />
         </Stack>

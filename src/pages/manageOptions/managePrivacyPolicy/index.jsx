@@ -111,10 +111,13 @@ const ManagePrivacyPolicyComponent = () => {
                 </Box>
                 <OutlinedButton
                   title={
-                    <div onClick={() => handleEdit()}>
+                    <Box
+                      onClick={() => handleEdit()}
+                      sx={{ display: "flex", alignItems: "center" }}
+                    >
                       <SVG.EditIcon className="me-2" />
                       Edit
-                    </div>
+                    </Box>
                   }
                   sx={{
                     padding: "8px 30px 10px 20px !important",
@@ -137,11 +140,20 @@ const ManagePrivacyPolicyComponent = () => {
                   color: "#121212",
 
                   "@media (max-width: 992px)": {
-                    fontSize: "14px",
+                    fontSize: "14px !important",
                   },
 
                   "@media (max-width: 480px)": {
-                    fontSize: "12px",
+                    fontSize: "12px !important",
+                  },
+                  "& h3": {
+                    fontSize: "14px !important",
+                    "@media (max-width: 992px)": {
+                      fontSize: "14px !important",
+                    },
+                    "@media (max-width: 480px)": {
+                      fontSize: "12px !important",
+                    },
                   },
                 }}
                 dangerouslySetInnerHTML={{ __html: value }}

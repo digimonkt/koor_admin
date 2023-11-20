@@ -10,8 +10,11 @@ import { useDispatch } from "react-redux";
 const DashboardComponent = () => {
   const dispatch = useDispatch;
   const [userList, setUserList] = useState([]);
+  const [isSelect, setIsSelect] = useState("this year");
   const [userData, setUserData] = useState({
-    totalUser: 0,
+    totalUsers: 0,
+    activeUsers: 0,
+    totalJobs: 0,
     jobSeekersCount: 0,
     employersCount: 0,
     vendorsCount: 10,
@@ -19,13 +22,12 @@ const DashboardComponent = () => {
   });
 
   const userCount = async () => {
-    const response = await getUserCountApi();
+    const response = await getUserCountApi(isSelect);
     if (response.remote === "success") {
-      const { employers, vendors } = response.data;
       const NewUserList = [
         {
           icon: <SVG.CreditIcon />,
-          title: response.data.active_jobs,
+          title: response.data.active_user,
           subtitle: "active users",
         },
         {
@@ -35,18 +37,29 @@ const DashboardComponent = () => {
         },
         {
           icon: <SVG.WorkIcon />,
-          title: response.data.active_user,
+          title: response.data.active_jobs,
           subtitle: "active posts",
         },
         {
           icon: <SVG.GroupUser />,
-          title: employers,
+          title: response.data.total_jobs,
           subtitle: "jobs posted",
         },
       ];
       setUserList(NewUserList);
+    } else {
+      dispatch(setErrorToast("something went wrong"));
+    }
+  };
+
+  const userDonutCount = async () => {
+    const response = await getUserCountApi(isSelect);
+    if (response.remote === "success") {
+      const { employers, vendors } = response.data;
       setUserData({
         totalUsers: response.data.total_user,
+        activeUsers: response.data.active_user,
+        totalJobs: response.data.total_jobs,
         vendorsCount: vendors,
         jobSeekersCount: response.data.job_seekers,
         employersCount: employers,
@@ -58,13 +71,21 @@ const DashboardComponent = () => {
   };
 
   function getPercentage(usersCount, totalUser) {
+    if (totalUser === 0) {
+      return 0;
+    }
     const result = (usersCount / totalUser) * 100;
     return result.toFixed(2);
   }
-
+  const handleChange = (event) => {
+    setIsSelect(event.target.value);
+  };
   useEffect(() => {
     userCount();
   }, []);
+  useEffect(() => {
+    userDonutCount();
+  }, [isSelect]);
   return (
     <Fragment>
       <div className="main-admin">
@@ -110,10 +131,12 @@ const DashboardComponent = () => {
                     user="Total users"
                     series={userData.seriesData}
                     colors={["#4267B2", "#4CAF50", "#FFA500"]}
+                    handleChange={handleChange}
+                    isSelect={isSelect}
                     content={
                       <>
                         <li>
-                          <b>{userData.jobSeekersCount}</b> – JobSeekers{" "}
+                          <b>{userData.jobSeekersCount || 0}</b> – JobSeekers{" "}
                           <small>
                             (
                             {getPercentage(
@@ -124,7 +147,7 @@ const DashboardComponent = () => {
                           </small>
                         </li>
                         <li>
-                          <b>{userData.employersCount}</b> – Employers{" "}
+                          <b>{userData.employersCount || 0}</b> – Employers{" "}
                           <small>
                             {" "}
                             (
@@ -136,7 +159,7 @@ const DashboardComponent = () => {
                           </small>
                         </li>
                         <li>
-                          <b>{userData.vendorsCount}</b> – Vendors{" "}
+                          <b>{userData.vendorsCount || 0}</b> – Vendors{" "}
                           <small>
                             {" "}
                             (

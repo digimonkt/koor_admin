@@ -88,6 +88,7 @@ const ChangePassword = () => {
                 </>
               }
               sx={{
+                height: "42px",
                 borderRadius: "73px",
                 border: "1px solid #274593",
                 color: "#274593",
@@ -95,6 +96,11 @@ const ChangePassword = () => {
                 fontSize: "16px",
                 fontFamily: "Bahnschrift",
                 width: "100%",
+                "@media (max-width: 480px)": {
+                  width: "204px",
+                  fontSize: "14px",
+                  marginBottom: "20px",
+                },
               }}
               onClick={() => formik.handleSubmit()}
             />

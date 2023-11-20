@@ -85,7 +85,7 @@ function Header(props) {
   return (
     <Box sx={{ display: "flex" }} className="header">
       <CssBaseline />
-      <AppBar component="nav">
+      <AppBar component="nav" sx={{ paddingRight: "0px !important" }}>
         <Toolbar>
           <Typography
             variant="h6"
@@ -106,6 +106,7 @@ function Header(props) {
                 {item.menu}
               </Link>
             ))}
+            {/*
             <IconButton
               disableFocusRipple={false}
               sx={{
@@ -119,7 +120,7 @@ function Header(props) {
               }}
             >
               <SVG.Notification />
-            </IconButton>
+            </IconButton> */}
             <SolidButton
               title="ADMIN PANEL"
               sx={{
@@ -129,6 +130,7 @@ function Header(props) {
                 fontFamily: "Bahnschrift",
                 fontSize: "16px",
                 color: "#274593",
+                ml: 2,
                 padding: "10px 30px",
                 fontWeight: 600,
                 "&:hover": {

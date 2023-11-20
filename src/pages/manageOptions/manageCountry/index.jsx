@@ -111,10 +111,11 @@ const ManageCountry = () => {
       dispatch(setErrorToast("Something went wrong"));
     }
   }
+  console.log({ selectCityValue });
   async function addCities() {
     const payload = {
-      title: selectCityValue.title,
-      country_name: selectCityValue.country.title,
+      title: selectCityValue?.title,
+      country_name: selectCityValue.country?.title,
     };
     const response = await addCityApi(payload);
     if (response.remote === "success") {
@@ -260,7 +261,7 @@ const ManageCountry = () => {
           </Accordion>
         ))}
       </Layout>
-      <DialogBox open={!!deleting} handleClose={() => setDeleting("")}>
+      <DialogBox open={!!deleting}>
         <DeleteCard
           title="Delete Category"
           content="Are you sure you want to delete category?"
@@ -268,7 +269,6 @@ const ManageCountry = () => {
           handleDelete={handleDelete}
         />
       </DialogBox>
-
       <DialogBox
         open={!!citesDeleting}
         handleClose={() => setCitesDeleting("")}
