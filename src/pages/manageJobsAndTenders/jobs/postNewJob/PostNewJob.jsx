@@ -708,7 +708,7 @@ const PostNewJob = () => {
                             value: country.id,
                             label: country.title,
                           }))}
-                          title={"select the options"}
+                          placeholder={"select the options"}
                           onChange={(_, value) => {
                             if (value) {
                               formik.setFieldValue("country", value);
