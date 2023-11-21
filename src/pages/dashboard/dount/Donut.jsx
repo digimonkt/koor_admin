@@ -96,7 +96,7 @@ const Donut = ({
   return (
     <div className={`${styles.chartContent}`}>
       <Stack
-        direction={{ xs: "column", sm: "row" }}
+        direction={{ xs: "row", sm: "row" }}
         spacing={2}
         justifyContent="space-between"
         alignItems="center"
