@@ -32,6 +32,7 @@ const NewPostResource = () => {
   const [files, setFiles] = useState([]);
   const [newImage, setNewImage] = useState("");
   const [addParagraph, setAddParagraph] = useState(1);
+  const [preview, setPreview] = useState(false);
   const [editorValue, setEditorValue] = useState(Array(addParagraph).fill(""));
   const [editorVisibility, setEditorVisibility] = useState(
     Array(addParagraph).fill(true)
@@ -193,224 +194,254 @@ const NewPostResource = () => {
       getSingleData();
     }
   }, [resourceId]);
-  // get Single Resource Data  End
 
   return (
-    <Card
-      sx={{
-        "&.MuiCard-root": {
-          boxShadow: "0px 15px 40px rgba(0, 0, 0, 0.05)",
-          borderRadius: "10px",
-          marginBottom: "100px",
-        },
-      }}
-    >
-      <CardContent
-        sx={{
-          "&.MuiCardContent-root": {
-            p: {
-              xs: 2,
-              sm: 1,
-              md: 3.75,
-              lg: 3.75,
-              xl: 3.75,
-            },
-          },
-        }}
-      >
-        <Stack
-          direction="row"
-          spacing={1}
-          alignItems="center"
-          className={`${styles.title}`}
+    <>
+      {!preview ? (
+        <Card
           sx={{
-            mb: {
-              xs: 1,
-              sm: 1,
-              md: 3.75,
-              lg: 3.75,
-              xl: 3.75,
+            "&.MuiCard-root": {
+              boxShadow: "0px 15px 40px rgba(0, 0, 0, 0.05)",
+              borderRadius: "10px",
+              marginBottom: "100px",
             },
           }}
         >
-          <IconButton LinkComponent={Link} to="/settings">
-            <SVG.ArrowLeftIcon />
-          </IconButton>{" "}
-          <h2>Create a new post</h2>
-        </Stack>
-        <Stack
-          direction={{ xs: "column", sm: "row" }}
-          spacing={{ xs: 1, sm: 2, md: 2 }}
-          justifyContent="space-between"
-          alignItems="center"
-          className={`${styles.subtitle}`}
-        ></Stack>
-        <hr />
-        <div className={`${styles.title} ${styles.spaceMy}`}>
-          <LabeledInput
-            placeholder="Post title"
-            type="text"
-            className={`${LabelStyle.formControl}`}
-            onChange={handlePostTitle}
-            value={postTitle}
-          />
-        </div>
-        <div className="drag-drop">
-          <label>
-            <input
-              type="file"
-              style={{
-                position: "absolute",
-                width: "100%",
-                height: "100%",
-                display: "none",
-              }}
-              accept="image/*"
-              onChange={handleFiles}
-            />
-            <Typography
-              sx={{
-                textAlign: "center",
-                cursor: "pointer",
-                fontSize: "16px",
-                fontFamily: "Poppins",
-                "@media (max-width: 992px)": {
-                  fontSize: "14px",
+          <CardContent
+            sx={{
+              "&.MuiCardContent-root": {
+                p: {
+                  xs: 2,
+                  sm: 1,
+                  md: 3.75,
+                  lg: 3.75,
+                  xl: 3.75,
                 },
-                "@media (max-width: 480px)": {
-                  fontSize: "14px",
+              },
+            }}
+          >
+            <Stack
+              direction="row"
+              spacing={1}
+              alignItems="center"
+              className={`${styles.title}`}
+              sx={{
+                mb: {
+                  xs: 1,
+                  sm: 1,
+                  md: 3.75,
+                  lg: 3.75,
+                  xl: 3.75,
                 },
               }}
             >
-              Drag here or
-              <span style={{ color: "#274593" }}>
-                upload a post cover image
-              </span>
-            </Typography>
-          </label>
-          {newImage && <>{thumbs}</>}
-        </div>
-
-        {editorValue.map((_, index) => (
-          <div key={index}>
-            <ReactQuill
-              theme="snow"
-              value={editorValue[index]}
-              modules={{
-                toolbar: toolbarOptions,
+              <IconButton LinkComponent={Link} to="/settings">
+                <SVG.ArrowLeftIcon />
+              </IconButton>{" "}
+              <h2>Create a new post</h2>
+            </Stack>
+            <Stack
+              direction={{ xs: "column", sm: "row" }}
+              spacing={{ xs: 1, sm: 2, md: 2 }}
+              justifyContent="space-between"
+              alignItems="center"
+              className={`${styles.subtitle}`}
+            ></Stack>
+            <hr />
+            <div className={`${styles.title} ${styles.spaceMy}`}>
+              <LabeledInput
+                placeholder="Post title"
+                type="text"
+                className={`${LabelStyle.formControl}`}
+                onChange={handlePostTitle}
+                value={postTitle}
+              />
+            </div>
+            <div className="drag-drop">
+              <label>
+                <input
+                  type="file"
+                  style={{
+                    position: "absolute",
+                    width: "100%",
+                    height: "100%",
+                    display: "none",
+                  }}
+                  accept="image/*"
+                  onChange={handleFiles}
+                />
+                <Typography
+                  sx={{
+                    textAlign: "center",
+                    cursor: "pointer",
+                    fontSize: "16px",
+                    fontFamily: "Poppins",
+                    "@media (max-width: 992px)": {
+                      fontSize: "14px",
+                    },
+                    "@media (max-width: 480px)": {
+                      fontSize: "14px",
+                    },
+                  }}
+                >
+                  Drag here or
+                  <span style={{ color: "#274593" }}>
+                    upload a post cover image
+                  </span>
+                </Typography>
+              </label>
+              {newImage && <>{thumbs}</>}
+            </div>
+            {editorValue.map((_, index) => (
+              <div key={index}>
+                <ReactQuill
+                  theme="snow"
+                  value={editorValue[index]}
+                  modules={{
+                    toolbar: [...toolbarOptions],
+                  }}
+                  onChange={(value) => handleEditorValue(index, value)}
+                  style={{
+                    width: "100%",
+                    marginTop: "20px",
+                    background: "#F0F0F0",
+                  }}
+                />
+                <Stack
+                  direction={"row"}
+                  alignItems={"center"}
+                  justifyContent="flex-end"
+                  onClick={() => handleDeleteContent(index)}
+                  sx={{
+                    mt: 3,
+                    position: "relative",
+                    bottom: "4rem",
+                    right: 0,
+                    margin: "10px",
+                  }}
+                >
+                  <IconButton size="large" sx={{ background: "#d5e3f7" }}>
+                    <SVG.DeleteIcon />
+                  </IconButton>
+                </Stack>
+              </div>
+            ))}
+          </CardContent>
+          <Stack
+            direction={"row"}
+            alignItems={"center"}
+            spacing={2}
+            justifyContent={"center"}
+            sx={{ marginBottom: "8px", color: "#848484" }}
+          >
+            <Button
+              variant="link"
+              onClick={handleAddParagraph}
+              sx={{
+                fontFamily: "Poppins",
               }}
-              onChange={(value) => handleEditorValue(index, value)}
-              style={{
-                width: "100%",
-                marginTop: "20px",
-                background: "#F0F0F0",
-              }}
-            />
+            >
+              <SVG.AddCircleIcon
+                style={{ marginRight: "8px", color: "#848484" }}
+              />
+              <Box component={"span"}> Add one more Paragraph</Box>
+            </Button>
+          </Stack>
+          {resourceId ? (
             <Stack
               direction={"row"}
-              alignItems={"center"}
-              justifyContent="flex-end"
-              onClick={() => handleDeleteContent(index)}
-              sx={{ mt: 3 }}
+              justifyContent={"center"}
+              sx={{ mb: "50px" }}
             >
-              <IconButton size="large" sx={{ background: "#d5e3f7" }}>
-                <SVG.DeleteIcon />
-              </IconButton>
+              <OutlinedButton
+                onClick={() => handleUpdate(resourceId)}
+                title={
+                  <Stack direction={"row"} alignItems={"center"} spacing={1}>
+                    <SVG.AddCircleIcon />
+                    <span> Update POST</span>
+                  </Stack>
+                }
+                sx={{
+                  color: "#274593",
+                  borderColor: "#274593",
+                  display: "flex",
+                  justifyContent: "center",
+                }}
+              />
+              <OutlinedButton
+                onClick={() => setPreview(true)}
+                title={
+                  <Stack direction={"row"} alignItems={"center"} spacing={1}>
+                    <SVG.AddCircleIcon />
+                    <span>Preview</span>
+                  </Stack>
+                }
+                sx={{
+                  color: "#274593",
+                  borderColor: "#274593",
+                  display: "flex",
+                  justifyContent: "center",
+                }}
+              />
             </Stack>
-          </div>
-        ))}
-      </CardContent>
-      <Stack
-        direction={"row"}
-        alignItems={"center"}
-        spacing={2}
-        justifyContent={"center"}
-        sx={{ marginBottom: "8px", color: "#848484" }}
-      >
-        <Button
-          variant="link"
-          onClick={handleAddParagraph}
-          sx={{
-            fontFamily: "Poppins",
-          }}
-        >
-          <SVG.AddCircleIcon style={{ marginRight: "8px", color: "#848484" }} />
-          <Box component={"span"}> Add one more Paragraph</Box>
-        </Button>
-      </Stack>
-      {resourceId ? (
-        <Stack direction={"row"} justifyContent={"center"}>
-          <OutlinedButton
-            onClick={() => handleUpdate(resourceId)}
-            title={
-              <Stack direction={"row"} alignItems={"center"} spacing={1}>
-                <SVG.AddCircleIcon />
-                <span> Update POST</span>
-              </Stack>
-            }
-            sx={{
-              color: "#274593",
-              borderColor: "#274593",
-              display: "flex",
-              justifyContent: "center",
-            }}
-          />
-        </Stack>
-      ) : (
-        <Stack
-          direction={"row"}
-          justifyContent={"center"}
-          sx={{ marginBottom: "50px" }}
-        >
-          <OutlinedButton
-            onClick={handleSubmit}
-            title={
-              <Stack
-                direction={"row"}
-                alignItems={"center"}
-                spacing={1}
-                sx={{ display: "flex", alignItems: "normal" }}
-              >
-                <SVG.RightBox />
-                <span>PUBLISH POST</span>
-              </Stack>
-            }
-            sx={{
-              color: "#274593",
-              width: "205px",
-              height: "44px",
-              border: "0px !important",
-              backgroundColor: "#D5E3F7",
-              "&:hover": {
-                backgroundColor: "#D5E3F7",
-              },
-              "@media (max-width: 990px)": {
-                fontSize: "16px",
-              },
-
-              "@media (max-width: 480px)": {
-                fontWeight: "600",
-                width: "187px",
-                height: "42px",
-                fontSize: "14px",
-              },
-            }}
-          />
-        </Stack>
-      )}
-      {files.length ? (
-        <ImageCropper
-          open={files[0]}
-          handleClose={() => {
-            setFiles([]);
-          }}
-          handleSave={handleUpdateImage}
-          image={files[0]}
-        />
+          ) : (
+            <Stack
+              direction={"row"}
+              justifyContent={"center"}
+              sx={{ mb: "50px" }}
+            >
+              <OutlinedButton
+                onClick={handleSubmit}
+                title={
+                  <Stack
+                    direction={"row"}
+                    alignItems={"center"}
+                    spacing={1}
+                    sx={{ display: "flex", alignItems: "normal" }}
+                  >
+                    <SVG.RightBox />
+                    <span>PUBLISH POST</span>
+                  </Stack>
+                }
+                sx={{
+                  color: "#274593",
+                  width: "205px",
+                  height: "44px",
+                  border: "0px !important",
+                  backgroundColor: "#D5E3F7",
+                  "&:hover": {
+                    backgroundColor: "#D5E3F7",
+                  },
+                  "@media (max-width: 990px)": {
+                    fontSize: "16px",
+                  },
+                  "@media (max-width: 480px)": {
+                    fontWeight: "600",
+                    width: "187px",
+                    height: "42px",
+                    fontSize: "14px",
+                  },
+                }}
+              />
+            </Stack>
+          )}
+          {files.length ? (
+            <ImageCropper
+              open={files[0]}
+              handleClose={() => {
+                setFiles([]);
+              }}
+              handleSave={handleUpdateImage}
+              image={files[0]}
+            />
+          ) : (
+            ""
+          )}
+        </Card>
       ) : (
         ""
       )}
-    </Card>
+    </>
   );
 };
 export default NewPostResource;

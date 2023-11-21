@@ -6,17 +6,20 @@ import {
   LabeledInput,
   SelectInput,
   AttachmentDragNDropInput,
+  ProfilePicInput,
 } from "@components/input";
 import CurrencyInput from "./currencyInput";
-import { PAY_PERIOD } from "@utils/enum";
 import { useFormik } from "formik";
 
 import {
   Card,
   CardContent,
   Divider,
+  FormControlLabel,
   Grid,
   IconButton,
+  Radio,
+  RadioGroup,
   Stack,
 } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
@@ -27,9 +30,10 @@ import {
   getCitiesByCountry,
   getTenderSector,
   getTenderOpportunityType,
+  getEmployers,
 } from "@redux/slice/choices";
 import { Link, useSearchParams, useNavigate } from "react-router-dom";
-import { FilledButton, OutlinedButton } from "@components/button";
+import { OutlinedButton, SolidButton } from "@components/button";
 import { ErrorMessage } from "@components/caption";
 import { useDebounce } from "usehooks-ts";
 import {
@@ -44,6 +48,7 @@ import dayjs from "dayjs";
 import { DATABASE_DATE_FORMAT } from "@utils/constants/constants";
 import { setErrorToast, setSuccessToast } from "@redux/slice/toast";
 import SelectWithSearch from "@components/input/selectWithsearch";
+import { manageEmployer } from "@api/employers";
 
 const PostNewJob = () => {
   const {
@@ -53,24 +58,38 @@ const PostNewJob = () => {
     tags,
     tenderCategories,
     opportunityTypes,
+    employers,
   } = useSelector(({ choice }) => choice);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
+  const [searchTerm, setSearchTerm] = useState("");
   const [tenderId, setTenderId] = useState(null);
   const [searchValue, setSearchValue] = useState("");
   const debouncedSearchValue = useDebounce(searchValue, 500);
   const [suggestedAddress, setSuggestedAddress] = useState([]);
+  const [employersData, setEmployersData] = useState(employers.data);
   const [searchCountry, setSearchCountry] = useState("");
+  const debouncedSearchEmployerValue = useDebounce(searchTerm, 500);
   const debouncedSearchCountryValue = useDebounce(searchCountry, 500);
   const [countriesData, setCountriesData] = useState(countries.data);
+  const [companyLogo, setCompanyLogo] = useState("");
+  const [selectedValue, setSelectedValue] = React.useState("exist");
+  const handleChange = (event) => {
+    setSelectedValue(event.target.value);
+    formik.setFieldValue("companyType", selectedValue);
+  };
 
   const formik = useFormik({
     initialValues: {
+      companyType: "",
+      existCompany: { label: "", value: "" },
+      company: "",
+      companyLogo: [],
+      companyLogoRemove: [],
       title: "",
       budgetCurrency: "usd",
       budgetAmount: 0,
-      budgetPayPeriod: PAY_PERIOD.month,
       description: "",
       country: { label: "", value: "" },
       city: { label: "", value: "" },
@@ -87,10 +106,13 @@ const PostNewJob = () => {
     validationSchema: validateCreateTenderInput,
     onSubmit: async (values, { resetForm }) => {
       const payload = {
+        company_type: selectedValue,
+        company: values.company,
+        company_logo_item: values.companyLogo,
+        exist_company: values.existCompany,
         title: values.title,
         budget_currency: values.budgetCurrency,
         budget_amount: values.budgetAmount,
-        budget_pay_period: values.budgetPayPeriod,
         description: values.description,
         country: values.country.value,
         city: values.city.value,
@@ -108,7 +130,9 @@ const PostNewJob = () => {
       };
       const newFormData = new FormData();
       for (const key in payload) {
-        if (key === "attachments") {
+        if (!payload[key]) {
+          delete payload[key];
+        } else if (key === "attachments") {
           payload.attachments.forEach((attachment) => {
             if (!attachment.id) {
               newFormData.append(key, attachment);
@@ -120,6 +144,7 @@ const PostNewJob = () => {
           newFormData.append(key, payload[key]);
         }
       }
+
       let res;
       if (!tenderId) {
         // createTender
@@ -128,6 +153,8 @@ const PostNewJob = () => {
           dispatch(setSuccessToast("Job Post Successfully"));
           setSuggestedAddress([]);
           setSearchValue("");
+          setSuggestedAddress([]);
+          setCompanyLogo();
           resetForm();
         } else {
           dispatch(setErrorToast("Something went wrong"));
@@ -144,6 +171,18 @@ const PostNewJob = () => {
     },
   });
 
+  console.log({ formik });
+  const getEmployerList = async () => {
+    const limitParam = 10;
+    const response = await manageEmployer({
+      search: searchTerm,
+      limit: limitParam,
+    });
+    if (response.remote === "success") {
+      setEmployersData(response.data.results);
+    }
+  };
+
   const getTenderDetailsById = useCallback(async (tenderId) => {
     const response = await getTenderDetailsByIdAPI({ tenderId });
     if (response.remote === "success") {
@@ -152,6 +191,17 @@ const PostNewJob = () => {
       if (data.address) {
         setSearchValue(data.address);
       }
+      if (data.companyLogo) setCompanyLogo(data.companyLogo);
+      if (!data.user?.id) {
+        setSelectedValue("new");
+      }
+      formik.setFieldValue("companyType", selectedValue);
+      formik.setFieldValue("company", data.company);
+
+      formik.setFieldValue("existCompany", {
+        value: data.user?.id || "",
+        label: data.user?.name || "",
+      });
       formik.setFieldValue("address", data.address);
       formik.setFieldValue("title", data.title);
       formik.setFieldValue("budgetCurrency", data.budgetCurrency);
@@ -222,6 +272,9 @@ const PostNewJob = () => {
     }
   }, [debouncedSearchValue]);
 
+  const handleProfilePicSave = async (file) => {
+    formik.setFieldValue("companyLogo", file);
+  };
   // Load Redux State
   useEffect(() => {
     if (!countries.data.length) {
@@ -239,6 +292,9 @@ const PostNewJob = () => {
     if (!tags.data.length) {
       dispatch(getTenderTags());
     }
+    if (!employers.data.length) {
+      dispatch(getEmployers());
+    }
   }, []);
 
   useEffect(() => {
@@ -246,6 +302,9 @@ const PostNewJob = () => {
       getTenderDetailsById(tenderId);
     }
   }, [tenderId]);
+  useEffect(() => {
+    getEmployerList();
+  }, [debouncedSearchEmployerValue, !formik.values.existCompany]);
   useEffect(() => {
     getCountryList();
   }, [debouncedSearchCountryValue, !formik.values.country]);
@@ -282,6 +341,151 @@ const PostNewJob = () => {
             </h2>
             <div className="form-content">
               <form onSubmit={formik.handleSubmit}>
+                <RadioGroup value={selectedValue} onChange={handleChange}>
+                  <FormControlLabel
+                    value="exist"
+                    control={<Radio />}
+                    label="Select Company"
+                    checked={selectedValue === "exist"}
+                  />
+                  <FormControlLabel
+                    value="new"
+                    control={<Radio />}
+                    label="Create Company"
+                    checked={selectedValue === "new"}
+                  />
+                </RadioGroup>
+                {selectedValue === "exist" && (
+                  <>
+                    <Grid xl={12} lg={12} xs={12}>
+                      <h2 className="mt-3">Select company</h2>
+                    </Grid>
+                    <Grid item xl={12} lg={12} xs={12}>
+                      <Grid container spacing={2}>
+                        <Grid item xl={4} lg={4} xs={12}>
+                          <label className="mb-2">
+                            Select Company
+                            <span className="required-field">*</span>
+                          </label>
+                          <SelectWithSearch
+                            sx={{
+                              borderRadius: "10px",
+                              background: "#F0F0F0",
+                              fontFamily: "Poppins",
+
+                              "& fieldset": {
+                                border: "1px solid #cacaca",
+                                borderRadius: "93px",
+                                display: "none",
+                                "&:hover": { borderColor: "#cacaca" },
+                              },
+                              "& .MuiOutlinedInput-root": {
+                                fontFamily: "Poppins",
+                                padding: "4px 9px",
+                              },
+                              "& .MuiFormLabel-root": {
+                                fontSize: "16px",
+                                color: "#848484",
+                                fontFamily: "Poppins !important",
+                                transform: "translate(14px, 12px) scale(1)",
+                              },
+                              "& .MuiInputLabel-shrink": {
+                                transform: "translate(14px, -9px) scale(0.75)",
+                              },
+                            }}
+                            options={(employersData || []).map((employer) => ({
+                              value: employer.id,
+                              label: employer.name || employer.email,
+                            }))}
+                            title={"select the options"}
+                            onChange={(_, value) => {
+                              if (value) {
+                                setSearchTerm(value.value);
+                                formik.setFieldValue("existCompany", value);
+                              } else {
+                                setSearchTerm("");
+                                formik.setFieldValue("existCompany", {
+                                  value: "",
+                                  label: "",
+                                });
+                              }
+                            }}
+                            value={formik.values.existCompany}
+                            onKeyUp={(e) => setSearchTerm(e.target.value)}
+                          />
+                        </Grid>
+                      </Grid>
+                    </Grid>
+                    <Grid item xl={12} lg={12} xs={12}>
+                      <Divider sx={{ borderColor: "#CACACA", opacity: "1" }} />
+                    </Grid>
+                  </>
+                )}
+                {selectedValue === "new" && (
+                  <>
+                    <Grid xl={12} lg={12} xs={12}>
+                      <h2 className="mt-3"> New Company</h2>
+                    </Grid>
+                    <Grid item xl={12} lg={12} xs={12}>
+                      <Grid container spacing={2}>
+                        <Grid item xl={4} lg={4} xs={12}>
+                          <label className="mb-2">
+                            Add Company Name
+                            <span className="required-field">*</span>
+                          </label>
+                          <input
+                            type="text"
+                            placeholder="Company Name"
+                            className="add-form-control"
+                            {...formik.getFieldProps("company")}
+                          />
+                        </Grid>
+
+                        <Grid item xl={12} lg={12} xs={12}>
+                          <label className="mb-2">
+                            Add Company Logo
+                            <span className="required-field">*</span>
+                          </label>
+                          <Card
+                            sx={{
+                              "&.MuiCard-root": {
+                                boxShadow: "0px 15px 40px rgba(0, 0, 0, 0.05)",
+                                borderRadius: "10px",
+                              },
+                            }}
+                          >
+                            <CardContent
+                              sx={{
+                                "&.MuiCardContent-root": {
+                                  padding: "30px",
+                                },
+                              }}
+                            >
+                              <ProfilePicInput
+                                title="Your organization logo"
+                                textColor="#274593"
+                                color="#274593"
+                                bgColor="rgba(40, 71, 146, 0.1)"
+                                // handleSave={handleProfilePicSave}
+                                image={companyLogo}
+                                loading={"loading"}
+                                newLogo={handleProfilePicSave}
+                                handleSaveCroppedImg={(file) =>
+                                  formik.setFieldValue("companyLogo", [file])
+                                }
+                              />
+                            </CardContent>
+                          </Card>
+                        </Grid>
+                      </Grid>
+                    </Grid>
+                    <Grid item xl={12} lg={12} xs={12}>
+                      <Divider
+                        sx={{ borderColor: "#CACACA", opacity: "1", my: 2 }}
+                      />
+                    </Grid>
+                  </>
+                )}
                 <Grid container spacing={2}>
                   <Grid item xl={8} lg={8} xs={12}>
                     <LabeledInput
@@ -837,9 +1041,9 @@ const PostNewJob = () => {
                         },
                       }}
                       disabled={formik.isSubmitting}
-                      onClick={() => navigate("/employer/manage-tenders")}
+                      onClick={() => navigate("/manage-tenders")}
                     />
-                    <FilledButton
+                    <SolidButton
                       sx={{
                         fontSize: "16px !important",
                         "@media (max-width: 480px)": {
@@ -857,6 +1061,7 @@ const PostNewJob = () => {
                           : "POST THE TENDER"
                       }
                       type="submit"
+                      className="resetButton"
                       disabled={formik.isSubmitting}
                     />
                   </Stack>
