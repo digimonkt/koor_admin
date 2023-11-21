@@ -310,6 +310,7 @@ const Invoices = () => {
               columns={USER_COLUMN_DATA}
               radius="7px"
             /> */}
+
             <DataTable
               rows={listInvoice || []}
               columns={columns || []}
