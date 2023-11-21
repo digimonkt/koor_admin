@@ -71,7 +71,7 @@ function ManageJobsComponent() {
         sortable: true,
         renderCell: (item) => {
           return (
-            <Stack direction="row" alignItems="center">
+            <Stack direction="row" alignItems="center" gap={1}>
               <IconButton
                 onClick={() => handleRedirectDetails(item.row.id)}
                 sx={{

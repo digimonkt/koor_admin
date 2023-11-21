@@ -1,6 +1,9 @@
 import api from ".";
 import urlcat from "urlcat";
-import { transformInvoiceDetailsAPI, transformInvoiceListAPI } from "./transform/invoice";
+import {
+  transformInvoiceDetailsAPI,
+  transformInvoiceListAPI,
+} from "./transform/invoice";
 
 export const manageSkillApi = async ({ limit, page, search, country }) => {
   const response = await api.request({
@@ -491,7 +494,7 @@ export const getInvoiceListApi = async ({
   employerId,
   sent,
   fromDate,
-  toDate
+  toDate,
 }) => {
   const response = await api.request({
     url: urlcat("/v1/admin/invoice", {
@@ -500,7 +503,7 @@ export const getInvoiceListApi = async ({
       invoiceId,
       userId: employerId,
       from: fromDate,
-      to: toDate
+      to: toDate,
     }),
     method: "GET",
   });
@@ -524,7 +527,7 @@ export const updatePlansAPI = async (data) => {
   const resp = await api.request({
     url: urlcat("v1/admin/package"),
     method: "PATCH",
-    data
+    data,
   });
   return resp;
 };
@@ -536,13 +539,11 @@ export const mailSendInvoiceAPI = async (invoiceId) => {
   return response;
 };
 
-export const getInvoiceDetailsAPI = async ({
-  id,
-}) => {
+export const getInvoiceDetailsAPI = async ({ id }) => {
   const invoiceId = id;
   const response = await api.request({
     url: urlcat("/v1/admin/invoice/:invoiceId/detail", {
-      invoiceId
+      invoiceId,
     }),
     method: "GET",
   });
@@ -552,5 +553,16 @@ export const getInvoiceDetailsAPI = async ({
       data: transformInvoiceDetailsAPI(response.data),
     };
   }
+  return response;
+};
+
+// ActiveInactiveTender
+export const activeInactiveTenderAPI = async (id) => {
+  const response = await api.request({
+    url: urlcat("/v1/admin/tender/:tenderId", {
+      tenderId: id,
+    }),
+    method: "PATCH",
+  });
   return response;
 };
