@@ -91,6 +91,14 @@ export const transformFullTenderDetails = (data) => {
     tag: data.tag,
     startDate: data.start_date,
     deadline: data.deadline,
+    user: {
+      id: data.user.id,
+      name: data.user.name,
+      email: data.user.email,
+      countryCode: data.user.country_code,
+      mobileNumber: data.user.mobile_number,
+      image: data.user.image,
+    },
     attachments:
       data.attachments?.map((attachment) => ({
         id: attachment.id,
