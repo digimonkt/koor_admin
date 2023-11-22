@@ -4,13 +4,14 @@ import { Card, CardContent, Grid, Stack } from "@mui/material";
 import { SVG } from "@assets/svg";
 import ColumChart from "./columChart/ColumChart";
 import Donut from "./dount/Donut";
-import { getUserCountApi } from "@api/dashboard";
+import { getFinancialCountApi, getUserCountApi } from "@api/dashboard";
 import { setErrorToast } from "@redux/slice/toast";
 import { useDispatch } from "react-redux";
 const DashboardComponent = () => {
   const dispatch = useDispatch;
   const [userList, setUserList] = useState([]);
   const [isSelect, setIsSelect] = useState("this year");
+  const [financialPerPeriod, setFinancialPerPeriod] = useState("this year");
   const [userData, setUserData] = useState({
     totalUsers: 0,
     activeUsers: 0,
@@ -18,6 +19,11 @@ const DashboardComponent = () => {
     jobSeekersCount: 0,
     employersCount: 0,
     vendorsCount: 10,
+    seriesData: [],
+  });
+
+  const [financialData, setFinancialData] = useState({
+    totalCredits: 0,
     seriesData: [],
   });
 
@@ -32,7 +38,7 @@ const DashboardComponent = () => {
         },
         {
           icon: <SVG.ClockIcon />,
-          title: "143 344",
+          title: response.data.total_visitor || 0,
           subtitle: "visitors today",
         },
         {
@@ -70,6 +76,18 @@ const DashboardComponent = () => {
     }
   };
 
+  const financialDonutCount = async () => {
+    const response = await getFinancialCountApi(financialPerPeriod);
+    if (response.remote === "success") {
+      const { totalCredits, gold, silver, copper } = response.data;
+      setFinancialData({
+        totalCredits,
+        seriesData: [gold, silver, copper],
+      });
+    } else {
+      dispatch(setErrorToast("something went wrong"));
+    }
+  };
   function getPercentage(usersCount, totalUser) {
     if (totalUser === 0) {
       return 0;
@@ -80,12 +98,19 @@ const DashboardComponent = () => {
   const handleChange = (event) => {
     setIsSelect(event.target.value);
   };
+  const handleFinancialChange = (event) => {
+    setFinancialPerPeriod(event.target.value);
+  };
   useEffect(() => {
     userCount();
   }, []);
   useEffect(() => {
     userDonutCount();
   }, [isSelect]);
+  useEffect(() => {
+    financialDonutCount();
+  }, []);
+  console.log({ financialData });
   return (
     <Fragment>
       <div className="main-admin">
@@ -108,7 +133,7 @@ const DashboardComponent = () => {
           ))}
         </Grid>
         <Grid container spacing={2}>
-          <Grid item xl={12} lg={12} xs={12}>
+          <Grid item xl={6} lg={6} xs={12}>
             <Card
               sx={{
                 "&.MuiCard-root": {
@@ -166,6 +191,75 @@ const DashboardComponent = () => {
                             {getPercentage(
                               userData.vendorsCount,
                               userData.totalUsers
+                            )}
+                            % )
+                          </small>
+                        </li>
+                      </>
+                    }
+                  />
+                )}
+              </CardContent>
+            </Card>
+          </Grid>
+          <Grid item xl={6} lg={6} xs={12}>
+            <Card
+              sx={{
+                "&.MuiCard-root": {
+                  boxShadow: "0px 15px 40px rgba(0, 0, 0, 0.05)",
+                  borderRadius: "10px",
+                },
+              }}
+            >
+              <CardContent
+                sx={{
+                  "&.MuiCardContent-root": {
+                    padding: "30px",
+                  },
+                }}
+              >
+                {financialData.seriesData.length > 0 && (
+                  <Donut
+                    title="Financial Count"
+                    total={financialData.totalUsers}
+                    user="Total Credits"
+                    series={financialData.seriesData}
+                    colors={["#F1BA4E", "#BA9365", "#D2D2D2"]}
+                    handleChange={handleFinancialChange}
+                    isSelect={financialPerPeriod}
+                    content={
+                      <>
+                        <li>
+                          <b>{financialData.gold || 0}</b> – Gold{" "}
+                          <small>
+                            (
+                            {getPercentage(
+                              financialData.gold,
+                              financialData.totalCredits
+                            )}
+                            % )
+                          </small>
+                        </li>
+                        <li>
+                          <b>{financialData.silver || 0}</b> – Silver{" "}
+                          <small>
+                            {" "}
+                            (
+                            {getPercentage(
+                              financialData.silver,
+                              financialData.totalCredits
+                            )}
+                            % )
+                          </small>
+                        </li>
+                        <li>
+                          <b>{financialData.copper || 0}</b> – Coppers{" "}
+                          <small>
+                            {" "}
+                            (
+                            {getPercentage(
+                              financialData.copper,
+                              financialData.totalCredits
                             )}
                             % )
                           </small>

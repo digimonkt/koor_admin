@@ -16,3 +16,21 @@ export const getDashboardApi = async (period) => {
   });
   return response;
 };
+export const getFinancialCountApi = async (period) => {
+  const response = await api.request({
+    url: urlcat("/v1/admin/financial-count", { period }),
+    method: "GET",
+  });
+  if (response.remote === "success") {
+    return {
+      remote: "success",
+      data: {
+        totalCredits: response.data.total_credits || 0,
+        gold: response.data.gold || 0,
+        silver: response.data.silver || 0,
+        copper: response.data.copper || 0,
+      }
+    };
+  }
+  console.log({ response });
+};
