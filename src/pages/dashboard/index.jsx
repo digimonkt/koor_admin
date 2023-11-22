@@ -89,12 +89,19 @@ const DashboardComponent = () => {
     }
   };
   function getPercentage(usersCount, totalUser) {
+    if (typeof usersCount !== "number" || typeof totalUser !== "number") {
+      return 0;
+    }
     if (totalUser === 0) {
       return 0;
     }
     const result = (usersCount / totalUser) * 100;
+    if (isNaN(result)) {
+      return 0;
+    }
     return result.toFixed(2);
   }
+
   const handleChange = (event) => {
     setIsSelect(event.target.value);
   };
@@ -109,8 +116,7 @@ const DashboardComponent = () => {
   }, [isSelect]);
   useEffect(() => {
     financialDonutCount();
-  }, []);
-  console.log({ financialData });
+  }, [financialPerPeriod]);
   return (
     <Fragment>
       <div className="main-admin">
@@ -221,7 +227,7 @@ const DashboardComponent = () => {
                 {financialData.seriesData.length > 0 && (
                   <Donut
                     title="Financial Count"
-                    total={financialData.totalUsers}
+                    total={financialData.totalCredits}
                     user="Total Credits"
                     series={financialData.seriesData}
                     colors={["#F1BA4E", "#BA9365", "#D2D2D2"]}
@@ -230,7 +236,7 @@ const DashboardComponent = () => {
                     content={
                       <>
                         <li>
-                          <b>{financialData.gold || 0}</b> – Gold{" "}
+                          <b>{financialData?.seriesData[0] || 0}</b> – Gold{" "}
                           <small>
                             (
                             {getPercentage(
@@ -241,7 +247,7 @@ const DashboardComponent = () => {
                           </small>
                         </li>
                         <li>
-                          <b>{financialData.silver || 0}</b> – Silver{" "}
+                          <b>{financialData?.seriesData[1] || 0}</b> – Silver{" "}
                           <small>
                             {" "}
                             (
@@ -253,7 +259,7 @@ const DashboardComponent = () => {
                           </small>
                         </li>
                         <li>
-                          <b>{financialData.copper || 0}</b> – Coppers{" "}
+                          <b>{financialData?.seriesData[2] || 0}</b> – Coppers{" "}
                           <small>
                             {" "}
                             (

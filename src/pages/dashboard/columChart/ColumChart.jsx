@@ -43,15 +43,24 @@ const ColumChart = () => {
     setIsSelect(event.target.value);
   };
 
-  const [state] = React.useState({
+  const transformData = (data) => {
+    const resultArray = Array.from({ length: 12 }, () => 0);
+    data?.forEach((item) => {
+      const monthIndex = item.month - 1;
+      resultArray[monthIndex] = item.count;
+    });
+    return resultArray;
+  };
+
+  const [state, setState] = React.useState({
     series: [
       {
-        name: "Net Profit",
-        data: [44, 55, 57, 56, 61, 58, 63, 60],
+        name: "Jobs",
+        data: transformData(isApplication?.jobs?.detail),
       },
       {
-        name: "Revenue",
-        data: [76, 85, 101, 98, 87, 105, 91],
+        name: "Employers",
+        data: transformData(isApplication?.employers?.detail),
       },
     ],
     options: {
@@ -144,7 +153,6 @@ const ColumChart = () => {
         ],
         labels: {
           show: true,
-
           style: {
             colors: [
               "#CACACA",
@@ -174,11 +182,7 @@ const ColumChart = () => {
         custom: function ({ series, seriesIndex, dataPointIndex }) {
           return (
             '<div class="arrow_box">' +
-            "<span>" +
             series[seriesIndex][dataPointIndex] +
-            "</span>" +
-            "<div class='smalltext'>" +
-            [" Sun. Aug 21"] +
             "</div>" +
             "</div>"
           );
@@ -186,6 +190,22 @@ const ColumChart = () => {
       },
     },
   });
+
+  useEffect(() => {
+    setState((prevState) => ({
+      ...prevState,
+      series: [
+        {
+          name: "Jobs",
+          data: transformData(isApplication?.jobs?.detail),
+        },
+        {
+          name: "Employers",
+          data: transformData(isApplication?.employers?.detail),
+        },
+      ],
+    }));
+  }, [isApplication]);
 
   useEffect(() => {
     employerDetails();
