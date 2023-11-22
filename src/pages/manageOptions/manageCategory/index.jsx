@@ -228,7 +228,6 @@ const ManageCategoryComponent = () => {
               <LabeledInput
                 placeholder="Add Sub Categories"
                 onChange={(e) => setAddSubCategory(e.target.value)}
-                value={addSubCategory}
                 style={{ marginBottom: "10px" }}
               />
 

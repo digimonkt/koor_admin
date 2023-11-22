@@ -109,7 +109,7 @@ const PostNewJob = () => {
         company_type: selectedValue,
         company: values.company,
         company_logo_item: values.companyLogo,
-        exist_company: values.existCompany,
+        employer_id: values.existCompany.value,
         title: values.title,
         budget_currency: values.budgetCurrency,
         budget_amount: values.budgetAmount,
@@ -171,7 +171,6 @@ const PostNewJob = () => {
     },
   });
 
-  console.log({ formik });
   const getEmployerList = async () => {
     const limitParam = 10;
     const response = await manageEmployer({
@@ -187,7 +186,6 @@ const PostNewJob = () => {
     const response = await getTenderDetailsByIdAPI({ tenderId });
     if (response.remote === "success") {
       const { data } = response;
-      console.log({ data });
       if (data.address) {
         setSearchValue(data.address);
       }
@@ -200,7 +198,7 @@ const PostNewJob = () => {
 
       formik.setFieldValue("existCompany", {
         value: data.user?.id || "",
-        label: data.user?.name || "",
+        label: data.user?.name || data.user?.email || "",
       });
       formik.setFieldValue("address", data.address);
       formik.setFieldValue("title", data.title);
