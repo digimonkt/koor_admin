@@ -68,8 +68,8 @@ const NewPostResource = () => {
   const thumbs = (
     <Avatar
       sx={{
-        width: 100,
-        height: 100,
+        width: preview ? "auto" : 100,
+        height: preview ? 600 : 100,
         color: "#CACACA",
         borderRadius: "0",
       }}
@@ -189,12 +189,12 @@ const NewPostResource = () => {
       console.log(response.error);
     }
   };
+
   useEffect(() => {
     if (resourceId) {
       getSingleData();
     }
   }, [resourceId]);
-
   return (
     <>
       {!preview ? (
@@ -349,9 +349,11 @@ const NewPostResource = () => {
           </Stack>
           {resourceId ? (
             <Stack
-              direction={"row"}
+              direction={"column"}
               justifyContent={"center"}
+              alignItems={"center"}
               sx={{ mb: "50px" }}
+              gap={2}
             >
               <OutlinedButton
                 onClick={() => handleUpdate(resourceId)}
@@ -366,29 +368,27 @@ const NewPostResource = () => {
                   borderColor: "#274593",
                   display: "flex",
                   justifyContent: "center",
+                  width: "205px",
                 }}
               />
-              <OutlinedButton
+              <Button
+                variant="link"
                 onClick={() => setPreview(true)}
-                title={
-                  <Stack direction={"row"} alignItems={"center"} spacing={1}>
-                    <SVG.AddCircleIcon />
-                    <span>Preview</span>
-                  </Stack>
-                }
                 sx={{
-                  color: "#274593",
-                  borderColor: "#274593",
-                  display: "flex",
-                  justifyContent: "center",
+                  fontFamily: "Poppins",
+                  color: "#848484",
                 }}
-              />
+              >
+                <Box component={"span"}>Preview</Box>
+              </Button>
             </Stack>
           ) : (
             <Stack
-              direction={"row"}
+              alignItems={"center"}
+              direction={"column"}
               justifyContent={"center"}
               sx={{ mb: "50px" }}
+              gap={2}
             >
               <OutlinedButton
                 onClick={handleSubmit}
@@ -399,7 +399,7 @@ const NewPostResource = () => {
                     spacing={1}
                     sx={{ display: "flex", alignItems: "normal" }}
                   >
-                    <SVG.RightBox />
+                    <SVG.EyeIcon />
                     <span>PUBLISH POST</span>
                   </Stack>
                 }
@@ -423,6 +423,16 @@ const NewPostResource = () => {
                   },
                 }}
               />
+              <Button
+                variant="link"
+                onClick={() => setPreview(true)}
+                sx={{
+                  fontFamily: "Poppins",
+                  color: "#848484",
+                }}
+              >
+                <Box component={"span"}>Preview</Box>
+              </Button>
             </Stack>
           )}
           {files.length ? (
@@ -439,7 +449,20 @@ const NewPostResource = () => {
           )}
         </Card>
       ) : (
-        ""
+        <Stack direction={"column"} justifyContent={"center"} gap={2}>
+          <Box display="flex" textAlign="center">
+            <Button onClick={() => setPreview(false)}>
+              <SVG.ArrowLeftIcon />
+            </Button>
+            <h2>Preview</h2>
+          </Box>
+          {thumbs}
+          <div
+            dangerouslySetInnerHTML={{
+              __html: editorValue,
+            }}
+          />
+        </Stack>
       )}
     </>
   );

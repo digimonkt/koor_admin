@@ -167,7 +167,7 @@ const PostNewJob = () => {
         company_type: selectedValue,
         company: values.company,
         company_logo_item: values.companyLogo,
-        exist_company: values.existCompany,
+        employer_id: values.existCompany.value,
         title: values.title,
         budget_currency: values.budgetCurrency,
         budget_amount: values.budgetAmount,
@@ -288,7 +288,7 @@ const PostNewJob = () => {
       formik.setFieldValue("company", data.company);
       formik.setFieldValue("existCompany", {
         value: data.user?.id || "",
-        label: data.user?.name || "",
+        label: data.user?.name || data.user?.email,
       });
       formik.setFieldValue("title", data.title);
       formik.setFieldValue("budgetCurrency", data.budgetCurrency);

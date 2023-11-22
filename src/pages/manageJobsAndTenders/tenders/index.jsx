@@ -99,7 +99,6 @@ function ManageTendersComponent() {
         width: 120,
         sortable: true,
         renderCell: (item) => {
-          console.log({ item });
           return (
             <Stack direction="row" spacing={1} alignItems="center">
               <Tooltip title="View Details">
@@ -294,6 +293,7 @@ function ManageTendersComponent() {
   useEffect(() => {
     getCountryList();
   }, []);
+
   return (
     <>
       <Layout

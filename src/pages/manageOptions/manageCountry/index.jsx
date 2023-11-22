@@ -111,7 +111,6 @@ const ManageCountry = () => {
       dispatch(setErrorToast("Something went wrong"));
     }
   }
-  console.log({ selectCityValue });
   async function addCities() {
     const payload = {
       title: selectCityValue?.title,
