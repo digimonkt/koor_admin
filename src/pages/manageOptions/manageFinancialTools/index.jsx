@@ -29,7 +29,6 @@ const AntTabs = styled(Tabs)({
   },
   "& .MuiTabs-flexContainer": {
     minHeight: 29,
-    flexWrap: "wrap",
   },
 });
 
@@ -38,6 +37,9 @@ const AntTab = styled((props) => <Tab disableRipple {...props} />)(
     textTransform: "none",
     minHeight: 29,
     padding: "0px 20px",
+    "@media (max-width:600px)": {
+      padding: "0px 5px",
+    },
     [theme.breakpoints.up("sm")]: {
       minWidth: 0,
     },
@@ -181,6 +183,8 @@ const FinancialTools = () => {
               value={value}
               onChange={handleChange}
               aria-label="basic tabs example"
+              variant="scrollable"
+              scrollButtons="auto"
             >
               <AntTab label="Package management " {...a11yProps(0)} />
               <AntTab label="Recharge" {...a11yProps(1)} />

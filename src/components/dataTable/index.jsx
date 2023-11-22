@@ -1,5 +1,5 @@
 import { SelectInput } from "@components/input";
-import { FormControl, Stack } from "@mui/material";
+import { Box, FormControl, Stack } from "@mui/material";
 import { StyledDataGrid } from "./style";
 import { useEffect } from "react";
 import { incrementPage } from "@utils/common";
@@ -12,7 +12,18 @@ function DataTable({ rows, columns, limitProps, loader, page, NoFoundText }) {
   }, [page, rows]);
   return (
     <>
-      <div style={{ width: "100%", height: "625px", marginBottom: "30px" }}>
+      <Box
+        sx={{
+          width: "100%",
+          height: "625px",
+          overflowY: "hidden",
+          overflowX: "auto",
+          marginBottom: "30px",
+          "@media (max-width:320px)": {
+            width: "320px",
+          },
+        }}
+      >
         <StyledDataGrid
           className="scrolltable"
           rows={rows}
@@ -25,7 +36,7 @@ function DataTable({ rows, columns, limitProps, loader, page, NoFoundText }) {
             params.indexRelativeToCurrentPage % 2 === 0 ? "even" : "odd"
           }
         />
-      </div>
+      </Box>
       <div className="peritemview">
         <Stack direction="row" spacing={2} alignItems="center">
           <span>Items per page:</span>{" "}
