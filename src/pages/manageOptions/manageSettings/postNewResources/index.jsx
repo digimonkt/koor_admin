@@ -304,6 +304,7 @@ const NewPostResource = () => {
                   style={{
                     width: "100%",
                     marginTop: "20px",
+                    fontFamily: "'Poppins' !important",
                     background: "#F0F0F0",
                   }}
                 />

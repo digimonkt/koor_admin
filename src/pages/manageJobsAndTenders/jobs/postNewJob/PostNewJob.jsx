@@ -241,7 +241,6 @@ const PostNewJob = () => {
         // create
         res = await createJobAPI(newFormData);
         if (res.remote === "success") {
-          // dispatch(setJobPostUpdate(true));
           setSubmitting(SUBMITTING_STATUS_ENUM.submitted);
           dispatch(setSuccessToast("Job Post Successfully"));
           resetForm();
@@ -257,7 +256,6 @@ const PostNewJob = () => {
         // update
         res = await updateEmployerJobAPI(jobId, newFormData);
         if (res.remote === "success") {
-          // dispatch(setJobPostUpdate(true));
           setSubmitting(SUBMITTING_STATUS_ENUM.updated);
           dispatch(setSuccessToast("Job Updated Successfully"));
         } else {
@@ -1111,6 +1109,12 @@ const PostNewJob = () => {
                         checked={formik.values.isApplyThroughKoor}
                         {...formik.getFieldProps("isApplyThroughKoor")}
                       />
+                      {formik.touched.isApplyThroughKoor &&
+                      formik.errors.isApplyThroughKoor ? (
+                        <ErrorMessage>
+                          {formik.errors.isApplyThroughKoor}
+                        </ErrorMessage>
+                      ) : null}
                     </FormGroup>
                   </Grid>
                   <Grid item xl={4} lg={4} sm={4} xs={12}>
@@ -1121,6 +1125,12 @@ const PostNewJob = () => {
                         checked={formik.values.isApplyThroughEmail}
                         {...formik.getFieldProps("isApplyThroughEmail")}
                       />
+                      {formik.touched.isApplyThroughEmail &&
+                      formik.errors.isApplyThroughEmail ? (
+                        <ErrorMessage>
+                          {formik.errors.isApplyThroughEmail}
+                        </ErrorMessage>
+                      ) : null}
                     </FormGroup>
                     <input
                       className="add-form-control"
