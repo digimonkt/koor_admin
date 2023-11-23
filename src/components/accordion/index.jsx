@@ -11,10 +11,12 @@ import { SVG } from "@assets/svg";
 
 function Accordion({ title, onOpen, handleDelete, handleEdit, children }) {
   const handleIconClick = useCallback(
-    (e) => {
+    (e, label) => {
       e.stopPropagation();
-      if (handleDelete) {
+      if (label === "delete") {
         handleDelete();
+      } else {
+        handleEdit();
       }
     },
     [handleDelete]
@@ -53,7 +55,7 @@ function Accordion({ title, onOpen, handleDelete, handleEdit, children }) {
           <div>
             {handleDelete && (
               <IconButton
-                onClick={(e) => handleIconClick(e)}
+                onClick={(e) => handleIconClick(e, "delete")}
                 sx={{
                   "&.MuiIconButton-root": {
                     background: "#D5E3F7",
@@ -70,7 +72,7 @@ function Accordion({ title, onOpen, handleDelete, handleEdit, children }) {
             )}
             {handleEdit && (
               <IconButton
-                onClick={(e) => handleIconClick(e)}
+                onClick={(e) => handleIconClick(e, "edit")}
                 sx={{
                   "&.MuiIconButton-root": {
                     background: "#D5E3F7",

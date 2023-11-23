@@ -7,6 +7,7 @@ import {
   SelectInput,
   AttachmentDragNDropInput,
   ProfilePicInput,
+  QuillInput,
 } from "@components/input";
 import CurrencyInput from "./currencyInput";
 import { useFormik } from "formik";
@@ -74,6 +75,7 @@ const PostNewJob = () => {
   const debouncedSearchCountryValue = useDebounce(searchCountry, 500);
   const [countriesData, setCountriesData] = useState(countries.data);
   const [companyLogo, setCompanyLogo] = useState("");
+  const [editorValue, setEditorValue] = useState("");
   const [selectedValue, setSelectedValue] = React.useState("exist");
   const handleChange = (event) => {
     setSelectedValue(event.target.value);
@@ -128,6 +130,7 @@ const PostNewJob = () => {
         attachments_remove: values.attachmentsRemove,
         tag: values.tag.value,
       };
+      console.log({ payload, values });
       const newFormData = new FormData();
       for (const key in payload) {
         if (!payload[key]) {
@@ -193,6 +196,7 @@ const PostNewJob = () => {
       if (!data.user?.id) {
         setSelectedValue("new");
       }
+      if (data.description) setEditorValue(data.description);
       formik.setFieldValue("companyType", selectedValue);
       formik.setFieldValue("company", data.company);
 
@@ -207,7 +211,6 @@ const PostNewJob = () => {
         "budgetAmount",
         parseInt(data.budgetAmount.replace(/,/g, ""), 10)
       );
-      formik.setFieldValue("description", data.description);
       formik.setFieldValue("country", {
         value: data.country.id,
         label: data.country.title,
@@ -523,11 +526,14 @@ const PostNewJob = () => {
                       <label>
                         Description <span className="required-field">*</span>
                       </label>
-                      <textarea
+                      <QuillInput
                         className="form-control-area"
                         placeholder="Write more details to attract the right candidates."
-                        {...formik.getFieldProps("description")}
-                      ></textarea>
+                        value={editorValue}
+                        onChange={(value) =>
+                          formik.setFieldValue("description", value)
+                        }
+                      />
                     </div>
                     {formik.touched.description && formik.errors.description ? (
                       <ErrorMessage>{formik.errors.description}</ErrorMessage>

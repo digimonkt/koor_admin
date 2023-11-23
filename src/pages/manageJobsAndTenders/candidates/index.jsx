@@ -306,7 +306,7 @@ function ManageCandidatesComponent() {
               sx={{ display: "flex", alignItems: "center" }}
             >
               <span className="d-inline-flex align-items-center me-2">
-                <SVG.WhiteFile />
+                <SVG.WhiteFile width={24} height={24} />
               </span>{" "}
               Reset Filter
             </Box>

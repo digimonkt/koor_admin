@@ -8,6 +8,7 @@ import {
   SelectInput,
   AttachmentDragNDropInput,
   ProfilePicInput,
+  QuillInput,
 } from "@components/input";
 import CloseIcon from "@mui/icons-material/Close";
 import CurrencyInput from "./currencyInput";
@@ -80,6 +81,8 @@ const PostNewJob = () => {
   const [companyAttachments, setCompanyAttachments] = useState("");
   const [searchCountry, setSearchCountry] = useState("");
   const [employersData, setEmployersData] = useState(employers.data);
+  const [editorValue, setEditorValue] = useState("");
+  const [instructions, setInstructions] = useState("");
   const [countriesData, setCountriesData] = useState(countries.data);
   const debouncedSearchCountryValue = useDebounce(searchCountry, 500);
   const debouncedSearchEmployerValue = useDebounce(searchTerm, 500);
@@ -282,6 +285,10 @@ const PostNewJob = () => {
       }
       setCompanyLogo(data.companyLogo);
       setCompanyAttachments(data.attachments);
+      if (data.description) setEditorValue(data.description);
+      if (data.applicationInstruction) {
+        setInstructions(data.applicationInstruction);
+      }
       formik.setFieldValue("companyType", selectedValue);
       formik.setFieldValue("company", data.company);
       formik.setFieldValue("existCompany", {
@@ -336,10 +343,6 @@ const PostNewJob = () => {
       formik.setFieldValue("cc2", data.cc2);
       formik.setFieldValue("isContactWhatsapp", Boolean(data.contactWhatsapp));
       formik.setFieldValue("contactWhatsapp", data.contactWhatsapp);
-      formik.setFieldValue(
-        "applicationInstruction",
-        data.applicationInstruction
-      );
       formik.setFieldValue(
         "isApplyThroughWebsite",
         Boolean(data.isApplyThroughWebsite)
@@ -660,11 +663,14 @@ const PostNewJob = () => {
                       <label>
                         Description<span className="required-field">*</span>
                       </label>
-                      <textarea
+                      <QuillInput
                         className="form-control-area"
                         placeholder="Write more details to attract the right candidates."
-                        {...formik.getFieldProps("description")}
-                      ></textarea>
+                        value={editorValue}
+                        onChange={(value) =>
+                          formik.setFieldValue("description", value)
+                        }
+                      />
                     </div>
                     {formik.touched.description && formik.errors.description ? (
                       <ErrorMessage>{formik.errors.description}</ErrorMessage>
@@ -1181,12 +1187,17 @@ const PostNewJob = () => {
                     />
                   </Grid>
                   <Grid item xl={12} lg={12} xs={12}>
-                    <LabeledInput
-                      title="Application Instructions"
-                      className="add-form-control"
+                    <label>
+                      Application Instructions
+                      <span className="required-field">*</span>
+                    </label>
+                    <QuillInput
+                      className="form-control-area"
                       placeholder="Write a brief text overview of your application process. You can also include links, emails, etc."
-                      required
-                      {...formik.getFieldProps("applicationInstruction")}
+                      value={instructions}
+                      onChange={(value) =>
+                        formik.setFieldValue("applicationInstruction", value)
+                      }
                     />
                     {formik.touched.applicationInstruction &&
                     formik.errors.applicationInstruction ? (
