@@ -9,7 +9,7 @@ export const validateCreateJobInput = Yup.object()
     budgetCurrency: Yup.string().required("Currency is required"),
     budgetAmount: Yup.number().required("Amount is required"),
     budgetPayPeriod: Yup.string().required("Pay period is required"),
-    description: Yup.string().required("Description is required"),
+    description: Yup.string().trim().required("Description cannot be empty"),
     country: Yup.object().shape({
       label: Yup.string().required("Country is required"),
       value: Yup.string().required("Country is required"),
@@ -26,8 +26,8 @@ export const validateCreateJobInput = Yup.object()
     isApplyThroughWebsite: Yup.boolean(),
     isApplyThroughKoor: Yup.boolean(),
     applicationInstruction: Yup.string()
-      .nullable()
-      .required("Application instructions are required"),
+      .trim()
+      .required("Application Instruction content cannot be empty"),
     isContactEmail: Yup.boolean(),
     deadline: Yup.string()
       .nullable()
@@ -101,7 +101,7 @@ export const validateCreateTenderInput = Yup.object().shape({
   opportunityType: Yup.object().required("Type is required"),
   budgetCurrency: Yup.string(),
   budgetAmount: Yup.number(),
-  description: Yup.string().required("Description is required"),
+  description: Yup.string().trim().required("Description cannot be empty"),
   country: Yup.object().required("Country is required"),
   city: Yup.object().required("City is required"),
   categories: Yup.array()
