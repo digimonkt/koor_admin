@@ -1,6 +1,7 @@
 import AttachmentDragNDropInputComponent from "./attachmentDragNDropInput";
 import CheckboxInputComponent from "./checkboxInput";
 import DateInputComponent from "./dateInput";
+import QuillInputComponent from "./quilleditor";
 // import HorizontalDateInputComponent from "./horizontalInput/horizontalDateInput";
 // import HorizontalLabelInputComponent from "./horizontalInput/horizontalLabelInput";
 // import HorizontalPhoneInputComponent from "./horizontalInput/horizontalPhoneInput";
@@ -24,6 +25,8 @@ export const AttachmentDragNDropInput = AttachmentDragNDropInputComponent;
 // export const LabeledPhoneInput = LabeledPhoneInputComponent;
 export const ProfilePicInput = ProfilePicInputComponent;
 export const DateInput = DateInputComponent;
+export const QuillInput = QuillInputComponent;
+
 // export const HorizontalDateInput = HorizontalDateInputComponent;
 // export const LabeledRadioInput = LabeledRadioInputComponent;
 // export const LabeledOtpInput = OtpInputComponent;

@@ -74,7 +74,8 @@ const Donut = ({
           breakpoint: 480,
           options: {
             chart: {
-              width: 200,
+              width: 140,
+              height: 140,
             },
             legend: {
               position: "bottom",
@@ -141,15 +142,25 @@ const Donut = ({
       </Stack>
 
       <Grid container spacing={2}>
-        <Grid item lg={4} xl={4} sm={6} xs={12}>
+        <Grid item lg={5} xl={5} sm={6} xs={5} sx={{
+          display: "flex",
+          justifyContent: "end",
+          "@media(max-width: 992px)": {
+            justifyContent: "center"
+          },
+          "@media(max-width: 480px)": {
+            justifyContent: "end"
+          },
+        }}>
           <ReactApexChart
             options={state.options}
             series={state.series}
             type="donut"
-            height={300}
+            height={200}
+            width={200}
           />
         </Grid>
-        <Grid item xl={8} lg={8} sm={6} xs={12}>
+        <Grid item xl={7} lg={7} sm={6} xs={7}>
           <div className={`${styles.seriesBox}`}>
             <h2>{total}</h2>
             <span>{user || 0}</span>
