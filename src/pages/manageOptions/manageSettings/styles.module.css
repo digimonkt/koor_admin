@@ -6,7 +6,9 @@
   line-height: 34px;
   color: #121212;
   margin: 0px;
+  margin-top: 10px;
 }
+
 .subtitle h3 {
   margin: 0px;
   font-family: "Poppins";
@@ -16,9 +18,15 @@
   line-height: 30px;
   color: #121212;
 }
+
 .imageBox {
   position: relative;
 }
+
+.ql-editor {
+  font-family: 'Poppins' !important;
+}
+
 .imageBox img {
   border-radius: 5px;
   display: block;
@@ -52,6 +60,7 @@
   -webkit-box-orient: vertical;
   overflow: hidden;
 }
+
 .playButton {
   position: absolute;
   top: 0;
@@ -64,6 +73,7 @@
   align-items: center;
   justify-content: center;
 }
+
 .showButton {
   width: 188px;
   margin: auto;
@@ -102,18 +112,22 @@
   /* Chrome/Opera/Safari */
   color: #848484;
 }
+
 .postTile::-moz-placeholder {
   /* Firefox 19+ */
   color: #848484;
 }
+
 .postTile:-ms-input-placeholder {
   /* IE 10+ */
   color: #848484;
 }
+
 .postTile:-moz-placeholder {
   /* Firefox 18- */
   color: #848484;
 }
+
 .newpostDescripition {
   background: #f0f0f0;
   border-radius: 10px;
@@ -126,11 +140,13 @@
   padding: 5px 10px;
   height: 34px;
 }
+
 .textareaFormat span {
   cursor: pointer;
   display: inline-flex;
   align-items: center;
 }
+
 .newpostContent {
   font-family: "Poppins";
   font-style: normal;
@@ -143,6 +159,7 @@
   /* Black #121212 */
   color: #121212;
 }
+
 .textarea {
   font-family: "Poppins";
   font-style: normal;
@@ -160,6 +177,7 @@
   resize: none;
   outline: none;
 }
+
 .addbtnlink {
   margin-top: 20px;
 }

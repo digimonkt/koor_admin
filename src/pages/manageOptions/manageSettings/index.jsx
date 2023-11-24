@@ -21,6 +21,8 @@ import { transformResourcesResponse } from "@api/transform/choices";
 import DialogBox from "@components/dialogBox";
 import { DeleteCard } from "@components/card";
 import AddJobPoint from "./addJobPoint";
+import env from "@utils/validateEnv";
+
 const StyledButton = styled(IconButton)(() => ({
   background: "#D5E3F7",
   width: "30px",
@@ -234,7 +236,10 @@ const ManageSettingsComponent = () => {
                               },
                             }}
                           >
-                            <StyledButton>
+                            <StyledButton
+                              component={"a"}
+                              href={`${env.REACT_APP_REDIRECT_URL}/resources/${item.id}`}
+                            >
                               <SVG.EyeIcon />
                             </StyledButton>
                             <StyledButton onClick={() => setDeleting(item.id)}>

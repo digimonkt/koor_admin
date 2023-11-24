@@ -8,6 +8,7 @@ import {
   SelectInput,
   AttachmentDragNDropInput,
   ProfilePicInput,
+  QuillInput,
 } from "@components/input";
 import CloseIcon from "@mui/icons-material/Close";
 import CurrencyInput from "./currencyInput";
@@ -80,6 +81,8 @@ const PostNewJob = () => {
   const [companyAttachments, setCompanyAttachments] = useState("");
   const [searchCountry, setSearchCountry] = useState("");
   const [employersData, setEmployersData] = useState(employers.data);
+  const [editorValue, setEditorValue] = useState("");
+  const [instructions, setInstructions] = useState("");
   const [countriesData, setCountriesData] = useState(countries.data);
   const debouncedSearchCountryValue = useDebounce(searchCountry, 500);
   const debouncedSearchEmployerValue = useDebounce(searchTerm, 500);
@@ -167,7 +170,7 @@ const PostNewJob = () => {
         company_type: selectedValue,
         company: values.company,
         company_logo_item: values.companyLogo,
-        exist_company: values.existCompany,
+        employer_id: values.existCompany.value,
         title: values.title,
         budget_currency: values.budgetCurrency,
         budget_amount: values.budgetAmount,
@@ -241,7 +244,6 @@ const PostNewJob = () => {
         // create
         res = await createJobAPI(newFormData);
         if (res.remote === "success") {
-          // dispatch(setJobPostUpdate(true));
           setSubmitting(SUBMITTING_STATUS_ENUM.submitted);
           dispatch(setSuccessToast("Job Post Successfully"));
           resetForm();
@@ -257,7 +259,6 @@ const PostNewJob = () => {
         // update
         res = await updateEmployerJobAPI(jobId, newFormData);
         if (res.remote === "success") {
-          // dispatch(setJobPostUpdate(true));
           setSubmitting(SUBMITTING_STATUS_ENUM.updated);
           dispatch(setSuccessToast("Job Updated Successfully"));
         } else {
@@ -284,11 +285,15 @@ const PostNewJob = () => {
       }
       setCompanyLogo(data.companyLogo);
       setCompanyAttachments(data.attachments);
+      if (data.description) setEditorValue(data.description);
+      if (data.applicationInstruction) {
+        setInstructions(data.applicationInstruction);
+      }
       formik.setFieldValue("companyType", selectedValue);
       formik.setFieldValue("company", data.company);
       formik.setFieldValue("existCompany", {
         value: data.user?.id || "",
-        label: data.user?.name || "",
+        label: data.user?.name || data.user?.email,
       });
       formik.setFieldValue("title", data.title);
       formik.setFieldValue("budgetCurrency", data.budgetCurrency);
@@ -338,10 +343,6 @@ const PostNewJob = () => {
       formik.setFieldValue("cc2", data.cc2);
       formik.setFieldValue("isContactWhatsapp", Boolean(data.contactWhatsapp));
       formik.setFieldValue("contactWhatsapp", data.contactWhatsapp);
-      formik.setFieldValue(
-        "applicationInstruction",
-        data.applicationInstruction
-      );
       formik.setFieldValue(
         "isApplyThroughWebsite",
         Boolean(data.isApplyThroughWebsite)
@@ -662,11 +663,14 @@ const PostNewJob = () => {
                       <label>
                         Description<span className="required-field">*</span>
                       </label>
-                      <textarea
+                      <QuillInput
                         className="form-control-area"
                         placeholder="Write more details to attract the right candidates."
-                        {...formik.getFieldProps("description")}
-                      ></textarea>
+                        value={editorValue}
+                        onChange={(value) =>
+                          formik.setFieldValue("description", value)
+                        }
+                      />
                     </div>
                     {formik.touched.description && formik.errors.description ? (
                       <ErrorMessage>{formik.errors.description}</ErrorMessage>
@@ -1111,6 +1115,12 @@ const PostNewJob = () => {
                         checked={formik.values.isApplyThroughKoor}
                         {...formik.getFieldProps("isApplyThroughKoor")}
                       />
+                      {formik.touched.isApplyThroughKoor &&
+                      formik.errors.isApplyThroughKoor ? (
+                        <ErrorMessage>
+                          {formik.errors.isApplyThroughKoor}
+                        </ErrorMessage>
+                      ) : null}
                     </FormGroup>
                   </Grid>
                   <Grid item xl={4} lg={4} sm={4} xs={12}>
@@ -1121,6 +1131,12 @@ const PostNewJob = () => {
                         checked={formik.values.isApplyThroughEmail}
                         {...formik.getFieldProps("isApplyThroughEmail")}
                       />
+                      {formik.touched.isApplyThroughEmail &&
+                      formik.errors.isApplyThroughEmail ? (
+                        <ErrorMessage>
+                          {formik.errors.isApplyThroughEmail}
+                        </ErrorMessage>
+                      ) : null}
                     </FormGroup>
                     <input
                       className="add-form-control"
@@ -1171,12 +1187,17 @@ const PostNewJob = () => {
                     />
                   </Grid>
                   <Grid item xl={12} lg={12} xs={12}>
-                    <LabeledInput
-                      title="Application Instructions"
-                      className="add-form-control"
+                    <label>
+                      Application Instructions
+                      <span className="required-field">*</span>
+                    </label>
+                    <QuillInput
+                      className="form-control-area"
                       placeholder="Write a brief text overview of your application process. You can also include links, emails, etc."
-                      required
-                      {...formik.getFieldProps("applicationInstruction")}
+                      value={instructions}
+                      onChange={(value) =>
+                        formik.setFieldValue("applicationInstruction", value)
+                      }
                     />
                     {formik.touched.applicationInstruction &&
                     formik.errors.applicationInstruction ? (

@@ -118,9 +118,7 @@ input::placeholder {
   padding-top: 20px;
 }
 
-.pagination-custom
-  .MuiPagination-root.MuiPagination-root
-  .MuiPaginationItem-root {
+.pagination-custom .MuiPagination-root.MuiPagination-root .MuiPaginationItem-root {
   margin-left: 10px;
   margin-right: 10px;
 }
@@ -408,9 +406,7 @@ input::-webkit-inner-spin-button {
     font-size: 12px;
   }
 
-  .pagination-custom
-    .MuiPagination-root.MuiPagination-root
-    .MuiPaginationItem-root {
+  .pagination-custom .MuiPagination-root.MuiPagination-root .MuiPaginationItem-root {
     font-size: 14px;
   }
 
