@@ -831,6 +831,7 @@ hr {
   border-radius: 10px;
   padding: 30px;
   width: 470px;
+  background-color: transparent;
 }
 .dropimg-userprofile {
   border: 2px dashed #cacaca;
@@ -1346,6 +1347,7 @@ span.count {
   width: 11px;
   height: 11px;
 }
+
 .chart-view h4 {
   font-family: "Poppins";
   font-style: normal;
@@ -1353,7 +1355,6 @@ span.count {
   font-size: 18px;
   line-height: 27px;
   letter-spacing: 0.02em;
-
   color: #121212;
   margin: 0px;
 }
