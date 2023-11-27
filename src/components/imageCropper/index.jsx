@@ -56,7 +56,6 @@ function ImageCropper({ open, handleClose, image, handleSave }) {
       console.error(e);
     }
   }, [croppedAreaPixels, rotation, image]);
-
   const onZoomChange = (zoom, _) => {
     setZoom(zoom);
   };
