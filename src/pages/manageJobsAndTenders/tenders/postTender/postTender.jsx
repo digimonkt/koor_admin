@@ -814,7 +814,7 @@ const PostNewJob = () => {
                             },
                           }}
                           defaultValue=""
-                          options={(sectors.data || []).map((employer) => ({
+                          options={sectors?.data?.map((employer) => ({
                             value: employer.id,
                             label: employer.title,
                           }))}

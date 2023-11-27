@@ -20,8 +20,11 @@ function SelectWithSearch({ options, title, ...rest }) {
           fontFamily: "Poppins !important",
         },
       }}
-      options={options}
+      options={options || []}
       getOptionLabel={(option) => option.label}
+      getOptionSelected={(option, selectedValue) =>
+        option.value === selectedValue.value
+      }
       renderInput={(params) => {
         return <TextField {...params} placeholder={title} />;
       }}

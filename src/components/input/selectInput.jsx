@@ -1,5 +1,5 @@
 import { styled } from "@mui/material/styles";
-import { FormControl, MenuItem, Select } from "@mui/material";
+import { Box, FormControl, MenuItem, Select } from "@mui/material";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import React from "react";
 import styles from "./input.module.css";
@@ -74,7 +74,9 @@ function SelectInputComponent({
           "&.MuiSelect-select": {
             fontFamily: "Poppins",
             fontSize: "16px",
-            padding: `14px 34px 14px ${search ? "60px" : "20px"} !important`,
+            padding: `14px 34px ${
+              search ? "14px 60px" : "14px 20px"
+            } !important`,
             display: "flex",
             alignItems: "center",
           },
@@ -102,7 +104,7 @@ function SelectInputComponent({
               ? undefined
               : () => {
                   return (
-                    <div className={styles.placeholder}>{placeholder}</div>
+                    <Box className={styles.placeholder}>{placeholder}</Box>
                   );
                 }
           }
