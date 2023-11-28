@@ -1,7 +1,8 @@
 import { Autocomplete, Box, TextField } from "@mui/material";
-function SelectWithSearch({ options, title, ...rest }) {
+function SelectWithSearch({ options, title, multiple, ...rest }) {
   return (
     <Autocomplete
+      multiple={Boolean(multiple)}
       sx={{
         borderRadius: "73px",
         background: "#fff",

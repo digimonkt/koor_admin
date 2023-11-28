@@ -41,5 +41,4 @@ export const getFinancialCountApi = async (period) => {
       },
     };
   }
-  console.log({ response });
 };

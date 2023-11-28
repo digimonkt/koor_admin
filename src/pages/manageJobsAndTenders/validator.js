@@ -33,13 +33,13 @@ export const validateCreateJobInput = Yup.object()
       .nonNullable()
       .required("Application Instruction content cannot be empty"),
     isContactEmail: Yup.boolean(),
+    startDate: Yup.string().nullable().required("Start Date is required"),
     deadline: Yup.string()
       .nullable()
       .required("Deadline is required")
-      .test("isFuture", "Date Must be of Future", (value) => {
+      .test("startDate", "Date Must be of Future", (value) => {
         return dayjs(value).isSameOrAfter(dayjs(), "days");
       }),
-    startDate: Yup.string().nullable().required("Start Date is required"),
     contactEmail: Yup.string()
       .email("Contact email must be a valid")
       .test(
@@ -110,19 +110,18 @@ export const validateCreateTenderInput = Yup.object()
     country: Yup.object().required("Country is required"),
     city: Yup.object().required("City is required"),
     categories: Yup.array()
-      .of(Yup.string())
       .min(1, "At Least one category is required")
       .max(3, "Maximum 3 categories"),
     sectors: Yup.object(),
     tag: Yup.object(),
     address: Yup.string().required("Address is required"),
+    startDate: Yup.string().nullable().required("Start Date is required"),
     deadline: Yup.string()
       .nullable()
       .required("Deadline is required")
       .test("startDate", "Date Must be of Future", (value) => {
         return dayjs(value).isSameOrAfter(dayjs(), "days");
       }),
-    startDate: Yup.string().nullable().required("Start Date is required"),
     isApplyThroughEmail: Yup.boolean(),
     isApplyThroughWebsite: Yup.boolean(),
     isApplyThroughKoor: Yup.boolean(),
