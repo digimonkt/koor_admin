@@ -214,7 +214,6 @@ const PostNewJob = () => {
     const response = await getTenderDetailsByIdAPI({ tenderId });
     if (response.remote === "success") {
       const { data } = response;
-      console.log({ data });
       if (data.address) {
         setSearchValue(data.address);
       }
