@@ -4,7 +4,6 @@ import styles from "./postTender.module.css";
 import {
   DateInput,
   LabeledInput,
-  SelectInput,
   AttachmentDragNDropInput,
   ProfilePicInput,
   QuillInput,
@@ -134,7 +133,7 @@ const PostNewJob = () => {
         city: values.city.value,
         sector: values.sectors.value,
         tender_type: values.opportunityType.value,
-        tender_category: values.categories,
+        tender_category: values.categories.map((e) => e.value),
         deadline: dayjs(values.deadline).format(DATABASE_DATE_FORMAT),
         address: values.address,
         start_date: values.startDate
@@ -155,7 +154,6 @@ const PostNewJob = () => {
         apply_through_website: values.isApplyThroughWebsite || "false",
         website_link: values.website,
       };
-      console.log({ payload, values });
       const newFormData = new FormData();
       for (const key in payload) {
         if (!payload[key]) {
@@ -254,7 +252,10 @@ const PostNewJob = () => {
       });
       formik.setFieldValue(
         "categories",
-        data.categories.map((category) => category.id)
+        data.categories.map((category) => ({
+          value: category.id,
+          label: category.title,
+        }))
       );
       formik.setFieldValue("sectors", {
         value: data.sectors.id,
@@ -283,7 +284,6 @@ const PostNewJob = () => {
       formik.setFieldValue("contactEmail", data.contactEmail);
       formik.setFieldValue("cc1", data.cc1);
       formik.setFieldValue("cc2", data.cc2);
-      formik.setFieldValue("isContactWhatsapp", Boolean(data.contactWhatsapp));
       formik.setFieldValue("contactWhatsapp", data.contactWhatsapp);
       formik.setFieldValue("website", data.website);
       formik.setFieldValue(
@@ -297,6 +297,7 @@ const PostNewJob = () => {
     }
   }, []);
 
+  console.log({ formik });
   // Address
   const getSuggestedAddress = async (search) => {
     const res = await GetSuggestedAddressAPI(search);
@@ -527,7 +528,7 @@ const PostNewJob = () => {
                                 bgColor="rgba(40, 71, 146, 0.1)"
                                 // handleSave={handleProfilePicSave}
                                 image={companyLogo}
-                                loading={"loading"}
+                                loading={false}
                                 newLogo={handleProfilePicSave}
                                 handleSaveCroppedImg={(file) =>
                                   formik.setFieldValue("companyLogo", [file])
@@ -761,18 +762,47 @@ const PostNewJob = () => {
                     </label>
                     <Grid container spacing={2}>
                       <Grid item xl={5} lg={5} sm={12} xs={12}>
-                        <SelectInput
-                          multiple
+                        <SelectWithSearch
+                          sx={{
+                            borderRadius: "10px",
+                            background: "#F0F0F0",
+                            fontFamily: "Poppins",
+
+                            "& fieldset": {
+                              border: "1px solid #cacaca",
+                              borderRadius: "93px",
+                              display: "none",
+                              "&:hover": { borderColor: "#cacaca" },
+                            },
+                            "& .MuiOutlinedInput-root": {
+                              fontFamily: "Poppins",
+                              padding: "4px 9px",
+                            },
+                            "& .MuiFormLabel-root": {
+                              fontSize: "16px",
+                              color: "#848484",
+                              fontFamily: "Poppins !important",
+                              transform: "translate(14px, 12px) scale(1)",
+                            },
+                            "& .MuiInputLabel-shrink": {
+                              transform: "translate(14px, -9px) scale(0.75)",
+                            },
+                          }}
+                          multiple={true}
                           defaultValue=""
-                          placeholder="Select a Job category"
+                          title="Select a Job category"
                           options={tenderCategories.data.map((category) => ({
                             value: category.id,
                             label: category.title,
                           }))}
-                          name={"categories"}
-                          value={formik.values.categories || []}
-                          onChange={formik.handleChange}
-                          onBlur={formik.handleBlur}
+                          onChange={(_, value) => {
+                            if (value) {
+                              formik.setFieldValue("categories", value);
+                            } else {
+                              formik.setFieldValue("categories", []);
+                            }
+                          }}
+                          value={formik.values.categories.map((e) => e)}
                         />
                         {formik.touched.categories &&
                         formik.errors.categories ? (

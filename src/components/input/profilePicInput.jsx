@@ -36,13 +36,6 @@ const ProfilePicInputComponent = ({
     setFiles([]);
   };
 
-  useEffect(() => {
-    setFiles([]);
-  }, [image]);
-  // const handleSaveImage = () => {
-  //   if (newImage instanceof File) handleSave(newImage);
-  // };
-
   const thumbs = (
     <Avatar
       sx={{
@@ -59,9 +52,10 @@ const ProfilePicInputComponent = ({
       }}
     />
   );
-
   useEffect(() => {
-    // Make sure to revoke the data uris to avoid memory leaks, will run on unmount
+    setFiles([]);
+  }, [image]);
+  useEffect(() => {
     return () => files.forEach((file) => URL.revokeObjectURL(file.preview));
   }, [files]);
   return (
@@ -89,7 +83,7 @@ const ProfilePicInputComponent = ({
           <Stack direction="column" spacing={4}>
             <div className="dropimg-userprofile">
               <div {...getRootProps({ className: "dropzone" })}>
-                <input {...getInputProps()} disabled={loading} />
+                <input {...getInputProps()} />
                 <p>
                   Drag here or{" "}
                   <span
@@ -103,26 +97,6 @@ const ProfilePicInputComponent = ({
                 </p>
               </div>
             </div>
-            {/* <div className="text-center">
-              <OutlinedButton
-                title={
-                  <>
-                    {loading ? (
-                      "Saving..."
-                    ) : (
-                      <>
-                        <span className="me-2 d-inline-flex">
-                          <SVG.CheckIcon />
-                        </span>
-                        Save photo
-                      </>
-                    )}
-                  </>
-                }
-                disabled={loading}
-                onClick={handleSaveImage}
-              />
-            </div> */}
           </Stack>
         </Stack>
       </div>
