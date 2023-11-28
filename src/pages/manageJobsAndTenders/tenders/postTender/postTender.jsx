@@ -1014,6 +1014,7 @@ const PostNewJob = () => {
                 <Grid item xl={4} lg={4} sm={4} xs={12}>
                   <FormGroup>
                     <FormControlLabel
+                      sx={{ width: "200px" }}
                       control={<Switch />}
                       label="Apply through Koor"
                       checked={formik.values.isApplyThroughKoor}
@@ -1026,6 +1027,7 @@ const PostNewJob = () => {
                       </ErrorMessage>
                     ) : null}
                     <FormControlLabel
+                      sx={{ width: "165px" }}
                       control={<Switch />}
                       label="Apply by email"
                       checked={formik.values.isApplyThroughEmail}
@@ -1098,6 +1100,7 @@ const PostNewJob = () => {
                 <Grid item xl={12} lg={12} xs={12}>
                   <FormGroup>
                     <FormControlLabel
+                      sx={{ width: "255px" }}
                       control={<Switch />}
                       label="Apply through your website"
                       checked={formik.values.isApplyThroughWebsite}
