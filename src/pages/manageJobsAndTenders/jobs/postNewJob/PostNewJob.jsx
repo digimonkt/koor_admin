@@ -286,11 +286,11 @@ const PostNewJob = () => {
         setSelectedValue("new");
       }
       setCompanyLogo(data.companyLogo);
+      formik.setFieldValue("description", data.description);
+      setEditorValue(data.description);
       setCompanyAttachments(data.attachments);
-      if (data.description) setEditorValue(data.description);
-      if (data.applicationInstruction) {
-        setInstructions(data.applicationInstruction);
-      }
+      setInstructions(data.applicationInstruction);
+      formik.setFieldValue("applicationInstruction", selectedValue);
       formik.setFieldValue("companyType", selectedValue);
       formik.setFieldValue("company", data.company);
       formik.setFieldValue("existCompany", {
@@ -304,7 +304,6 @@ const PostNewJob = () => {
         parseInt(data.budgetAmount.replace(/,/g, ""), 10)
       );
       formik.setFieldValue("budgetPayPeriod", data.budgetPayPeriod);
-      formik.setFieldValue("description", data.description);
       formik.setFieldValue("country", {
         value: data.country.id,
         label: data.country.title,
@@ -441,6 +440,9 @@ const PostNewJob = () => {
     const newJobId = searchParams.get("jobId");
     if (newJobId && jobId !== newJobId) setJobId(newJobId);
   }, [searchParams.get("jobId")]);
+  // Example: Log formik.values.description
+  console.log(formik.values.description);
+
   return (
     <div className="job-application">
       <Card
@@ -670,7 +672,7 @@ const PostNewJob = () => {
                       <QuillInput
                         className="form-control-area"
                         placeholder="Write more details to attract the right candidates."
-                        value={editorValue}
+                        value={editorValue || formik.values.description}
                         onChange={(value) =>
                           formik.setFieldValue("description", value)
                         }

@@ -223,14 +223,15 @@ const PostNewJob = () => {
       if (!data.user?.id) {
         setSelectedValue("new");
       }
-      if (data.description) {
-        setEditorValue(data.description);
-      }
+      formik.setFieldValue("description", data.description);
+      setEditorValue(data.description);
+      formik.setFieldValue(
+        "applicationInstruction",
+        data.applicationInstruction
+      );
       formik.setFieldValue("companyType", selectedValue);
       formik.setFieldValue("company", data.company);
-      if (data.applicationInstruction) {
-        setInstructions(data.applicationInstruction);
-      }
+      setInstructions(data.applicationInstruction);
       formik.setFieldValue("existCompany", {
         value: data.user?.id || "",
         label: data.user?.name || data.user?.email || "",
@@ -289,10 +290,6 @@ const PostNewJob = () => {
       formik.setFieldValue(
         "isApplyThroughWebsite",
         Boolean(data.isApplyThroughWebsite)
-      );
-      formik.setFieldValue(
-        "applicationInstruction",
-        data.applicationInstruction
       );
     }
   }, []);
