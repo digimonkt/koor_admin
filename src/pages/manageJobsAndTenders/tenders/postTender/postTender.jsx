@@ -476,7 +476,7 @@ const PostNewJob = () => {
                         </Grid>
                       </Grid>
                     </Grid>
-                    <Grid item xl={12} lg={12} xs={12}>
+                    <Grid item xl={12} lg={12} xs={12} className="mt-2">
                       <Divider sx={{ borderColor: "#CACACA", opacity: "1" }} />
                     </Grid>
                   </>
@@ -546,7 +546,7 @@ const PostNewJob = () => {
                     </Grid>
                   </>
                 )}
-                <Grid container spacing={2}>
+                <Grid container spacing={2} className="mt-0">
                   <Grid item xl={8} lg={8} xs={12}>
                     <LabeledInput
                       title="Title of your tender"
@@ -1106,7 +1106,7 @@ const PostNewJob = () => {
                     ) : null}
                   </Grid>
                 </Grid>
-                <Grid item xl={12} lg={12} xs={12}>
+                <Grid item xl={12} lg={12} xs={12} className="mt-3">
                   <label>
                     Application Instructions
                     <span className="required-field">*</span>
@@ -1198,7 +1198,7 @@ const PostNewJob = () => {
                     }}
                   />
                 </Grid>
-                <Grid item xl={12} lg={12} xs={12}>
+                <Grid item xl={12} lg={12} xs={12} className="mb-3">
                   <Divider
                     sx={{ borderColor: "#CACACA", opacity: "1", my: 2 }}
                   />
