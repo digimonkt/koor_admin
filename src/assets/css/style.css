@@ -916,6 +916,7 @@ hr {
   border-radius: 10px;
   padding: 30px;
   width: 470px;
+  background-color: transparent;
 }
 
 .dropimg-userprofile {
@@ -1485,7 +1486,6 @@ span.count {
   font-size: 18px;
   line-height: 27px;
   letter-spacing: 0.02em;
-
   color: #121212;
   margin: 0px;
 }

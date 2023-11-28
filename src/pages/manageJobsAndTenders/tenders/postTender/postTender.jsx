@@ -4,7 +4,6 @@ import styles from "./postTender.module.css";
 import {
   DateInput,
   LabeledInput,
-  SelectInput,
   AttachmentDragNDropInput,
   ProfilePicInput,
   QuillInput,
@@ -17,11 +16,13 @@ import {
   CardContent,
   Divider,
   FormControlLabel,
+  FormGroup,
   Grid,
   IconButton,
   Radio,
   RadioGroup,
   Stack,
+  Switch,
 } from "@mui/material";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -64,6 +65,7 @@ const PostNewJob = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
+  const [instructions, setInstructions] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
   const [tenderId, setTenderId] = useState(null);
   const [searchValue, setSearchValue] = useState("");
@@ -104,6 +106,17 @@ const PostNewJob = () => {
       deadline: "",
       attachments: [],
       attachmentsRemove: [],
+      websiteLink: "",
+      contactWhatsapp: "",
+      isContactEmail: false,
+      contactEmail: "",
+      cc1: "",
+      cc2: "",
+      isContactWhatsapp: false,
+      applicationInstruction: "",
+      isApplyThroughEmail: false,
+      isApplyThroughKoor: false,
+      isApplyThroughWebsite: false,
     },
     validationSchema: validateCreateTenderInput,
     onSubmit: async (values, { resetForm }) => {
@@ -120,7 +133,7 @@ const PostNewJob = () => {
         city: values.city.value,
         sector: values.sectors.value,
         tender_type: values.opportunityType.value,
-        tender_category: values.categories,
+        tender_category: values.categories.map((e) => e.value),
         deadline: dayjs(values.deadline).format(DATABASE_DATE_FORMAT),
         address: values.address,
         start_date: values.startDate
@@ -128,9 +141,19 @@ const PostNewJob = () => {
           : "",
         attachments: values.attachments,
         attachments_remove: values.attachmentsRemove,
+        application_instruction: values.applicationInstruction,
         tag: values.tag.value,
+        contact_email: values?.contactEmail || "",
+        cc1: values?.cc1 || "",
+        cc2: values?.cc2 || "",
+        contact_whatsapp: values.isContactWhatsapp
+          ? values.contactWhatsapp
+          : "",
+        apply_through_koor: values.isApplyThroughKoor || "false",
+        apply_through_email: values.isApplyThroughEmail || "false",
+        apply_through_website: values.isApplyThroughWebsite || "false",
+        website_link: values.website,
       };
-      console.log({ payload, values });
       const newFormData = new FormData();
       for (const key in payload) {
         if (!payload[key]) {
@@ -159,6 +182,7 @@ const PostNewJob = () => {
           setSuggestedAddress([]);
           setCompanyLogo();
           resetForm();
+          navigate("/manage-tenders");
         } else {
           dispatch(setErrorToast("Something went wrong"));
         }
@@ -167,6 +191,7 @@ const PostNewJob = () => {
         res = await updateTenderAPI(tenderId, newFormData);
         if (res.remote === "success") {
           dispatch(setSuccessToast("Tender Updated Successfully"));
+          navigate("/manage-tenders");
         } else {
           dispatch(setErrorToast("Something went wrong"));
         }
@@ -192,14 +217,20 @@ const PostNewJob = () => {
       if (data.address) {
         setSearchValue(data.address);
       }
-      if (data.companyLogo) setCompanyLogo(data.companyLogo);
+      if (data.companyLogo) {
+        setCompanyLogo(data.companyLogo);
+      }
       if (!data.user?.id) {
         setSelectedValue("new");
       }
-      if (data.description) setEditorValue(data.description);
+      if (data.description) {
+        setEditorValue(data.description);
+      }
       formik.setFieldValue("companyType", selectedValue);
       formik.setFieldValue("company", data.company);
-
+      if (data.applicationInstruction) {
+        setInstructions(data.applicationInstruction);
+      }
       formik.setFieldValue("existCompany", {
         value: data.user?.id || "",
         label: data.user?.name || data.user?.email || "",
@@ -221,7 +252,10 @@ const PostNewJob = () => {
       });
       formik.setFieldValue(
         "categories",
-        data.categories.map((category) => category.id)
+        data.categories.map((category) => ({
+          value: category.id,
+          label: category.title,
+        }))
       );
       formik.setFieldValue("sectors", {
         value: data.sectors.id,
@@ -232,15 +266,38 @@ const PostNewJob = () => {
         label: data.opportunityType.title,
       });
       formik.setFieldValue("tag", {
-        value: data.tag[0].id,
-        label: data.tag[0].title,
+        value: data?.tag[0]?.id || "",
+        label: data?.tag[0]?.title || "",
       });
       formik.setFieldValue("deadline", dayjs(data.deadline));
       formik.setFieldValue("startDate", dayjs(data.startDate));
       formik.setFieldValue("attachments", data.attachments);
+      formik.setFieldValue(
+        "isApplyThroughEmail",
+        Boolean(data.isApplyThroughEmail)
+      );
+      formik.setFieldValue("isContactEmail", Boolean(data.contactEmail));
+      formik.setFieldValue(
+        "isApplyThroughKoor",
+        Boolean(data.isApplyThroughKoor)
+      );
+      formik.setFieldValue("contactEmail", data.contactEmail);
+      formik.setFieldValue("cc1", data.cc1);
+      formik.setFieldValue("cc2", data.cc2);
+      formik.setFieldValue("contactWhatsapp", data.contactWhatsapp);
+      formik.setFieldValue("website", data.website);
+      formik.setFieldValue(
+        "isApplyThroughWebsite",
+        Boolean(data.isApplyThroughWebsite)
+      );
+      formik.setFieldValue(
+        "applicationInstruction",
+        data.applicationInstruction
+      );
     }
   }, []);
 
+  console.log({ formik });
   // Address
   const getSuggestedAddress = async (search) => {
     const res = await GetSuggestedAddressAPI(search);
@@ -248,6 +305,7 @@ const PostNewJob = () => {
       setSuggestedAddress(res.data.predictions);
     }
   };
+
   const getCountryList = async () => {
     const limitParam = 10;
     const response = await getCountriesName({
@@ -276,6 +334,7 @@ const PostNewJob = () => {
   const handleProfilePicSave = async (file) => {
     formik.setFieldValue("companyLogo", file);
   };
+
   // Load Redux State
   useEffect(() => {
     if (!countries.data.length) {
@@ -469,7 +528,7 @@ const PostNewJob = () => {
                                 bgColor="rgba(40, 71, 146, 0.1)"
                                 // handleSave={handleProfilePicSave}
                                 image={companyLogo}
-                                loading={"loading"}
+                                loading={false}
                                 newLogo={handleProfilePicSave}
                                 handleSaveCroppedImg={(file) =>
                                   formik.setFieldValue("companyLogo", [file])
@@ -504,6 +563,7 @@ const PostNewJob = () => {
                     <CurrencyInput
                       currency="USD"
                       title="Budget"
+                      type="number"
                       optionsValues={{
                         currency: formik.getFieldProps("budgetCurrency"),
                         input: formik.getFieldProps("budgetAmount"),
@@ -702,18 +762,47 @@ const PostNewJob = () => {
                     </label>
                     <Grid container spacing={2}>
                       <Grid item xl={5} lg={5} sm={12} xs={12}>
-                        <SelectInput
-                          multiple
+                        <SelectWithSearch
+                          sx={{
+                            borderRadius: "10px",
+                            background: "#F0F0F0",
+                            fontFamily: "Poppins",
+
+                            "& fieldset": {
+                              border: "1px solid #cacaca",
+                              borderRadius: "93px",
+                              display: "none",
+                              "&:hover": { borderColor: "#cacaca" },
+                            },
+                            "& .MuiOutlinedInput-root": {
+                              fontFamily: "Poppins",
+                              padding: "4px 9px",
+                            },
+                            "& .MuiFormLabel-root": {
+                              fontSize: "16px",
+                              color: "#848484",
+                              fontFamily: "Poppins !important",
+                              transform: "translate(14px, 12px) scale(1)",
+                            },
+                            "& .MuiInputLabel-shrink": {
+                              transform: "translate(14px, -9px) scale(0.75)",
+                            },
+                          }}
+                          multiple={true}
                           defaultValue=""
-                          placeholder="Select a Job category"
+                          title="Select a Job category"
                           options={tenderCategories.data.map((category) => ({
                             value: category.id,
                             label: category.title,
                           }))}
-                          name={"categories"}
-                          value={formik.values.categories || []}
-                          onChange={formik.handleChange}
-                          onBlur={formik.handleBlur}
+                          onChange={(_, value) => {
+                            if (value) {
+                              formik.setFieldValue("categories", value);
+                            } else {
+                              formik.setFieldValue("categories", []);
+                            }
+                          }}
+                          value={formik.values.categories.map((e) => e)}
                         />
                         {formik.touched.categories &&
                         formik.errors.categories ? (
@@ -727,9 +816,7 @@ const PostNewJob = () => {
                   <Grid item xl={12} lg={12} xs={12}>
                     <Grid container spacing={2}>
                       <Grid item xl={4} lg={4} sm={6} xs={12}>
-                        <label>
-                          Sector <span className="required-field">*</span>
-                        </label>
+                        <label>Sector</label>
                         <SelectWithSearch
                           sx={{
                             borderRadius: "10px",
@@ -779,9 +866,7 @@ const PostNewJob = () => {
                         ) : null}
                       </Grid>
                       <Grid item xl={4} lg={4} sm={6} xs={12}>
-                        <label>
-                          Type <span className="required-field">*</span>
-                        </label>
+                        <label>Type</label>
                         <SelectWithSearch
                           title="Select a type of opportunity"
                           defaultValue=""
@@ -836,9 +921,7 @@ const PostNewJob = () => {
                         ) : null}
                       </Grid>
                       <Grid item xl={4} lg={4} xs={12}>
-                        <label>
-                          Tag <span className="required-field">*</span>
-                        </label>
+                        <label>Tag</label>
                         <SelectWithSearch
                           defaultValue=""
                           sx={{
@@ -867,7 +950,7 @@ const PostNewJob = () => {
                             },
                           }}
                           title="Select a Tag"
-                          options={(tags.data || []).map((tag) => ({
+                          options={(tags?.data || [])?.map((tag) => ({
                             value: tag.id,
                             label: tag.title,
                           }))}
@@ -906,6 +989,7 @@ const PostNewJob = () => {
                             onChange={(e) =>
                               formik.setFieldValue("startDate", e)
                             }
+                            type="date"
                             value={formik.values.startDate}
                             onBlur={formik.getFieldProps("startDate").onBlur}
                             minDate={dayjs()}
@@ -936,6 +1020,7 @@ const PostNewJob = () => {
                             onChange={(e) =>
                               formik.setFieldValue("deadline", e)
                             }
+                            type="date"
                             value={formik.values.deadline}
                             onBlur={formik.getFieldProps("deadline").onBlur}
                             minDate={formik.values.startDate}
@@ -949,12 +1034,117 @@ const PostNewJob = () => {
                       </Grid>
                     </Grid>
                   </Grid>
-
                   <Grid item xl={12} lg={12} xs={12}>
                     <Divider sx={{ borderColor: "#CACACA", opacity: "1" }} />
                   </Grid>
                 </Grid>
-
+                <Grid item xl={12} lg={12} xs={12}>
+                  <h2 className="mt-3">Ways to apply</h2>
+                </Grid>
+                <Grid item xl={4} lg={4} sm={4} xs={12}>
+                  <FormGroup>
+                    <FormControlLabel
+                      control={<Switch />}
+                      label="Apply through Koor"
+                      checked={formik.values.isApplyThroughKoor}
+                      {...formik.getFieldProps("isApplyThroughKoor")}
+                    />
+                    {formik.touched.isApplyThroughKoor &&
+                    formik.errors.isApplyThroughKoor ? (
+                      <ErrorMessage>
+                        {formik.errors.isApplyThroughKoor}
+                      </ErrorMessage>
+                    ) : null}
+                    <FormControlLabel
+                      control={<Switch />}
+                      label="Apply by email"
+                      checked={formik.values.isApplyThroughEmail}
+                      {...formik.getFieldProps("isApplyThroughEmail")}
+                    />
+                    {formik.touched.isApplyThroughEmail &&
+                    formik.errors.isApplyThroughEmail ? (
+                      <ErrorMessage>
+                        {formik.errors.isApplyThroughEmail}
+                      </ErrorMessage>
+                    ) : null}
+                  </FormGroup>
+                </Grid>
+                <Grid container spacing={2}>
+                  <Grid item xl={4} lg={4} sm={4} xs={12}>
+                    <input
+                      className="add-form-control"
+                      placeholder="Your email address"
+                      {...formik.getFieldProps("contactEmail")}
+                    />
+                    {formik.touched.contactEmail &&
+                    formik.errors.contactEmail ? (
+                      <ErrorMessage>{formik.errors.contactEmail}</ErrorMessage>
+                    ) : null}
+                  </Grid>
+                  <Grid item xl={4} lg={4} sm={4} xs={12}>
+                    <input
+                      className="add-form-control"
+                      placeholder="CC email address"
+                      type="email"
+                      {...formik.getFieldProps("cc1")}
+                    />
+                    {formik.touched.cc1 && formik.errors.cc1 ? (
+                      <ErrorMessage>{formik.errors.cc1}</ErrorMessage>
+                    ) : null}
+                  </Grid>
+                  <Grid item xl={4} lg={4} sm={4} xs={12}>
+                    <input
+                      className="add-form-control"
+                      placeholder="Another CC email address"
+                      type="email"
+                      {...formik.getFieldProps("cc2")}
+                    />
+                    {formik.touched.cc2 && formik.errors.cc2 ? (
+                      <ErrorMessage>{formik.errors.cc2}</ErrorMessage>
+                    ) : null}
+                  </Grid>
+                </Grid>
+                <Grid item xl={12} lg={12} xs={12}>
+                  <label>
+                    Application Instructions
+                    <span className="required-field">*</span>
+                  </label>
+                  <QuillInput
+                    className="form-control-area"
+                    type="textarea"
+                    placeholder="Write a brief text overview of your application process. You can also include links, emails, etc."
+                    value={instructions}
+                    onChange={(value) =>
+                      formik.setFieldValue("applicationInstruction", value)
+                    }
+                  />
+                  {formik.touched.applicationInstruction &&
+                  formik.errors.applicationInstruction ? (
+                    <ErrorMessage>
+                      {formik.errors.applicationInstruction}
+                    </ErrorMessage>
+                  ) : null}
+                </Grid>
+                <Grid item xl={12} lg={12} xs={12}>
+                  <FormGroup>
+                    <FormControlLabel
+                      control={<Switch />}
+                      label="Apply through your website"
+                      checked={formik.values.isApplyThroughWebsite}
+                      {...formik.getFieldProps("isApplyThroughWebsite")}
+                    />
+                  </FormGroup>
+                  <LabeledInput
+                    title=""
+                    className="add-form-control"
+                    placeholder="Paste a link to your website’s application form"
+                    required
+                    {...formik.getFieldProps("website")}
+                  />
+                  {formik.touched.websiteLink && formik.errors.websiteLink ? (
+                    <ErrorMessage>{formik.errors.websiteLink}</ErrorMessage>
+                  ) : null}
+                </Grid>
                 <Grid item xl={12} lg={12} xs={12}>
                   <h2 className="mt-2 mb-3">Attach files</h2>
                   {formik.errors?.attachments ? (
@@ -1045,7 +1235,6 @@ const PostNewJob = () => {
                         },
                       }}
                       disabled={formik.isSubmitting}
-                      onClick={() => navigate("/manage-tenders")}
                     />
                     <SolidButton
                       sx={{

@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { FilledButton } from "@components/button";
 import DialogBox from "@components/dialogBox";
-import { Slider } from "@mui/material";
+import { Box, Slider } from "@mui/material";
 import Cropper from "react-easy-crop";
 import getCroppedImg from "./helper";
 import styles from "./styles.module.css";
@@ -56,27 +56,40 @@ function ImageCropper({ open, handleClose, image, handleSave }) {
       console.error(e);
     }
   }, [croppedAreaPixels, rotation, image]);
-
   const onZoomChange = (zoom, _) => {
     setZoom(zoom);
   };
   return (
-    <DialogBox open={open} handleClose={handleClose}>
+    <DialogBox
+      open={open}
+      handleClose={handleClose}
+      sx={{ "& .MuiPaper-root": { background: "#fff" } }}
+    >
       <div>
         <div className={`${styles.cropper_height}`}>
           {imageSrc && (
-            <Cropper
-              image={imageSrc}
-              crop={crop}
-              rotation={rotation}
-              zoom={zoom}
-              aspect={1}
-              showGrid={false}
-              cropShape="round" // Set cropShape to "round" for circular crop
-              onCropChange={onCropChange}
-              onCropComplete={onCropComplete}
-              onZoomChange={onZoomChange}
-            />
+            <Box
+              sx={{
+                "& .reactEasyCrop_Container": { maxHeight: "70%" },
+                "& .reactEasyCrop_CropArea": {
+                  boxShadow: "none",
+                  border: "5px solid #EEA23D",
+                },
+              }}
+            >
+              <Cropper
+                image={imageSrc}
+                crop={crop}
+                rotation={rotation}
+                zoom={zoom}
+                aspect={1}
+                showGrid={false}
+                cropShape="round" // Set cropShape to "round" for circular crop
+                onCropChange={onCropChange}
+                onCropComplete={onCropComplete}
+                onZoomChange={onZoomChange}
+              />
+            </Box>
           )}
         </div>
         <div className="controls">

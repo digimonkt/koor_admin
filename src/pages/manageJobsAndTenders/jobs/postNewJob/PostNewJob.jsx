@@ -251,6 +251,7 @@ const PostNewJob = () => {
           setSuggestedAddress([]);
           setCompanyLogo();
           setCompanyAttachments("");
+          navigate("/manage-jobs");
         } else {
           dispatch(setErrorToast("Something went wrong"));
           setSubmitting(SUBMITTING_STATUS_ENUM.error);
@@ -261,6 +262,7 @@ const PostNewJob = () => {
         if (res.remote === "success") {
           setSubmitting(SUBMITTING_STATUS_ENUM.updated);
           dispatch(setSuccessToast("Job Updated Successfully"));
+          navigate("/manage-jobs");
         } else {
           setSubmitting(SUBMITTING_STATUS_ENUM.error);
           dispatch(setErrorToast("Something went wrong"));
@@ -595,7 +597,7 @@ const PostNewJob = () => {
                                 bgColor="rgba(40, 71, 146, 0.1)"
                                 // handleSave={handleProfilePicSave}
                                 image={companyLogo}
-                                loading={"loading"}
+                                loading={false}
                                 newLogo={handleProfilePicSave}
                                 handleSaveCroppedImg={(file) =>
                                   formik.setFieldValue("companyLogo", [file])
@@ -630,6 +632,7 @@ const PostNewJob = () => {
                       title="Experience in Years"
                       className="add-form-control"
                       placeholder="Experience in Years"
+                      type="number"
                       {...formik.getFieldProps("experience")}
                     />
                     {formik.touched.experience && formik.errors.experience ? (
@@ -639,6 +642,7 @@ const PostNewJob = () => {
                   <Grid item xl={4} lg={4}>
                     <CurrencyInput
                       currency="USD"
+                      type="number"
                       title="Budget"
                       optionsValues={{
                         currency: formik.getFieldProps("budgetCurrency"),
@@ -712,7 +716,7 @@ const PostNewJob = () => {
                             value: country.id,
                             label: country.title,
                           }))}
-                          placeholder={"select the options"}
+                          title={"select the options"}
                           onChange={(_, value) => {
                             if (value) {
                               formik.setFieldValue("country", value);
@@ -859,27 +863,6 @@ const PostNewJob = () => {
                     </label>
                     <Grid container spacing={2}>
                       <Grid item xl={6} lg={6} xs={12}>
-                        {/* <SelectInput
-                          defaultValue=""
-                          title="Select a Job category"
-                          options={categories.data.map((jobCategory) => ({
-                            value: jobCategory.id,
-                            label: jobCategory.title,
-                          }))}
-                          name={"jobCategories"}
-                          onChange={(_, value) => {
-                            if (value) {
-                              formik.setFieldValue("jobCategories", value);
-                            } else {
-                              formik.setFieldValue("jobCategories", {
-                                value: "",
-                                label: "",
-                              });
-                            }
-                          }}
-                          value={formik.values.jobCategories}
-                          onBlur={formik.handleBlur}
-                        /> */}
                         <SelectWithSearch
                           sx={{
                             borderRadius: "10px",
@@ -1045,6 +1028,7 @@ const PostNewJob = () => {
                     <LabeledInput
                       title="Duration in Month"
                       className="add-form-control"
+                      type="number"
                       placeholder="Months"
                       {...formik.getFieldProps("duration")}
                     />
@@ -1066,7 +1050,7 @@ const PostNewJob = () => {
                         </label>
                       </Stack>
                       <DateInput
-                        className="smallfont"
+                        type="date"
                         onChange={(e) => formik.setFieldValue("startDate", e)}
                         value={formik.values.startDate}
                         onBlur={formik.getFieldProps("startDate").onBlur}
@@ -1090,9 +1074,9 @@ const PostNewJob = () => {
                         </label>
                       </Stack>
                       <DateInput
-                        className="smallfont"
                         onChange={(e) => formik.setFieldValue("deadline", e)}
                         value={formik.values.deadline}
+                        type="date"
                         onBlur={formik.getFieldProps("deadline").onBlur}
                         minDate={formik.values.startDate}
                       />
@@ -1164,8 +1148,12 @@ const PostNewJob = () => {
                     <input
                       className="add-form-control"
                       placeholder="CC email address"
+                      type="email"
                       {...formik.getFieldProps("cc1")}
                     />
+                    {formik.touched.cc1 && formik.errors.cc1 ? (
+                      <ErrorMessage>{formik.errors.cc1}</ErrorMessage>
+                    ) : null}
                   </Grid>
                   <Grid
                     item
@@ -1183,8 +1171,12 @@ const PostNewJob = () => {
                     <input
                       className="add-form-control"
                       placeholder="Another CC email address"
+                      type="email"
                       {...formik.getFieldProps("cc2")}
                     />
+                    {formik.touched.cc2 && formik.errors.cc2 ? (
+                      <ErrorMessage>{formik.errors.cc2}</ErrorMessage>
+                    ) : null}{" "}
                   </Grid>
                   <Grid item xl={12} lg={12} xs={12}>
                     <label>
@@ -1469,7 +1461,6 @@ const PostNewJob = () => {
                           },
                         }}
                         disabled={formik.isSubmitting}
-                        onClick={() => navigate("/manage-jobs")}
                       />
                       <SolidButton
                         disabled={submitting === SUBMITTING_STATUS_ENUM.loading}
