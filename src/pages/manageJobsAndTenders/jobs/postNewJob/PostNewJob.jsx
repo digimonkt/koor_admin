@@ -493,8 +493,8 @@ const PostNewJob = () => {
                     </Grid>
                     <Grid item xl={12} lg={12} xs={12}>
                       <Grid container spacing={2}>
-                        <Grid item xl={4} lg={4} xs={12}>
-                          <label className="mb-2">
+                        <Grid item xl={4} lg={4} xs={12} className="mb-2">
+                          <label>
                             Select Company
                             <span className="required-field">*</span>
                           </label>
@@ -503,7 +503,7 @@ const PostNewJob = () => {
                               borderRadius: "10px",
                               background: "#F0F0F0",
                               fontFamily: "Poppins",
-
+                              marginTop: "10px",
                               "& fieldset": {
                                 border: "1px solid #cacaca",
                                 borderRadius: "93px",
@@ -612,12 +612,12 @@ const PostNewJob = () => {
                     </Grid>
                     <Grid item xl={12} lg={12} xs={12}>
                       <Divider
-                        sx={{ borderColor: "#CACACA", opacity: "1", my: 2 }}
+                        sx={{ borderColor: "#CACACA", opacity: "1", my: 1 }}
                       />
                     </Grid>
                   </>
                 )}
-                <Grid container spacing={2}>
+                <Grid container spacing={2} className="mt-0">
                   <Grid item xl={5} lg={5}>
                     <LabeledInput
                       title="Title of your job"
@@ -693,7 +693,7 @@ const PostNewJob = () => {
                             borderRadius: "10px",
                             background: "#F0F0F0",
                             fontFamily: "Poppins",
-
+                            marginTop: "10px",
                             "& fieldset": {
                               border: "1px solid #cacaca",
                               borderRadius: "93px",
@@ -760,7 +760,7 @@ const PostNewJob = () => {
                             borderRadius: "10px",
                             background: "#F0F0F0",
                             fontFamily: "Poppins",
-
+                            marginTop: "10px",
                             "& fieldset": {
                               border: "1px solid #cacaca",
                               borderRadius: "93px",
@@ -817,7 +817,7 @@ const PostNewJob = () => {
                       Working place address{" "}
                       <span className="required-field">*</span>
                     </label>
-                    <div className={styles.positionReltive}>
+                    <div className={`${styles.positionReltive}`}>
                       <input
                         type="text"
                         placeholder="Address"
@@ -870,7 +870,7 @@ const PostNewJob = () => {
                             borderRadius: "10px",
                             background: "#F0F0F0",
                             fontFamily: "Poppins",
-
+                            marginTop: "10px",
                             "& fieldset": {
                               border: "1px solid #cacaca",
                               borderRadius: "93px",
@@ -940,7 +940,7 @@ const PostNewJob = () => {
                             borderRadius: "10px",
                             background: "#F0F0F0",
                             fontFamily: "Poppins",
-
+                            marginTop: "10px",
                             "& fieldset": {
                               border: "1px solid #cacaca",
                               borderRadius: "93px",
@@ -1096,6 +1096,7 @@ const PostNewJob = () => {
                   <Grid item xl={12} lg={12} sm={12} xs={12}>
                     <FormGroup>
                       <FormControlLabel
+                        sx={{ width: "200px" }}
                         control={<Switch />}
                         label="Apply through Koor"
                         checked={formik.values.isApplyThroughKoor}
@@ -1112,6 +1113,7 @@ const PostNewJob = () => {
                   <Grid item xl={4} lg={4} sm={4} xs={12}>
                     <FormGroup>
                       <FormControlLabel
+                        sx={{ width: "165px" }}
                         control={<Switch />}
                         label="Apply by email"
                         checked={formik.values.isApplyThroughEmail}
@@ -1203,6 +1205,7 @@ const PostNewJob = () => {
                   <Grid item xl={12} lg={12} xs={12}>
                     <FormGroup>
                       <FormControlLabel
+                        sx={{ width: "255px" }}
                         control={<Switch />}
                         label="Apply through your website"
                         checked={formik.values.isApplyThroughWebsite}
@@ -1465,6 +1468,11 @@ const PostNewJob = () => {
                         disabled={formik.isSubmitting}
                       />
                       <SolidButton
+                        sx={{
+                          "@media (max-width: 480px)": {
+                            width: "100%",
+                          },
+                        }}
                         disabled={submitting === SUBMITTING_STATUS_ENUM.loading}
                         title={
                           submitting === SUBMITTING_STATUS_ENUM.loading

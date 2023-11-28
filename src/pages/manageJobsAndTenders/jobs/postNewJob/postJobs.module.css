@@ -1,6 +1,12 @@
 .positionReltive {
   position: relative;
+  margin-top: 10px;
 }
+
+.positionReltive input {
+  height: 46px;
+}
+
 .search_results_box {
   background: white;
   box-shadow: 1px 10px 16px #5a5959;

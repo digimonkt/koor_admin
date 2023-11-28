@@ -96,7 +96,7 @@ function ManageTendersComponent() {
       {
         field: "action",
         headerName: "Action",
-        width: 120,
+        width: 180,
         sortable: true,
         renderCell: (item) => {
           return (
