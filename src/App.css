@@ -42,6 +42,7 @@ input::placeholder {
 .header .MuiPaper-root.MuiAppBar-root {
   background-color: #274593 !important;
   box-shadow: none !important;
+  z-index: 9999;
 }
 
 .arrow_box:after {
