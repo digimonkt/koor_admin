@@ -5,6 +5,14 @@
   width: 650px !important;
 }
 
+.MuiAutocomplete-popper {
+  z-index: 9 !important;
+}
+
+.MuiPickersPopper-root {
+  z-index: 9 !important;
+}
+
 .form-control {
   font-weight: 500;
   font-family: "Poppins";
