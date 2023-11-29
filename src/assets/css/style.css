@@ -50,7 +50,7 @@
   font-family: "Poppins !important";
 }
 
-.invoice_date .MuiStack-root>.MuiTextField-root {
+.invoice_date .MuiStack-root > .MuiTextField-root {
   min-width: 100% !important;
 }
 
@@ -94,16 +94,19 @@
   font-weight: 500;
 }
 
-.paginations .MuiButtonBase-root.MuiPaginationItem-root.MuiPaginationItem-sizeMedium.MuiPaginationItem-text.MuiPaginationItem-rounded.Mui-selected.MuiPaginationItem-page.css-10w330c-MuiButtonBase-root-MuiPaginationItem-root {
+.paginations
+  .MuiButtonBase-root.MuiPaginationItem-root.MuiPaginationItem-sizeMedium.MuiPaginationItem-text.MuiPaginationItem-rounded.Mui-selected.MuiPaginationItem-page.css-10w330c-MuiButtonBase-root-MuiPaginationItem-root {
   background-color: #fff !important;
   box-shadow: 0px 2px 6px 0px #00000026;
 }
 
-.paginations .css-10w330c-MuiButtonBase-root-MuiPaginationItem-root.Mui-disabled {
+.paginations
+  .css-10w330c-MuiButtonBase-root-MuiPaginationItem-root.Mui-disabled {
   display: none !important;
 }
 
-.paginations button.MuiButtonBase-root.MuiPaginationItem-root.MuiPaginationItem-sizeMedium.MuiPaginationItem-text.MuiPaginationItem-rounded.MuiPaginationItem-previousNext.css-10w330c--MuiPaginationItem-root {
+.paginations
+  button.MuiButtonBase-root.MuiPaginationItem-root.MuiPaginationItem-sizeMedium.MuiPaginationItem-text.MuiPaginationItem-rounded.MuiPaginationItem-previousNext.css-10w330c--MuiPaginationItem-root {
   display: none !important;
 }
 
@@ -244,7 +247,7 @@ span.MuiTouchRipple-root.css-8je8zh-MuiTouchRipple-root {
   border-bottom: 0 !important;
 }
 
-.SelectDropdown label+.css-hrjh4n-MuiInputBase-root {
+.SelectDropdown label + .css-hrjh4n-MuiInputBase-root {
   margin-top: 12px;
   font-family: "Poppins";
 }
@@ -438,7 +441,8 @@ header {
   padding-bottom: 16px;
 }
 
-.saved-jobs button.MuiButtonBase-root.MuiIconButton-root.MuiIconButton-sizeMedium.css-15arr0g-MuiButtonBase-root-MuiIconButton-root {
+.saved-jobs
+  button.MuiButtonBase-root.MuiIconButton-root.MuiIconButton-sizeMedium.css-15arr0g-MuiButtonBase-root-MuiIconButton-root {
   justify-content: center;
   position: relative !important;
   left: 13px !important;
@@ -472,7 +476,7 @@ header {
   margin: 0px;
 }
 
-.register-des>a {
+.register-des > a {
   border: 2px solid #cacaca;
   border-radius: 88px;
   display: block;
@@ -483,7 +487,7 @@ header {
   margin-bottom: 16px;
 }
 
-.register-des>a:last-child {
+.register-des > a:last-child {
   margin-bottom: 0px;
   cursor: pointer;
 }
@@ -496,7 +500,7 @@ header {
   opacity: 0.5;
 }
 
-.register-des>a:hover {
+.register-des > a:hover {
   background: #d5e3f7;
   border: 2px solid #274593;
   box-shadow: 0px 2px 15px 2px rgba(0, 44, 106, 0.35);
@@ -916,7 +920,6 @@ hr {
   border-radius: 10px;
   padding: 30px;
   width: 470px;
-  background-color: transparent;
 }
 
 .dropimg-userprofile {
