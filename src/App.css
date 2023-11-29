@@ -42,7 +42,6 @@ input::placeholder {
 .header .MuiPaper-root.MuiAppBar-root {
   background-color: #274593 !important;
   box-shadow: none !important;
-  z-index: 9999;
 }
 
 .arrow_box:after {
@@ -119,7 +118,9 @@ input::placeholder {
   padding-top: 20px;
 }
 
-.pagination-custom .MuiPagination-root.MuiPagination-root .MuiPaginationItem-root {
+.pagination-custom
+  .MuiPagination-root.MuiPagination-root
+  .MuiPaginationItem-root {
   margin-left: 10px;
   margin-right: 10px;
 }
@@ -407,7 +408,9 @@ input::-webkit-inner-spin-button {
     font-size: 12px;
   }
 
-  .pagination-custom .MuiPagination-root.MuiPagination-root .MuiPaginationItem-root {
+  .pagination-custom
+    .MuiPagination-root.MuiPagination-root
+    .MuiPaginationItem-root {
     font-size: 14px;
   }
 
