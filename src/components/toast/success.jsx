@@ -19,7 +19,11 @@ function SuccessToastComponent({
       autoHideDuration={duration || 2000}
       onClose={handleClose}
     >
-      <Alert onClose={handleClose} severity="success" sx={{ width: "100%" }}>
+      <Alert
+        onClose={handleClose}
+        severity="success"
+        sx={{ width: "100%", zIndex: 100000 }}
+      >
         {message}
       </Alert>
     </Snackbar>

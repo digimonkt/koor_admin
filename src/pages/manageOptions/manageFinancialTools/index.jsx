@@ -32,7 +32,7 @@ const AntTabs = styled(Tabs)({
   },
 });
 
-const AntTab = styled((props) => <Tab disableRipple {...props} />)(
+const AntTab = styled(props => <Tab disableRipple {...props} />)(
   ({ theme }) => ({
     textTransform: "none",
     minHeight: 29,
@@ -67,7 +67,7 @@ const AntTab = styled((props) => <Tab disableRipple {...props} />)(
     "&.Mui-focusVisible": {
       backgroundColor: "#d1eaff",
     },
-  })
+  }),
 );
 
 // const TablePagination = styled(Pagination)(() => ({
@@ -98,8 +98,7 @@ const FinancialTools = () => {
         hidden={value !== index}
         id={`simple-tabpanel-${index}`}
         aria-labelledby={`simple-tab-${index}`}
-        {...other}
-      >
+        {...other}>
         {value === index && <Box sx={{ py: 3, pb: 0 }}>{children}</Box>}
       </div>
     );
@@ -162,8 +161,7 @@ const FinancialTools = () => {
             boxShadow: "0px 15px 40px rgba(0, 0, 0, 0.05)",
             borderRadius: "10px",
           },
-        }}
-      >
+        }}>
         <CardContent
           sx={{
             "&.MuiCardContent-root": {
@@ -175,8 +173,7 @@ const FinancialTools = () => {
                 xl: 3.75,
               },
             },
-          }}
-        >
+          }}>
           <div className="report">
             <h2>Financial tools</h2>
             <AntTabs
@@ -184,8 +181,7 @@ const FinancialTools = () => {
               onChange={handleChange}
               aria-label="basic tabs example"
               variant="scrollable"
-              scrollButtons="auto"
-            >
+              scrollButtons="auto">
               <AntTab label="Package management " {...a11yProps(0)} />
               <AntTab label="Recharge" {...a11yProps(1)} />
               {/* <AntTab label="Genenate invoices" {...a11yProps(2)} /> */}
