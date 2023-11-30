@@ -32,11 +32,11 @@ function ManageTendersComponent() {
   const [country, setCountry] = useState({});
   const debouncedSearchTenderValue = useDebounce(searchTerm, 500);
 
-  const PostNewJob = () => {
+  const PostNewTender = () => {
     navigate("./post-tender");
   };
 
-  const PostNewTender = () => {
+  const PostNewJob = () => {
     navigate("./post-tender");
   };
 
@@ -96,9 +96,9 @@ function ManageTendersComponent() {
       {
         field: "action",
         headerName: "Action",
-        width: 180,
+        width: "220",
         sortable: true,
-        renderCell: (item) => {
+        renderCell: item => {
           return (
             <Stack direction="row" spacing={1} alignItems="center">
               <Tooltip title="View Details">
@@ -112,19 +112,17 @@ function ManageTendersComponent() {
                     width: 30,
                     height: 30,
                     color: "#274593",
-                  }}
-                >
+                  }}>
                   <SVG.EyeIcon />
                 </IconButton>
               </Tooltip>
               <Tooltip
-                title={item.row.status === "active" ? "Deactivate" : "active"}
-              >
+                title={item.row.status === "active" ? "Deactivate" : "active"}>
                 <IconButton
                   onClick={() => {
                     handleHoldTender(
                       item,
-                      item.row.status === "active" ? "inActive" : "active"
+                      item.row.status === "active" ? "inActive" : "active",
                     );
                   }}
                   sx={{
@@ -134,8 +132,7 @@ function ManageTendersComponent() {
                     width: 30,
                     height: 30,
                     color: "#274593",
-                  }}
-                >
+                  }}>
                   {item.row.status === "active" ? (
                     <SVG.HoldIcon />
                   ) : (
@@ -153,8 +150,7 @@ function ManageTendersComponent() {
                     width: 30,
                     height: 30,
                     color: "#274593",
-                  }}
-                >
+                  }}>
                   <SVG.DeleteIcon />
                 </IconButton>
               </Tooltip>
@@ -168,8 +164,7 @@ function ManageTendersComponent() {
                     width: 30,
                     height: 30,
                     color: "#274593",
-                  }}
-                >
+                  }}>
                   <SVG.EditIcon />
                 </IconButton>
               </Tooltip>
@@ -178,14 +173,14 @@ function ManageTendersComponent() {
         },
       },
     ],
-    []
+    [],
   );
 
   const handleDelete = useCallback(async () => {
     const response = await deleteTenderAPI(deleteTender);
     if (response.remote === "success") {
       const newTenderTable = tenderTable.filter(
-        (tender) => tender.id !== deleteTender
+        tender => tender.id !== deleteTender,
       );
       setTenderTable(newTenderTable);
       setDeleteTender("");
@@ -196,11 +191,11 @@ function ManageTendersComponent() {
     }
   }, [tenderTable, dispatch, deleteTender]);
 
-  const handleEdit = async (item) => {
+  const handleEdit = async item => {
     navigate(`./post-tender?tenderId=${item}`);
   };
 
-  const handleRedirectDetails = useCallback((item) => {
+  const handleRedirectDetails = useCallback(item => {
     const url = `${env.REACT_APP_REDIRECT_URL}/tender/details/${item}`;
     window.open(url, "_blank");
   }, []);
@@ -219,7 +214,7 @@ function ManageTendersComponent() {
       const startIndex = (page - 1) * 10;
       const formateData = transformOptionsResponse(
         response.data.results,
-        startIndex
+        startIndex,
       );
       if (!formateData.length) {
         dispatch(setLoading(false));
@@ -231,9 +226,9 @@ function ManageTendersComponent() {
       dispatch(setLoading(false));
     }
   }, [country, debouncedSearchTenderValue, pages, limit]);
-  const filterTenderCountry = (e) => {
+  const filterTenderCountry = e => {
     const countryId = e.target.value;
-    const country = countriesData.find((country) => country.id === countryId);
+    const country = countriesData.find(country => country.id === countryId);
     setCountry(country);
   };
   const getCountryList = async () => {
@@ -249,7 +244,7 @@ function ManageTendersComponent() {
     if (response.remote === "success") {
       window.open(
         process.env.REACT_APP_BACKEND_URL + response.data.url,
-        "_blank"
+        "_blank",
       );
     } else {
       dispatch(setErrorToast("Something went wrong"));
@@ -262,7 +257,7 @@ function ManageTendersComponent() {
   const handleHoldTender = useCallback(
     async (item, action) => {
       const id = item.row.id;
-      const updatedTenderTable = tenderTable.map((job) => {
+      const updatedTenderTable = tenderTable.map(job => {
         if (job.id === id) {
           return { ...job, action };
         }
@@ -272,7 +267,7 @@ function ManageTendersComponent() {
       await activeInactiveTenderAPI(id);
       tenderList();
     },
-    [tenderTable, dispatch]
+    [tenderTable, dispatch],
   );
 
   useEffect(() => {
@@ -304,22 +299,21 @@ function ManageTendersComponent() {
         NoFoundText={{ noRowsLabel: "No tender found" }}
         dropDownValue={countriesData}
         selectPropsCountry={{
-          onChange: (e) => filterTenderCountry(e),
+          onChange: e => filterTenderCountry(e),
           value: country.id || "",
         }}
         totalCount={totalCount}
         handlePageChange={getPage}
         searchProps={{
           placeholder: "Search Tenders",
-          onChange: (e) => setSearchTerm(e.target.value),
+          onChange: e => setSearchTerm(e.target.value),
           value: searchTerm,
         }}
         faq={{
           title: (
             <Box
               onClick={() => PostNewJob()}
-              sx={{ display: "flex", alignItems: "center" }}
-            >
+              sx={{ display: "flex", alignItems: "center" }}>
               <span className="d-inline-flex align-items-center me-2">
                 <SVG.WhiteFile />
               </span>
@@ -334,14 +328,13 @@ function ManageTendersComponent() {
             { label: 10, value: 10 },
             { label: 15, value: 15 },
           ],
-          onChange: (e) => setLimit(e.target.value),
+          onChange: e => setLimit(e.target.value),
         }}
         csvProps={{
           title: (
             <Box
               onClick={() => downloadJobCSV()}
-              sx={{ display: "flex", alignItems: "center" }}
-            >
+              sx={{ display: "flex", alignItems: "center" }}>
               <span className="d-inline-flex align-items-center me-2">
                 <SVG.ExportIcon />
               </span>
@@ -353,8 +346,7 @@ function ManageTendersComponent() {
           title: (
             <Box
               onClick={() => PostNewTender()}
-              sx={{ display: "flex", alignItems: "center" }}
-            >
+              sx={{ display: "flex", alignItems: "center" }}>
               <span className="d-inline-flex align-items-center me-2">
                 <SVG.WhiteFile />
               </span>
@@ -366,8 +358,7 @@ function ManageTendersComponent() {
           title: (
             <Box
               onClick={() => resetFilterJob()}
-              sx={{ display: "flex", alignItems: "center" }}
-            >
+              sx={{ display: "flex", alignItems: "center" }}>
               <span className="d-inline-flex align-items-center me-2">
                 <RestartAlt />
               </span>
@@ -379,8 +370,7 @@ function ManageTendersComponent() {
       {deleteTender && (
         <DialogBox
           open={!!deleteTender}
-          handleClose={() => setDeleteTender("")}
-        >
+          handleClose={() => setDeleteTender("")}>
           <DeleteCard
             title="Delete Tender"
             content="Are you sure you want to delete Tender?"
