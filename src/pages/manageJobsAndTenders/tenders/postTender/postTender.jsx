@@ -648,7 +648,9 @@ const PostNewJob = () => {
                           onKeyUp={e => setSearchCountry(e.target.value)}
                         />
                         {formik.touched.country && formik.errors.country ? (
-                          <ErrorMessage>{formik.errors.country}</ErrorMessage>
+                          <ErrorMessage>
+                            {formik.errors.country.value}
+                          </ErrorMessage>
                         ) : null}
                       </Grid>
                       <Grid item xl={6} lg={6} sm={6} xs={12}>
@@ -699,7 +701,6 @@ const PostNewJob = () => {
                             }
                           }}
                           value={formik.values.city}
-                          // onKeyUp={(e) => setSearchCountry(e.target.value)}
                         />
                         {formik.touched.city && formik.errors.city ? (
                           <ErrorMessage>

@@ -17,8 +17,15 @@ export const validateCreateJobInput = Yup.object()
       label: Yup.string().required("Country is required"),
       value: Yup.string().required("Country is required"),
     }),
+    city: Yup.object().shape({
+      label: Yup.string().required("City is required"),
+      value: Yup.string().required("City is required"),
+    }),
     address: Yup.string().required("Address is required"),
-    jobCategories: Yup.object().required("Job Category is required"),
+    jobCategories: Yup.object().shape({
+      label: Yup.string().required("job Categories is required"),
+      value: Yup.string().required("job Categories is required"),
+    }),
     jobSubCategory: Yup.object().required("Job Sub Category is required"),
     isFullTime: Yup.boolean(),
     isPartTime: Yup.boolean(),
@@ -37,7 +44,7 @@ export const validateCreateJobInput = Yup.object()
     deadline: Yup.string()
       .nullable()
       .required("Deadline is required")
-      .test("startDate", "Date Must be of Future", (value) => {
+      .test("startDate", "Date Must be of Future", value => {
         return dayjs(value).isSameOrAfter(dayjs(), "days");
       }),
     contactEmail: Yup.string()
@@ -51,7 +58,7 @@ export const validateCreateJobInput = Yup.object()
             return value || this.parent.cc1 || this.parent.cc2;
           }
           return true;
-        }
+        },
       ),
     cc1: Yup.string().email("CC1 email must be a valid"),
     cc2: Yup.string().email("CC2 email must be a valid"),
@@ -66,13 +73,13 @@ export const validateCreateJobInput = Yup.object()
         } else {
           return true;
         }
-      }
+      },
     ),
 
     languages: Yup.array().of(
       Yup.object().shape({
         id: Yup.string(),
-      })
+      }),
     ),
     skills: Yup.array().of(Yup.string()),
   })
@@ -97,7 +104,7 @@ export const validateCreateJobInput = Yup.object()
       }
 
       return true;
-    }
+    },
   );
 
 export const validateCreateTenderInput = Yup.object()
@@ -107,8 +114,14 @@ export const validateCreateTenderInput = Yup.object()
     budgetCurrency: Yup.string(),
     budgetAmount: Yup.number(),
     description: Yup.string().trim().required("Description cannot be empty"),
-    country: Yup.object().required("Country is required"),
-    city: Yup.object().required("City is required"),
+    country: Yup.object().shape({
+      label: Yup.string().required("Country is required"),
+      value: Yup.string().required("Country is required"),
+    }),
+    city: Yup.object().shape({
+      label: Yup.string().required("City Categories is required"),
+      value: Yup.string().required("City is required"),
+    }),
     categories: Yup.array()
       .min(1, "At Least one category is required")
       .max(3, "Maximum 3 categories"),
@@ -119,7 +132,7 @@ export const validateCreateTenderInput = Yup.object()
     deadline: Yup.string()
       .nullable()
       .required("Deadline is required")
-      .test("startDate", "Date Must be of Future", (value) => {
+      .test("startDate", "Date Must be of Future", value => {
         return dayjs(value).isSameOrAfter(dayjs(), "days");
       }),
     isApplyThroughEmail: Yup.boolean(),
@@ -140,7 +153,7 @@ export const validateCreateTenderInput = Yup.object()
             return value || this.parent.cc1 || this.parent.cc2;
           }
           return true;
-        }
+        },
       ),
     cc1: Yup.string().email("CC1 email must be a valid"),
     cc2: Yup.string().email("CC2 email must be a valid"),
@@ -155,7 +168,7 @@ export const validateCreateTenderInput = Yup.object()
         } else {
           return true;
         }
-      }
+      },
     ),
   })
   .test(
@@ -179,5 +192,5 @@ export const validateCreateTenderInput = Yup.object()
       }
 
       return true;
-    }
+    },
   );
