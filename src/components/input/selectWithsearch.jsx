@@ -30,7 +30,9 @@ function SelectWithSearch({ options, title, multiple, ...rest }) {
         return (
           <Box
             component="li"
-            sx={{ "& > img": { mr: 2, flexShrink: 0 } }}
+            sx={{
+              "& > img": { mr: 2, flexShrink: 0 },
+            }}
             {...props}
             key={options.value}
           >

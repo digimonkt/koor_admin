@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { SVG } from "@assets/svg";
-import { IconButton, Box } from "@mui/material";
+import { IconButton, Box, Tooltip } from "@mui/material";
 import { Stack } from "@mui/system";
 import Layout from "../layout";
 import {
@@ -24,7 +24,7 @@ function ManageJobsComponent() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { countries } = useSelector((state) => state.choice);
+  const { countries } = useSelector(state => state.choice);
   const [countriesData, setCountriesData] = useState(countries.data);
   const [jobTable, setJobTable] = useState([]);
   const [totalCount, setTotalCount] = useState(0);
@@ -44,6 +44,7 @@ function ManageJobsComponent() {
       {
         field: "jobId",
         headerName: "ID",
+        width: "220",
         sortable: true,
       },
       {
@@ -55,93 +56,96 @@ function ManageJobsComponent() {
       {
         field: "company",
         headerName: "Company",
-        width: 220,
+        width: "220",
         sortable: true,
       },
       {
         field: "location",
         headerName: "Location",
-        width: "130",
+        width: "220",
         sortable: true,
       },
       {
         field: "action",
         headerName: "Action",
-        width: 180,
+        width: "220",
         sortable: true,
-        renderCell: (item) => {
+        renderCell: item => {
           return (
             <Stack direction="row" alignItems="center" gap={1}>
-              <IconButton
-                onClick={() => handleRedirectDetails(item.row.id)}
-                sx={{
-                  "&.MuiIconButton-root": {
-                    background: "#D5E3F7",
-                  },
+              <Tooltip title="View Details">
+                <IconButton
+                  onClick={() => handleRedirectDetails(item.row.id)}
+                  sx={{
+                    "&.MuiIconButton-root": {
+                      background: "#D5E3F7",
+                    },
 
-                  width: 30,
-                  height: 30,
-                  color: "#274593",
-                }}
-              >
-                <SVG.EyeIcon />
-              </IconButton>
-
-              <IconButton
-                onClick={() => {
-                  handleHoldJob(
-                    item,
-                    item.row.action === "active" ? "inActive" : "active"
-                  );
-                }}
-                sx={{
-                  "&.MuiIconButton-root": {
-                    background: "#D5E3F7",
-                  },
-                  width: 30,
-                  height: 30,
-                  color: "#274593",
-                }}
-              >
-                {item.row.action === "active" ? (
-                  <SVG.HoldIcon />
-                ) : (
-                  <SVG.polygon />
-                )}
-              </IconButton>
-
-              <IconButton
-                onClick={() => setDeleting(item.row.id)}
-                sx={{
-                  "&.MuiIconButton-root": {
-                    background: "#D5E3F7",
-                  },
-                  width: 30,
-                  height: 30,
-                  color: "#274593",
-                }}
-              >
-                <SVG.DeleteIcon />
-              </IconButton>
-              <IconButton
-                onClick={() => handleEdit(item.row.id)}
-                sx={{
-                  "&.MuiIconButton-root": {
-                    background: "#D5E3F7",
-                  },
-                  width: 30,
-                  height: 30,
-                  color: "#274593",
-                }}
-              >
-                <SVG.EditIcon />
-              </IconButton>
+                    width: 30,
+                    height: 30,
+                    color: "#274593",
+                  }}>
+                  <SVG.EyeIcon />
+                </IconButton>
+              </Tooltip>
+              <Tooltip
+                title={item.row.action === "active" ? "Deactivate" : "active"}>
+                <IconButton
+                  onClick={() => {
+                    handleHoldJob(
+                      item,
+                      item.row.action === "active" ? "inActive" : "active",
+                    );
+                  }}
+                  sx={{
+                    "&.MuiIconButton-root": {
+                      background: "#D5E3F7",
+                    },
+                    width: 30,
+                    height: 30,
+                    color: "#274593",
+                  }}>
+                  {item.row.action === "active" ? (
+                    <SVG.HoldIcon />
+                  ) : (
+                    <SVG.polygon />
+                  )}
+                </IconButton>
+              </Tooltip>
+              <Tooltip title="Delete">
+                <IconButton
+                  onClick={() => setDeleting(item.row.id)}
+                  sx={{
+                    "&.MuiIconButton-root": {
+                      background: "#D5E3F7",
+                    },
+                    width: 30,
+                    height: 30,
+                    color: "#274593",
+                  }}>
+                  <SVG.DeleteIcon />
+                </IconButton>
+              </Tooltip>
+              <Tooltip title="Edit">
+                <IconButton
+                  onClick={() => handleEdit(item.row.id)}
+                  sx={{
+                    "&.MuiIconButton-root": {
+                      background: "#D5E3F7",
+                    },
+                    width: 30,
+                    height: 30,
+                    color: "#274593",
+                  }}>
+                  <SVG.EditIcon />
+                </IconButton>
+              </Tooltip>
             </Stack>
           );
         },
       },
     ],
-    []
+    [],
   );
 
   const manageJobList = useCallback(async () => {
@@ -158,7 +162,7 @@ function ManageJobsComponent() {
       const startIndex = (page - 1) * 10;
       const formateData = transformJobAPIResponse(
         response.data.results,
-        startIndex
+        startIndex,
       );
       if (!formateData.length) {
         dispatch(setLoading(false));
@@ -174,10 +178,10 @@ function ManageJobsComponent() {
   const getPage = useCallback((_, page) => {
     setPages(page);
   }, []);
-  const handleEdit = async (item) => {
+  const handleEdit = async item => {
     navigate(`/post-newJob?jobId=${item}`);
   };
-  const handleRedirectDetails = useCallback((item) => {
+  const handleRedirectDetails = useCallback(item => {
     const url = `${env.REACT_APP_REDIRECT_URL}/jobs/details/${item}`;
     window.open(url, "_blank");
   }, []);
@@ -185,7 +189,7 @@ function ManageJobsComponent() {
   const handleDelete = useCallback(async () => {
     const response = await deleteJob(deleting);
     if (response.remote === "success") {
-      const newJobTable = jobTable.filter((job) => job.id !== deleting);
+      const newJobTable = jobTable.filter(job => job.id !== deleting);
       setJobTable(newJobTable);
       setDeleting("");
       dispatch(setSuccessToast("Job Delete SuccessFully"));
@@ -201,16 +205,16 @@ function ManageJobsComponent() {
       setCountriesData(response.data.results);
     }
   };
-  const filterJobsCountry = (e) => {
+  const filterJobsCountry = e => {
     const countryId = e.target.value;
-    const country = countriesData.find((country) => country.id === countryId);
+    const country = countriesData.find(country => country.id === countryId);
     setCountry(country);
   };
 
   const handleHoldJob = useCallback(
     async (item, action) => {
       const id = item.row.id;
-      const updatedJobTable = jobTable.map((job) => {
+      const updatedJobTable = jobTable.map(job => {
         if (job.id === id) {
           return { ...job, action };
         }
@@ -220,7 +224,7 @@ function ManageJobsComponent() {
       await activeInactiveJob(id);
       manageJobList();
     },
-    [jobTable, dispatch]
+    [jobTable, dispatch],
   );
 
   const resetFilterJob = useCallback(() => {
@@ -234,7 +238,7 @@ function ManageJobsComponent() {
     if (response.remote === "success") {
       window.open(
         process.env.REACT_APP_BACKEND_URL + response.data.url,
-        "_blank"
+        "_blank",
       );
     } else {
       dispatch(setErrorToast("Something went wrong"));
@@ -271,11 +275,11 @@ function ManageJobsComponent() {
         page={pages}
         searchProps={{
           placeholder: "Search Jobs",
-          onChange: (e) => setSearchTerm(e.target.value),
+          onChange: e => setSearchTerm(e.target.value),
           value: searchTerm,
         }}
         selectProps={{
-          onChange: (e) => filterJobsCountry(e),
+          onChange: e => filterJobsCountry(e),
           value: country.id || "",
         }}
         limitProps={{
@@ -285,14 +289,13 @@ function ManageJobsComponent() {
             { label: 10, value: 10 },
             { label: 15, value: 15 },
           ],
-          onChange: (e) => setLimit(e.target.value),
+          onChange: e => setLimit(e.target.value),
         }}
         csvProps={{
           title: (
             <Box
               onClick={() => downloadJobCSV()}
-              sx={{ display: "flex", alignItems: "center" }}
-            >
+              sx={{ display: "flex", alignItems: "center" }}>
               <span className="d-inline-flex align-items-center me-2">
                 <SVG.ExportIcon />
               </span>
@@ -304,8 +307,7 @@ function ManageJobsComponent() {
           title: (
             <Box
               onClick={() => PostNewJob()}
-              sx={{ display: "flex", alignItems: "center" }}
-            >
+              sx={{ display: "flex", alignItems: "center" }}>
               <span className="d-inline-flex align-items-center me-2">
                 <SVG.WhiteFile />
               </span>
@@ -317,8 +319,7 @@ function ManageJobsComponent() {
           title: (
             <Box
               onClick={() => resetFilterJob()}
-              sx={{ display: "flex", alignItems: "center" }}
-            >
+              sx={{ display: "flex", alignItems: "center" }}>
               <span className="d-inline-flex align-items-center me-2">
                 <RestartAlt />
               </span>
