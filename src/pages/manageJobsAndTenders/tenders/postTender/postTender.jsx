@@ -699,7 +699,6 @@ const PostNewJob = () => {
                             }
                           }}
                           value={formik.values.city}
-                          // onKeyUp={(e) => setSearchCountry(e.target.value)}
                         />
                         {formik.touched.city && formik.errors.city ? (
                           <ErrorMessage>

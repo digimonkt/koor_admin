@@ -908,7 +908,7 @@ const PostNewJob = () => {
                         {formik.touched.jobCategories &&
                         formik.errors.jobCategories ? (
                           <ErrorMessage>
-                            {formik.errors.jobCategories.value}
+                            {formik.errors.jobCategories}
                           </ErrorMessage>
                         ) : null}
                       </Grid>
