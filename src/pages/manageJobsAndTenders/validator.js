@@ -17,10 +17,10 @@ export const validateCreateJobInput = Yup.object()
       label: Yup.string().required("Country is required"),
       value: Yup.string().required("Country is required"),
     }),
-    city: Yup.object().shape({
-      label: Yup.string().required("City is required"),
-      value: Yup.string().required("City is required"),
-    }),
+    // city: Yup.object().shape({
+    //   label: Yup.string().required("City is required"),
+    //   value: Yup.string().required("City is required"),
+    // }),
     address: Yup.string().required("Address is required"),
     jobCategories: Yup.object().shape({
       label: Yup.string().required("job Categories is required"),
