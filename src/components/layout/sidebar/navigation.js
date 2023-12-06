@@ -151,7 +151,7 @@ export const MENU_ITEM = [
   {
     id: "19",
     icon: <SVG.Settings />,
-    page: "Settings",
+    page: "CMS and settings",
     url: "/settings",
   },
   {

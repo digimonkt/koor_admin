@@ -38,11 +38,11 @@ const PostTestimonials = () => {
   const [newImage, setNewImage] = useState("");
   const [paragraph, setParagraph] = useState("");
 
-  const handleFiles = (e) => {
+  const handleFiles = e => {
     setFiles(e.target.files);
   };
 
-  const handleUpdateImage = (file) => {
+  const handleUpdateImage = file => {
     setNewImage(file);
     setFiles([]);
   };
@@ -64,20 +64,20 @@ const PostTestimonials = () => {
       }}
     />
   );
-  const handlePostTitle = (e) => {
+  const handlePostTitle = e => {
     setPostTitle(e);
   };
-  const handleClientName = (e) => {
+  const handleClientName = e => {
     setClientName(e);
   };
-  const handleCompanyName = (e) => {
+  const handleCompanyName = e => {
     setCompanyName(e);
   };
-  const handlePosition = (e) => {
+  const handlePosition = e => {
     setClientPosition(e);
   };
 
-  const handleParagraph = (e) => {
+  const handleParagraph = e => {
     setParagraph(e);
   };
 
@@ -122,7 +122,7 @@ const PostTestimonials = () => {
     }
   };
 
-  const handleUpdateTestimonial = async (testimonialId) => {
+  const handleUpdateTestimonial = async testimonialId => {
     const payload = {
       title: postTitle,
       client_name: clientName,
@@ -192,8 +192,7 @@ const PostTestimonials = () => {
           borderRadius: "10px",
           marginBottom: "100px",
         },
-      }}
-    >
+      }}>
       <CardContent
         sx={{
           "&.MuiCardContent-root": {
@@ -205,8 +204,7 @@ const PostTestimonials = () => {
               xl: 3.75,
             },
           },
-        }}
-      >
+        }}>
         <Stack
           direction="row"
           spacing={1}
@@ -220,8 +218,7 @@ const PostTestimonials = () => {
               lg: 3.75,
               xl: 3.75,
             },
-          }}
-        >
+          }}>
           <IconButton LinkComponent={Link} to="/manage-testimonials">
             <SVG.ArrowLeftIcon />
           </IconButton>{" "}
@@ -233,7 +230,7 @@ const PostTestimonials = () => {
               <LabeledInput
                 placeholder="Post title"
                 type="text"
-                onChange={(e) => handlePostTitle(e.target.value)}
+                onChange={e => handlePostTitle(e.target.value)}
                 value={postTitle}
               />
             </div>
@@ -243,7 +240,7 @@ const PostTestimonials = () => {
               <LabeledInput
                 placeholder="Client Name"
                 type="text"
-                onChange={(e) => handleClientName(e.target.value)}
+                onChange={e => handleClientName(e.target.value)}
                 value={clientName}
               />
             </div>
@@ -253,7 +250,7 @@ const PostTestimonials = () => {
               <LabeledInput
                 placeholder="Company Name "
                 type="text"
-                onChange={(e) => handleCompanyName(e.target.value)}
+                onChange={e => handleCompanyName(e.target.value)}
                 value={companyName}
               />
             </div>
@@ -263,7 +260,7 @@ const PostTestimonials = () => {
               <LabeledInput
                 placeholder="Client position "
                 type="text"
-                onChange={(e) => handlePosition(e.target.value)}
+                onChange={e => handlePosition(e.target.value)}
                 value={clientPosition}
               />
             </div>
@@ -271,8 +268,7 @@ const PostTestimonials = () => {
           <Grid item xs={12} lg={12}>
             <div
               className="drag-drop"
-              style={{ flexDirection: "column", height: "auto" }}
-            >
+              style={{ flexDirection: "column", height: "auto" }}>
               <label>
                 <input
                   type="file"
@@ -307,7 +303,7 @@ const PostTestimonials = () => {
                   background: "#F0F0F0",
                   fontFamily: "Poppins !important",
                 }}
-                onChange={(value) => handleParagraph(value)}
+                onChange={value => handleParagraph(value)}
               />
             </Box>
           </Grid>
@@ -316,8 +312,7 @@ const PostTestimonials = () => {
           <Stack
             direction={"row"}
             justifyContent={"center"}
-            sx={{ marginTop: "15px" }}
-          >
+            sx={{ marginTop: "15px" }}>
             <OutlinedButton
               onClick={() => handleUpdateTestimonial(testimonialId)}
               title={
@@ -338,8 +333,7 @@ const PostTestimonials = () => {
           <Stack
             direction={"row"}
             justifyContent={"center"}
-            sx={{ marginTop: "15px" }}
-          >
+            sx={{ marginTop: "15px" }}>
             <OutlinedButton
               onClick={handleAddTestimonial}
               title={

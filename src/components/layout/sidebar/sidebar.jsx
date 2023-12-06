@@ -61,7 +61,7 @@ function Sidebar() {
   const container =
     window !== undefined ? () => window.document.body : undefined;
   return (
-    <Box sx={{ display: "flex" }} className="sidebar__box">
+    <Box sx={{ display: { xs: "block", sm: "flex" } }} className="sidebar__box">
       <Box
         component="nav"
         sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}

@@ -17,7 +17,7 @@ import { getCountriesName } from "@api/jobs";
 import { showRole } from "@utils/common";
 function ManageCandidatesComponent() {
   const dispatch = useDispatch();
-  const { countries } = useSelector((state) => state.choice);
+  const { countries } = useSelector(state => state.choice);
   const [candidateTable, setCandidateTable] = useState([]);
   const [pages, setPages] = useState(1);
   const [limit, setLimit] = useState(10);
@@ -42,7 +42,7 @@ function ManageCandidatesComponent() {
         headerName: "Role",
         sortable: true,
         width: 200,
-        renderCell: (item) => showRole(item.row.role),
+        renderCell: item => showRole(item.row.role),
       },
 
       {
@@ -70,7 +70,7 @@ function ManageCandidatesComponent() {
         headerName: "Action",
         sortable: false,
         width: 120,
-        renderCell: (item) => {
+        renderCell: item => {
           return (
             <Stack direction="row" spacing={1} alignItems="center">
               <>
@@ -85,14 +85,12 @@ function ManageCandidatesComponent() {
                     width: 30,
                     height: 30,
                     color: "#274593",
-                  }}
-                >
+                  }}>
                   <Tooltip
                     title={
                       item.row.action ? "Deactivate User" : "Activate User"
                     }
-                    arrow
-                  >
+                    arrow>
                     {item.row.action ? (
                       <SVG.ToggleOffIcon />
                     ) : (
@@ -113,8 +111,7 @@ function ManageCandidatesComponent() {
                   width: 30,
                   height: 30,
                   color: "#274593",
-                }}
-              >
+                }}>
                 <Tooltip title={"View Profile"} arrow>
                   <SVG.EyeIcon />
                 </Tooltip>
@@ -128,8 +125,7 @@ function ManageCandidatesComponent() {
                   width: 30,
                   height: 30,
                   color: "#274593",
-                }}
-              >
+                }}>
                 <Tooltip title={"Delete"} arrow>
                   <SVG.DeleteIcon />
                 </Tooltip>
@@ -139,7 +135,7 @@ function ManageCandidatesComponent() {
         },
       },
     ],
-    []
+    [],
   );
 
   const handleRedirectDetails = useCallback((item, role) => {
@@ -180,18 +176,18 @@ function ManageCandidatesComponent() {
     setPages(page);
   }, []);
 
-  const filterJobsCountry = (e) => {
+  const filterJobsCountry = e => {
     const countryId = e.target.value;
-    const country = countriesData.find((country) => country.id === countryId);
+    const country = countriesData.find(country => country.id === countryId);
     setCountry(country);
   };
 
   const activeDeActiveUser = useCallback(
-    async (item) => {
+    async item => {
       const id = item.row.id;
       const response = await activeInactiveUser(id);
       if (response.remote === "success") {
-        const update = [...candidateTable].map((i) => {
+        const update = [...candidateTable].map(i => {
           if (i.id === item.row.id) {
             i.action = !i.action;
           }
@@ -203,7 +199,7 @@ function ManageCandidatesComponent() {
         dispatch(setErrorToast("something went wrong"));
       }
     },
-    [candidateTable]
+    [candidateTable],
   );
 
   const handleDelete = useCallback(async () => {
@@ -211,7 +207,7 @@ function ManageCandidatesComponent() {
     const response = await deleteUser(deleting);
     if (response.remote === "success") {
       const newCandidateTable = candidateTable.filter(
-        (emp) => emp.id !== deleting
+        emp => emp.id !== deleting,
       );
       setCandidateTable(newCandidateTable);
       setDeleting("");
@@ -239,7 +235,7 @@ function ManageCandidatesComponent() {
     if (response.remote === "success") {
       window.open(
         process.env.REACT_APP_BACKEND_URL + response.data.url,
-        "_blank"
+        "_blank",
       );
     } else {
       dispatch(setErrorToast("something went wrong"));
@@ -270,11 +266,11 @@ function ManageCandidatesComponent() {
         dropDownList={countriesData}
         searchProps={{
           placeholder: "Search Candidates",
-          onChange: (e) => setSearchTerm(e.target.value),
+          onChange: e => setSearchTerm(e.target.value),
           value: searchTerm,
         }}
         selectProps={{
-          onChange: (e) => filterJobsCountry(e),
+          onChange: e => filterJobsCountry(e),
           value: country.id || "",
         }}
         limitProps={{
@@ -284,14 +280,13 @@ function ManageCandidatesComponent() {
             { label: 10, value: 10 },
             { label: 15, value: 15 },
           ],
-          onChange: (e) => setLimit(e.target.value),
+          onChange: e => setLimit(e.target.value),
         }}
         csvProps={{
           title: (
             <Box
               onClick={() => downloadCandidatesCSV()}
-              sx={{ display: "flex", alignItems: "center" }}
-            >
+              sx={{ display: "flex", alignItems: "center" }}>
               <span className="d-inline-flex align-items-center me-2">
                 <SVG.ExportIcon />
               </span>
@@ -303,8 +298,7 @@ function ManageCandidatesComponent() {
           title: (
             <Box
               onClick={() => resetFilterCandidate()}
-              sx={{ display: "flex", alignItems: "center" }}
-            >
+              sx={{ display: "flex", alignItems: "center" }}>
               <span className="d-inline-flex align-items-center me-2">
                 <SVG.WhiteFile width={24} height={24} />
               </span>{" "}
