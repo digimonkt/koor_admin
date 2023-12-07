@@ -286,18 +286,18 @@ const PostNewJob = () => {
         setSelectedValue("new");
       }
       setCompanyLogo(data.companyLogo);
-      formik.setFieldValue("description", data.description);
-      setEditorValue(data.description);
-      setCompanyAttachments(data.attachments);
-      setInstructions(data.applicationInstruction);
-      formik.setFieldValue("applicationInstruction", selectedValue);
-      formik.setFieldValue("companyType", selectedValue);
-      formik.setFieldValue("company", data.company);
+      formik.setFieldValue("description", data.description || "");
+      setEditorValue(data.description || "");
+      setCompanyAttachments(data.attachments || []);
+      setInstructions(data.applicationInstruction || "");
+      formik.setFieldValue("applicationInstruction", selectedValue || "");
+      formik.setFieldValue("companyType", selectedValue || "");
+      formik.setFieldValue("company", data.company || "");
       formik.setFieldValue("existCompany", {
         value: data.user?.id || "",
         label: data.user?.name || data.user?.email,
       });
-      formik.setFieldValue("title", data.title);
+      formik.setFieldValue("title", data.title || "");
       formik.setFieldValue("budgetCurrency", data.budgetCurrency);
       formik.setFieldValue(
         "budgetAmount",
@@ -305,48 +305,54 @@ const PostNewJob = () => {
       );
       formik.setFieldValue("budgetPayPeriod", data.budgetPayPeriod);
       formik.setFieldValue("country", {
-        value: data.country.id,
-        label: data.country.title,
+        value: data.country.id || "",
+        label: data.country.title || "",
       });
       formik.setFieldValue("city", {
-        value: data.city.id,
-        label: data.city.title,
+        value: data.city.id || "",
+        label: data.city.title || "",
       });
-      formik.setFieldValue("address", data.address);
-      formik.setFieldValue("duration", data.duration);
-      formik.setFieldValue("experience", data.experience);
+      formik.setFieldValue("address", data.address || "");
+      formik.setFieldValue("duration", data.duration || "");
+      formik.setFieldValue("experience", data.experience || "");
       setSuggestedAddressValue(data.address);
-      formik.setFieldValue("websiteLink", data.websiteLink);
+      formik.setFieldValue("websiteLink", data.websiteLink || "");
       formik.setFieldValue("jobCategories", {
-        value: data.jobCategories.id,
-        label: data.jobCategories.title,
+        value: data.jobCategories.id || "",
+        label: data.jobCategories.title || "",
       });
       formik.setFieldValue("jobSubCategory", {
-        value: data.jobSubCategory.id,
-        label: data.jobSubCategory.title,
+        value: data.jobSubCategory.id || "",
+        label: data.jobSubCategory.title || "",
       });
       formik.setFieldValue(
         "isApplyThroughEmail",
-        Boolean(data.isApplyThroughEmail),
+        Boolean(data.isApplyThroughEmail) || false,
       );
       formik.setFieldValue("isFullTime", data.isFullTime);
       formik.setFieldValue("isPartTime", data.isPartTime);
       formik.setFieldValue("hasContract", data.hasContract);
       formik.setFieldValue("deadline", dayjs(data.deadline));
       formik.setFieldValue("startDate", dayjs(data.startDate));
-      formik.setFieldValue("isContactEmail", Boolean(data.contactEmail));
+      formik.setFieldValue(
+        "isContactEmail",
+        Boolean(data.contactEmail) || false,
+      );
       formik.setFieldValue(
         "isApplyThroughKoor",
-        Boolean(data.isApplyThroughKoor),
+        Boolean(data.isApplyThroughKoor) || false,
       );
-      formik.setFieldValue("contactEmail", data.contactEmail);
-      formik.setFieldValue("cc1", data.cc1);
-      formik.setFieldValue("cc2", data.cc2);
-      formik.setFieldValue("isContactWhatsapp", Boolean(data.contactWhatsapp));
-      formik.setFieldValue("contactWhatsapp", data.contactWhatsapp);
+      formik.setFieldValue("contactEmail", data.contactEmail || "");
+      formik.setFieldValue("cc1", data.cc1 || "");
+      formik.setFieldValue("cc2", data.cc2 || "");
+      formik.setFieldValue(
+        "isContactWhatsapp",
+        Boolean(data.contactWhatsapp) || false,
+      );
+      formik.setFieldValue("contactWhatsapp", data.contactWhatsapp || "");
       formik.setFieldValue(
         "isApplyThroughWebsite",
-        Boolean(data.isApplyThroughWebsite),
+        Boolean(data.isApplyThroughWebsite) || false,
       );
       formik.setFieldValue(
         "languages",
@@ -367,8 +373,8 @@ const PostNewJob = () => {
             })),
       );
       formik.setFieldValue("highestEducation", {
-        value: data.highestEducation.id,
-        label: data.highestEducation.title,
+        value: data.highestEducation.id || "",
+        label: data.highestEducation.title || "",
       });
       formik.setFieldValue(
         "skills",
