@@ -28,8 +28,8 @@ export const StyledDataGrid = styled(DataGrid)(({ theme }) => ({
 
   "& .MuiDataGrid-columnsContainer, .MuiDataGrid-cell": {
     borderBottom: "0px",
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: "flex-start",
+    alignItems: "flex-start",
   },
   "& .MuiDataGrid-row:not(.MuiDataGrid-row--dynamicHeight)>.MuiDataGrid-cell": {
     whiteSpace: "normal",

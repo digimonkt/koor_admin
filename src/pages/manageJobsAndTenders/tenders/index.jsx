@@ -46,13 +46,14 @@ function ManageTendersComponent() {
         id: "1",
         field: "no",
         headerName: "No",
+        width: "90",
         sortable: true,
       },
       {
         id: "2",
         field: "tender_id",
         headerName: "Tender id",
-        width: "220",
+        width: "150",
         sortable: true,
       },
       {
