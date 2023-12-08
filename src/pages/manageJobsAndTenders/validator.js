@@ -20,7 +20,7 @@ export const validateCreateJobInput = Yup.object()
       value: Yup.string().required("Country is required"),
     }),
     existCompany: Yup.string().when("companyType", {
-      is: (e) => e === "exist",
+      is: e => e === "exist",
       then: () =>
         Yup.object().shape({
           label: Yup.string().required("Company is required"),
@@ -33,7 +33,7 @@ export const validateCreateJobInput = Yup.object()
         }),
     }),
     company: Yup.string().when("companyType", {
-      is: (e) => e === "new",
+      is: e => e === "new",
       then: () => Yup.string().required("Company details is required"),
       otherwise: () => Yup.string().notRequired(),
     }),
@@ -60,7 +60,7 @@ export const validateCreateJobInput = Yup.object()
     deadline: Yup.string()
       .nullable()
       .required("Deadline is required")
-      .test("startDate", "Date Must be of Future", (value) => {
+      .test("startDate", "Date Must be of Future", value => {
         return dayjs(value).isSameOrAfter(dayjs(), "days");
       }),
     websiteLink: Yup.string().matches(REGEX.website, "website link not valid"),
@@ -75,7 +75,7 @@ export const validateCreateJobInput = Yup.object()
             return value || this.parent.cc1 || this.parent.cc2;
           }
           return true;
-        }
+        },
       ),
     cc1: Yup.string().email("CC1 email must be a valid"),
     cc2: Yup.string().email("CC2 email must be a valid"),
@@ -90,13 +90,13 @@ export const validateCreateJobInput = Yup.object()
         } else {
           return true;
         }
-      }
+      },
     ),
 
     languages: Yup.array().of(
       Yup.object().shape({
         id: Yup.string(),
-      })
+      }),
     ),
     skills: Yup.array().of(Yup.string()),
   })
@@ -121,7 +121,7 @@ export const validateCreateJobInput = Yup.object()
       }
 
       return true;
-    }
+    },
   );
 
 export const validateCreateTenderInput = Yup.object()
@@ -144,7 +144,7 @@ export const validateCreateTenderInput = Yup.object()
       .min(1, "At Least one category is required")
       .max(3, "Maximum 3 categories"),
     existCompany: Yup.string().when("companyType", {
-      is: (e) => e === "exist" || e === undefined,
+      is: e => e === "exist" || e === undefined,
       then: () =>
         Yup.object().shape({
           label: Yup.string().required("Company is required"),
@@ -157,7 +157,7 @@ export const validateCreateTenderInput = Yup.object()
         }),
     }),
     company: Yup.string().when("companyType", {
-      is: (e) => e === "new" || e === undefined,
+      is: e => e === "new" || e === undefined,
       then: () => Yup.string().required("Company details is required"),
       otherwise: () => Yup.string().notRequired(),
     }),
@@ -168,7 +168,7 @@ export const validateCreateTenderInput = Yup.object()
     deadline: Yup.string()
       .nullable()
       .required("Deadline is required")
-      .test("startDate", "Date Must be of Future", (value) => {
+      .test("startDate", "Date Must be of Future", value => {
         return dayjs(value).isSameOrAfter(dayjs(), "days");
       }),
     isApplyThroughEmail: Yup.boolean(),
@@ -178,7 +178,7 @@ export const validateCreateTenderInput = Yup.object()
       .trim()
       .required("Application Instruction content cannot be empty"),
     isContactEmail: Yup.boolean(),
-    website: Yup.string().matches(REGEX.website, "website link not valid"),
+    websiteLink: Yup.string().matches(REGEX.website, "website link not valid"),
     contactEmail: Yup.string()
       .email("Contact email must be a valid")
       .test(
@@ -190,7 +190,7 @@ export const validateCreateTenderInput = Yup.object()
             return value || this.parent.cc1 || this.parent.cc2;
           }
           return true;
-        }
+        },
       ),
     cc1: Yup.string().email("CC1 email must be a valid"),
     cc2: Yup.string().email("CC2 email must be a valid"),
@@ -205,7 +205,7 @@ export const validateCreateTenderInput = Yup.object()
         } else {
           return true;
         }
-      }
+      },
     ),
   })
   .test(
@@ -229,5 +229,5 @@ export const validateCreateTenderInput = Yup.object()
       }
 
       return true;
-    }
+    },
   );
