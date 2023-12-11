@@ -49,7 +49,7 @@ function ManageSkillsComponent() {
       field: "action",
       headerName: "Action",
       sortable: false,
-      renderCell: (item) => {
+      renderCell: item => {
         return (
           <Stack direction="row" spacing={1} alignItems="center">
             <IconButton
@@ -61,8 +61,7 @@ function ManageSkillsComponent() {
                 width: 30,
                 height: 30,
                 color: "#274593",
-              }}
-            >
+              }}>
               <SVG.DeleteIcon />
             </IconButton>
 
@@ -75,8 +74,7 @@ function ManageSkillsComponent() {
                 width: 30,
                 height: 30,
                 color: "#274593",
-              }}
-            >
+              }}>
               <SVG.EditIcon />
             </IconButton>
           </Stack>
@@ -137,7 +135,7 @@ function ManageSkillsComponent() {
     setLoading(false);
     const response = await skillDeleteApi(deleteSkill);
     if (response.remote === "success") {
-      const newSkillTable = skillsTable.filter((emp) => emp.id !== deleteSkill);
+      const newSkillTable = skillsTable.filter(emp => emp.id !== deleteSkill);
       setSkillsTable(newSkillTable);
       setDeleteSkill("");
       dispatch(setSuccessToast("Delete Skill SuccessFully"));
@@ -147,7 +145,7 @@ function ManageSkillsComponent() {
     }
   };
 
-  const handleEdit = async (item) => {
+  const handleEdit = async item => {
     setEditSkill(item.id);
     setEditSkillValue(item.name);
   };
@@ -187,13 +185,13 @@ function ManageSkillsComponent() {
         handlePageChange={getPage}
         searchProps={{
           placeholder: "Search Skills",
-          onChange: (e) => setSearchTerm(e.target.value),
+          onChange: e => setSearchTerm(e.target.value),
           value: searchTerm,
         }}
         inputProps={{
           type: "text",
-          placeholder: "Add Skill",
-          onChange: (e) => setAddSkill(e.target.value),
+          placeholder: "Enter Skill",
+          onChange: e => setAddSkill(e.target.value),
           value: addSkill,
         }}
         limitProps={{
@@ -203,7 +201,7 @@ function ManageSkillsComponent() {
             { label: 10, value: 10 },
             { label: 15, value: 15 },
           ],
-          onChange: (e) => setLimit(e.target.value),
+          onChange: e => setLimit(e.target.value),
         }}
         optionsProps={{
           title: (

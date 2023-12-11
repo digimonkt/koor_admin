@@ -49,7 +49,7 @@ function ManageSector() {
       field: "action",
       headerName: "Action",
       sortable: false,
-      renderCell: (item) => {
+      renderCell: item => {
         return (
           <Stack direction="row" spacing={1} alignItems="center">
             <IconButton
@@ -61,8 +61,7 @@ function ManageSector() {
                 width: 30,
                 height: 30,
                 color: "#274593",
-              }}
-            >
+              }}>
               <SVG.DeleteIcon />
             </IconButton>
 
@@ -75,8 +74,7 @@ function ManageSector() {
                 width: 30,
                 height: 30,
                 color: "#274593",
-              }}
-            >
+              }}>
               <SVG.EditIcon />
             </IconButton>
           </Stack>
@@ -136,7 +134,7 @@ function ManageSector() {
     setLoading(false);
     const response = await sectorDeleteApi(deleteSkill);
     if (response.remote === "success") {
-      const newSkillTable = skillsTable.filter((emp) => emp.id !== deleteSkill);
+      const newSkillTable = skillsTable.filter(emp => emp.id !== deleteSkill);
       setSkillsTable(newSkillTable);
       setDeleteSkill("");
       dispatch(setSuccessToast("Delete Skill SuccessFully"));
@@ -146,7 +144,7 @@ function ManageSector() {
     }
   };
 
-  const handleEdit = async (item) => {
+  const handleEdit = async item => {
     setEditSkill(item.id);
     setEditSkillValue(item.name);
   };
@@ -186,13 +184,13 @@ function ManageSector() {
         handlePageChange={getPage}
         searchProps={{
           placeholder: "Search Sector",
-          onChange: (e) => setSearchTerm(e.target.value),
+          onChange: e => setSearchTerm(e.target.value),
           value: searchTerm,
         }}
         inputProps={{
           type: "text",
-          placeholder: "Add Sector",
-          onChange: (e) => setAddSkill(e.target.value),
+          placeholder: "Enter Sector",
+          onChange: e => setAddSkill(e.target.value),
           value: addSkill,
         }}
         limitProps={{
@@ -202,7 +200,7 @@ function ManageSector() {
             { label: 10, value: 10 },
             { label: 15, value: 15 },
           ],
-          onChange: (e) => setLimit(e.target.value),
+          onChange: e => setLimit(e.target.value),
         }}
         optionsProps={{
           title: (

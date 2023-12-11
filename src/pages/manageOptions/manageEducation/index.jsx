@@ -48,7 +48,7 @@ function manageEducation() {
       field: "action",
       headerName: "Action",
       sortable: false,
-      renderCell: (item) => {
+      renderCell: item => {
         return (
           <Stack direction="row" spacing={1} alignItems="center">
             <IconButton
@@ -60,8 +60,7 @@ function manageEducation() {
                 width: 30,
                 height: 30,
                 color: "#274593",
-              }}
-            >
+              }}>
               <SVG.DeleteIcon />
             </IconButton>
 
@@ -74,8 +73,7 @@ function manageEducation() {
                 width: 30,
                 height: 30,
                 color: "#274593",
-              }}
-            >
+              }}>
               <SVG.EditIcon />
             </IconButton>
           </Stack>
@@ -131,7 +129,7 @@ function manageEducation() {
     }
   };
 
-  const handleEdit = async (item) => {
+  const handleEdit = async item => {
     setEditEducation(item.id);
     setEditEducationValue(item.name);
   };
@@ -156,7 +154,7 @@ function manageEducation() {
     const response = await deleteEducationApi(deleteEducation);
     if (response.remote === "success") {
       const newCategoryTable = educationTable.filter(
-        (emp) => emp.id !== deleteEducation
+        emp => emp.id !== deleteEducation,
       );
       setEducationTable(newCategoryTable);
       setDeleteEducation("");
@@ -186,13 +184,13 @@ function manageEducation() {
         page={pages}
         searchProps={{
           placeholder: "Search  Education",
-          onChange: (e) => setSearchTerm(e.target.value),
+          onChange: e => setSearchTerm(e.target.value),
           value: searchTerm,
         }}
         inputProps={{
           type: "text",
-          placeholder: "Add  Education",
-          onChange: (e) => setAddEducation(e.target.value),
+          placeholder: "Enter Education",
+          onChange: e => setAddEducation(e.target.value),
           value: addEducation,
         }}
         limitProps={{
@@ -202,7 +200,7 @@ function manageEducation() {
             { label: 10, value: 10 },
             { label: 15, value: 15 },
           ],
-          onChange: (e) => setLimit(e.target.value),
+          onChange: e => setLimit(e.target.value),
         }}
         optionsProps={{
           title: (
@@ -216,8 +214,7 @@ function manageEducation() {
 
       <DialogBox
         open={!!deleteEducation}
-        handleClose={() => setDeleteEducation("")}
-      >
+        handleClose={() => setDeleteEducation("")}>
         <DeleteCard
           title="Delete Category"
           content="Are you sure you want to delete Category?"
@@ -228,8 +225,7 @@ function manageEducation() {
 
       <DialogBox
         open={!!editEducation}
-        handleClose={() => setEditEducation("")}
-      >
+        handleClose={() => setEditEducation("")}>
         <EditCard
           title="Edit Category"
           handleCancel={() => setEditEducation("")}

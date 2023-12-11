@@ -30,7 +30,7 @@ import {
 } from "@api/managejobSubCategory";
 const ManageCategoryComponent = () => {
   const dispatch = useDispatch();
-  const { categories } = useSelector((state) => state.choice);
+  const { categories } = useSelector(state => state.choice);
   const [searchTerm, setSearchTerm] = useState("");
   const debouncedSearchCategoryValue = useDebounce(searchTerm, 500);
   const [addCategory, setAddCategory] = useState("");
@@ -55,7 +55,7 @@ const ManageCategoryComponent = () => {
         addCategories({
           id: response.data.data.id,
           title: payload.title,
-        })
+        }),
       );
       dispatch(setSuccessToast("Add Category SuccessFully"));
       setAddCategory("");
@@ -64,11 +64,11 @@ const ManageCategoryComponent = () => {
     }
   }
 
-  const handleSearch = (search) => {
+  const handleSearch = search => {
     setSearchTerm(search);
   };
 
-  const handleSelectCategories = (id) => {
+  const handleSelectCategories = id => {
     dispatch(getSubCategories({ categoryId: id }));
   };
 
@@ -107,7 +107,7 @@ const ManageCategoryComponent = () => {
     }
   };
 
-  const onAddSubCategory = async (id) => {
+  const onAddSubCategory = async id => {
     const payload = {
       title: addSubCategory,
       category: id,
@@ -119,7 +119,7 @@ const ManageCategoryComponent = () => {
           id: response.data.data.id,
           title: payload.title,
           categoryId: response.data.data.category,
-        })
+        }),
       );
       dispatch(setSuccessToast("Add Sub Category SuccessFully"));
       setAddSubCategory("");
@@ -137,7 +137,7 @@ const ManageCategoryComponent = () => {
         removeSubCategory({
           id: subCategoryDeleting.id,
           categoryId,
-        })
+        }),
       );
       setSubCategoryDeleting("");
       dispatch(setSuccessToast("Delete Sub Category SuccessFully"));
@@ -147,11 +147,11 @@ const ManageCategoryComponent = () => {
     }
   };
 
-  const handleDeleteId = async (category) => {
+  const handleDeleteId = async category => {
     setSubCategoryDeleting(category);
   };
 
-  const handleEditSub = async (subcategory) => {
+  const handleEditSub = async subcategory => {
     setEditCategoryId(subcategory.categoryId);
     setSubCategoryEdit(subcategory.id);
     setSubCategoryEditValue(subcategory.title);
@@ -191,7 +191,7 @@ const ManageCategoryComponent = () => {
       <Layout
         searchProps={{
           placeholder: "Search Category",
-          onChange: (e) => handleSearch(e.target.value),
+          onChange: e => handleSearch(e.target.value),
           value: searchTerm,
         }}
         totalCount={totalCount}
@@ -200,8 +200,8 @@ const ManageCategoryComponent = () => {
         addBtnTitle={"add Category"}
         title={"Add Category"}
         addItems={{
-          onChange: (e) => setAddCategory(e.target.value),
-          placeholder: "Add Category",
+          onChange: e => setAddCategory(e.target.value),
+          placeholder: "Enter Category",
           value: addCategory,
         }}
         onAddItems={addItems}
@@ -212,9 +212,8 @@ const ManageCategoryComponent = () => {
             { label: 10, value: 10 },
             { label: 15, value: 15 },
           ],
-          onChange: (e) => setLimit(e.target.value),
-        }}
-      >
+          onChange: e => setLimit(e.target.value),
+        }}>
         <Card elevation={0} sx={{ background: "transparent" }}>
           {categories.data.map((category, index) => (
             <Accordion
@@ -223,11 +222,10 @@ const ManageCategoryComponent = () => {
               title={category.title}
               onOpen={() => handleSelectCategories(category.id)}
               handleDelete={() => setDeleting(category.id)}
-              handleEdit={() => handleEdit(category)}
-            >
+              handleEdit={() => handleEdit(category)}>
               <LabeledInput
                 placeholder="Add Sub Categories"
-                onChange={(e) => setAddSubCategory(e.target.value)}
+                onChange={e => setAddSubCategory(e.target.value)}
                 style={{ marginBottom: "10px" }}
               />
 
@@ -273,8 +271,7 @@ const ManageCategoryComponent = () => {
 
       <DialogBox
         open={!!subCategoryDeleting}
-        handleClose={() => setSubCategoryDeleting("")}
-      >
+        handleClose={() => setSubCategoryDeleting("")}>
         <DeleteCard
           title="Delete Sub Category"
           content="Are you sure you want to delete Sub category?"
@@ -295,8 +292,7 @@ const ManageCategoryComponent = () => {
 
       <DialogBox
         open={!!subCategoryEdit}
-        handleClose={() => setSubCategoryEdit("")}
-      >
+        handleClose={() => setSubCategoryEdit("")}>
         <EditCard
           title="Edit Sub Category"
           handleCancel={() => setSubCategoryEdit("")}
