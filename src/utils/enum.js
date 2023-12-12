@@ -29,5 +29,5 @@ export const SUBMITTING_STATUS_ENUM = Object.freeze({
 export const REGEX = Object.freeze({
   email: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
   website:
-    /^((ftp|http|https):\/\/)?(www.)?(?!.*(ftp|http|https|www.))[a-zA-Z0-9_-]+(\.[a-zA-Z]+)+((\/)[\w#]+)*(\/\w+\?[a-zA-Z0-9_]+=\w+(&[a-zA-Z0-9_]+=\w+)*)?\/?$/gm,
+    /^((ftp|http|https):\/\/)?(www\.)?[a-zA-Z0-9_-]+(\.[a-zA-Z]+)+((\/[\w#-]+)*)?$/gm,
 });
