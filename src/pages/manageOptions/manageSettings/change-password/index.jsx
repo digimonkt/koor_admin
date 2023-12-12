@@ -19,7 +19,7 @@ const ChangePassword = () => {
       confirmPassword: "",
     },
     validationSchema: validateChangePasswordForm,
-    onSubmit: async (values) => {
+    onSubmit: async values => {
       const payload = {
         old_password: values.currentPassword,
         password: values.newPassword,
@@ -84,7 +84,7 @@ const ChangePassword = () => {
                   <div style={{ marginTop: "6px", marginRight: "8px" }}>
                     <SVG.PriorityIcon />
                   </div>
-                  <div>SAVE PASSWORD</div>
+                  <div>SAVE CREDENTIALS</div>
                 </>
               }
               sx={{

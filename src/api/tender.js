@@ -4,7 +4,7 @@ import urlcat from "urlcat";
 // Sectors
 export const getTenderSectorAPI = async data => {
   const response = await api.request({
-    url: urlcat("/v1/admin/sector", data || {}),
+    url: urlcat("/v1/admin/sector", { ...data, limit: 500 } || {}),
     method: "GET",
   });
   if (response.remote === "success") {
@@ -19,7 +19,7 @@ export const getTenderSectorAPI = async data => {
 // OrganizationTypes
 export const getTenderOpportunityTypeAPI = async data => {
   const response = await api.request({
-    url: urlcat("/v1/admin/opportunity-type", data || {}),
+    url: urlcat("/v1/admin/opportunity-type", { ...data, limit: 500 } || {}),
     method: "GET",
   });
   if (response.remote === "success") {
@@ -34,7 +34,7 @@ export const getTenderOpportunityTypeAPI = async data => {
 // TenderTags
 export const getTenderTagsAPI = async data => {
   const response = await api.request({
-    url: urlcat("/v1/admin/tag", data || {}),
+    url: urlcat("/v1/admin/tag", { ...data, limit: 500 } || {}),
     method: "GET",
   });
   if (response.remote === "success") {
@@ -49,7 +49,7 @@ export const getTenderTagsAPI = async data => {
 // TenderCategories
 export const getTenderCategoryAPI = async data => {
   const response = await api.request({
-    url: urlcat("/v1/admin/tender-category", data || {}),
+    url: urlcat("/v1/admin/tender-category", { ...data, limit: 500 } || {}),
     method: "GET",
   });
   if (response.remote === "success") {
