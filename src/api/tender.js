@@ -2,7 +2,7 @@ import api from ".";
 import urlcat from "urlcat";
 
 // Sectors
-export const getTenderSectorAPI = async (data) => {
+export const getTenderSectorAPI = async data => {
   const response = await api.request({
     url: urlcat("/v1/admin/sector", data || {}),
     method: "GET",
@@ -17,7 +17,7 @@ export const getTenderSectorAPI = async (data) => {
 };
 
 // OrganizationTypes
-export const getTenderOpportunityTypeAPI = async (data) => {
+export const getTenderOpportunityTypeAPI = async data => {
   const response = await api.request({
     url: urlcat("/v1/admin/opportunity-type", data || {}),
     method: "GET",
@@ -32,7 +32,7 @@ export const getTenderOpportunityTypeAPI = async (data) => {
 };
 
 // TenderTags
-export const getTenderTagsAPI = async (data) => {
+export const getTenderTagsAPI = async data => {
   const response = await api.request({
     url: urlcat("/v1/admin/tag", data || {}),
     method: "GET",
@@ -47,7 +47,7 @@ export const getTenderTagsAPI = async (data) => {
 };
 
 // TenderCategories
-export const getTenderCategoryAPI = async (data) => {
+export const getTenderCategoryAPI = async data => {
   const response = await api.request({
     url: urlcat("/v1/admin/tender-category", data || {}),
     method: "GET",
@@ -61,7 +61,7 @@ export const getTenderCategoryAPI = async (data) => {
   return response;
 };
 
-export const deleteTenderAPI = async (tenderId) => {
+export const deleteTenderAPI = async tenderId => {
   const response = await api.request({
     url: urlcat("/v1/admin/tender/:tenderId", { tenderId }),
     method: "DELETE",
