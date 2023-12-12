@@ -9,12 +9,13 @@ export const validateLoginForm = Yup.object({
 });
 
 export const validateChangePasswordForm = Yup.object({
+  mail: Yup.string().required("mail is Required"),
   currentPassword: Yup.string().required("Current Password is  Required"),
   newPassword: Yup.string().required("Password is Required"),
   confirmPassword: Yup.string()
     .oneOf(
       [Yup.ref("newPassword"), null],
-      "Password and current password must match"
+      "Password and current password must match",
     )
     .required("Confirm Password is Required"),
 });

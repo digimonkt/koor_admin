@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { ErrorMessage } from "@components/caption";
 import { Stack } from "@mui/material";
 import { SVG } from "@assets/svg";
@@ -8,12 +8,15 @@ import { validateChangePasswordForm } from "../../../auth/validator";
 import { useFormik } from "formik";
 import { setSuccessToast } from "@redux/slice/toast";
 import { ChangeAdminPassword } from "@api/auth";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { LabeledInput } from "@components/input";
 const ChangePassword = () => {
+  const { adminMail } = useSelector(state => state.auth);
+  console.log(adminMail);
   const dispatch = useDispatch();
   const formik = useFormik({
     initialValues: {
+      mail: "",
       currentPassword: "",
       newPassword: "",
       confirmPassword: "",
@@ -21,6 +24,7 @@ const ChangePassword = () => {
     validationSchema: validateChangePasswordForm,
     onSubmit: async values => {
       const payload = {
+        mail: values.mail,
         old_password: values.currentPassword,
         password: values.newPassword,
       };
@@ -32,10 +36,26 @@ const ChangePassword = () => {
       }
     },
   });
+
+  useEffect(() => {
+    formik.setFieldValue("mail", adminMail);
+  }, [adminMail]);
   return (
     <>
       <form>
         <Stack direction="column" spacing={1.5}>
+          <div className={`${styles.formGroup}`}>
+            <label>Change Your mail</label>
+            <LabeledInput
+              placeholder="Current Mail"
+              type="text"
+              className={`${styles.formControl}`}
+              {...formik.getFieldProps("mail")}
+            />
+            {formik.touched.mail && formik.errors.mail ? (
+              <ErrorMessage>{formik.errors.mail}</ErrorMessage>
+            ) : null}
+          </div>
           <div className={`${styles.formGroup}`}>
             <label>Type your current password</label>
             <LabeledInput
