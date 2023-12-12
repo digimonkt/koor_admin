@@ -50,7 +50,7 @@ function ManageTag() {
       field: "action",
       headerName: "Action",
       sortable: false,
-      renderCell: (item) => {
+      renderCell: item => {
         return (
           <Stack direction="row" spacing={1} alignItems="center">
             <IconButton
@@ -62,8 +62,7 @@ function ManageTag() {
                 width: 30,
                 height: 30,
                 color: "#274593",
-              }}
-            >
+              }}>
               <SVG.DeleteIcon />
             </IconButton>
 
@@ -76,8 +75,7 @@ function ManageTag() {
                 width: 30,
                 height: 30,
                 color: "#274593",
-              }}
-            >
+              }}>
               <SVG.EditIcon />
             </IconButton>
           </Stack>
@@ -138,7 +136,7 @@ function ManageTag() {
     setLoading(false);
     const response = await tagDeleteApi(deleteSkill);
     if (response.remote === "success") {
-      const newSkillTable = skillsTable.filter((emp) => emp.id !== deleteSkill);
+      const newSkillTable = skillsTable.filter(emp => emp.id !== deleteSkill);
       setSkillsTable(newSkillTable);
       setDeleteSkill("");
       dispatch(setSuccessToast("Delete Skill SuccessFully"));
@@ -148,7 +146,7 @@ function ManageTag() {
     }
   };
 
-  const handleEdit = async (item) => {
+  const handleEdit = async item => {
     setEditSkill(item.id);
     setEditSkillValue(item.name);
   };
@@ -188,13 +186,13 @@ function ManageTag() {
         handlePageChange={getPage}
         searchProps={{
           placeholder: "Search Tags",
-          onChange: (e) => setSearchTerm(e.target.value),
+          onChange: e => setSearchTerm(e.target.value),
           value: searchTerm,
         }}
         inputProps={{
           type: "text",
-          placeholder: "Add Tag",
-          onChange: (e) => setAddSkill(e.target.value),
+          placeholder: "Enter Tag",
+          onChange: e => setAddSkill(e.target.value),
           value: addSkill,
         }}
         limitProps={{
@@ -204,7 +202,7 @@ function ManageTag() {
             { label: 10, value: 10 },
             { label: 15, value: 15 },
           ],
-          onChange: (e) => setLimit(e.target.value),
+          onChange: e => setLimit(e.target.value),
         }}
         optionsProps={{
           title: (
