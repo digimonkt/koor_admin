@@ -10,6 +10,8 @@ import { setSuccessToast } from "@redux/slice/toast";
 import { ChangeAdminPassword } from "@api/auth";
 import { useDispatch, useSelector } from "react-redux";
 import { LabeledInput } from "@components/input";
+import { getUserDetailsApi } from "@api/manageoptions";
+import { setAdminMail } from "@redux/slice/user";
 const ChangePassword = () => {
   const { adminMail } = useSelector(state => state.auth);
   console.log(adminMail);
@@ -24,10 +26,15 @@ const ChangePassword = () => {
     validationSchema: validateChangePasswordForm,
     onSubmit: async values => {
       const payload = {
-        mail: values.mail,
+        email: values.mail,
         old_password: values.currentPassword,
         password: values.newPassword,
       };
+      for (const i in payload) {
+        if (payload[i] === "") {
+          delete payload[i];
+        }
+      }
       const response = await ChangeAdminPassword(payload);
       if (response.remote === "success") {
         dispatch(setSuccessToast("Password Change  SuccessFully"));
@@ -37,9 +44,20 @@ const ChangePassword = () => {
     },
   });
 
+  const getUserDetails = async () => {
+    const adminDetails = await getUserDetailsApi();
+    if (adminDetails.remote === "success") {
+      dispatch(setAdminMail(adminDetails.data.email));
+      console.log({ adminDetails });
+      formik.setFieldValue("mail", adminDetails?.data?.email || adminDetails);
+    }
+  };
+
   useEffect(() => {
+    getUserDetails();
     formik.setFieldValue("mail", adminMail);
-  }, [adminMail]);
+  }, [adminMail || adminMail === ""]);
+
   return (
     <>
       <form>
@@ -50,6 +68,7 @@ const ChangePassword = () => {
               placeholder="Current Mail"
               type="text"
               className={`${styles.formControl}`}
+              values={adminMail}
               {...formik.getFieldProps("mail")}
             />
             {formik.touched.mail && formik.errors.mail ? (

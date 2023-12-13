@@ -1154,7 +1154,6 @@ const PostNewJob = () => {
                     title=""
                     className="add-form-control"
                     placeholder="Paste a link to your website’s application form"
-                    required
                     {...formik.getFieldProps("websiteLink")}
                   />
                   {formik.touched.websiteLink && formik.errors.websiteLink ? (

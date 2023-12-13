@@ -111,11 +111,13 @@ const ManageCountry = () => {
       dispatch(setErrorToast("Something went wrong"));
     }
   }
+
   async function addCities() {
     const payload = {
       title: selectCityValue?.title,
       country_name: selectCityValue.country?.title,
     };
+
     const response = await addCityApi(payload);
     if (response.remote === "success") {
       dispatch(
