@@ -63,7 +63,13 @@ export const validateCreateJobInput = Yup.object()
       .test("startDate", "Date Must be of Future", value => {
         return dayjs(value).isSameOrAfter(dayjs(), "days");
       }),
-    websiteLink: Yup.string().matches(REGEX.website, "website link not valid"),
+    websiteLink: Yup.string()
+      .when("isApplyThroughWebsite", {
+        is: true,
+        then: () => Yup.string().required("Website link is required"),
+        otherwise: () => Yup.string().notRequired(),
+      })
+      .matches(REGEX.website, "website link not valid"),
     contactEmail: Yup.string()
       .email("Contact email must be a valid")
       .test(
@@ -178,7 +184,13 @@ export const validateCreateTenderInput = Yup.object()
       .trim()
       .required("Application Instruction content cannot be empty"),
     isContactEmail: Yup.boolean(),
-    websiteLink: Yup.string().matches(REGEX.website, "website link not valid"),
+    websiteLink: Yup.string()
+      .when("isApplyThroughWebsite", {
+        is: true,
+        then: () => Yup.string().required("Website link is required"),
+        otherwise: () => Yup.string().notRequired(),
+      })
+      .matches(REGEX.website, "website link not valid"),
     contactEmail: Yup.string()
       .email("Contact email must be a valid")
       .test(
