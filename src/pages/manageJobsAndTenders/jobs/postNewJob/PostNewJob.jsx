@@ -834,7 +834,7 @@ const PostNewJob = () => {
                             }
                           }}
                           value={formik.values.city}
-                          // onKeyUp={(e) => setSearchCountry(e.target.value)}
+                        // onKeyUp={(e) => setSearchCountry(e.target.value)}
                         />
                         {formik.touched.city && formik.errors.city ? (
                           <ErrorMessage>
@@ -937,10 +937,10 @@ const PostNewJob = () => {
                             }
                           }}
                           value={formik.values.jobCategories}
-                          // onKeyUp={(e) => setSearchCountry(e.target.value)}
+                        // onKeyUp={(e) => setSearchCountry(e.target.value)}
                         />
                         {formik.touched.jobCategories &&
-                        formik.errors.jobCategories ? (
+                          formik.errors.jobCategories ? (
                           <ErrorMessage>
                             {formik.errors.jobCategories.value}
                           </ErrorMessage>
@@ -992,7 +992,7 @@ const PostNewJob = () => {
                           }}
                           options={(
                             subCategories.data[
-                              formik.values.jobCategories.value
+                            formik.values.jobCategories.value
                             ] || []
                           ).map(jobSubCategory => ({
                             value: jobSubCategory.id,
@@ -1015,10 +1015,10 @@ const PostNewJob = () => {
                             }
                           }}
                           value={formik.values.jobSubCategory}
-                          // onKeyUp={(e) => setSearchCountry(e.target.value)}
+                        // onKeyUp={(e) => setSearchCountry(e.target.value)}
                         />
                         {formik.touched.jobSubCategory &&
-                        formik.errors.jobSubCategory ? (
+                          formik.errors.jobSubCategory ? (
                           <ErrorMessage>
                             {formik.errors.jobSubCategory.value}
                           </ErrorMessage>
@@ -1129,7 +1129,7 @@ const PostNewJob = () => {
                         {...formik.getFieldProps("isApplyThroughKoor")}
                       />
                       {formik.touched.isApplyThroughKoor &&
-                      formik.errors.isApplyThroughKoor ? (
+                        formik.errors.isApplyThroughKoor ? (
                         <ErrorMessage>
                           {formik.errors.isApplyThroughKoor}
                         </ErrorMessage>
@@ -1146,7 +1146,7 @@ const PostNewJob = () => {
                         {...formik.getFieldProps("isApplyThroughEmail")}
                       />
                       {formik.touched.isApplyThroughEmail &&
-                      formik.errors.isApplyThroughEmail ? (
+                        formik.errors.isApplyThroughEmail ? (
                         <ErrorMessage>
                           {formik.errors.isApplyThroughEmail}
                         </ErrorMessage>
@@ -1158,7 +1158,7 @@ const PostNewJob = () => {
                       {...formik.getFieldProps("contactEmail")}
                     />
                     {formik.touched.contactEmail &&
-                    formik.errors.contactEmail ? (
+                      formik.errors.contactEmail ? (
                       <ErrorMessage>{formik.errors.contactEmail}</ErrorMessage>
                     ) : null}
                   </Grid>
@@ -1220,7 +1220,7 @@ const PostNewJob = () => {
                       }
                     />
                     {formik.touched.applicationInstruction &&
-                    formik.errors.applicationInstruction ? (
+                      formik.errors.applicationInstruction ? (
                       <ErrorMessage>
                         {formik.errors.applicationInstruction}
                       </ErrorMessage>
@@ -1300,7 +1300,7 @@ const PostNewJob = () => {
                       value={formik.values.highestEducation}
                     />
                     {formik.touched.highestEducation &&
-                    formik.errors.highestEducation ? (
+                      formik.errors.highestEducation ? (
                       <ErrorMessage>
                         {formik.errors.highestEducation.value}
                       </ErrorMessage>
@@ -1332,7 +1332,7 @@ const PostNewJob = () => {
                             {i === 0 ? (
                               <>
                                 {formik.touched.languages &&
-                                formik.errors.languages ? (
+                                  formik.errors.languages ? (
                                   <ErrorMessage>
                                     {formik.errors.languages}
                                   </ErrorMessage>
