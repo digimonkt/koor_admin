@@ -74,23 +74,26 @@ const Layout = (employerDetail) => {
           </IconButton>{" "}
           <h2>Employer Details</h2>
         </Stack>
-        <hr />
+        <hr style={{ marginBottom: "10px" }} />
         <Avatar
           sx={{
             width: 100,
             height: 100,
             color: "#CACACA",
-            borderRadius: "50",
+            borderRadius: "0px",
           }}
           src={
             process.env.REACT_APP_BACKEND_URL +
             employerDetail?.employerDetail?.image?.path
           }
         />
-        <h1>{employerDetail.employerDetail?.name}</h1>
+        <h1 style={{ margin: "10px 0px" }}>
+          {employerDetail.employerDetail?.name}
+        </h1>
         <Grid xs={12} spacing={2.5}>
           <Card
             sx={{
+              marginBottom: "10px",
               "&.MuiCard-root": {
                 boxShadow: "none",
                 borderRadius: "10px",
@@ -188,6 +191,7 @@ const Layout = (employerDetail) => {
             align="left"
             className="toggleBtn"
             sx={{
+              marginTop: "10px",
               fontFamily: "Bahnschrift",
             }}
             title={verifiedData ? "verified" : "unverify"}
