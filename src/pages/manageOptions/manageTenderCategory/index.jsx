@@ -49,7 +49,7 @@ function ManageTender() {
       field: "action",
       headerName: "Action",
       sortable: false,
-      renderCell: (item) => {
+      renderCell: item => {
         return (
           <Stack direction="row" spacing={1} alignItems="center">
             <IconButton
@@ -61,8 +61,7 @@ function ManageTender() {
                 width: 30,
                 height: 30,
                 color: "#274593",
-              }}
-            >
+              }}>
               <SVG.DeleteIcon />
             </IconButton>
 
@@ -75,8 +74,7 @@ function ManageTender() {
                 width: 30,
                 height: 30,
                 color: "#274593",
-              }}
-            >
+              }}>
               <SVG.EditIcon />
             </IconButton>
           </Stack>
@@ -139,7 +137,7 @@ function ManageTender() {
     const response = await tenderCategoryDeleteApi(deleteTenderCategory);
     if (response.remote === "success") {
       const newSkillTable = tenderCategoryTable.filter(
-        (emp) => emp.id !== deleteTenderCategory
+        emp => emp.id !== deleteTenderCategory,
       );
       setTenderCategoryTable(newSkillTable);
       setDeleteTenderCategory("");
@@ -150,7 +148,7 @@ function ManageTender() {
     }
   };
 
-  const handleEdit = async (item) => {
+  const handleEdit = async item => {
     setEditTenderCategory(item.id);
     setEditTenderValue(item.name);
   };
@@ -190,13 +188,13 @@ function ManageTender() {
         page={pages}
         searchProps={{
           placeholder: "Search Tender Category",
-          onChange: (e) => setSearchTerm(e.target.value),
+          onChange: e => setSearchTerm(e.target.value),
           value: searchTerm,
         }}
         inputProps={{
           type: "text",
-          placeholder: "Add Tender Category",
-          onChange: (e) => setAddTenderCategory(e.target.value),
+          placeholder: "Enter Tender Category",
+          onChange: e => setAddTenderCategory(e.target.value),
           value: addTenderCategory,
         }}
         limitProps={{
@@ -206,7 +204,7 @@ function ManageTender() {
             { label: 10, value: 10 },
             { label: 15, value: 15 },
           ],
-          onChange: (e) => setLimit(e.target.value),
+          onChange: e => setLimit(e.target.value),
         }}
         optionsProps={{
           title: (
@@ -219,8 +217,7 @@ function ManageTender() {
       />
       <DialogBox
         open={!!deleteTenderCategory}
-        handleClose={() => setDeleteTenderCategory("")}
-      >
+        handleClose={() => setDeleteTenderCategory("")}>
         <DeleteCard
           title="Delete Tender Category"
           content="Are you sure you want to delete Tender Category?"
@@ -231,8 +228,7 @@ function ManageTender() {
 
       <DialogBox
         open={!!editTenderCategory}
-        handleClose={() => setEditTenderCategory("")}
-      >
+        handleClose={() => setEditTenderCategory("")}>
         <EditCard
           title="Edit Skill"
           handleCancel={() => setEditTenderCategory("")}

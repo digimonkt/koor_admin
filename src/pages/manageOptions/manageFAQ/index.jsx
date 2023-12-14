@@ -54,13 +54,13 @@ function ManageFQL() {
       headerName: "Role",
       width: 300,
       sortable: true,
-      renderCell: (item) => showRole(item.row.role),
+      renderCell: item => showRole(item.row.role),
     },
     {
       field: "action",
       headerName: "Action",
       sortable: false,
-      renderCell: (item) => {
+      renderCell: item => {
         return (
           <Stack direction="row" spacing={1} alignItems="center">
             <IconButton
@@ -72,8 +72,7 @@ function ManageFQL() {
                 width: 30,
                 height: 30,
                 color: "#274593",
-              }}
-            >
+              }}>
               <SVG.EyeIcon />
             </IconButton>
 
@@ -86,8 +85,7 @@ function ManageFQL() {
                 width: 30,
                 height: 30,
                 color: "#274593",
-              }}
-            >
+              }}>
               <SVG.EditIcon />
             </IconButton>
 
@@ -100,8 +98,7 @@ function ManageFQL() {
                 width: 30,
                 height: 30,
                 color: "#274593",
-              }}
-            >
+              }}>
               <SVG.DeleteIcon />
             </IconButton>
           </Stack>
@@ -159,7 +156,7 @@ function ManageFQL() {
     const response = await deleteFaqCategoryApi(deleteFAQCategory);
     if (response.remote === "success") {
       const newFAQTable = faqCategoryTable.filter(
-        (emp) => emp.id !== deleteFAQCategory
+        emp => emp.id !== deleteFAQCategory,
       );
       setFAQCategoryTable(newFAQTable);
       setDeleteFAQCategory("");
@@ -169,12 +166,12 @@ function ManageFQL() {
     }
   };
 
-  const handleEdit = async (item) => {
+  const handleEdit = async item => {
     setEditFAQCategory(item.id);
     setEditFAQValue(item.name);
   };
 
-  const showFAQ = async (details) => {
+  const showFAQ = async details => {
     const id = details.id;
     const role = details.role;
     navigate(`/manage-faq/${id}/${role}`);
@@ -215,15 +212,15 @@ function ManageFQL() {
         handlePageChange={getPage}
         searchProps={{
           placeholder: "Search manage FAQ",
-          onChange: (e) => setSearchTerm(e.target.value),
+          onChange: e => setSearchTerm(e.target.value),
           value: searchTerm,
         }}
         inputProps={{
           type: "text",
-          placeholder: "Add FAQ Category",
-          onChange: (e) => setAddFAQCategory(e.target.value),
+          placeholder: "Enter FAQ Category",
+          onChange: e => setAddFAQCategory(e.target.value),
           value: addFAQCategory,
-          style: { marginLeft: "-6px" }
+          style: { marginLeft: "-6px" },
         }}
         inputPropsRole={{
           content: { faqCategoryTable },
@@ -237,7 +234,7 @@ function ManageFQL() {
             { label: 10, value: 10 },
             { label: 15, value: 15 },
           ],
-          onChange: (e) => setLimit(e.target.value),
+          onChange: e => setLimit(e.target.value),
         }}
         optionsProps={{
           title: (
@@ -250,8 +247,7 @@ function ManageFQL() {
       />
       <DialogBox
         open={!!deleteFAQCategory}
-        handleClose={() => setDeleteFAQCategory("")}
-      >
+        handleClose={() => setDeleteFAQCategory("")}>
         <DeleteCard
           title="Delete FAQ Category"
           content="Are you sure you want to delete FAQ Category?"
@@ -262,8 +258,7 @@ function ManageFQL() {
 
       <DialogBox
         open={!!editFAQCategory}
-        handleClose={() => setEditFAQCategory("")}
-      >
+        handleClose={() => setEditFAQCategory("")}>
         <EditCard
           title="Edit FAQ Category"
           handleCancel={() => setEditFAQCategory("")}

@@ -86,7 +86,7 @@ const PostNewJob = () => {
 
   const formik = useFormik({
     initialValues: {
-      companyType: "",
+      companyType: "exist",
       existCompany: { label: "", value: "" },
       company: "",
       companyLogo: [],
@@ -222,6 +222,10 @@ const PostNewJob = () => {
       }
       if (!data.user?.id) {
         setSelectedValue("new");
+        formik.setFieldValue("companyType", "new");
+      } else {
+        setSelectedValue("exist");
+        formik.setFieldValue("companyType", "exist");
       }
       formik.setFieldValue("description", data.description || "");
       setEditorValue(data.description);
@@ -229,7 +233,6 @@ const PostNewJob = () => {
         "applicationInstruction",
         data.applicationInstruction || ""
       );
-      formik.setFieldValue("companyType", selectedValue || "");
       formik.setFieldValue("company", data.company || "");
       setInstructions(data.applicationInstruction || "");
       formik.setFieldValue("existCompany", {
@@ -272,7 +275,7 @@ const PostNewJob = () => {
       });
       formik.setFieldValue("deadline", dayjs(data.deadline));
       formik.setFieldValue("startDate", dayjs(data.startDate));
-      formik.setFieldValue("attachments", data.attachments);
+      formik.setFieldValue("attachments", data?.attachments);
       formik.setFieldValue(
         "isApplyThroughEmail",
         Boolean(data.isApplyThroughEmail) || false
@@ -285,11 +288,11 @@ const PostNewJob = () => {
         "isApplyThroughKoor",
         Boolean(data.isApplyThroughKoor) || false
       );
-      formik.setFieldValue("contactEmail", data.contactEmail || "");
-      formik.setFieldValue("cc1", data.cc1 || "");
-      formik.setFieldValue("cc2", data.cc2 || "");
-      formik.setFieldValue("contactWhatsapp", data.contactWhatsapp || "");
-      formik.setFieldValue("website", data.website || "");
+      formik.setFieldValue("contactEmail", data?.contactEmail || "");
+      formik.setFieldValue("cc1", data?.cc1 || "");
+      formik.setFieldValue("cc2", data?.cc2 || "");
+      formik.setFieldValue("contactWhatsapp", data?.contactWhatsapp || "");
+      formik.setFieldValue("website", data?.website || "");
       formik.setFieldValue(
         "isApplyThroughWebsite",
         Boolean(data.isApplyThroughWebsite || false)
@@ -297,7 +300,6 @@ const PostNewJob = () => {
     }
   }, []);
 
-  console.log({ formik });
   // Address
   const getSuggestedAddress = async (search) => {
     const res = await GetSuggestedAddressAPI(search);
@@ -372,6 +374,7 @@ const PostNewJob = () => {
     const newTenderId = searchParams.get("tenderId");
     if (newTenderId && tenderId !== newTenderId) setTenderId(newTenderId);
   }, [searchParams.get("tenderId")]);
+  console.log({ formik });
   return (
     <div className="job-application">
       <Card
@@ -407,6 +410,8 @@ const PostNewJob = () => {
                     value="exist"
                     control={<Radio />}
                     label="Select Company"
+                    onChange={formik.handleChange}
+                    onBlur={() => formik.setFieldValue("companyType", "exist")}
                     checked={selectedValue === "exist"}
                   />
                   <FormControlLabel
@@ -414,6 +419,8 @@ const PostNewJob = () => {
                     value="new"
                     control={<Radio />}
                     label="Create Company"
+                    onBlur={() => formik.setFieldValue("companyType", "new")}
+                    onChange={formik.handleChange}
                     checked={selectedValue === "new"}
                   />
                 </RadioGroup>
@@ -460,6 +467,7 @@ const PostNewJob = () => {
                               label: employer.name || employer.email,
                             }))}
                             title={"select the options"}
+                            onBlur={formik.handleBlur}
                             onChange={(_, value) => {
                               if (value) {
                                 setSearchTerm(value.value);
@@ -475,6 +483,12 @@ const PostNewJob = () => {
                             value={formik.values.existCompany}
                             onKeyUp={(e) => setSearchTerm(e.target.value)}
                           />
+                          {formik.errors.existCompany &&
+                          formik.errors.existCompany ? (
+                            <ErrorMessage>
+                              {formik.errors.existCompany.value}
+                            </ErrorMessage>
+                          ) : null}
                         </Grid>
                       </Grid>
                     </Grid>
@@ -501,6 +515,9 @@ const PostNewJob = () => {
                             className="add-form-control"
                             {...formik.getFieldProps("company")}
                           />
+                          {formik.touched.company && formik.errors.company ? (
+                            <ErrorMessage>{formik.errors.company}</ErrorMessage>
+                          ) : null}
                         </Grid>
 
                         <Grid item xl={12} lg={12} xs={12}>
@@ -536,6 +553,12 @@ const PostNewJob = () => {
                                   formik.setFieldValue("companyLogo", [file])
                                 }
                               />
+                              {formik.touched.company &&
+                              formik.errors.company ? (
+                                <ErrorMessage>
+                                  {formik.errors.company}
+                                </ErrorMessage>
+                              ) : null}
                             </CardContent>
                           </Card>
                         </Grid>
@@ -1144,8 +1167,7 @@ const PostNewJob = () => {
                     title=""
                     className="add-form-control"
                     placeholder="Paste a link to your website’s application form"
-                    required
-                    {...formik.getFieldProps("website")}
+                    {...formik.getFieldProps("websiteLink")}
                   />
                   {formik.touched.websiteLink && formik.errors.websiteLink ? (
                     <ErrorMessage>{formik.errors.websiteLink}</ErrorMessage>

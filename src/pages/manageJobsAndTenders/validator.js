@@ -1,3 +1,4 @@
+import { REGEX } from "@utils/enum";
 import dayjs from "dayjs";
 import isSameOrAfter from "dayjs/plugin/isSameOrAfter";
 import * as Yup from "yup";
@@ -5,6 +6,7 @@ dayjs.extend(isSameOrAfter);
 
 export const validateCreateJobInput = Yup.object()
   .shape({
+    companyType: Yup.string(),
     title: Yup.string().required("Title is required"),
     budgetCurrency: Yup.string().required("Currency is required"),
     budgetAmount: Yup.number().required("Amount is required"),
@@ -17,10 +19,24 @@ export const validateCreateJobInput = Yup.object()
       label: Yup.string().required("Country is required"),
       value: Yup.string().required("Country is required"),
     }),
-    // city: Yup.object().shape({
-    //   label: Yup.string().required("City is required"),
-    //   value: Yup.string().required("City is required"),
-    // }),
+    existCompany: Yup.string().when("companyType", {
+      is: e => e === "exist",
+      then: () =>
+        Yup.object().shape({
+          label: Yup.string().required("Company is required"),
+          value: Yup.string().required("Company is required"),
+        }),
+      otherwise: () =>
+        Yup.object().shape({
+          label: Yup.string().notRequired(),
+          value: Yup.string().notRequired(),
+        }),
+    }),
+    company: Yup.string().when("companyType", {
+      is: e => e === "new",
+      then: () => Yup.string().required("Company details is required"),
+      otherwise: () => Yup.string().notRequired(),
+    }),
     address: Yup.string().required("Address is required"),
     jobCategories: Yup.object().shape({
       label: Yup.string().required("job Categories is required"),
@@ -47,6 +63,13 @@ export const validateCreateJobInput = Yup.object()
       .test("startDate", "Date Must be of Future", value => {
         return dayjs(value).isSameOrAfter(dayjs(), "days");
       }),
+    websiteLink: Yup.string()
+      .when("isApplyThroughWebsite", {
+        is: true,
+        then: () => Yup.string().required("Website link is required"),
+        otherwise: () => Yup.string().notRequired(),
+      })
+      .matches(REGEX.website, "website link not valid"),
     contactEmail: Yup.string()
       .email("Contact email must be a valid")
       .test(
@@ -110,6 +133,7 @@ export const validateCreateJobInput = Yup.object()
 export const validateCreateTenderInput = Yup.object()
   .shape({
     title: Yup.string().required("Title is required"),
+    companyType: Yup.string(),
     opportunityType: Yup.object(),
     budgetCurrency: Yup.string(),
     budgetAmount: Yup.number(),
@@ -125,6 +149,24 @@ export const validateCreateTenderInput = Yup.object()
     categories: Yup.array()
       .min(1, "At Least one category is required")
       .max(3, "Maximum 3 categories"),
+    existCompany: Yup.string().when("companyType", {
+      is: e => e === "exist" || e === undefined,
+      then: () =>
+        Yup.object().shape({
+          label: Yup.string().required("Company is required"),
+          value: Yup.string().required("Company is required"),
+        }),
+      otherwise: () =>
+        Yup.object().shape({
+          label: Yup.string().notRequired(),
+          value: Yup.string().notRequired(),
+        }),
+    }),
+    company: Yup.string().when("companyType", {
+      is: e => e === "new" || e === undefined,
+      then: () => Yup.string().required("Company details is required"),
+      otherwise: () => Yup.string().notRequired(),
+    }),
     sectors: Yup.object(),
     tag: Yup.object(),
     address: Yup.string().required("Address is required"),
@@ -142,6 +184,13 @@ export const validateCreateTenderInput = Yup.object()
       .trim()
       .required("Application Instruction content cannot be empty"),
     isContactEmail: Yup.boolean(),
+    websiteLink: Yup.string()
+      .when("isApplyThroughWebsite", {
+        is: true,
+        then: () => Yup.string().required("Website link is required"),
+        otherwise: () => Yup.string().notRequired(),
+      })
+      .matches(REGEX.website, "website link not valid"),
     contactEmail: Yup.string()
       .email("Contact email must be a valid")
       .test(

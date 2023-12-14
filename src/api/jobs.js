@@ -31,7 +31,7 @@ export const manageJobData = async ({
 };
 
 // DeleteJob
-export const deleteJob = async (jobId) => {
+export const deleteJob = async jobId => {
   const response = await api.request({
     url: urlcat("/v1/admin/jobs/:jobId", { jobId }),
     method: "DELETE",
@@ -40,7 +40,7 @@ export const deleteJob = async (jobId) => {
 };
 
 // ToggleJobStatus
-export const activeInactiveJob = async (jobId) => {
+export const activeInactiveJob = async jobId => {
   const response = await api.request({
     url: urlcat("/v1/admin/jobs/:jobId", { jobId }),
     method: "PATCH",
@@ -58,9 +58,9 @@ export const getCountriesName = async ({ search, limit, page }) => {
 };
 
 // Languages
-export const getLanguagesAPI = async (data) => {
+export const getLanguagesAPI = async data => {
   const response = await api.request({
-    url: urlcat("/v1/admin/language", data || {}),
+    url: urlcat("/v1/admin/language", { ...data, limit: 500 } || {}),
     method: "GET",
   });
   if (response.remote === "success") {
@@ -73,9 +73,9 @@ export const getLanguagesAPI = async (data) => {
 };
 
 // EducationLevel
-export const getEducationLevelsAPI = async (data) => {
+export const getEducationLevelsAPI = async data => {
   const response = await api.request({
-    url: urlcat("/v1/admin/education-level", data || {}),
+    url: urlcat("/v1/admin/education-level", { ...data, limit: 500 } || {}),
     method: "GET",
   });
   if (response.remote === "success") {
@@ -88,9 +88,9 @@ export const getEducationLevelsAPI = async (data) => {
 };
 
 // Skills
-export const getSkillsAPI = async (data) => {
+export const getSkillsAPI = async data => {
   const response = await api.request({
-    url: urlcat("/v1/admin/skills", data || {}),
+    url: urlcat("/v1/admin/skills", { ...data, limit: 500 } || {}),
     method: "GET",
   });
   if (response.remote === "success") {
@@ -103,7 +103,7 @@ export const getSkillsAPI = async (data) => {
 };
 
 // GoogleMapAddress
-export const GetSuggestedAddressAPI = async (search) => {
+export const GetSuggestedAddressAPI = async search => {
   return await api.request({
     url: urlcat("v1/users/get-location", { search }),
     method: "GET",
@@ -111,7 +111,7 @@ export const GetSuggestedAddressAPI = async (search) => {
 };
 
 // CreateJob
-export const createJobAPI = async (data) => {
+export const createJobAPI = async data => {
   const res = await api.request({
     url: urlcat("/v1/admin/jobs/create"),
     method: "POST",
@@ -137,7 +137,7 @@ export const updateEmployerJobAPI = async (jobId, data) => {
 };
 
 // JobDetails
-export const getJobDetailsByIdAPI = async (data) => {
+export const getJobDetailsByIdAPI = async data => {
   const response = await api.request({
     url: urlcat("/v1/jobs/:jobId", data),
     method: "GET",
@@ -152,7 +152,7 @@ export const getJobDetailsByIdAPI = async (data) => {
 };
 
 // CreateTender
-export const createTenderAPI = async (data) => {
+export const createTenderAPI = async data => {
   const res = await api.request({
     url: urlcat("/v1/admin/tender/create"),
     method: "POST",
@@ -165,7 +165,7 @@ export const createTenderAPI = async (data) => {
 };
 
 // TenderDetails
-export const getTenderDetailsByIdAPI = async (data) => {
+export const getTenderDetailsByIdAPI = async data => {
   const response = await api.request({
     url: urlcat("/v1/tenders/:tenderId", data),
     method: "GET",

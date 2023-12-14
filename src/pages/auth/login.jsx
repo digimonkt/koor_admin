@@ -9,7 +9,7 @@ import { ErrorMessage } from "@components/caption";
 import Loader from "@components/loader";
 import { USER_ROLES } from "@utils/enum";
 import { useDispatch } from "react-redux";
-import { setIsLoggedIn, setRole } from "@redux/slice/user";
+import { setIsLoggedIn, setRole, setAdminMail } from "@redux/slice/user";
 function LoginComponent() {
   const dispatch = useDispatch();
   const [loading, setIsLoading] = useState(false);
@@ -20,7 +20,7 @@ function LoginComponent() {
       role: "",
     },
     validationSchema: validateLoginForm,
-    onSubmit: async (values) => {
+    onSubmit: async values => {
       setIsLoading(true);
       const payload = {
         email: values.email,
@@ -31,6 +31,7 @@ function LoginComponent() {
       if (response.remote === "success") {
         dispatch(setIsLoggedIn(true));
         dispatch(setRole(USER_ROLES.admin));
+        dispatch(setAdminMail(payload.email));
         setIsLoading(false);
       } else {
         setIsLoading(false);
@@ -67,8 +68,7 @@ function LoginComponent() {
                 title="Login"
                 type="submit"
                 className={styles.login_btn}
-                onClick={() => formik.handleSubmit()}
-              >
+                onClick={() => formik.handleSubmit()}>
                 {loading ? <Loader loading={loading} /> : "Login"}
               </Button>
             </div>

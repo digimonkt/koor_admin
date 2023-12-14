@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { ErrorMessage } from "@components/caption";
 import { Stack } from "@mui/material";
 import { SVG } from "@assets/svg";
@@ -8,22 +8,33 @@ import { validateChangePasswordForm } from "../../../auth/validator";
 import { useFormik } from "formik";
 import { setSuccessToast } from "@redux/slice/toast";
 import { ChangeAdminPassword } from "@api/auth";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { LabeledInput } from "@components/input";
+import { getUserDetailsApi } from "@api/manageoptions";
+import { setAdminMail } from "@redux/slice/user";
 const ChangePassword = () => {
+  const { adminMail } = useSelector(state => state.auth);
+  console.log(adminMail);
   const dispatch = useDispatch();
   const formik = useFormik({
     initialValues: {
+      mail: "",
       currentPassword: "",
       newPassword: "",
       confirmPassword: "",
     },
     validationSchema: validateChangePasswordForm,
-    onSubmit: async (values) => {
+    onSubmit: async values => {
       const payload = {
+        email: values.mail,
         old_password: values.currentPassword,
         password: values.newPassword,
       };
+      for (const i in payload) {
+        if (payload[i] === "") {
+          delete payload[i];
+        }
+      }
       const response = await ChangeAdminPassword(payload);
       if (response.remote === "success") {
         dispatch(setSuccessToast("Password Change  SuccessFully"));
@@ -32,10 +43,38 @@ const ChangePassword = () => {
       }
     },
   });
+
+  const getUserDetails = async () => {
+    const adminDetails = await getUserDetailsApi();
+    if (adminDetails.remote === "success") {
+      dispatch(setAdminMail(adminDetails.data.email));
+      console.log({ adminDetails });
+      formik.setFieldValue("mail", adminDetails?.data?.email || adminDetails);
+    }
+  };
+
+  useEffect(() => {
+    getUserDetails();
+    formik.setFieldValue("mail", adminMail);
+  }, [adminMail || adminMail === ""]);
+
   return (
     <>
       <form>
         <Stack direction="column" spacing={1.5}>
+          <div className={`${styles.formGroup}`}>
+            <label>Change Your mail</label>
+            <LabeledInput
+              placeholder="Current Mail"
+              type="text"
+              className={`${styles.formControl}`}
+              values={adminMail}
+              {...formik.getFieldProps("mail")}
+            />
+            {formik.touched.mail && formik.errors.mail ? (
+              <ErrorMessage>{formik.errors.mail}</ErrorMessage>
+            ) : null}
+          </div>
           <div className={`${styles.formGroup}`}>
             <label>Type your current password</label>
             <LabeledInput
@@ -84,7 +123,7 @@ const ChangePassword = () => {
                   <div style={{ marginTop: "6px", marginRight: "8px" }}>
                     <SVG.PriorityIcon />
                   </div>
-                  <div>SAVE PASSWORD</div>
+                  <div>SAVE CREDENTIALS</div>
                 </>
               }
               sx={{
