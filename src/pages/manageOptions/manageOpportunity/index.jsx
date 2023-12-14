@@ -49,7 +49,7 @@ function ManageOpportunity() {
       field: "action",
       headerName: "Action",
       sortable: false,
-      renderCell: item => {
+      renderCell: (item) => {
         return (
           <Stack direction="row" spacing={1} alignItems="center">
             <IconButton
@@ -61,7 +61,8 @@ function ManageOpportunity() {
                 width: 30,
                 height: 30,
                 color: "#274593",
-              }}>
+              }}
+            >
               <SVG.DeleteIcon />
             </IconButton>
 
@@ -74,7 +75,8 @@ function ManageOpportunity() {
                 width: 30,
                 height: 30,
                 color: "#274593",
-              }}>
+              }}
+            >
               <SVG.EditIcon />
             </IconButton>
           </Stack>
@@ -119,7 +121,6 @@ function ManageOpportunity() {
 
       dispatch(setSuccessToast("Add Opportunity SuccessFully"));
     } else {
-      console.log(response.error);
       dispatch(setErrorToast("Something went wrong"));
     }
   };
@@ -135,7 +136,7 @@ function ManageOpportunity() {
     setLoading(false);
     const response = await opportunityDeleteApi(deleteSkill);
     if (response.remote === "success") {
-      const newSkillTable = skillsTable.filter(emp => emp.id !== deleteSkill);
+      const newSkillTable = skillsTable.filter((emp) => emp.id !== deleteSkill);
       setSkillsTable(newSkillTable);
       setDeleteSkill("");
       dispatch(setSuccessToast("Delete Opportunity SuccessFully"));
@@ -145,7 +146,7 @@ function ManageOpportunity() {
     }
   };
 
-  const handleEdit = async item => {
+  const handleEdit = async (item) => {
     setEditSkill(item.id);
     setEditSkillValue(item.name);
   };
@@ -185,13 +186,13 @@ function ManageOpportunity() {
         handlePageChange={getPage}
         searchProps={{
           placeholder: "Search Opportunity",
-          onChange: e => setSearchTerm(e.target.value),
+          onChange: (e) => setSearchTerm(e.target.value),
           value: searchTerm,
         }}
         inputProps={{
           type: "text",
           placeholder: "Enter Opportunity",
-          onChange: e => setAddSkill(e.target.value),
+          onChange: (e) => setAddSkill(e.target.value),
           value: addSkill,
         }}
         limitProps={{
@@ -201,7 +202,7 @@ function ManageOpportunity() {
             { label: 10, value: 10 },
             { label: 15, value: 15 },
           ],
-          onChange: e => setLimit(e.target.value),
+          onChange: (e) => setLimit(e.target.value),
         }}
         optionsProps={{
           title: (

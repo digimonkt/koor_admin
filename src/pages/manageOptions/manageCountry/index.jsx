@@ -108,17 +108,17 @@ const ManageCountry = () => {
       dispatch(removeCountry({ id: deleting }));
       setDeleting("");
       dispatch(setSuccessToast("Delete Country SuccessFully"));
+    } else if (response.error.errors.message) {
+      dispatch(setErrorToast(response.error.errors.message));
     } else {
       dispatch(setErrorToast("Something went wrong"));
     }
   }
-
   async function addCities() {
     const payload = {
       title: selectCityValue?.title || customCity,
       country_name: selectCityValue?.country?.title || countryId,
     };
-
     const response = await addCityApi(payload);
     if (response.remote === "success") {
       dispatch(getCitiesByCountry({ countryId: response.data.data.country }));
@@ -154,6 +154,8 @@ const ManageCountry = () => {
       );
       setCitesDeleting("");
       dispatch(setSuccessToast("Delete Cities SuccessFully"));
+    } else if (response.error.errors.message) {
+      dispatch(setErrorToast(response.error.errors.message));
     } else {
       dispatch(setErrorToast("Something went wrong"));
     }
@@ -191,7 +193,7 @@ const ManageCountry = () => {
           value: searchTerm,
         }}
         addBtnTitle={"add country"}
-        title={"Enter Country"}
+        title={"Add Country"}
         onAddItems={addItems}
         totalCount={totalCount}
         handlePageChange={getPage}
