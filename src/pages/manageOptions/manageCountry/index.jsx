@@ -111,13 +111,12 @@ const ManageCountry = () => {
       dispatch(setErrorToast("Something went wrong"));
     }
   }
-
   async function addCities() {
+    console.log({ selectCityValue });
     const payload = {
       title: selectCityValue?.title,
       country_name: selectCityValue.country?.title,
     };
-
     const response = await addCityApi(payload);
     if (response.remote === "success") {
       dispatch(
@@ -127,7 +126,7 @@ const ManageCountry = () => {
           countryId: response.data.data.country,
         }),
       );
-      dispatch(setSuccessToast("Add Country SuccessFully"));
+      dispatch(setSuccessToast("Add  SuccessFully"));
       setSelectCityValue("");
     } else {
       dispatch(setErrorToast(response.error.errors.title));
@@ -186,7 +185,7 @@ const ManageCountry = () => {
           value: searchTerm,
         }}
         addBtnTitle={"add country"}
-        title={"Enter Country"}
+        title={"Add Country"}
         onAddItems={addItems}
         totalCount={totalCount}
         handlePageChange={getPage}

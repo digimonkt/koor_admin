@@ -22,8 +22,8 @@ function SelectWithSearch({ options, title, multiple, ...rest }) {
         },
       }}
       options={options}
-      getOptionLabel={(option) => option.label}
-      renderInput={(params) => {
+      getOptionLabel={option => option.label}
+      renderInput={params => {
         return <TextField {...params} placeholder={title} />;
       }}
       renderOption={(props, option) => {
@@ -34,8 +34,7 @@ function SelectWithSearch({ options, title, multiple, ...rest }) {
               "& > img": { mr: 2, flexShrink: 0 },
             }}
             {...props}
-            key={options.value}
-          >
+            key={options.value}>
             {option.label}
           </Box>
         );
