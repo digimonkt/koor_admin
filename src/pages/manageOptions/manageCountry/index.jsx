@@ -43,6 +43,7 @@ const ManageCountry = () => {
   const [deleting, setDeleting] = useState("");
   const [citesDeleting, setCitesDeleting] = useState("");
   const [countryId, setCountryId] = useState("");
+  const [customCity, setCustomCity] = useState(null);
   const handleSelectCountry = country => {
     setCountryId(country.title);
     const id = country.id;
@@ -114,12 +115,14 @@ const ManageCountry = () => {
 
   async function addCities() {
     const payload = {
-      title: selectCityValue?.title,
-      country_name: selectCityValue.country?.title,
+      title: selectCityValue?.title || customCity,
+      country_name: selectCityValue?.country?.title || countryId,
     };
 
     const response = await addCityApi(payload);
     if (response.remote === "success") {
+      dispatch(getCitiesByCountry({ countryId: response.data.data.country }));
+      getWorldCities(countryId);
       dispatch(
         addCity({
           id: response.data.data.id,
@@ -127,7 +130,7 @@ const ManageCountry = () => {
           countryId: response.data.data.country,
         }),
       );
-      dispatch(setSuccessToast("Add Country SuccessFully"));
+      dispatch(setSuccessToast("City Added SuccessFully"));
       setSelectCityValue("");
     } else {
       dispatch(setErrorToast(response.error.errors.title));
@@ -141,6 +144,8 @@ const ManageCountry = () => {
   const handleDeleteCities = async () => {
     const response = await deleteCitiesApi(citesDeleting.id);
     if (response.remote === "success") {
+      dispatch(getCitiesByCountry({ countryId: citesDeleting.country.id }));
+      getWorldCities(countryId);
       dispatch(
         removeCity({
           id: citesDeleting.id,
@@ -220,9 +225,10 @@ const ManageCountry = () => {
               spacing={2}
               sx={{ mb: 3 }}>
               <SelectWithSearch
-                title={"Add city"}
+                title={"Enter city"}
                 onChange={(_, value) => setSelectCityValue(value)}
                 onKeyPress={e => getDataCity(e.target.value)}
+                onKeyUp={e => setCustomCity(e.target.value)}
                 options={cityName.map(cities => ({
                   value: cities.id,
                   label: cities.title,
