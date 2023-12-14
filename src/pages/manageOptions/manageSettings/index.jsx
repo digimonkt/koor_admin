@@ -50,20 +50,19 @@ const ManageSettingsComponent = () => {
       setCardList(formateData);
     }
   };
-  const handleUpdateResource = id => {
+  const handleUpdateResource = (id) => {
     navigate(`/settings/create-new-post/${id}`);
   };
 
   const handleDeleteResource = async () => {
     const response = await resourcesDeleteApi(deleting);
     if (response.remote === "success") {
-      const newResources = cardList.filter(res => res.id !== deleting);
+      const newResources = cardList.filter((res) => res.id !== deleting);
       setCardList(newResources);
       setDeleting("");
       dispatch(setSuccessToast("Resource Delete SuccessFully"));
     } else {
       dispatch(setErrorToast("Something went wrong"));
-      console.log(response.error);
     }
   };
 
@@ -71,9 +70,9 @@ const ManageSettingsComponent = () => {
     setLimit(limit + 2);
   }
 
-  const removeImagesFromHTMLArray = htmlArray => {
+  const removeImagesFromHTMLArray = (htmlArray) => {
     const imgRegex = /<img[^>]+>/g;
-    return htmlArray.map(html => html.replace(imgRegex, ""));
+    return htmlArray.map((html) => html.replace(imgRegex, ""));
   };
 
   useEffect(() => {
@@ -89,7 +88,8 @@ const ManageSettingsComponent = () => {
             borderRadius: "10px",
             mb: 10,
           },
-        }}>
+        }}
+      >
         <CardContent
           sx={{
             "&.MuiCardContent-root": {
@@ -101,7 +101,8 @@ const ManageSettingsComponent = () => {
                 xl: 3.75,
               },
             },
-          }}>
+          }}
+        >
           <Stack
             direction="row"
             spacing={1}
@@ -115,7 +116,8 @@ const ManageSettingsComponent = () => {
                 lg: 3.75,
                 xl: 3.75,
               },
-            }}>
+            }}
+          >
             <Box sx={{ display: "flex", alignItems: "center" }}>
               <IconButton disableRipple={true} sx={{ padding: "0px" }}>
                 <SVG.ArrowLeftIcon className="me-3" />
@@ -138,7 +140,8 @@ const ManageSettingsComponent = () => {
                 xl: 3.75,
                 marginBottom: "20px !important",
               },
-            }}>
+            }}
+          >
             <h3>Resources</h3>
             <div onClick={() => handleNewJob()}>
               <OutlinedButton
@@ -177,7 +180,8 @@ const ManageSettingsComponent = () => {
                       borderRadius: "10px",
                       border: "1px solid #CACACA",
                     },
-                  }}>
+                  }}
+                >
                   <CardContent
                     sx={{
                       "&.MuiCardContent-root": {
@@ -189,7 +193,8 @@ const ManageSettingsComponent = () => {
                           xl: 2.5,
                         },
                       },
-                    }}>
+                    }}
+                  >
                     <Grid container spacing={2.5}>
                       <Grid item lg={6} sm={6} xs={12}>
                         <div className={`${styles.imageBox}`}>
@@ -212,7 +217,7 @@ const ManageSettingsComponent = () => {
                                   __html: html?.slice(0, 300) + "......",
                                 }}
                               />
-                            ),
+                            )
                           )}
 
                           <Stack
@@ -228,17 +233,20 @@ const ManageSettingsComponent = () => {
                               "@media (max-width: 992px)": {
                                 justifyContent: "left",
                               },
-                            }}>
+                            }}
+                          >
                             <StyledButton
                               component={"a"}
-                              href={`${env.REACT_APP_REDIRECT_URL}/resources/${item.id}`}>
+                              href={`${env.REACT_APP_REDIRECT_URL}/resources/${item.id}`}
+                            >
                               <SVG.EyeIcon />
                             </StyledButton>
                             <StyledButton onClick={() => setDeleting(item.id)}>
                               <SVG.DeleteIcon />
                             </StyledButton>
                             <StyledButton
-                              onClick={() => handleUpdateResource(item.id)}>
+                              onClick={() => handleUpdateResource(item.id)}
+                            >
                               <SVG.EditIcon />
                             </StyledButton>
                           </Stack>
@@ -253,7 +261,8 @@ const ManageSettingsComponent = () => {
               <Grid item lg={12} xs={12}>
                 <div
                   className={`${styles.showButton}`}
-                  onClick={handleShowMore}>
+                  onClick={handleShowMore}
+                >
                   <OutlinedButton
                     title={
                       <>
@@ -271,7 +280,8 @@ const ManageSettingsComponent = () => {
                         fontFamily: "Bahnschrift",
                         padding: "10px 30px",
                       },
-                    }}>
+                    }}
+                  >
                     <span className="d-inline-flex me-2">
                       <SVG.ArrowDownIcon />
                     </span>
