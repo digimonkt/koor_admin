@@ -13,8 +13,7 @@ import { LabeledInput } from "@components/input";
 import { getUserDetailsApi } from "@api/manageoptions";
 import { setAdminMail } from "@redux/slice/user";
 const ChangePassword = () => {
-  const { adminMail } = useSelector(state => state.auth);
-  console.log(adminMail);
+  const { adminMail } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   const formik = useFormik({
     initialValues: {
@@ -24,7 +23,7 @@ const ChangePassword = () => {
       confirmPassword: "",
     },
     validationSchema: validateChangePasswordForm,
-    onSubmit: async values => {
+    onSubmit: async (values) => {
       const payload = {
         email: values.mail,
         old_password: values.currentPassword,
@@ -48,7 +47,6 @@ const ChangePassword = () => {
     const adminDetails = await getUserDetailsApi();
     if (adminDetails.remote === "success") {
       dispatch(setAdminMail(adminDetails.data.email));
-      console.log({ adminDetails });
       formik.setFieldValue("mail", adminDetails?.data?.email || adminDetails);
     }
   };

@@ -48,7 +48,7 @@ function ManageLanguage() {
       field: "action",
       headerName: "Action",
       sortable: false,
-      renderCell: item => {
+      renderCell: (item) => {
         return (
           <Stack direction="row" spacing={1} alignItems="center">
             <IconButton
@@ -60,7 +60,8 @@ function ManageLanguage() {
                 width: 30,
                 height: 30,
                 color: "#274593",
-              }}>
+              }}
+            >
               <SVG.DeleteIcon />
             </IconButton>
 
@@ -73,7 +74,8 @@ function ManageLanguage() {
                 width: 30,
                 height: 30,
                 color: "#274593",
-              }}>
+              }}
+            >
               <SVG.EditIcon />
             </IconButton>
           </Stack>
@@ -125,12 +127,11 @@ function ManageLanguage() {
       setAddLanguage("");
       dispatch(setSuccessToast("Add language SuccessFully"));
     } else {
-      console.log(response.error);
       dispatch(setErrorToast("Something went wrong"));
     }
   };
 
-  const handleEdit = async item => {
+  const handleEdit = async (item) => {
     setEditLanguage(item.id);
     setEditLanguageValue(item.name);
   };
@@ -155,14 +156,13 @@ function ManageLanguage() {
     const response = await deleteLanguageApi(deleteLanguage);
     if (response.remote === "success") {
       const newLanguageTable = languageTable.filter(
-        emp => emp.id !== deleteLanguage,
+        (emp) => emp.id !== deleteLanguage
       );
       setLanguageTable(newLanguageTable);
       setDeleteLanguage("");
       dispatch(setSuccessToast("Delete Language SuccessFully"));
     } else {
       dispatch(setErrorToast("Something went wrong"));
-      console.log(response.error);
     }
   };
 
@@ -186,13 +186,13 @@ function ManageLanguage() {
         handlePageChange={getPage}
         searchProps={{
           placeholder: "Search Language ",
-          onChange: e => setSearchTerm(e.target.value),
+          onChange: (e) => setSearchTerm(e.target.value),
           value: searchTerm,
         }}
         inputProps={{
           type: "text",
           placeholder: "Enter Language ",
-          onChange: e => setAddLanguage(e.target.value),
+          onChange: (e) => setAddLanguage(e.target.value),
           value: addLanguage,
         }}
         limitProps={{
@@ -202,7 +202,7 @@ function ManageLanguage() {
             { label: 10, value: 10 },
             { label: 15, value: 15 },
           ],
-          onChange: e => setLimit(e.target.value),
+          onChange: (e) => setLimit(e.target.value),
         }}
         optionsProps={{
           title: (
@@ -216,7 +216,8 @@ function ManageLanguage() {
 
       <DialogBox
         open={!!deleteLanguage}
-        handleClose={() => setDeleteLanguage("")}>
+        handleClose={() => setDeleteLanguage("")}
+      >
         <DeleteCard
           title="Delete Language"
           content="Are you sure you want to delete Language?"
