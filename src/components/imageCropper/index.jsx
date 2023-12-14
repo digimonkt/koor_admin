@@ -73,7 +73,7 @@ function ImageCropper({ open, handleClose, image, handleSave }) {
                 "& .reactEasyCrop_Container": { maxHeight: "70%" },
                 "& .reactEasyCrop_CropArea": {
                   boxShadow: "none",
-                  border: "5px solid #EEA23D",
+                  border: "4px solid #EEA23D",
                 },
               }}
             >
@@ -84,10 +84,12 @@ function ImageCropper({ open, handleClose, image, handleSave }) {
                 zoom={zoom}
                 aspect={1}
                 showGrid={false}
-                cropShape="round" // Set cropShape to "round" for circular crop
+                // cropShape="round"
                 onCropChange={onCropChange}
                 onCropComplete={onCropComplete}
                 onZoomChange={onZoomChange}
+                width={"250px"}
+                height={"250px"}
               />
             </Box>
           )}
