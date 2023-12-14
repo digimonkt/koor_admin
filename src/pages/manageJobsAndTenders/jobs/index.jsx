@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { SVG } from "@assets/svg";
-import { IconButton, Box } from "@mui/material";
+import { IconButton, Box, Tooltip } from "@mui/material";
 import { Stack } from "@mui/system";
 import Layout from "../layout";
 import {
@@ -39,11 +39,14 @@ function ManageJobsComponent() {
       {
         field: "no",
         headerName: "No",
+        width: "90",
+
         sortable: true,
       },
       {
         field: "jobId",
         headerName: "ID",
+        width: "120",
         sortable: true,
       },
       {
@@ -55,87 +58,95 @@ function ManageJobsComponent() {
       {
         field: "company",
         headerName: "Company",
-        width: 220,
+        width: "220",
         sortable: true,
       },
       {
         field: "location",
         headerName: "Location",
-        width: "130",
+        width: "220",
         sortable: true,
       },
       {
         field: "action",
         headerName: "Action",
-        width: 180,
+        width: "220",
         sortable: true,
         renderCell: (item) => {
           return (
             <Stack direction="row" alignItems="center" gap={1}>
-              <IconButton
-                onClick={() => handleRedirectDetails(item.row.id)}
-                sx={{
-                  "&.MuiIconButton-root": {
-                    background: "#D5E3F7",
-                  },
+              <Tooltip title="View Details">
+                <IconButton
+                  onClick={() => handleRedirectDetails(item.row.id)}
+                  sx={{
+                    "&.MuiIconButton-root": {
+                      background: "#D5E3F7",
+                    },
 
-                  width: 30,
-                  height: 30,
-                  color: "#274593",
-                }}
+                    width: 30,
+                    height: 30,
+                    color: "#274593",
+                  }}
+                >
+                  <SVG.EyeIcon />
+                </IconButton>
+              </Tooltip>
+              <Tooltip
+                title={item.row.action === "active" ? "Deactivate" : "active"}
               >
-                <SVG.EyeIcon />
-              </IconButton>
-
-              <IconButton
-                onClick={() => {
-                  handleHoldJob(
-                    item,
-                    item.row.action === "active" ? "inActive" : "active"
-                  );
-                }}
-                sx={{
-                  "&.MuiIconButton-root": {
-                    background: "#D5E3F7",
-                  },
-                  width: 30,
-                  height: 30,
-                  color: "#274593",
-                }}
-              >
-                {item.row.action === "active" ? (
-                  <SVG.HoldIcon />
-                ) : (
-                  <SVG.polygon />
-                )}
-              </IconButton>
-
-              <IconButton
-                onClick={() => setDeleting(item.row.id)}
-                sx={{
-                  "&.MuiIconButton-root": {
-                    background: "#D5E3F7",
-                  },
-                  width: 30,
-                  height: 30,
-                  color: "#274593",
-                }}
-              >
-                <SVG.DeleteIcon />
-              </IconButton>
-              <IconButton
-                onClick={() => handleEdit(item.row.id)}
-                sx={{
-                  "&.MuiIconButton-root": {
-                    background: "#D5E3F7",
-                  },
-                  width: 30,
-                  height: 30,
-                  color: "#274593",
-                }}
-              >
-                <SVG.EditIcon />
-              </IconButton>
+                <IconButton
+                  onClick={() => {
+                    handleHoldJob(
+                      item,
+                      item.row.action === "active" ? "inActive" : "active"
+                    );
+                  }}
+                  sx={{
+                    "&.MuiIconButton-root": {
+                      background: "#D5E3F7",
+                    },
+                    width: 30,
+                    height: 30,
+                    color: "#274593",
+                  }}
+                >
+                  {item.row.action === "active" ? (
+                    <SVG.HoldIcon />
+                  ) : (
+                    <SVG.polygon />
+                  )}
+                </IconButton>
+              </Tooltip>
+              <Tooltip title="Delete">
+                <IconButton
+                  onClick={() => setDeleting(item.row.id)}
+                  sx={{
+                    "&.MuiIconButton-root": {
+                      background: "#D5E3F7",
+                    },
+                    width: 30,
+                    height: 30,
+                    color: "#274593",
+                  }}
+                >
+                  <SVG.DeleteIcon />
+                </IconButton>
+              </Tooltip>
+              <Tooltip title="Edit">
+                <IconButton
+                  onClick={() => handleEdit(item.row.id)}
+                  sx={{
+                    "&.MuiIconButton-root": {
+                      background: "#D5E3F7",
+                    },
+                    width: 30,
+                    height: 30,
+                    color: "#274593",
+                  }}
+                >
+                  <SVG.EditIcon />
+                </IconButton>
+              </Tooltip>
             </Stack>
           );
         },

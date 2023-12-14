@@ -32,11 +32,11 @@ function ManageTendersComponent() {
   const [country, setCountry] = useState({});
   const debouncedSearchTenderValue = useDebounce(searchTerm, 500);
 
-  const PostNewJob = () => {
+  const PostNewTender = () => {
     navigate("./post-tender");
   };
 
-  const PostNewTender = () => {
+  const PostNewJob = () => {
     navigate("./post-tender");
   };
 
@@ -46,13 +46,14 @@ function ManageTendersComponent() {
         id: "1",
         field: "no",
         headerName: "No",
+        width: "90",
         sortable: true,
       },
       {
         id: "2",
         field: "tender_id",
         headerName: "Tender id",
-        width: "220",
+        width: "150",
         sortable: true,
       },
       {
@@ -96,7 +97,7 @@ function ManageTendersComponent() {
       {
         field: "action",
         headerName: "Action",
-        width: 120,
+        width: "220",
         sortable: true,
         renderCell: (item) => {
           return (

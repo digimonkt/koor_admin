@@ -1,7 +1,8 @@
 import { Autocomplete, Box, TextField } from "@mui/material";
-function SelectWithSearch({ options, title, ...rest }) {
+function SelectWithSearch({ options, title, multiple, ...rest }) {
   return (
     <Autocomplete
+      multiple={Boolean(multiple)}
       sx={{
         borderRadius: "73px",
         background: "#fff",
@@ -29,7 +30,9 @@ function SelectWithSearch({ options, title, ...rest }) {
         return (
           <Box
             component="li"
-            sx={{ "& > img": { mr: 2, flexShrink: 0 } }}
+            sx={{
+              "& > img": { mr: 2, flexShrink: 0 },
+            }}
             {...props}
             key={options.value}
           >

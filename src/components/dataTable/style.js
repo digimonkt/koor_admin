@@ -20,11 +20,16 @@ export const StyledDataGrid = styled(DataGrid)(({ theme }) => ({
     color: "#274593",
   },
   "& .MuiDataGrid-columnHeader:last-child .MuiDataGrid-columnSeparator": {
+    textAlign: "center",
     display: "none",
+    justifyContent: "center",
+    alignItems: "center",
   },
 
   "& .MuiDataGrid-columnsContainer, .MuiDataGrid-cell": {
     borderBottom: "0px",
+    justifyContent: "flex-start",
+    alignItems: "flex-start",
   },
   "& .MuiDataGrid-row:not(.MuiDataGrid-row--dynamicHeight)>.MuiDataGrid-cell": {
     whiteSpace: "normal",
@@ -32,7 +37,6 @@ export const StyledDataGrid = styled(DataGrid)(({ theme }) => ({
     maxHeight: "none !important",
     minHeight: "auto !important",
     padding: "10px",
-    // justifyContent: "center",
   },
 
   "& .MuiPaginationItem-root": {
@@ -45,11 +49,13 @@ export const StyledDataGrid = styled(DataGrid)(({ theme }) => ({
     outline: "none",
   },
   "& .MuiDataGrid-columnHeaderTitleContainer": {
-    justifyContent: "start",
+    justifyContent: "center",
+    alignItems: "center",
   },
   "& .MuiDataGrid-columnHeader:first-of-type .MuiDataGrid-columnHeaderTitleContainer":
     {
-      justifyContent: "start",
+      justifyContent: "center",
+      alignItems: "center",
     },
   "& .MuiDataGrid-columnHeaderDraggableContainer .MuiDataGrid-menuIcon": {
     display: "none",

@@ -31,7 +31,7 @@ import { Stack } from "@mui/material";
 
 const ManageCountry = () => {
   const dispatch = useDispatch();
-  const { countries } = useSelector((state) => state.choice);
+  const { countries } = useSelector(state => state.choice);
   const [selectValue, setSelectValue] = useState([]);
   const [selectCityValue, setSelectCityValue] = useState([]);
   const [countryName, setCountryName] = useState([]);
@@ -43,7 +43,7 @@ const ManageCountry = () => {
   const [deleting, setDeleting] = useState("");
   const [citesDeleting, setCitesDeleting] = useState("");
   const [countryId, setCountryId] = useState("");
-  const handleSelectCountry = (country) => {
+  const handleSelectCountry = country => {
     setCountryId(country.title);
     const id = country.id;
     const countryName = country.title;
@@ -69,7 +69,7 @@ const ManageCountry = () => {
           phone_code: payload.country_code,
           iso2: payload.iso_code2,
           iso3: payload.iso_code3,
-        })
+        }),
       );
       dispatch(setSuccessToast("Add Country SuccessFully"));
       setSelectValue([]);
@@ -97,7 +97,7 @@ const ManageCountry = () => {
     }
   };
 
-  const handleSearch = (search) => {
+  const handleSearch = search => {
     setSearchTerm(search);
   };
 
@@ -111,11 +111,13 @@ const ManageCountry = () => {
       dispatch(setErrorToast("Something went wrong"));
     }
   }
+
   async function addCities() {
     const payload = {
       title: selectCityValue?.title,
       country_name: selectCityValue.country?.title,
     };
+
     const response = await addCityApi(payload);
     if (response.remote === "success") {
       dispatch(
@@ -123,7 +125,7 @@ const ManageCountry = () => {
           id: response.data.data.id,
           title: payload.title,
           countryId: response.data.data.country,
-        })
+        }),
       );
       dispatch(setSuccessToast("Add Country SuccessFully"));
       setSelectCityValue("");
@@ -132,7 +134,7 @@ const ManageCountry = () => {
     }
   }
 
-  const handleDeleteCity = (city) => {
+  const handleDeleteCity = city => {
     setCitesDeleting(city);
   };
 
@@ -143,7 +145,7 @@ const ManageCountry = () => {
         removeCity({
           id: citesDeleting.id,
           countryId: citesDeleting.countryId,
-        })
+        }),
       );
       setCitesDeleting("");
       dispatch(setSuccessToast("Delete Cities SuccessFully"));
@@ -180,18 +182,18 @@ const ManageCountry = () => {
         countryInput
         searchProps={{
           placeholder: "Search Country",
-          onChange: (e) => handleSearch(e.target.value),
+          onChange: e => handleSearch(e.target.value),
           value: searchTerm,
         }}
         addBtnTitle={"add country"}
-        title={"Add Country"}
+        title={"Enter Country"}
         onAddItems={addItems}
         totalCount={totalCount}
         handlePageChange={getPage}
         page={pages}
         selectList={{
           onChange: (_, value) => setSelectValue(value),
-          options: countryName.map((country) => ({
+          options: countryName.map(country => ({
             value: country.id,
             label: country.title,
             ...country,
@@ -204,27 +206,24 @@ const ManageCountry = () => {
             { label: 10, value: 10 },
             { label: 15, value: 15 },
           ],
-          onChange: (e) => setLimit(e.target.value),
-        }}
-      >
-        {countries.data.map((country) => (
+          onChange: e => setLimit(e.target.value),
+        }}>
+        {countries.data.map(country => (
           <Accordion
             key={country.id}
             title={country.title}
             onOpen={() => handleSelectCountry(country)}
-            handleDelete={() => setDeleting(country.id)}
-          >
+            handleDelete={() => setDeleting(country.id)}>
             <Stack
               direction={"row"}
               alignItems={"center"}
               spacing={2}
-              sx={{ mb: 3 }}
-            >
+              sx={{ mb: 3 }}>
               <SelectWithSearch
                 title={"Add city"}
                 onChange={(_, value) => setSelectCityValue(value)}
-                onKeyPress={(e) => getDataCity(e.target.value)}
-                options={cityName.map((cities) => ({
+                onKeyPress={e => getDataCity(e.target.value)}
+                options={cityName.map(cities => ({
                   value: cities.id,
                   label: cities.title,
                   ...cities,
@@ -270,8 +269,7 @@ const ManageCountry = () => {
       </DialogBox>
       <DialogBox
         open={!!citesDeleting}
-        handleClose={() => setCitesDeleting("")}
-      >
+        handleClose={() => setCitesDeleting("")}>
         <DeleteCard
           title="Delete Cities"
           content="Are you sure you want to delete cites?"
