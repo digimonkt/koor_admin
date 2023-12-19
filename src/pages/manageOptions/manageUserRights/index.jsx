@@ -44,7 +44,6 @@ const ManageUserRightsComponent = () => {
       dispatch(setSuccessToast("Update User Rights De SuccessFully"));
     } else {
       dispatch(setErrorToast("Something went wrong"));
-      console.log(response.error);
     }
   };
 
