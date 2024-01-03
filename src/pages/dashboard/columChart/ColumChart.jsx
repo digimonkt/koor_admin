@@ -248,7 +248,7 @@ const ColumChart = () => {
             >
               <MenuItem value="this week">This Week</MenuItem>
               <MenuItem value="last month">Last Month</MenuItem>
-              <MenuItem value="this year">This year</MenuItem>
+              <MenuItem value="this year">Last year</MenuItem>
             </SelectBox>
           </FormControl>
         </Stack>

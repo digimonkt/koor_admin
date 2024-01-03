@@ -102,10 +102,10 @@ const DashboardComponent = () => {
     return result.toFixed(2);
   }
 
-  const handleChange = event => {
+  const handleChange = (event) => {
     setIsSelect(event.target.value);
   };
-  const handleFinancialChange = event => {
+  const handleFinancialChange = (event) => {
     setFinancialPerPeriod(event.target.value);
   };
   useEffect(() => {
@@ -127,7 +127,8 @@ const DashboardComponent = () => {
                 direction="row"
                 spacing={1}
                 alignItems="center"
-                className={`${styles.userCounter}`}>
+                className={`${styles.userCounter}`}
+              >
                 {item.icon}
                 <div className={`${styles.user}`}>
                   <h2>{item.title}</h2>
@@ -145,13 +146,15 @@ const DashboardComponent = () => {
                   boxShadow: "0px 15px 40px rgba(0, 0, 0, 0.05)",
                   borderRadius: "10px",
                 },
-              }}>
+              }}
+            >
               <CardContent
                 sx={{
                   "&.MuiCardContent-root": {
                     padding: "30px",
                   },
-                }}>
+                }}
+              >
                 {userData.seriesData.length > 0 && (
                   <Donut
                     title="Koor users"
@@ -212,13 +215,15 @@ const DashboardComponent = () => {
                   boxShadow: "0px 15px 40px rgba(0, 0, 0, 0.05)",
                   borderRadius: "10px",
                 },
-              }}>
+              }}
+            >
               <CardContent
                 sx={{
                   "&.MuiCardContent-root": {
                     padding: "30px",
                   },
-                }}>
+                }}
+              >
                 {financialData.seriesData.length > 0 && (
                   <Donut
                     title="Credit Plans Purchased"
@@ -279,13 +284,15 @@ const DashboardComponent = () => {
                   boxShadow: "0px 15px 40px rgba(0, 0, 0, 0.05)",
                   borderRadius: "10px",
                 },
-              }}>
+              }}
+            >
               <CardContent
                 sx={{
                   "&.MuiCardContent-root": {
                     padding: "30px",
                   },
-                }}>
+                }}
+              >
                 <ColumChart />
               </CardContent>
             </Card>
