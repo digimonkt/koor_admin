@@ -225,7 +225,7 @@ const ManageListingCompany = () => {
           ) : (
             <Grid container spacing={2.5}>
               {companyLogoList.map((logo, index) => (
-                <Grid item lg={3} xs={6} key={index}>
+                <Grid item xs={6} sm={5} lg={4} xl={2} key={index}>
                   <Card
                     sx={{
                       "&.MuiCard-root": {
@@ -245,7 +245,8 @@ const ManageListingCompany = () => {
                       <div className={`${styles.imageBox}`}>
                         <img
                           src={`${process.env.REACT_APP_BACKEND_URL}${logo.imgUrl}`}
-                          height={140}
+                          height={240}
+                          style={{ objectFit: "contain" }}
                         />
                         <StyledButton>
                           <SVG.DeleteIcon

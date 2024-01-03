@@ -136,22 +136,29 @@ const Donut = ({
           >
             <MenuItem value="this week">This Week</MenuItem>
             <MenuItem value="last month">Last Month</MenuItem>
-            <MenuItem value="this year">This Year</MenuItem>
+            <MenuItem value="this year">Last Year</MenuItem>
           </SelectBox>
         </FormControl>
       </Stack>
 
       <Grid container spacing={2}>
-        <Grid item lg={5} xl={5} sm={6} xs={5} sx={{
-          display: "flex",
-          justifyContent: "end",
-          "@media(max-width: 992px)": {
-            justifyContent: "center"
-          },
-          "@media(max-width: 480px)": {
-            justifyContent: "end"
-          },
-        }}>
+        <Grid
+          item
+          lg={5}
+          xl={5}
+          sm={6}
+          xs={5}
+          sx={{
+            display: "flex",
+            justifyContent: "end",
+            "@media(max-width: 992px)": {
+              justifyContent: "center",
+            },
+            "@media(max-width: 480px)": {
+              justifyContent: "end",
+            },
+          }}
+        >
           <ReactApexChart
             options={state.options}
             series={state.series}
