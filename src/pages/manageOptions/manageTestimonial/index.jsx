@@ -64,7 +64,7 @@ const ManageTestimonials = () => {
     const response = await testimonialDeleteApi(deleting);
     if (response.remote === "success") {
       const newTestimonial = testimonialsList.filter(
-        (res) => res.id !== deleting
+        (res) => res.id !== deleting,
       );
       setTestimonialsList(newTestimonial);
       setDeleting("");

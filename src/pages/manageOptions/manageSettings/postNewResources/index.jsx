@@ -35,7 +35,7 @@ const NewPostResource = () => {
   const [preview, setPreview] = useState(false);
   const [editorValue, setEditorValue] = useState(Array(addParagraph).fill(""));
   const [editorVisibility, setEditorVisibility] = useState(
-    Array(addParagraph).fill(true)
+    Array(addParagraph).fill(true),
   );
   const [postTitle, setPostTitle] = useState("");
 
@@ -68,8 +68,8 @@ const NewPostResource = () => {
   const thumbs = (
     <Avatar
       sx={{
-        width: preview ? "auto" : 100,
-        height: preview ? 600 : 100,
+        width: "auto",
+        height: "100%",
         color: "#CACACA",
         borderRadius: "0",
       }}
