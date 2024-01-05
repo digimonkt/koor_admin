@@ -49,8 +49,8 @@ const PostTestimonials = () => {
   const thumbs = (
     <Avatar
       sx={{
-        width: 100,
-        height: 100,
+        width: "auto",
+        height: "100%",
         color: "#CACACA",
         borderRadius: "0",
       }}
