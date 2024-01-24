@@ -28,10 +28,7 @@ export const validateCreateJobInput = Yup.object()
     isApplyThroughEmail: Yup.boolean(),
     isApplyThroughWebsite: Yup.boolean(),
     isApplyThroughKoor: Yup.boolean(),
-    applicationInstruction: Yup.string()
-      .trim()
-      .nonNullable()
-      .required("Application Instruction content cannot be empty"),
+    applicationInstruction: Yup.string().trim().nonNullable(),
     isContactEmail: Yup.boolean(),
     deadline: Yup.string()
       .nullable()
@@ -51,7 +48,7 @@ export const validateCreateJobInput = Yup.object()
             return value || this.parent.cc1 || this.parent.cc2;
           }
           return true;
-        }
+        },
       ),
     cc1: Yup.string().email("CC1 email must be a valid"),
     cc2: Yup.string().email("CC2 email must be a valid"),
@@ -66,13 +63,13 @@ export const validateCreateJobInput = Yup.object()
         } else {
           return true;
         }
-      }
+      },
     ),
 
     languages: Yup.array().of(
       Yup.object().shape({
         id: Yup.string(),
-      })
+      }),
     ),
     skills: Yup.array().of(Yup.string()),
   })
@@ -97,7 +94,7 @@ export const validateCreateJobInput = Yup.object()
       }
 
       return true;
-    }
+    },
   );
 
 export const validateCreateTenderInput = Yup.object()
@@ -126,9 +123,7 @@ export const validateCreateTenderInput = Yup.object()
     isApplyThroughEmail: Yup.boolean(),
     isApplyThroughWebsite: Yup.boolean(),
     isApplyThroughKoor: Yup.boolean(),
-    applicationInstruction: Yup.string()
-      .trim()
-      .required("Application Instruction content cannot be empty"),
+    applicationInstruction: Yup.string().trim(),
     isContactEmail: Yup.boolean(),
     contactEmail: Yup.string()
       .email("Contact email must be a valid")
@@ -141,7 +136,7 @@ export const validateCreateTenderInput = Yup.object()
             return value || this.parent.cc1 || this.parent.cc2;
           }
           return true;
-        }
+        },
       ),
     cc1: Yup.string().email("CC1 email must be a valid"),
     cc2: Yup.string().email("CC2 email must be a valid"),
@@ -156,7 +151,7 @@ export const validateCreateTenderInput = Yup.object()
         } else {
           return true;
         }
-      }
+      },
     ),
   })
   .test(
@@ -180,5 +175,5 @@ export const validateCreateTenderInput = Yup.object()
       }
 
       return true;
-    }
+    },
   );
