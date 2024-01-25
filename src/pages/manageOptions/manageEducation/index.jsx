@@ -129,7 +129,11 @@ function manageEducation() {
       setAddEducation("");
       dispatch(setSuccessToast("Add Education SuccessFully"));
     } else {
-      dispatch(setErrorToast("Something went wrong"));
+      if (response.error.errors.title === "Not a valid string.") {
+        dispatch(setErrorToast("Field can not be blank"));
+      } else {
+        dispatch(setErrorToast("Something went wrong"));
+      }
     }
   };
 

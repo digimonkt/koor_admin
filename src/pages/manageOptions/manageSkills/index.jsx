@@ -124,7 +124,11 @@ function ManageSkillsComponent() {
 
       dispatch(setSuccessToast("Add Skill SuccessFully"));
     } else {
-      dispatch(setErrorToast("Something went wrong"));
+      if (response.error.errors.title) {
+        dispatch(setErrorToast("Field can not be blank"));
+      } else {
+        dispatch(setErrorToast("Something went wrong"));
+      }
     }
   };
 

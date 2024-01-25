@@ -125,7 +125,11 @@ function ManageTag() {
 
       dispatch(setSuccessToast("Add Tag SuccessFully"));
     } else {
-      dispatch(setErrorToast("Something went wrong"));
+      if (response.error.errors.title === "This field may not be blank.") {
+        dispatch(setErrorToast("Field can not be blank"));
+      } else {
+        dispatch(setErrorToast("Something went wrong"));
+      }
     }
   };
 

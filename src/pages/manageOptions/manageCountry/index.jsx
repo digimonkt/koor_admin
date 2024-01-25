@@ -31,7 +31,7 @@ import { Stack } from "@mui/material";
 
 const ManageCountry = () => {
   const dispatch = useDispatch();
-  const { countries } = useSelector(state => state.choice);
+  const { countries } = useSelector((state) => state.choice);
   const [selectValue, setSelectValue] = useState([]);
   const [selectCityValue, setSelectCityValue] = useState([]);
   const [countryName, setCountryName] = useState([]);
@@ -44,7 +44,7 @@ const ManageCountry = () => {
   const [citesDeleting, setCitesDeleting] = useState("");
   const [countryId, setCountryId] = useState("");
   const [customCity, setCustomCity] = useState(null);
-  const handleSelectCountry = country => {
+  const handleSelectCountry = (country) => {
     setCountryId(country.title);
     const id = country.id;
     const countryName = country.title;
@@ -76,7 +76,11 @@ const ManageCountry = () => {
       setSelectValue([]);
     } else {
       setSelectValue([]);
-      dispatch(setErrorToast(response.error.errors.message));
+      if (response.error.errors.title === "This field is required.") {
+        dispatch(setErrorToast("Field can not be blank"));
+      } else {
+        dispatch(setErrorToast("Something went wrong"));
+      }
     }
   }
 
@@ -98,7 +102,7 @@ const ManageCountry = () => {
     }
   };
 
-  const handleSearch = search => {
+  const handleSearch = (search) => {
     setSearchTerm(search);
   };
 
@@ -137,7 +141,7 @@ const ManageCountry = () => {
     }
   }
 
-  const handleDeleteCity = city => {
+  const handleDeleteCity = (city) => {
     setCitesDeleting(city);
   };
 
@@ -189,7 +193,7 @@ const ManageCountry = () => {
         countryInput
         searchProps={{
           placeholder: "Search Country",
-          onChange: e => handleSearch(e.target.value),
+          onChange: (e) => handleSearch(e.target.value),
           value: searchTerm,
         }}
         addBtnTitle={"add country"}
@@ -200,7 +204,7 @@ const ManageCountry = () => {
         page={pages}
         selectList={{
           onChange: (_, value) => setSelectValue(value),
-          options: countryName.map(country => ({
+          options: countryName.map((country) => ({
             value: country.id,
             label: country.title,
             ...country,
@@ -213,25 +217,28 @@ const ManageCountry = () => {
             { label: 10, value: 10 },
             { label: 15, value: 15 },
           ],
-          onChange: e => setLimit(e.target.value),
-        }}>
-        {countries.data.map(country => (
+          onChange: (e) => setLimit(e.target.value),
+        }}
+      >
+        {countries.data.map((country) => (
           <Accordion
             key={country.id}
             title={country.title}
             onOpen={() => handleSelectCountry(country)}
-            handleDelete={() => setDeleting(country.id)}>
+            handleDelete={() => setDeleting(country.id)}
+          >
             <Stack
               direction={"row"}
               alignItems={"center"}
               spacing={2}
-              sx={{ mb: 3 }}>
+              sx={{ mb: 3 }}
+            >
               <SelectWithSearch
                 title={"Enter city"}
                 onChange={(_, value) => setSelectCityValue(value)}
-                onKeyPress={e => getDataCity(e.target.value)}
-                onKeyUp={e => setCustomCity(e.target.value)}
-                options={cityName.map(cities => ({
+                onKeyPress={(e) => getDataCity(e.target.value)}
+                onKeyUp={(e) => setCustomCity(e.target.value)}
+                options={cityName.map((cities) => ({
                   value: cities.id,
                   label: cities.title,
                   ...cities,
@@ -277,7 +284,8 @@ const ManageCountry = () => {
       </DialogBox>
       <DialogBox
         open={!!citesDeleting}
-        handleClose={() => setCitesDeleting("")}>
+        handleClose={() => setCitesDeleting("")}
+      >
         <DeleteCard
           title="Delete Cities"
           content="Are you sure you want to delete cites?"
