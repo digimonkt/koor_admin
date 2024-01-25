@@ -18,7 +18,13 @@ const OptionsFilter = ({
   tenderProps,
 }) => {
   return (
-    <Stack direction={"row"} alignItems={"center"} spacing={1}>
+    <Stack
+      direction={"row"}
+      alignItems={"center"}
+      spacing={1}
+      flexWrap={"wrap"}
+      useFlexGap
+    >
       {news && tender ? (
         <>
           <SearchInput

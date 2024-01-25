@@ -124,7 +124,10 @@ function ManageFQL() {
       const totalCounts = Math.ceil(response.data.count / limit);
       setTotalCount(totalCounts);
     } else {
-      console.log(response.error);
+      setLoading(false);
+      if (response?.error.errors.detail === "I") {
+        setPages(1);
+      }
     }
   };
 
@@ -147,7 +150,11 @@ function ManageFQL() {
       setAddFAQRole("");
       dispatch(setSuccessToast("Add FAQ Category SuccessFully"));
     } else {
-      dispatch(setErrorToast("Something went wrong"));
+      if (response.error.errors.title === "This field may not be blank.") {
+        dispatch(setErrorToast("Field can not be blank"));
+      } else {
+        dispatch(setErrorToast("Something went wrong"));
+      }
     }
   };
 
@@ -159,7 +166,7 @@ function ManageFQL() {
     const response = await deleteFaqCategoryApi(deleteFAQCategory);
     if (response.remote === "success") {
       const newFAQTable = faqCategoryTable.filter(
-        (emp) => emp.id !== deleteFAQCategory
+        (emp) => emp.id !== deleteFAQCategory,
       );
       setFAQCategoryTable(newFAQTable);
       setDeleteFAQCategory("");
@@ -220,10 +227,10 @@ function ManageFQL() {
         }}
         inputProps={{
           type: "text",
-          placeholder: "Add FAQ Category",
+          placeholder: "Enter FAQ Category",
           onChange: (e) => setAddFAQCategory(e.target.value),
           value: addFAQCategory,
-          style: { marginLeft: "-6px" }
+          style: { marginLeft: "-6px" },
         }}
         inputPropsRole={{
           content: { faqCategoryTable },

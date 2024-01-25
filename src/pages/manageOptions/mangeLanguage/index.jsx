@@ -98,7 +98,10 @@ function ManageLanguage() {
       const totalCounts = Math.ceil(response.data.count / limit);
       setTotalCount(totalCounts);
     } else {
-      console.log(response.error);
+      setLoading(false);
+      if (response?.error.errors.detail === "I") {
+        setPages(1);
+      }
     }
   };
 
@@ -127,7 +130,6 @@ function ManageLanguage() {
       setAddLanguage("");
       dispatch(setSuccessToast("Add language SuccessFully"));
     } else {
-      console.log(response.error);
       dispatch(setErrorToast("Something went wrong"));
     }
   };
@@ -157,14 +159,13 @@ function ManageLanguage() {
     const response = await deleteLanguageApi(deleteLanguage);
     if (response.remote === "success") {
       const newLanguageTable = languageTable.filter(
-        (emp) => emp.id !== deleteLanguage
+        (emp) => emp.id !== deleteLanguage,
       );
       setLanguageTable(newLanguageTable);
       setDeleteLanguage("");
       dispatch(setSuccessToast("Delete Language SuccessFully"));
     } else {
       dispatch(setErrorToast("Something went wrong"));
-      console.log(response.error);
     }
   };
 
@@ -193,7 +194,7 @@ function ManageLanguage() {
         }}
         inputProps={{
           type: "text",
-          placeholder: "Add  Language ",
+          placeholder: "Enter Language ",
           onChange: (e) => setAddLanguage(e.target.value),
           value: addLanguage,
         }}

@@ -123,7 +123,7 @@ const PostNewJob = () => {
   // !! formik  validation start
   const formik = useFormik({
     initialValues: {
-      companyType: "",
+      companyType: "exist",
       existCompany: { label: "", value: "" },
       company: "",
       companyLogo: [],
@@ -270,7 +270,6 @@ const PostNewJob = () => {
       }
     },
   });
-  console.log({ formik });
 
   // !! formik  validation end
   const getSuggestedAddress = async (search) => {
@@ -285,70 +284,82 @@ const PostNewJob = () => {
       const { data } = response;
       if (!data.user?.id) {
         setSelectedValue("new");
+        formik.setFieldValue("companyType", "new");
+      } else {
+        setSelectedValue("exist");
+        formik.setFieldValue("companyType", "exist");
       }
-      setCompanyLogo(data.companyLogo);
-      setCompanyAttachments(data.attachments);
-      if (data.description) setEditorValue(data.description);
-      if (data.applicationInstruction) {
-        setInstructions(data.applicationInstruction);
-      }
-      formik.setFieldValue("companyType", selectedValue);
-      formik.setFieldValue("company", data.company);
+      setCompanyLogo(data?.companyLogo);
+      formik.setFieldValue("description", data.description || "");
+      setEditorValue(data.description || "");
+      setCompanyAttachments(data.attachments || []);
+      setInstructions(data.applicationInstruction || "");
+      formik.setFieldValue(
+        "applicationInstruction",
+        data.applicationInstruction || ""
+      );
+
+      formik.setFieldValue("company", data.company || "");
       formik.setFieldValue("existCompany", {
         value: data.user?.id || "",
-        label: data.user?.name || data.user?.email,
+        label: data.user?.name || data.user?.email || "",
       });
-      formik.setFieldValue("title", data.title);
+      formik.setFieldValue("title", data.title || "");
       formik.setFieldValue("budgetCurrency", data.budgetCurrency);
       formik.setFieldValue(
         "budgetAmount",
-        parseInt(data.budgetAmount.replace(/,/g, ""), 10)
+        parseInt(data.budgetAmount.replace(/,/g, ""), 10) || 0
       );
       formik.setFieldValue("budgetPayPeriod", data.budgetPayPeriod);
-      formik.setFieldValue("description", data.description);
       formik.setFieldValue("country", {
-        value: data.country.id,
-        label: data.country.title,
+        value: data.country.id || "",
+        label: data.country.title || "",
       });
       formik.setFieldValue("city", {
-        value: data.city.id,
-        label: data.city.title,
+        value: data.city.id || "",
+        label: data.city.title || "",
       });
-      formik.setFieldValue("address", data.address);
-      formik.setFieldValue("duration", data.duration);
-      formik.setFieldValue("experience", data.experience);
-      setSuggestedAddressValue(data.address);
-      formik.setFieldValue("websiteLink", data.websiteLink);
+      formik.setFieldValue("address", data.address || "");
+      formik.setFieldValue("duration", data.duration || "");
+      formik.setFieldValue("experience", data.experience || "");
+      setSuggestedAddressValue(data?.address);
+      formik.setFieldValue("websiteLink", data.websiteLink || "");
       formik.setFieldValue("jobCategories", {
-        value: data.jobCategories.id,
-        label: data.jobCategories.title,
+        value: data.jobCategories.id || "",
+        label: data.jobCategories.title || "",
       });
       formik.setFieldValue("jobSubCategory", {
-        value: data.jobSubCategory.id,
-        label: data.jobSubCategory.title,
+        value: data.jobSubCategory.id || "",
+        label: data.jobSubCategory.title || "",
       });
       formik.setFieldValue(
         "isApplyThroughEmail",
-        Boolean(data.isApplyThroughEmail)
+        Boolean(data.isApplyThroughEmail) || false
       );
-      formik.setFieldValue("isFullTime", data.isFullTime);
-      formik.setFieldValue("isPartTime", data.isPartTime);
-      formik.setFieldValue("hasContract", data.hasContract);
+      formik.setFieldValue("isFullTime", data.isFullTime || false);
+      formik.setFieldValue("isPartTime", data.isPartTime || false);
+      formik.setFieldValue("hasContract", data.hasContract || false);
       formik.setFieldValue("deadline", dayjs(data.deadline));
       formik.setFieldValue("startDate", dayjs(data.startDate));
-      formik.setFieldValue("isContactEmail", Boolean(data.contactEmail));
+      formik.setFieldValue(
+        "isContactEmail",
+        Boolean(data.contactEmail) || false
+      );
       formik.setFieldValue(
         "isApplyThroughKoor",
-        Boolean(data.isApplyThroughKoor)
+        Boolean(data.isApplyThroughKoor) || false
       );
-      formik.setFieldValue("contactEmail", data.contactEmail);
-      formik.setFieldValue("cc1", data.cc1);
-      formik.setFieldValue("cc2", data.cc2);
-      formik.setFieldValue("isContactWhatsapp", Boolean(data.contactWhatsapp));
-      formik.setFieldValue("contactWhatsapp", data.contactWhatsapp);
+      formik.setFieldValue("contactEmail", data.contactEmail || "");
+      formik.setFieldValue("cc1", data.cc1 || "");
+      formik.setFieldValue("cc2", data.cc2 || "");
+      formik.setFieldValue(
+        "isContactWhatsapp",
+        Boolean(data.contactWhatsapp) || false
+      );
+      formik.setFieldValue("contactWhatsapp", data.contactWhatsapp || "");
       formik.setFieldValue(
         "isApplyThroughWebsite",
-        Boolean(data.isApplyThroughWebsite)
+        Boolean(data.isApplyThroughWebsite) || false
       );
       formik.setFieldValue(
         "languages",
@@ -369,8 +380,8 @@ const PostNewJob = () => {
             }))
       );
       formik.setFieldValue("highestEducation", {
-        value: data.highestEducation.id,
-        label: data.highestEducation.title,
+        value: data.highestEducation.id || "",
+        label: data.highestEducation.title || "",
       });
       formik.setFieldValue(
         "skills",
@@ -442,6 +453,7 @@ const PostNewJob = () => {
     const newJobId = searchParams.get("jobId");
     if (newJobId && jobId !== newJobId) setJobId(newJobId);
   }, [searchParams.get("jobId")]);
+  // Example: Log formik.values.description
   return (
     <div className="job-application">
       <Card
@@ -473,15 +485,21 @@ const PostNewJob = () => {
               <form onSubmit={formik.handleSubmit}>
                 <RadioGroup value={selectedValue} onChange={handleChange}>
                   <FormControlLabel
+                    sx={{ width: "180px" }}
                     value="exist"
                     control={<Radio />}
                     label="Select Company"
+                    onChange={formik.handleChange}
+                    onBlur={() => formik.setFieldValue("companyType", "exist")}
                     checked={selectedValue === "exist"}
                   />
                   <FormControlLabel
+                    sx={{ width: "180px" }}
                     value="new"
                     control={<Radio />}
                     label="Create Company"
+                    onBlur={() => formik.setFieldValue("companyType", "new")}
+                    onChange={formik.handleChange}
                     checked={selectedValue === "new"}
                   />
                 </RadioGroup>
@@ -492,8 +510,8 @@ const PostNewJob = () => {
                     </Grid>
                     <Grid item xl={12} lg={12} xs={12}>
                       <Grid container spacing={2}>
-                        <Grid item xl={4} lg={4} xs={12}>
-                          <label className="mb-2">
+                        <Grid item xl={4} lg={4} xs={12} className="mb-2">
+                          <label>
                             Select Company
                             <span className="required-field">*</span>
                           </label>
@@ -502,7 +520,7 @@ const PostNewJob = () => {
                               borderRadius: "10px",
                               background: "#F0F0F0",
                               fontFamily: "Poppins",
-
+                              marginTop: "10px",
                               "& fieldset": {
                                 border: "1px solid #cacaca",
                                 borderRadius: "93px",
@@ -528,6 +546,7 @@ const PostNewJob = () => {
                               label: employer.name || employer.email,
                             }))}
                             title={"select the options"}
+                            onBlur={formik.handleBlur}
                             onChange={(_, value) => {
                               if (value) {
                                 setSearchTerm(value.value);
@@ -543,6 +562,12 @@ const PostNewJob = () => {
                             value={formik.values.existCompany}
                             onKeyUp={(e) => setSearchTerm(e.target.value)}
                           />
+                          {formik.errors.existCompany &&
+                          formik.errors.existCompany ? (
+                            <ErrorMessage>
+                              {formik.errors.existCompany.value}
+                            </ErrorMessage>
+                          ) : null}
                         </Grid>
                       </Grid>
                     </Grid>
@@ -567,8 +592,13 @@ const PostNewJob = () => {
                             type="text"
                             placeholder="Company Name"
                             className="add-form-control"
+                            onBlur={formik.handleBlur}
+                            onChange={formik.handleChange}
                             {...formik.getFieldProps("company")}
                           />
+                          {formik.touched.company && formik.errors.company ? (
+                            <ErrorMessage>{formik.errors.company}</ErrorMessage>
+                          ) : null}
                         </Grid>
 
                         <Grid item xl={12} lg={12} xs={12}>
@@ -598,12 +628,18 @@ const PostNewJob = () => {
                                 bgColor="rgba(40, 71, 146, 0.1)"
                                 // handleSave={handleProfilePicSave}
                                 image={companyLogo}
-                                loading={"loading"}
+                                loading={false}
                                 newLogo={handleProfilePicSave}
                                 handleSaveCroppedImg={(file) =>
                                   formik.setFieldValue("companyLogo", [file])
                                 }
                               />
+                              {formik.touched.company &&
+                              formik.errors.company ? (
+                                <ErrorMessage>
+                                  {formik.errors.company}
+                                </ErrorMessage>
+                              ) : null}
                             </CardContent>
                           </Card>
                         </Grid>
@@ -611,12 +647,12 @@ const PostNewJob = () => {
                     </Grid>
                     <Grid item xl={12} lg={12} xs={12}>
                       <Divider
-                        sx={{ borderColor: "#CACACA", opacity: "1", my: 2 }}
+                        sx={{ borderColor: "#CACACA", opacity: "1", my: 1 }}
                       />
                     </Grid>
                   </>
                 )}
-                <Grid container spacing={2}>
+                <Grid container spacing={2} className="mt-0">
                   <Grid item xl={5} lg={5}>
                     <LabeledInput
                       title="Title of your job"
@@ -671,7 +707,7 @@ const PostNewJob = () => {
                       <QuillInput
                         className="form-control-area"
                         placeholder="Write more details to attract the right candidates."
-                        value={editorValue}
+                        value={editorValue || formik.values.description}
                         onChange={(value) =>
                           formik.setFieldValue("description", value)
                         }
@@ -692,7 +728,7 @@ const PostNewJob = () => {
                             borderRadius: "10px",
                             background: "#F0F0F0",
                             fontFamily: "Poppins",
-
+                            marginTop: "10px",
                             "& fieldset": {
                               border: "1px solid #cacaca",
                               borderRadius: "93px",
@@ -717,7 +753,7 @@ const PostNewJob = () => {
                             value: country.id,
                             label: country.title,
                           }))}
-                          placeholder={"select the options"}
+                          title={"select the options"}
                           onChange={(_, value) => {
                             if (value) {
                               formik.setFieldValue("country", value);
@@ -759,7 +795,7 @@ const PostNewJob = () => {
                             borderRadius: "10px",
                             background: "#F0F0F0",
                             fontFamily: "Poppins",
-
+                            marginTop: "10px",
                             "& fieldset": {
                               border: "1px solid #cacaca",
                               borderRadius: "93px",
@@ -816,7 +852,7 @@ const PostNewJob = () => {
                       Working place address{" "}
                       <span className="required-field">*</span>
                     </label>
-                    <div className={styles.positionReltive}>
+                    <div className={`${styles.positionReltive}`}>
                       <input
                         type="text"
                         placeholder="Address"
@@ -864,33 +900,12 @@ const PostNewJob = () => {
                     </label>
                     <Grid container spacing={2}>
                       <Grid item xl={6} lg={6} xs={12}>
-                        {/* <SelectInput
-                          defaultValue=""
-                          title="Select a Job category"
-                          options={categories.data.map((jobCategory) => ({
-                            value: jobCategory.id,
-                            label: jobCategory.title,
-                          }))}
-                          name={"jobCategories"}
-                          onChange={(_, value) => {
-                            if (value) {
-                              formik.setFieldValue("jobCategories", value);
-                            } else {
-                              formik.setFieldValue("jobCategories", {
-                                value: "",
-                                label: "",
-                              });
-                            }
-                          }}
-                          value={formik.values.jobCategories}
-                          onBlur={formik.handleBlur}
-                        /> */}
                         <SelectWithSearch
                           sx={{
                             borderRadius: "10px",
                             background: "#F0F0F0",
                             fontFamily: "Poppins",
-
+                            marginTop: "10px",
                             "& fieldset": {
                               border: "1px solid #cacaca",
                               borderRadius: "93px",
@@ -960,7 +975,7 @@ const PostNewJob = () => {
                             borderRadius: "10px",
                             background: "#F0F0F0",
                             fontFamily: "Poppins",
-
+                            marginTop: "10px",
                             "& fieldset": {
                               border: "1px solid #cacaca",
                               borderRadius: "93px",
@@ -1072,7 +1087,7 @@ const PostNewJob = () => {
                         </label>
                       </Stack>
                       <DateInput
-                        className="smallfont"
+                        type="date"
                         onChange={(e) => formik.setFieldValue("startDate", e)}
                         value={formik.values.startDate}
                         onBlur={formik.getFieldProps("startDate").onBlur}
@@ -1096,9 +1111,9 @@ const PostNewJob = () => {
                         </label>
                       </Stack>
                       <DateInput
-                        className="smallfont"
                         onChange={(e) => formik.setFieldValue("deadline", e)}
                         value={formik.values.deadline}
+                        type="date"
                         onBlur={formik.getFieldProps("deadline").onBlur}
                         minDate={formik.values.startDate}
                       />
@@ -1116,6 +1131,7 @@ const PostNewJob = () => {
                   <Grid item xl={12} lg={12} sm={12} xs={12}>
                     <FormGroup>
                       <FormControlLabel
+                        sx={{ width: "200px" }}
                         control={<Switch />}
                         label="Apply through Koor"
                         checked={formik.values.isApplyThroughKoor}
@@ -1132,6 +1148,7 @@ const PostNewJob = () => {
                   <Grid item xl={4} lg={4} sm={4} xs={12}>
                     <FormGroup>
                       <FormControlLabel
+                        sx={{ width: "165px" }}
                         control={<Switch />}
                         label="Apply by email"
                         checked={formik.values.isApplyThroughEmail}
@@ -1223,6 +1240,7 @@ const PostNewJob = () => {
                   <Grid item xl={12} lg={12} xs={12}>
                     <FormGroup>
                       <FormControlLabel
+                        sx={{ width: "255px" }}
                         control={<Switch />}
                         label="Apply through your website"
                         checked={formik.values.isApplyThroughWebsite}
@@ -1233,7 +1251,6 @@ const PostNewJob = () => {
                       title=""
                       className="add-form-control"
                       placeholder="Paste a link to your website’s application form"
-                      required
                       {...formik.getFieldProps("websiteLink")}
                     />
                     {formik.touched.websiteLink && formik.errors.websiteLink ? (
@@ -1485,6 +1502,11 @@ const PostNewJob = () => {
                         disabled={formik.isSubmitting}
                       />
                       <SolidButton
+                        sx={{
+                          "@media (max-width: 480px)": {
+                            width: "100%",
+                          },
+                        }}
                         disabled={submitting === SUBMITTING_STATUS_ENUM.loading}
                         title={
                           submitting === SUBMITTING_STATUS_ENUM.loading

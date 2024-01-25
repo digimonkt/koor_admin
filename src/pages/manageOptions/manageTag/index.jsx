@@ -100,7 +100,10 @@ function ManageTag() {
       const totalCounts = Math.ceil(response.data.count / limit);
       setTotalCount(totalCounts);
     } else {
-      console.log(response.error);
+      setLoading(false);
+      if (response?.error.errors.detail === "I") {
+        setPages(1);
+      }
     }
   };
 
@@ -122,7 +125,6 @@ function ManageTag() {
 
       dispatch(setSuccessToast("Add Tag SuccessFully"));
     } else {
-      console.log(response.error);
       dispatch(setErrorToast("Something went wrong"));
     }
   };
@@ -144,7 +146,6 @@ function ManageTag() {
       dispatch(setSuccessToast("Delete Skill SuccessFully"));
     } else {
       dispatch(setErrorToast("Something went wrong"));
-      console.log(response.error);
     }
   };
 
@@ -193,7 +194,7 @@ function ManageTag() {
         }}
         inputProps={{
           type: "text",
-          placeholder: "Add Tag",
+          placeholder: "Enter Tag",
           onChange: (e) => setAddSkill(e.target.value),
           value: addSkill,
         }}

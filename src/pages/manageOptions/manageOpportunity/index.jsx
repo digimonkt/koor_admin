@@ -99,7 +99,10 @@ function ManageOpportunity() {
       const totalCounts = Math.ceil(response.data.count / limit);
       setTotalCount(totalCounts);
     } else {
-      console.log(response.error);
+      setLoading(false);
+      if (response?.error.errors.detail === "I") {
+        setPages(1);
+      }
     }
   };
 
@@ -121,7 +124,6 @@ function ManageOpportunity() {
 
       dispatch(setSuccessToast("Add Opportunity SuccessFully"));
     } else {
-      console.log(response.error);
       dispatch(setErrorToast("Something went wrong"));
     }
   };
@@ -192,7 +194,7 @@ function ManageOpportunity() {
         }}
         inputProps={{
           type: "text",
-          placeholder: "Add Opportunity",
+          placeholder: "Enter Opportunity",
           onChange: (e) => setAddSkill(e.target.value),
           value: addSkill,
         }}

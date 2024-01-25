@@ -85,7 +85,6 @@ const ManageCategoryComponent = () => {
       dispatch(setSuccessToast("Delete Category SuccessFully"));
     } else {
       dispatch(setErrorToast("Something went wrong"));
-      console.log(response.error);
     }
   }
 
@@ -143,7 +142,6 @@ const ManageCategoryComponent = () => {
       dispatch(setSuccessToast("Delete Sub Category SuccessFully"));
     } else {
       dispatch(setErrorToast("Something went wrong"));
-      console.log(response.error);
     }
   };
 
@@ -201,7 +199,7 @@ const ManageCategoryComponent = () => {
         title={"Add Category"}
         addItems={{
           onChange: (e) => setAddCategory(e.target.value),
-          placeholder: "Add Category",
+          placeholder: "Enter Category",
           value: addCategory,
         }}
         onAddItems={addItems}

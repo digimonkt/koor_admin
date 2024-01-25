@@ -99,7 +99,10 @@ function ManageSector() {
       const totalCounts = Math.ceil(response.data.count / limit);
       setTotalCount(totalCounts);
     } else {
-      console.log(response.error);
+      setLoading(false);
+      if (response?.error.errors.detail === "I") {
+        setPages(1);
+      }
     }
   };
 
@@ -120,7 +123,6 @@ function ManageSector() {
       setAddSkill("");
       dispatch(setSuccessToast("Add Sector SuccessFully"));
     } else {
-      console.log(response.error);
       dispatch(setErrorToast("Something went wrong"));
     }
   };
@@ -142,7 +144,6 @@ function ManageSector() {
       dispatch(setSuccessToast("Delete Skill SuccessFully"));
     } else {
       dispatch(setErrorToast("Something went wrong"));
-      console.log(response.error);
     }
   };
 
@@ -191,7 +192,7 @@ function ManageSector() {
         }}
         inputProps={{
           type: "text",
-          placeholder: "Add Sector",
+          placeholder: "Enter Sector",
           onChange: (e) => setAddSkill(e.target.value),
           value: addSkill,
         }}

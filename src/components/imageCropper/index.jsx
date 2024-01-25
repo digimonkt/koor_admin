@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useState } from "react";
 import { FilledButton } from "@components/button";
 import DialogBox from "@components/dialogBox";
-import { Slider } from "@mui/material";
+import { Box, Slider } from "@mui/material";
 import Cropper from "react-easy-crop";
 import getCroppedImg from "./helper";
 import styles from "./styles.module.css";
@@ -17,8 +17,8 @@ function ImageCropper({ open, handleClose, image, handleSave }) {
   const [imageSrc, setImageSrc] = useState("");
   const [crop, setCrop] = useState({ x: 0, y: 0 });
   const [zoom, setZoom] = useState(1);
-  const [rotation, setRotation] = useState(0);
   const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
+  const [aspect, setAspect] = useState(1); // Added aspect state
   const setImageOnMount = async (image) => {
     const blobImage = await fileToDataUri(image);
     // const dataURL =
@@ -40,11 +40,7 @@ function ImageCropper({ open, handleClose, image, handleSave }) {
 
   const showCroppedImage = useCallback(async () => {
     try {
-      const croppedImage = await getCroppedImg(
-        imageSrc,
-        croppedAreaPixels,
-        rotation
-      );
+      const croppedImage = await getCroppedImg(imageSrc, croppedAreaPixels);
       const blob = await (await fetch(croppedImage)).blob();
       blob.name = "image.jpeg";
       blob.latModified = new Date();
@@ -55,43 +51,47 @@ function ImageCropper({ open, handleClose, image, handleSave }) {
     } catch (e) {
       console.error(e);
     }
-  }, [croppedAreaPixels, rotation, image]);
-
+  }, [croppedAreaPixels, image]);
   const onZoomChange = (zoom, _) => {
     setZoom(zoom);
   };
+  const onAspectChange = (aspect, _) => {
+    setAspect(aspect);
+  };
   return (
-    <DialogBox open={open} handleClose={handleClose}>
+    <DialogBox
+      open={open}
+      handleClose={handleClose}
+      sx={{ "& .MuiPaper-root": { background: "#fff" } }}
+    >
       <div>
         <div className={`${styles.cropper_height}`}>
           {imageSrc && (
-            <Cropper
-              image={imageSrc}
-              crop={crop}
-              rotation={rotation}
-              zoom={zoom}
-              aspect={1}
-              showGrid={false}
-              cropShape="round" // Set cropShape to "round" for circular crop
-              onCropChange={onCropChange}
-              onCropComplete={onCropComplete}
-              onZoomChange={onZoomChange}
-            />
+            <Box
+              sx={{
+                "& .reactEasyCrop_Container": { maxHeight: "70%" },
+                "& .reactEasyCrop_CropArea": {
+                  boxShadow: "none",
+                  border: "4px solid #EEA23D",
+                },
+              }}
+            >
+              <Cropper
+                image={imageSrc}
+                crop={crop}
+                zoom={zoom}
+                aspect={aspect}
+                showGrid={false}
+                onCropChange={onCropChange}
+                onCropComplete={onCropComplete}
+                onZoomChange={onZoomChange}
+                width={"250px"}
+                height={"250px"}
+              />
+            </Box>
           )}
         </div>
         <div className="controls">
-          <label>
-            Rotate
-            <Slider
-              value={rotation}
-              min={0}
-              max={360}
-              step={1}
-              aria-labelledby="rotate"
-              onChange={(e, rotation) => setRotation(rotation)}
-              className="range"
-            />
-          </label>
           <label>
             Zoom
             <Slider
@@ -100,11 +100,22 @@ function ImageCropper({ open, handleClose, image, handleSave }) {
               max={3}
               step={0.1}
               aria-labelledby="zoom"
-              onChange={(e, zoom) => setZoom(zoom)}
+              onChange={(_, zoom) => setZoom(zoom)}
               className="range"
             />
           </label>
-
+          <label>
+            Aspect
+            <Slider
+              value={aspect}
+              min={1}
+              max={3}
+              step={0.01}
+              aria-labelledby="aspect"
+              onChange={(_, zoom) => onAspectChange(zoom)}
+              className="range"
+            />
+          </label>
           <FilledButton title="Done" onClick={showCroppedImage} />
         </div>
       </div>

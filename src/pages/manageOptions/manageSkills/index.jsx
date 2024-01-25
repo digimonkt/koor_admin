@@ -99,6 +99,9 @@ function ManageSkillsComponent() {
       const totalCounts = Math.ceil(response.data.count / limit);
       setTotalCount(totalCounts);
     } else {
+      if (response?.error.errors.detail === "I") {
+        setPages(1);
+      }
       console.log(response.error);
     }
   };
@@ -121,7 +124,6 @@ function ManageSkillsComponent() {
 
       dispatch(setSuccessToast("Add Skill SuccessFully"));
     } else {
-      console.log(response.error);
       dispatch(setErrorToast("Something went wrong"));
     }
   };
@@ -143,7 +145,6 @@ function ManageSkillsComponent() {
       dispatch(setSuccessToast("Delete Skill SuccessFully"));
     } else {
       dispatch(setErrorToast("Something went wrong"));
-      console.log(response.error);
     }
   };
 
@@ -192,7 +193,7 @@ function ManageSkillsComponent() {
         }}
         inputProps={{
           type: "text",
-          placeholder: "Add Skill",
+          placeholder: "Enter Skill",
           onChange: (e) => setAddSkill(e.target.value),
           value: addSkill,
         }}

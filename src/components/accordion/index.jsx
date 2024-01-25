@@ -2,6 +2,7 @@ import React, { useCallback } from "react";
 import {
   AccordionDetails,
   AccordionSummary,
+  Box,
   IconButton,
   Accordion as MUIAccordion,
   Typography,
@@ -48,11 +49,24 @@ function Accordion({ title, onOpen, handleDelete, handleEdit, children }) {
           className="accordion-class"
         >
           <Typography
-            sx={{ fontFamily: "Poppins", fontWeight: 500, fontSize: "18px" }}
+            sx={{
+              fontFamily: "Poppins",
+              fontWeight: 500,
+              fontSize: "18px",
+              wordBreak: "break-word",
+            }}
           >
             {title}
           </Typography>
-          <div>
+          <Box
+            sx={{
+              display: "flex",
+              alignItems: "center",
+              "@media (max-width: 480px)": {
+                display: "block",
+              },
+            }}
+          >
             {handleDelete && (
               <IconButton
                 onClick={(e) => handleIconClick(e, "delete")}
@@ -65,6 +79,9 @@ function Accordion({ title, onOpen, handleDelete, handleEdit, children }) {
                   height: 30,
                   marginRight: "16px",
                   color: "#274593",
+                  "@media (max-width: 480px)": {
+                    marginBottom: "5px",
+                  },
                 }}
               >
                 <SVG.DeleteIcon />
@@ -87,7 +104,7 @@ function Accordion({ title, onOpen, handleDelete, handleEdit, children }) {
                 <SVG.EditIcon />
               </IconButton>
             )}
-          </div>
+          </Box>
         </AccordionSummary>
         <AccordionDetails>{children}</AccordionDetails>
       </MUIAccordion>

@@ -45,7 +45,6 @@ const ManagePrivacyPolicyComponent = () => {
       dispatch(setSuccessToast("Update ly"));
     } else {
       dispatch(setErrorToast("Something went wrong"));
-      console.log(response.error);
     }
   };
 

@@ -43,8 +43,7 @@ const Layout = ({
         direction={{ xs: "column", sm: "row" }}
         spacing={{ xs: 1.25, sm: 2.5 }}
         alignItems={{ xs: "start", sm: "center" }}
-        sx={{ marginBottom: 2.5 }}
-      >
+        sx={{ marginBottom: 2.5 }}>
         <SearchInput widthInput="100%" {...searchProps} />
         {countryInput ? (
           <SelectWithSearch title={title} {...selectList} />
@@ -78,8 +77,7 @@ const Layout = ({
         {children}
         <Box
           className="peritemview"
-          sx={{ p: 3, borderTop: "1px solid rgba(0, 0, 0, 0.12)" }}
-        >
+          sx={{ p: 3, borderTop: "1px solid rgba(0, 0, 0, 0.12)" }}>
           <Stack direction="row" spacing={2} alignItems="center">
             <span>Items per page:</span>{" "}
             <FormControl
@@ -90,8 +88,7 @@ const Layout = ({
                   padding: "7px 40px 5px 15px !important",
                 },
               }}
-              size="small"
-            >
+              size="small">
               <SelectInput
                 options={[
                   { label: 5, value: 5 },

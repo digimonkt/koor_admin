@@ -36,21 +36,15 @@ const ProfilePicInputComponent = ({
     setFiles([]);
   };
 
-  useEffect(() => {
-    setFiles([]);
-  }, [image]);
-  // const handleSaveImage = () => {
-  //   if (newImage instanceof File) handleSave(newImage);
-  // };
-
   const thumbs = (
     <Avatar
       sx={{
-        width: 100,
-        height: 100,
+        width: "auto",
+        height: "100%",
         color: "#CACACA",
         "&.MuiAvatar-circular": {
           background: "#F0F0F0",
+          borderRadius: "0px",
         },
       }}
       src={newImage instanceof File ? URL.createObjectURL(newImage) : newImage}
@@ -59,16 +53,27 @@ const ProfilePicInputComponent = ({
       }}
     />
   );
-
   useEffect(() => {
-    // Make sure to revoke the data uris to avoid memory leaks, will run on unmount
+    setFiles([]);
+  }, [image]);
+  useEffect(() => {
     return () => files.forEach((file) => URL.revokeObjectURL(file.preview));
   }, [files]);
   return (
     <>
       <div className="add-content">
         <h2>{title}</h2>
-        <Stack direction="row" spacing={2} className="mt-4">
+        <Stack
+          direction="row"
+          spacing={2}
+          className="mt-4"
+          sx={{
+            "@media (max-width: 320px)": {
+              display: "block",
+              textAlign: "-webkit-center",
+            },
+          }}
+        >
           {!newImage ? (
             <Avatar
               alt="profileImage"
@@ -78,6 +83,7 @@ const ProfilePicInputComponent = ({
                 color: "#CACACA",
                 "&.MuiAvatar-colorDefault": {
                   background: "#F0F0F0",
+                  borderRadius: "0px",
                 },
               }}
             >
@@ -86,10 +92,19 @@ const ProfilePicInputComponent = ({
           ) : (
             <>{thumbs}</>
           )}
-          <Stack direction="column" spacing={4}>
+          <Stack
+            direction="column"
+            spacing={4}
+            sx={{
+              "@media (max-width: 320px)": {
+                marginLeft: "0px !important",
+                marginTop: "10px !important",
+              },
+            }}
+          >
             <div className="dropimg-userprofile">
               <div {...getRootProps({ className: "dropzone" })}>
-                <input {...getInputProps()} disabled={loading} />
+                <input {...getInputProps()} />
                 <p>
                   Drag here or{" "}
                   <span
@@ -103,26 +118,6 @@ const ProfilePicInputComponent = ({
                 </p>
               </div>
             </div>
-            {/* <div className="text-center">
-              <OutlinedButton
-                title={
-                  <>
-                    {loading ? (
-                      "Saving..."
-                    ) : (
-                      <>
-                        <span className="me-2 d-inline-flex">
-                          <SVG.CheckIcon />
-                        </span>
-                        Save photo
-                      </>
-                    )}
-                  </>
-                }
-                disabled={loading}
-                onClick={handleSaveImage}
-              />
-            </div> */}
           </Stack>
         </Stack>
       </div>

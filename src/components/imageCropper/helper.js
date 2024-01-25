@@ -26,7 +26,8 @@ export default async function getCroppedImg(
   imageSrc,
   pixelCrop,
   rotation = 0,
-  flip = { horizontal: false, vertical: false }
+  flip = { horizontal: false, vertical: false },
+  zoom = 1, // default zoom value is 1
 ) {
   const image = await createImage(imageSrc);
   const canvas = document.createElement("canvas");
@@ -41,29 +42,42 @@ export default async function getCroppedImg(
   const { width: bBoxWidth, height: bBoxHeight } = rotateSize(
     image.width,
     image.height,
-    rotation
+    rotation,
   );
 
-  // set canvas size to match the bounding box
-  canvas.width = bBoxWidth;
-  canvas.height = bBoxHeight;
+  // Adjust bounding box dimensions based on zoom
+  const zoomedWidth = bBoxWidth * zoom;
+  const zoomedHeight = bBoxHeight * zoom;
 
-  ctx.translate(bBoxWidth / 2, bBoxHeight / 2);
+  // set canvas size to match the adjusted bounding box
+  canvas.width = zoomedWidth;
+  canvas.height = zoomedHeight;
+
+  ctx.translate(zoomedWidth / 2, zoomedHeight / 2);
   ctx.rotate(rotRad);
   ctx.scale(flip.horizontal ? -1 : 1, flip.vertical ? -1 : 1);
   ctx.translate(-image.width / 2, -image.height / 2);
 
   ctx.drawImage(image, 0, 0);
 
+  // Adjust pixelCrop dimensions based on zoom
+  const zoomedPixelCrop = {
+    x: pixelCrop.x * zoom,
+    y: pixelCrop.y * zoom,
+    width: pixelCrop.width * zoom,
+    height: pixelCrop.height * zoom,
+  };
+
   const data = ctx.getImageData(
-    pixelCrop.x,
-    pixelCrop.y,
-    pixelCrop.width,
-    pixelCrop.height
+    zoomedPixelCrop.x,
+    zoomedPixelCrop.y,
+    zoomedPixelCrop.width,
+    zoomedPixelCrop.height,
   );
 
-  canvas.width = pixelCrop.width;
-  canvas.height = pixelCrop.height;
+  // set canvas size to match the adjusted pixelCrop dimensions
+  canvas.width = zoomedPixelCrop.width;
+  canvas.height = zoomedPixelCrop.height;
 
   ctx.putImageData(data, 0, 0);
 

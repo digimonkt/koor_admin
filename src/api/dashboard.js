@@ -1,7 +1,7 @@
 import api from ".";
 import urlcat from "urlcat";
 
-export const getUserCountApi = async (period) => {
+export const getUserCountApi = async period => {
   const response = await api.request({
     url: urlcat("/v1/admin/users-count", { period }),
     method: "GET",
@@ -9,7 +9,7 @@ export const getUserCountApi = async (period) => {
   return response;
 };
 
-export const getDashboardApi = async (period) => {
+export const getDashboardApi = async period => {
   const response = await api.request({
     url: urlcat("/v1/admin/dashboard", { period }),
     method: "GET",
@@ -25,7 +25,7 @@ export const getDashboardApi = async (period) => {
   }
 };
 
-export const getFinancialCountApi = async (period) => {
+export const getFinancialCountApi = async period => {
   const response = await api.request({
     url: urlcat("/v1/admin/financial-count", { period }),
     method: "GET",
@@ -41,5 +41,4 @@ export const getFinancialCountApi = async (period) => {
       },
     };
   }
-  console.log({ response });
 };

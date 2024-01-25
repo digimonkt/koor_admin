@@ -139,7 +139,7 @@ function ManageCandidatesComponent() {
         },
       },
     ],
-    []
+    [],
   );
 
   const handleRedirectDetails = useCallback((item, role) => {
@@ -172,7 +172,9 @@ function ManageCandidatesComponent() {
       setTotalCount(totalCounts);
     } else {
       dispatch(setLoading(false));
-      console.log(response.error);
+      if (response?.error.errors.detail === "I") {
+        setPages(1);
+      }
     }
   }, [country, debouncedSearchCandidatesValue, pages, limit]);
 
@@ -203,7 +205,7 @@ function ManageCandidatesComponent() {
         dispatch(setErrorToast("something went wrong"));
       }
     },
-    [candidateTable]
+    [candidateTable],
   );
 
   const handleDelete = useCallback(async () => {
@@ -211,14 +213,13 @@ function ManageCandidatesComponent() {
     const response = await deleteUser(deleting);
     if (response.remote === "success") {
       const newCandidateTable = candidateTable.filter(
-        (emp) => emp.id !== deleting
+        (emp) => emp.id !== deleting,
       );
       setCandidateTable(newCandidateTable);
       setDeleting("");
       dispatch(setSuccessToast("Job Delete SuccessFully"));
     } else {
       dispatch(setErrorToast("Something went wrong"));
-      console.log(response.error);
     }
   }, [deleting, candidateTable, dispatch]);
 
@@ -239,7 +240,7 @@ function ManageCandidatesComponent() {
     if (response.remote === "success") {
       window.open(
         process.env.REACT_APP_BACKEND_URL + response.data.url,
-        "_blank"
+        "_blank",
       );
     } else {
       dispatch(setErrorToast("something went wrong"));

@@ -39,32 +39,32 @@ function ManageEmployerComponent() {
         field: "name",
         headerName: "Name",
         sortable: true,
-        width: 180,
+        width: "220",
         id: "3",
       },
       {
         field: "email",
         headerName: "Email",
         sortable: true,
-        width: 300,
+        width: "220",
       },
       {
         field: "credits",
         headerName: "Credits",
         sortable: true,
-        width: 200,
+        width: "220",
       },
       {
         field: "mobileNumber",
         headerName: "Mobile number",
         sortable: true,
-        width: 200,
+        width: "220",
       },
       {
         field: "action",
         headerName: "Action",
         sortable: false,
-        width: 150,
+        width: "220",
         renderCell: (item) => {
           return (
             <Stack direction="row" spacing={1} alignItems="center">
@@ -133,14 +133,14 @@ function ManageEmployerComponent() {
         },
       },
     ],
-    []
+    [],
   );
 
   const handleRedirectDetails = useCallback(
     (id) => {
       navigate(`employer-details/${id}`);
     },
-    [navigate]
+    [navigate],
   );
 
   const employerList = useCallback(async () => {
@@ -162,7 +162,12 @@ function ManageEmployerComponent() {
       const totalCounts = Math.ceil(response.data.count / limit);
       setTotalCount(totalCounts);
     } else {
-      dispatch(setErrorToast("something went wrong"));
+      dispatch(setLoading(false));
+      if (response?.error.errors.detail === "I") {
+        setPages(1);
+      }
+
+      // dispatch(setErrorToast("something went wrong"));
     }
   }, [country, debouncedSearchEmployerValue, pages, limit]);
 
@@ -195,14 +200,14 @@ function ManageEmployerComponent() {
       await activeInactiveUser(id);
       employerList();
     },
-    [employerTable]
+    [employerTable],
   );
 
   const handleDelete = useCallback(async () => {
     const response = await deleteUser(deleting);
     if (response.remote === "success") {
       const newEmployerTable = employerTable.filter(
-        (emp) => emp.id !== deleting
+        (emp) => emp.id !== deleting,
       );
       setEmployerTable(newEmployerTable);
       setDeleting("");
@@ -223,7 +228,7 @@ function ManageEmployerComponent() {
     if (response.remote === "success") {
       window.open(
         process.env.REACT_APP_BACKEND_URL + response.data.url,
-        "_blank"
+        "_blank",
       );
     } else {
       dispatch(setErrorToast("something went wrong"));

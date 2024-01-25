@@ -49,8 +49,8 @@ const PostTestimonials = () => {
   const thumbs = (
     <Avatar
       sx={{
-        width: 100,
-        height: 100,
+        width: "auto",
+        height: "100%",
         color: "#CACACA",
         borderRadius: "0",
       }}
@@ -115,7 +115,6 @@ const PostTestimonials = () => {
         navigate("/manage-testimonials");
       } else {
         dispatch(setErrorToast("Something went wrong"));
-        console.log(response.error);
       }
     } else {
       dispatch(setErrorToast("All fields are required"));
@@ -156,7 +155,6 @@ const PostTestimonials = () => {
         navigate("/manage-testimonials");
       } else {
         dispatch(setErrorToast("Something went wrong"));
-        console.log(response.error);
       }
     } else {
       dispatch(setErrorToast("All fields are required"));

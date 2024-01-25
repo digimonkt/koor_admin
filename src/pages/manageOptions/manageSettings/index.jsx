@@ -63,7 +63,6 @@ const ManageSettingsComponent = () => {
       dispatch(setSuccessToast("Resource Delete SuccessFully"));
     } else {
       dispatch(setErrorToast("Something went wrong"));
-      console.log(response.error);
     }
   };
 
@@ -295,7 +294,7 @@ const ManageSettingsComponent = () => {
             )}
           </Grid>
           <div className={`${styles.title} ${styles.spaceMy}`}>
-            <h2>Change password</h2>
+            <h2>Change Credentials</h2>
           </div>
           <ChangePassword />
           <div className={`${styles.title} ${styles.spaceMy}`}>

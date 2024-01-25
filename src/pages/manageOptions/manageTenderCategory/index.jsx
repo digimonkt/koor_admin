@@ -99,7 +99,10 @@ function ManageTender() {
       const totalCounts = Math.ceil(response.data.count / limit);
       setTotalCount(totalCounts);
     } else {
-      console.log(response.error);
+      setLoading(false);
+      if (response?.error.errors.detail === "I") {
+        setPages(1);
+      }
     }
   };
 
@@ -121,7 +124,6 @@ function ManageTender() {
 
       dispatch(setSuccessToast("Add Tender Category SuccessFully"));
     } else {
-      console.log(response.error);
       dispatch(setErrorToast("Something went wrong"));
     }
   };
@@ -139,14 +141,13 @@ function ManageTender() {
     const response = await tenderCategoryDeleteApi(deleteTenderCategory);
     if (response.remote === "success") {
       const newSkillTable = tenderCategoryTable.filter(
-        (emp) => emp.id !== deleteTenderCategory
+        (emp) => emp.id !== deleteTenderCategory,
       );
       setTenderCategoryTable(newSkillTable);
       setDeleteTenderCategory("");
       dispatch(setSuccessToast("Delete Tender Category SuccessFully"));
     } else {
       dispatch(setErrorToast("Something went wrong"));
-      console.log(response.error);
     }
   };
 
@@ -195,7 +196,7 @@ function ManageTender() {
         }}
         inputProps={{
           type: "text",
-          placeholder: "Add Tender Category",
+          placeholder: "Enter Tender Category",
           onChange: (e) => setAddTenderCategory(e.target.value),
           value: addTenderCategory,
         }}

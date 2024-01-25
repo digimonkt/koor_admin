@@ -172,7 +172,7 @@ const DashboardComponent = () => {
                             (
                             {getPercentage(
                               userData.jobSeekersCount,
-                              userData.totalUsers
+                              userData.totalUsers,
                             )}
                             % )
                           </small>
@@ -184,7 +184,7 @@ const DashboardComponent = () => {
                             (
                             {getPercentage(
                               userData.employersCount,
-                              userData.totalUsers
+                              userData.totalUsers,
                             )}
                             % )
                           </small>
@@ -196,7 +196,7 @@ const DashboardComponent = () => {
                             (
                             {getPercentage(
                               userData.vendorsCount,
-                              userData.totalUsers
+                              userData.totalUsers,
                             )}
                             % )
                           </small>
@@ -226,7 +226,7 @@ const DashboardComponent = () => {
               >
                 {financialData.seriesData.length > 0 && (
                   <Donut
-                    title="Financial Count"
+                    title="Credit Plans Purchased"
                     total={financialData.totalCredits}
                     user="Total Credits"
                     series={financialData.seriesData}
@@ -241,7 +241,7 @@ const DashboardComponent = () => {
                             (
                             {getPercentage(
                               financialData.gold,
-                              financialData.totalCredits
+                              financialData.totalCredits,
                             )}
                             % )
                           </small>
@@ -253,7 +253,7 @@ const DashboardComponent = () => {
                             (
                             {getPercentage(
                               financialData.silver,
-                              financialData.totalCredits
+                              financialData.totalCredits,
                             )}
                             % )
                           </small>
@@ -265,7 +265,7 @@ const DashboardComponent = () => {
                             (
                             {getPercentage(
                               financialData.copper,
-                              financialData.totalCredits
+                              financialData.totalCredits,
                             )}
                             % )
                           </small>
