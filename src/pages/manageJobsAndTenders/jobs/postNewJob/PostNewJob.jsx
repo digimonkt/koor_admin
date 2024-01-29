@@ -1321,7 +1321,6 @@ const PostNewJob = () => {
                     <label className="mb-2 d-block">
                       Required languages
                       <span style={{ opacity: "0.5" }}>(Maximum 3)</span>
-                      <span className="required-field">*</span>
                     </label>
                     <Grid container spacing={2}>
                       {[0, 1, 2].map((i) => {
@@ -1362,7 +1361,6 @@ const PostNewJob = () => {
                   <label className="mb-2 d-block">
                     Job skills
                     <span style={{ opacity: "0.5" }}>(Maximum 3)</span>
-                    <span className="required-field">*</span>
                   </label>
                   <Grid container spacing={2}>
                     <Grid item xl={4} lg={4} xs={12}>
