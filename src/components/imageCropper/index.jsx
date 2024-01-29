@@ -97,7 +97,7 @@ function ImageCropper({ open, handleClose, image, handleSave }) {
             <Slider
               value={zoom}
               min={1}
-              max={3}
+              max={2}
               step={0.1}
               aria-labelledby="zoom"
               onChange={(_, zoom) => setZoom(zoom)}
@@ -109,8 +109,8 @@ function ImageCropper({ open, handleClose, image, handleSave }) {
             <Slider
               value={aspect}
               min={1}
-              max={3}
-              step={0.01}
+              max={2}
+              step={0.001}
               aria-labelledby="aspect"
               onChange={(_, zoom) => onAspectChange(zoom)}
               className="range"
