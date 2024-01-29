@@ -125,7 +125,7 @@ function ManageTendersComponent() {
                   onClick={() => {
                     handleHoldTender(
                       item,
-                      item.row.status === "active" ? "inActive" : "active"
+                      item.row.status === "active" ? "inActive" : "active",
                     );
                   }}
                   sx={{
@@ -179,14 +179,14 @@ function ManageTendersComponent() {
         },
       },
     ],
-    []
+    [],
   );
 
   const handleDelete = useCallback(async () => {
     const response = await deleteTenderAPI(deleteTender);
     if (response.remote === "success") {
       const newTenderTable = tenderTable.filter(
-        (tender) => tender.id !== deleteTender
+        (tender) => tender.id !== deleteTender,
       );
       setTenderTable(newTenderTable);
       setDeleteTender("");
@@ -220,7 +220,7 @@ function ManageTendersComponent() {
       const startIndex = (page - 1) * 10;
       const formateData = transformOptionsResponse(
         response.data.results,
-        startIndex
+        startIndex,
       );
       if (!formateData.length) {
         dispatch(setLoading(false));
@@ -230,6 +230,9 @@ function ManageTendersComponent() {
       setTotalCount(totalCounts);
     } else {
       dispatch(setLoading(false));
+      if (response?.error.errors.detail === "I") {
+        setPages(1);
+      }
     }
   }, [country, debouncedSearchTenderValue, pages, limit]);
   const filterTenderCountry = (e) => {
@@ -250,7 +253,7 @@ function ManageTendersComponent() {
     if (response.remote === "success") {
       window.open(
         process.env.REACT_APP_BACKEND_URL + response.data.url,
-        "_blank"
+        "_blank",
       );
     } else {
       dispatch(setErrorToast("Something went wrong"));
@@ -273,7 +276,7 @@ function ManageTendersComponent() {
       await activeInactiveTenderAPI(id);
       tenderList();
     },
-    [tenderTable, dispatch]
+    [tenderTable, dispatch],
   );
 
   useEffect(() => {

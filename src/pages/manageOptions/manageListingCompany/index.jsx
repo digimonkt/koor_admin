@@ -103,7 +103,11 @@ const ManageListingCompany = () => {
       setFiles([]);
       dispatch(setSuccessToast("Add company image SuccessFully"));
     } else {
-      dispatch(setErrorToast("Something went wrong"));
+      if (response.error.errors.category_logo) {
+        dispatch(setErrorToast("Field can not be blank"));
+      } else {
+        dispatch(setErrorToast("Something went wrong"));
+      }
     }
   };
   // *Add Company  Logo End

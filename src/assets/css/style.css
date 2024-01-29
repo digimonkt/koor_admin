@@ -332,7 +332,7 @@ header {
 .outline-button {
   border: 1px solid #274593 !important;
   border-radius: 73px !important;
-  padding: 10px 30px !important;
+  padding: 10px 30px;
   color: #274593 !important;
   /* font-size: 16px !important; */
   letter-spacing: 0.03em !important;
@@ -1759,7 +1759,9 @@ body {
     background: #fff;
     visibility: hidden;
     opacity: 0;
-    transition: visibility 1s, opacity 0.5s linear;
+    transition:
+      visibility 1s,
+      opacity 0.5s linear;
   }
 
   .menu.menu-selected {
@@ -1874,7 +1876,7 @@ input.employersearch {
   .outline-button {
     border: 1px solid #274593 !important;
     border-radius: 73px !important;
-    padding: 6px 20px !important;
+    padding: 6px 20px;
     color: #274593 !important;
     /* font-size: 16px !important; */
     letter-spacing: 0.03em !important;
@@ -1898,7 +1900,7 @@ input.employersearch {
   .outline-button {
     border: 1px solid #274593 !important;
     border-radius: 73px !important;
-    padding: 6px 20px !important;
+    padding: 6px 20px;
     color: #274593 !important;
     /* font-size: 16px !important; */
     letter-spacing: 0.03em !important;

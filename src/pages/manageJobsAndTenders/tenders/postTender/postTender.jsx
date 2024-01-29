@@ -231,7 +231,7 @@ const PostNewJob = () => {
       setEditorValue(data.description);
       formik.setFieldValue(
         "applicationInstruction",
-        data.applicationInstruction || ""
+        data.applicationInstruction || "",
       );
       formik.setFieldValue("company", data.company || "");
       setInstructions(data.applicationInstruction || "");
@@ -244,7 +244,7 @@ const PostNewJob = () => {
       formik.setFieldValue("budgetCurrency", data.budgetCurrency);
       formik.setFieldValue(
         "budgetAmount",
-        parseInt(data.budgetAmount.replace(/,/g, ""), 10)
+        parseInt(data.budgetAmount.replace(/,/g, ""), 10),
       );
       formik.setFieldValue("country", {
         value: data.country.id || "",
@@ -259,7 +259,7 @@ const PostNewJob = () => {
         data.categories.map((category) => ({
           value: category.id || "",
           label: category.title || "",
-        }))
+        })),
       );
       formik.setFieldValue("sectors", {
         value: data.sectors.id || "",
@@ -278,15 +278,15 @@ const PostNewJob = () => {
       formik.setFieldValue("attachments", data?.attachments);
       formik.setFieldValue(
         "isApplyThroughEmail",
-        Boolean(data.isApplyThroughEmail) || false
+        Boolean(data.isApplyThroughEmail) || false,
       );
       formik.setFieldValue(
         "isContactEmail",
-        Boolean(data.contactEmail) || false
+        Boolean(data.contactEmail) || false,
       );
       formik.setFieldValue(
         "isApplyThroughKoor",
-        Boolean(data.isApplyThroughKoor) || false
+        Boolean(data.isApplyThroughKoor) || false,
       );
       formik.setFieldValue("contactEmail", data?.contactEmail || "");
       formik.setFieldValue("cc1", data?.cc1 || "");
@@ -295,7 +295,7 @@ const PostNewJob = () => {
       formik.setFieldValue("website", data?.website || "");
       formik.setFieldValue(
         "isApplyThroughWebsite",
-        Boolean(data.isApplyThroughWebsite || false)
+        Boolean(data.isApplyThroughWebsite || false),
       );
     }
   }, []);
@@ -765,7 +765,7 @@ const PostNewJob = () => {
                                   onClick={() => {
                                     formik.setFieldValue(
                                       "address",
-                                      address.description
+                                      address.description,
                                     );
                                     setSearchValue(address.description);
                                   }}
@@ -869,7 +869,7 @@ const PostNewJob = () => {
                             },
                           }}
                           defaultValue=""
-                          options={(sectors.data || []).map((employer) => ({
+                          options={sectors?.data?.map((employer) => ({
                             value: employer.id,
                             label: employer.title,
                           }))}
@@ -924,7 +924,7 @@ const PostNewJob = () => {
                             (opportunityType) => ({
                               value: opportunityType.id,
                               label: opportunityType.title,
-                            })
+                            }),
                           )}
                           onChange={(_, value) => {
                             if (value) {
@@ -1016,8 +1016,8 @@ const PostNewJob = () => {
                             }
                             type="date"
                             value={formik.values.startDate}
+                            minDate={dayjs().subtract(1, "month")}
                             onBlur={formik.getFieldProps("startDate").onBlur}
-                            minDate={dayjs()}
                           />
                           {formik.touched.startDate &&
                           formik.errors.startDate ? (
@@ -1186,12 +1186,12 @@ const PostNewJob = () => {
                           "attachments",
                           `Maximum 10 files allowed. you can upload only ${
                             10 - currentAttachments.length
-                          } remaining`
+                          } remaining`,
                         );
                       } else {
                         const filesTaken = file.slice(
                           0,
-                          10 - currentAttachments.length
+                          10 - currentAttachments.length,
                         );
                         formik.setFieldValue("attachments", [
                           ...currentAttachments,
@@ -1208,15 +1208,15 @@ const PostNewJob = () => {
                         formik.setFieldValue(
                           "attachments",
                           formik.values.attachments.filter(
-                            (attachment) => attachment.path !== file.path
-                          )
+                            (attachment) => attachment.path !== file.path,
+                          ),
                         );
                       } else {
                         formik.setFieldValue(
                           "attachments",
                           formik.values.attachments.filter(
-                            (_, i) => i !== index
-                          )
+                            (_, i) => i !== index,
+                          ),
                         );
                       }
                     }}
@@ -1277,8 +1277,8 @@ const PostNewJob = () => {
                             ? "Updating..."
                             : "Posting..."
                           : tenderId
-                          ? "Update the tender"
-                          : "POST THE TENDER"
+                            ? "Update the tender"
+                            : "POST THE TENDER"
                       }
                       type="submit"
                       className="resetButton"

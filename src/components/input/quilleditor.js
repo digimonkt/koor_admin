@@ -26,7 +26,7 @@ const QuillInputComponent = ({ value = "", placeholder = "", onChange }) => {
     [{ direction: "rtl" }], // text direction
     [{ size: ["small", false, "large", "huge"] }], // font size
     [{ color: [] }, { background: [] }], // text and background color
-    [{ font: [] }], // font family
+    [{ font: ["Poppins"] }], // font family
     [{ align: [] }], // text alignment
     ["link", "image", "video"], // link, image, and video
     ["clean"], // remove formatting

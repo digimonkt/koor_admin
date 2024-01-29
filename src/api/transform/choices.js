@@ -10,7 +10,9 @@ export const transformJobAPIResponse = (data) => {
     jobId: data.job_id,
     jobTitle: data.title,
     company: data.user || data.company,
-    location: `${data.city.title},${data.country.title}`,
+    location: `${data.city.title ? data.city.title + ", " : ""}${
+      data.country.title
+    }`,
     action: data.status,
   }));
 };

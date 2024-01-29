@@ -99,7 +99,10 @@ function ManageTender() {
       const totalCounts = Math.ceil(response.data.count / limit);
       setTotalCount(totalCounts);
     } else {
-      console.log(response.error);
+      setLoading(false);
+      if (response?.error.errors.detail === "I") {
+        setPages(1);
+      }
     }
   };
 
@@ -121,7 +124,11 @@ function ManageTender() {
 
       dispatch(setSuccessToast("Add Tender Category SuccessFully"));
     } else {
-      dispatch(setErrorToast("Something went wrong"));
+      if (response.error.errors.title === "This field may not be blank.") {
+        dispatch(setErrorToast("Field can not be blank"));
+      } else {
+        dispatch(setErrorToast("Something went wrong"));
+      }
     }
   };
 
@@ -138,7 +145,7 @@ function ManageTender() {
     const response = await tenderCategoryDeleteApi(deleteTenderCategory);
     if (response.remote === "success") {
       const newSkillTable = tenderCategoryTable.filter(
-        (emp) => emp.id !== deleteTenderCategory
+        (emp) => emp.id !== deleteTenderCategory,
       );
       setTenderCategoryTable(newSkillTable);
       setDeleteTenderCategory("");
