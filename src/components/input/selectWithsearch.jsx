@@ -21,9 +21,12 @@ function SelectWithSearch({ options, title, multiple, ...rest }) {
           fontFamily: "Poppins !important",
         },
       }}
-      options={options}
-      getOptionLabel={option => option.label}
-      renderInput={params => {
+      options={options || []}
+      getOptionLabel={(option) => option.label}
+      getOptionSelected={(option, selectedValue) =>
+        option.value === selectedValue.value
+      }
+      renderInput={(params) => {
         return <TextField {...params} placeholder={title} />;
       }}
       renderOption={(props, option) => {
@@ -34,7 +37,8 @@ function SelectWithSearch({ options, title, multiple, ...rest }) {
               "& > img": { mr: 2, flexShrink: 0 },
             }}
             {...props}
-            key={options.value}>
+            key={options.value}
+          >
             {option.label}
           </Box>
         );

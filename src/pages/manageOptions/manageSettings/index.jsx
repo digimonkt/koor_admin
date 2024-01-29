@@ -217,7 +217,7 @@ const ManageSettingsComponent = () => {
                                   __html: html?.slice(0, 300) + "......",
                                 }}
                               />
-                            )
+                            ),
                           )}
 
                           <Stack

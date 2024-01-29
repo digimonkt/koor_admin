@@ -99,6 +99,9 @@ function ManageSkillsComponent() {
       const totalCounts = Math.ceil(response.data.count / limit);
       setTotalCount(totalCounts);
     } else {
+      if (response?.error.errors.detail === "I") {
+        setPages(1);
+      }
       console.log(response.error);
     }
   };
@@ -121,7 +124,13 @@ function ManageSkillsComponent() {
 
       dispatch(setSuccessToast("Add Skill SuccessFully"));
     } else {
-      dispatch(setErrorToast("Something went wrong"));
+      if (response.error.errors.title) {
+        dispatch(setErrorToast("Field can not be blank"));
+      } else if (response.error.errors.message === "Skills already exists") {
+        dispatch(setErrorToast("Skills already exists"));
+      } else {
+        dispatch(setErrorToast("Something went wrong"));
+      }
     }
   };
 

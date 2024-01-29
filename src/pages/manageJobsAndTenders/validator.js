@@ -20,7 +20,7 @@ export const validateCreateJobInput = Yup.object()
       value: Yup.string().required("Country is required"),
     }),
     existCompany: Yup.string().when("companyType", {
-      is: e => e === "exist",
+      is: (e) => e === "exist",
       then: () =>
         Yup.object().shape({
           label: Yup.string().required("Company is required"),
@@ -33,7 +33,7 @@ export const validateCreateJobInput = Yup.object()
         }),
     }),
     company: Yup.string().when("companyType", {
-      is: e => e === "new",
+      is: (e) => e === "new",
       then: () => Yup.string().required("Company details is required"),
       otherwise: () => Yup.string().notRequired(),
     }),
@@ -51,16 +51,13 @@ export const validateCreateJobInput = Yup.object()
     isApplyThroughEmail: Yup.boolean(),
     isApplyThroughWebsite: Yup.boolean(),
     isApplyThroughKoor: Yup.boolean(),
-    applicationInstruction: Yup.string()
-      .trim()
-      .nonNullable()
-      .required("Application Instruction content cannot be empty"),
+    applicationInstruction: Yup.string().trim().nonNullable(),
     isContactEmail: Yup.boolean(),
     startDate: Yup.string().nullable().required("Start Date is required"),
     deadline: Yup.string()
       .nullable()
       .required("Deadline is required")
-      .test("startDate", "Date Must be of Future", value => {
+      .test("startDate", "Date Must be of Future", (value) => {
         return dayjs(value).isSameOrAfter(dayjs(), "days");
       }),
     websiteLink: Yup.string().when("isApplyThroughWebsite", {
@@ -155,7 +152,7 @@ export const validateCreateTenderInput = Yup.object()
       .min(1, "At Least one category is required")
       .max(3, "Maximum 3 categories"),
     existCompany: Yup.string().when("companyType", {
-      is: e => e === "exist" || e === undefined,
+      is: (e) => e === "exist" || e === undefined,
       then: () =>
         Yup.object().shape({
           label: Yup.string().required("Company is required"),
@@ -168,7 +165,7 @@ export const validateCreateTenderInput = Yup.object()
         }),
     }),
     company: Yup.string().when("companyType", {
-      is: e => e === "new" || e === undefined,
+      is: (e) => e === "new" || e === undefined,
       then: () => Yup.string().required("Company details is required"),
       otherwise: () => Yup.string().notRequired(),
     }),
@@ -179,15 +176,13 @@ export const validateCreateTenderInput = Yup.object()
     deadline: Yup.string()
       .nullable()
       .required("Deadline is required")
-      .test("startDate", "Date Must be of Future", value => {
+      .test("startDate", "Date Must be of Future", (value) => {
         return dayjs(value).isSameOrAfter(dayjs(), "days");
       }),
     isApplyThroughEmail: Yup.boolean(),
     isApplyThroughWebsite: Yup.boolean(),
     isApplyThroughKoor: Yup.boolean(),
-    applicationInstruction: Yup.string()
-      .trim()
-      .required("Application Instruction content cannot be empty"),
+    applicationInstruction: Yup.string().trim(),
     isContactEmail: Yup.boolean(),
     websiteLink: Yup.string().when("isApplyThroughWebsite", {
       is: true,

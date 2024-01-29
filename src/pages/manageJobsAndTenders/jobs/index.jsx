@@ -98,7 +98,7 @@ function ManageJobsComponent() {
                   onClick={() => {
                     handleHoldJob(
                       item,
-                      item.row.action === "active" ? "inActive" : "active"
+                      item.row.action === "active" ? "inActive" : "active",
                     );
                   }}
                   sx={{
@@ -152,7 +152,7 @@ function ManageJobsComponent() {
         },
       },
     ],
-    []
+    [],
   );
 
   const manageJobList = useCallback(async () => {
@@ -169,7 +169,7 @@ function ManageJobsComponent() {
       const startIndex = (page - 1) * 10;
       const formateData = transformJobAPIResponse(
         response.data.results,
-        startIndex
+        startIndex,
       );
       if (!formateData.length) {
         dispatch(setLoading(false));
@@ -179,6 +179,9 @@ function ManageJobsComponent() {
       setTotalCount(totalCounts);
     } else {
       dispatch(setLoading(false));
+      if (response?.error.errors.detail === "I") {
+        setPages(1);
+      }
     }
   }, [country, debouncedSearchJobsValue, pages, limit]);
 
@@ -231,7 +234,7 @@ function ManageJobsComponent() {
       await activeInactiveJob(id);
       manageJobList();
     },
-    [jobTable, dispatch]
+    [jobTable, dispatch],
   );
 
   const resetFilterJob = useCallback(() => {
@@ -245,7 +248,7 @@ function ManageJobsComponent() {
     if (response.remote === "success") {
       window.open(
         process.env.REACT_APP_BACKEND_URL + response.data.url,
-        "_blank"
+        "_blank",
       );
     } else {
       dispatch(setErrorToast("Something went wrong"));

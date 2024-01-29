@@ -11,19 +11,27 @@ import {
 } from "@mui/material";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { setSuccessToast } from "@redux/slice/toast";
+import { useDispatch } from "react-redux";
 const Layout = (employerDetail) => {
   const id = employerDetail.employerDetail?.id;
   const [isVerified, setIsVerified] = useState(false);
   const data = employerDetail.employerDetail?.profile?.is_verified;
   const [verifiedData, setVerifiedData] = useState(data);
+  const [loading, setLoading] = useState(false);
+  const dispatch = useDispatch();
+
   const handleVerified = async () => {
     setIsVerified(!isVerified);
+    setLoading(true);
     const response = await verifyUnVerifyApi(
       id,
-      isVerified ? "unverify" : "verify"
+      isVerified ? "unverify" : "verify",
     );
     if (response.remote === "success") {
       setVerifiedData(!verifiedData);
+      dispatch(setSuccessToast(response.data?.message));
+      setLoading(false);
     }
   };
 
@@ -194,7 +202,16 @@ const Layout = (employerDetail) => {
               marginTop: "10px",
               fontFamily: "Bahnschrift",
             }}
-            title={verifiedData ? "verified" : "unverify"}
+            title={
+              verifiedData
+                ? loading
+                  ? "verified..."
+                  : "verified"
+                : loading
+                  ? "unverify..."
+                  : "unverify"
+            }
+            disabled={loading}
             onClick={handleVerified}
           />
         </Grid>

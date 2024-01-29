@@ -15,7 +15,7 @@ import { getCountriesName } from "@api/jobs";
 function ManageEmployerComponent() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { countries } = useSelector(state => state.choice);
+  const { countries } = useSelector((state) => state.choice);
   const [employerTable, setEmployerTable] = useState([]);
   const [pages, setPages] = useState(1);
   const [limit, setLimit] = useState(10);
@@ -65,7 +65,7 @@ function ManageEmployerComponent() {
         headerName: "Action",
         sortable: false,
         width: "220",
-        renderCell: item => {
+        renderCell: (item) => {
           return (
             <Stack direction="row" spacing={1} alignItems="center">
               <>
@@ -81,7 +81,8 @@ function ManageEmployerComponent() {
                       width: 30,
                       height: 30,
                       color: "#274593",
-                    }}>
+                    }}
+                  >
                     {item.row.action ? (
                       <SVG.ToggleOffIcon />
                     ) : (
@@ -95,7 +96,8 @@ function ManageEmployerComponent() {
                     }}
                     sx={{
                       padding: "0px",
-                    }}>
+                    }}
+                  >
                     {<SVG.unVerify />}
                   </IconButton>
                 )}
@@ -109,7 +111,8 @@ function ManageEmployerComponent() {
                   width: 30,
                   height: 30,
                   color: "#274593",
-                }}>
+                }}
+              >
                 <SVG.EyeIcon />
               </IconButton>
               <IconButton
@@ -121,7 +124,8 @@ function ManageEmployerComponent() {
                   width: 30,
                   height: 30,
                   color: "#274593",
-                }}>
+                }}
+              >
                 <SVG.DeleteIcon />
               </IconButton>
             </Stack>
@@ -133,7 +137,7 @@ function ManageEmployerComponent() {
   );
 
   const handleRedirectDetails = useCallback(
-    id => {
+    (id) => {
       navigate(`employer-details/${id}`);
     },
     [navigate],
@@ -158,7 +162,12 @@ function ManageEmployerComponent() {
       const totalCounts = Math.ceil(response.data.count / limit);
       setTotalCount(totalCounts);
     } else {
-      dispatch(setErrorToast("something went wrong"));
+      dispatch(setLoading(false));
+      if (response?.error.errors.detail === "I") {
+        setPages(1);
+      }
+
+      // dispatch(setErrorToast("something went wrong"));
     }
   }, [country, debouncedSearchEmployerValue, pages, limit]);
 
@@ -166,9 +175,9 @@ function ManageEmployerComponent() {
     setPages(page);
   }, []);
 
-  const filterJobsCountry = e => {
+  const filterJobsCountry = (e) => {
     const countryId = e.target.value;
-    const country = countriesData?.find(country => country.id === countryId);
+    const country = countriesData?.find((country) => country.id === countryId);
     setCountry(country);
   };
   const getCountryList = async () => {
@@ -179,9 +188,9 @@ function ManageEmployerComponent() {
     }
   };
   const activeDeActiveUser = useCallback(
-    async item => {
+    async (item) => {
       const id = item.row.id;
-      const update = employerTable.map(i => {
+      const update = employerTable.map((i) => {
         if (i.action === id) {
           return { ...i };
         }
@@ -197,7 +206,9 @@ function ManageEmployerComponent() {
   const handleDelete = useCallback(async () => {
     const response = await deleteUser(deleting);
     if (response.remote === "success") {
-      const newEmployerTable = employerTable.filter(emp => emp.id !== deleting);
+      const newEmployerTable = employerTable.filter(
+        (emp) => emp.id !== deleting,
+      );
       setEmployerTable(newEmployerTable);
       setDeleting("");
       dispatch(setSuccessToast("Job Delete SuccessFully"));
@@ -249,11 +260,11 @@ function ManageEmployerComponent() {
         page={pages}
         searchProps={{
           placeholder: "Search Employers",
-          onChange: e => setSearchTerm(e.target.value),
+          onChange: (e) => setSearchTerm(e.target.value),
           value: searchTerm,
         }}
         selectProps={{
-          onChange: e => filterJobsCountry(e),
+          onChange: (e) => filterJobsCountry(e),
           value: country?.id || "",
         }}
         limitProps={{
@@ -263,13 +274,14 @@ function ManageEmployerComponent() {
             { label: 10, value: 10 },
             { label: 15, value: 15 },
           ],
-          onChange: e => setLimit(e.target.value),
+          onChange: (e) => setLimit(e.target.value),
         }}
         csvProps={{
           title: (
             <Box
               onClick={() => downloadEmployerCSV()}
-              sx={{ display: "flex", alignItems: "center" }}>
+              sx={{ display: "flex", alignItems: "center" }}
+            >
               <span className="d-inline-flex align-items-center me-2">
                 <SVG.ExportIcon />
               </span>
@@ -281,7 +293,8 @@ function ManageEmployerComponent() {
           title: (
             <Box
               onClick={() => resetFilterEmployer()}
-              sx={{ display: "flex", alignItems: "center" }}>
+              sx={{ display: "flex", alignItems: "center" }}
+            >
               <span className="d-inline-flex align-items-center me-2">
                 <SVG.WhiteFile />
               </span>{" "}

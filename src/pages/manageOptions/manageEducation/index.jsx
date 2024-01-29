@@ -98,7 +98,10 @@ function manageEducation() {
       const totalCounts = Math.ceil(response.data.count / limit);
       setTotalCount(totalCounts);
     } else {
-      console.log(response.error);
+      setLoading(false);
+      if (response?.error.errors.detail === "I") {
+        setPages(1);
+      }
     }
   };
 
@@ -126,7 +129,11 @@ function manageEducation() {
       setAddEducation("");
       dispatch(setSuccessToast("Add Education SuccessFully"));
     } else {
-      dispatch(setErrorToast("Something went wrong"));
+      if (response.error.errors.title === "Not a valid string.") {
+        dispatch(setErrorToast("Field can not be blank"));
+      } else {
+        dispatch(setErrorToast("Something went wrong"));
+      }
     }
   };
 
@@ -155,7 +162,7 @@ function manageEducation() {
     const response = await deleteEducationApi(deleteEducation);
     if (response.remote === "success") {
       const newCategoryTable = educationTable.filter(
-        (emp) => emp.id !== deleteEducation
+        (emp) => emp.id !== deleteEducation,
       );
       setEducationTable(newCategoryTable);
       setDeleteEducation("");

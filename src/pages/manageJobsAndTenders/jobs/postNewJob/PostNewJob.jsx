@@ -296,7 +296,7 @@ const PostNewJob = () => {
       setInstructions(data.applicationInstruction || "");
       formik.setFieldValue(
         "applicationInstruction",
-        data.applicationInstruction || ""
+        data.applicationInstruction || "",
       );
 
       formik.setFieldValue("company", data.company || "");
@@ -308,7 +308,7 @@ const PostNewJob = () => {
       formik.setFieldValue("budgetCurrency", data.budgetCurrency);
       formik.setFieldValue(
         "budgetAmount",
-        parseInt(data.budgetAmount.replace(/,/g, ""), 10) || 0
+        parseInt(data.budgetAmount.replace(/,/g, ""), 10) || 0,
       );
       formik.setFieldValue("budgetPayPeriod", data.budgetPayPeriod);
       formik.setFieldValue("country", {
@@ -334,7 +334,7 @@ const PostNewJob = () => {
       });
       formik.setFieldValue(
         "isApplyThroughEmail",
-        Boolean(data.isApplyThroughEmail) || false
+        Boolean(data.isApplyThroughEmail) || false,
       );
       formik.setFieldValue("isFullTime", data.isFullTime || false);
       formik.setFieldValue("isPartTime", data.isPartTime || false);
@@ -343,23 +343,23 @@ const PostNewJob = () => {
       formik.setFieldValue("startDate", dayjs(data.startDate));
       formik.setFieldValue(
         "isContactEmail",
-        Boolean(data.contactEmail) || false
+        Boolean(data.contactEmail) || false,
       );
       formik.setFieldValue(
         "isApplyThroughKoor",
-        Boolean(data.isApplyThroughKoor) || false
+        Boolean(data.isApplyThroughKoor) || false,
       );
       formik.setFieldValue("contactEmail", data.contactEmail || "");
       formik.setFieldValue("cc1", data.cc1 || "");
       formik.setFieldValue("cc2", data.cc2 || "");
       formik.setFieldValue(
         "isContactWhatsapp",
-        Boolean(data.contactWhatsapp) || false
+        Boolean(data.contactWhatsapp) || false,
       );
       formik.setFieldValue("contactWhatsapp", data.contactWhatsapp || "");
       formik.setFieldValue(
         "isApplyThroughWebsite",
-        Boolean(data.isApplyThroughWebsite) || false
+        Boolean(data.isApplyThroughWebsite) || false,
       );
       formik.setFieldValue(
         "languages",
@@ -377,7 +377,7 @@ const PostNewJob = () => {
             ]
           : [1, 2, 3].map(() => ({
               language: "",
-            }))
+            })),
       );
       formik.setFieldValue("highestEducation", {
         value: data.highestEducation.id || "",
@@ -385,7 +385,7 @@ const PostNewJob = () => {
       });
       formik.setFieldValue(
         "skills",
-        data.skills.map ? data.skills.map((skill) => skill.id) : []
+        data.skills.map ? data.skills.map((skill) => skill.id) : [],
       );
       // formik.setFieldValue("attachments", data.attachments);
     }
@@ -445,7 +445,7 @@ const PostNewJob = () => {
       !subCategories.data[formik.values.jobCategories]?.length
     ) {
       dispatch(
-        getSubCategories({ categoryId: formik.values.jobCategories.value })
+        getSubCategories({ categoryId: formik.values.jobCategories.value }),
       );
     }
   }, [formik.values.jobCategories]);
@@ -875,10 +875,10 @@ const PostNewJob = () => {
                                   onClick={() => {
                                     formik.setFieldValue(
                                       "address",
-                                      address.description
+                                      address.description,
                                     );
                                     setSuggestedAddressValue(
-                                      address.description
+                                      address.description,
                                     );
                                   }}
                                 >
@@ -1055,7 +1055,7 @@ const PostNewJob = () => {
                       <JobFormControl
                         className="update_checkbox"
                         control={<CheckboxInput sx={{ padding: "9px 5px" }} />}
-                        label="Contract"
+                        label="Consultant"
                         checked={formik.values.hasContract}
                         {...formik.getFieldProps("hasContract")}
                       />
@@ -1091,7 +1091,7 @@ const PostNewJob = () => {
                         onChange={(e) => formik.setFieldValue("startDate", e)}
                         value={formik.values.startDate}
                         onBlur={formik.getFieldProps("startDate").onBlur}
-                        minDate={dayjs()}
+                        minDate={dayjs().subtract(1, "month")}
                       />
                       {formik.touched.startDate && formik.errors.startDate ? (
                         <ErrorMessage>{formik.errors.startDate}</ErrorMessage>
@@ -1321,7 +1321,6 @@ const PostNewJob = () => {
                     <label className="mb-2 d-block">
                       Required languages
                       <span style={{ opacity: "0.5" }}>(Maximum 3)</span>
-                      <span className="required-field">*</span>
                     </label>
                     <Grid container spacing={2}>
                       {[0, 1, 2].map((i) => {
@@ -1362,7 +1361,6 @@ const PostNewJob = () => {
                   <label className="mb-2 d-block">
                     Job skills
                     <span style={{ opacity: "0.5" }}>(Maximum 3)</span>
-                    <span className="required-field">*</span>
                   </label>
                   <Grid container spacing={2}>
                     <Grid item xl={4} lg={4} xs={12}>
@@ -1442,20 +1440,20 @@ const PostNewJob = () => {
                         formik.setFieldValue(
                           "attachments",
                           formik.values.attachments.filter(
-                            (attachment) => attachment.id !== file.id
-                          )
+                            (attachment) => attachment.id !== file.id,
+                          ),
                         );
                         setCompanyAttachments(
                           companyAttachments.filter(
-                            (attachment) => attachment.id !== file.id
-                          )
+                            (attachment) => attachment.id !== file.id,
+                          ),
                         );
                       } else {
                         formik.setFieldValue(
                           "attachments",
                           formik.values.attachments.filter(
-                            (attachment) => attachment.path !== file.path
-                          )
+                            (attachment) => attachment.path !== file.path,
+                          ),
                         );
                       }
                     }}
@@ -1514,8 +1512,8 @@ const PostNewJob = () => {
                               ? "Updating..."
                               : "Posting..."
                             : jobId
-                            ? "UPDATE THE JOB"
-                            : "POST THE JOB"
+                              ? "UPDATE THE JOB"
+                              : "POST THE JOB"
                         }
                         type="submit"
                         className="mt-2 resetButton"
