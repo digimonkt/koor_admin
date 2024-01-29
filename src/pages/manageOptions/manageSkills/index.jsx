@@ -126,6 +126,8 @@ function ManageSkillsComponent() {
     } else {
       if (response.error.errors.title) {
         dispatch(setErrorToast("Field can not be blank"));
+      } else if (response.error.errors.message === "Skills already exists") {
+        dispatch(setErrorToast("Skills already exists"));
       } else {
         dispatch(setErrorToast("Something went wrong"));
       }
