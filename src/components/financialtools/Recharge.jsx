@@ -30,7 +30,7 @@ const StyledFormLabel = styled(FormLabel)(() => ({
 const Recharge = () => {
   const dispatch = useDispatch();
   const [content, setContent] = useState([]);
-  const [contentId, setContentId] = useState("");
+  const [contentId, setContentId] = useState(0);
   const [creditsAmount, setCreditsAmount] = useState([]);
   const [userPoints, setUserPoints] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
@@ -136,6 +136,7 @@ const Recharge = () => {
               <StyledFormLabel>Number of job credits</StyledFormLabel>
               <input
                 className={`${styles.textType}`}
+                required={true}
                 placeholder="Add Credits"
                 onChange={handleChange}
                 type="number"
