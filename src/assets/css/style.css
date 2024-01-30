@@ -1544,7 +1544,7 @@ span.count {
 
 .usd {
   padding: 8px;
-  width: 100px !important;
+  width: 115px;
   background: #cacaca40;
   border-radius: 10px;
   font-family: "Poppins";
@@ -1555,7 +1555,6 @@ span.count {
   /* identical to box height */
   text-align: center;
   letter-spacing: 0.02em;
-
   color: #121212;
   opacity: 0.5;
 }

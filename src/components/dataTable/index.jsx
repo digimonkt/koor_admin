@@ -7,7 +7,8 @@ import { incrementPage } from "@utils/common";
 function DataTable({ rows, columns, limitProps, loader, page, NoFoundText }) {
   useEffect(() => {
     if (rows.length) {
-      incrementPage({ page, rows });
+      const startIndex = (page - 1) * limitProps.value + 1;
+      incrementPage({ page, rows, startIndex });
     }
   }, [page, rows]);
   return (
@@ -22,7 +23,8 @@ function DataTable({ rows, columns, limitProps, loader, page, NoFoundText }) {
           "@media (max-width:320px)": {
             width: "320px",
           },
-        }}>
+        }}
+      >
         <StyledDataGrid
           className="scrolltable"
           rows={rows}
@@ -31,7 +33,7 @@ function DataTable({ rows, columns, limitProps, loader, page, NoFoundText }) {
           disableHeight={false}
           disableColumnSelector={false}
           localeText={NoFoundText ?? { noRowsLabel: "No rows found" }}
-          getRowClassName={params =>
+          getRowClassName={(params) =>
             params.indexRelativeToCurrentPage % 2 === 0 ? "even" : "odd"
           }
         />
@@ -56,7 +58,8 @@ function DataTable({ rows, columns, limitProps, loader, page, NoFoundText }) {
                 },
               },
             }}
-            size="small">
+            size="small"
+          >
             <SelectInput
               options={[
                 { label: 5, value: 5 },

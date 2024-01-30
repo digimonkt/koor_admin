@@ -167,6 +167,16 @@ function manageEducation() {
       setEducationTable(newCategoryTable);
       setDeleteEducation("");
       dispatch(setSuccessToast("Delete Skill SuccessFully"));
+    } else if (
+      response.error.errors.message[0] ||
+      response.error.errors.message
+    ) {
+      console.log(response);
+      dispatch(
+        setErrorToast(
+          response.error.errors.message || response.error.errors.message[0],
+        ),
+      );
     } else {
       dispatch(setErrorToast("Something went wrong"));
     }

@@ -154,7 +154,6 @@ function ManageJobsComponent() {
     ],
     [],
   );
-
   const manageJobList = useCallback(async () => {
     dispatch(setLoading(true));
     const page = pages;
@@ -166,7 +165,7 @@ function ManageJobsComponent() {
       country: country.title,
     });
     if (response.remote === "success") {
-      const startIndex = (page - 1) * 10;
+      const startIndex = (page - 1) * limit + 1;
       const formateData = transformJobAPIResponse(
         response.data.results,
         startIndex,
