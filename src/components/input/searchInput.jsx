@@ -17,9 +17,9 @@ function SearchInputComponent({ placeholder, widthInput, ...rest }) {
         placeholder={placeholder}
         {...rest}
       />
-      <button className={`${styles.btn}`}>
-        <SVG.SearchRightIcon />
-      </button>
+      {/* <button className={`${styles.btn}`}> */}
+      {/*   <SVG.SearchRightIcon /> */}
+      {/* </button> */}
     </Stack>
   );
 }

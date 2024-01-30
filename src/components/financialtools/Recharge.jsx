@@ -30,7 +30,7 @@ const StyledFormLabel = styled(FormLabel)(() => ({
 const Recharge = () => {
   const dispatch = useDispatch();
   const [content, setContent] = useState([]);
-  const [contentId, setContentId] = useState("");
+  const [contentId, setContentId] = useState(0);
   const [creditsAmount, setCreditsAmount] = useState([]);
   const [userPoints, setUserPoints] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
@@ -46,16 +46,25 @@ const Recharge = () => {
 
   const handleSubmit = async () => {
     const action = "recharge";
-    const response = await verifyUnVerifyApi(contentId, action, creditsAmount);
-    if (response.remote === "success") {
-      dispatch(setSuccessToast("Recharge add successFully"));
-      setCreditsAmount([]);
-      setContentId("");
-      setContent([]);
+    if (!contentId || !creditsAmount || !creditsAmount.length) {
+      dispatch(setErrorToast("Please fill all the fields"));
     } else {
-      dispatch(setErrorToast("Something Went Wrong"));
+      const response = await verifyUnVerifyApi(
+        contentId,
+        action,
+        creditsAmount,
+      );
+      if (response.remote === "success") {
+        dispatch(setSuccessToast("Recharge add successFully"));
+        setCreditsAmount([]);
+        setContentId("");
+        setContent([]);
+      } else {
+        dispatch(setErrorToast("Something Went Wrong"));
+      }
     }
   };
+
   const debouncedSearchCountryValue = useDebounce(searchTerm, 500);
   useEffect(() => {
     getEmployerList();
@@ -121,6 +130,7 @@ const Recharge = () => {
                 }}
                 options={options}
                 title={"select the options"}
+                required
                 onChange={(_, value) => {
                   if (value) {
                     setContentId(value.value);

@@ -55,7 +55,7 @@ const ManageCategoryComponent = () => {
         addCategories({
           id: response.data.data.id,
           title: payload.title,
-        })
+        }),
       );
       dispatch(setSuccessToast("Add Category SuccessFully"));
       setAddCategory("");
@@ -83,6 +83,15 @@ const ManageCategoryComponent = () => {
       dispatch(removeCategory({ id: deleting }));
       setDeleting("");
       dispatch(setSuccessToast("Delete Category SuccessFully"));
+    } else if (
+      response.error.errors.message[0] ||
+      response.error.errors.message
+    ) {
+      dispatch(
+        setErrorToast(
+          response.error.errors.message || response.error.errors.message[0],
+        ),
+      );
     } else {
       dispatch(setErrorToast("Something went wrong"));
     }
@@ -118,7 +127,7 @@ const ManageCategoryComponent = () => {
           id: response.data.data.id,
           title: payload.title,
           categoryId: response.data.data.category,
-        })
+        }),
       );
       dispatch(setSuccessToast("Add Sub Category SuccessFully"));
       setAddSubCategory("");
@@ -136,10 +145,19 @@ const ManageCategoryComponent = () => {
         removeSubCategory({
           id: subCategoryDeleting.id,
           categoryId,
-        })
+        }),
       );
       setSubCategoryDeleting("");
       dispatch(setSuccessToast("Delete Sub Category SuccessFully"));
+    } else if (
+      response.error.errors.message[0] ||
+      response.error.errors.message
+    ) {
+      dispatch(
+        setErrorToast(
+          response.error.errors.message || response.error.errors.message[0],
+        ),
+      );
     } else {
       dispatch(setErrorToast("Something went wrong"));
     }
