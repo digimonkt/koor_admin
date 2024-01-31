@@ -125,9 +125,7 @@ function ManageSkillsComponent() {
       dispatch(setSuccessToast("Add Skill SuccessFully"));
     } else {
       if (response.error.errors.title) {
-        dispatch(setErrorToast("Field can not be blank"));
-      } else if (response.error.errors.message === "Skills already exists") {
-        dispatch(setErrorToast("Skills already exists"));
+        dispatch(setErrorToast(response.error.errors.title));
       } else {
         dispatch(setErrorToast("Something went wrong"));
       }
@@ -149,6 +147,10 @@ function ManageSkillsComponent() {
       setSkillsTable(newSkillTable);
       setDeleteSkill("");
       dispatch(setSuccessToast("Delete Skill SuccessFully"));
+    } else if (
+      response.error.errors.message === "This skill already used in job."
+    ) {
+      dispatch(setErrorToast("This skill already used in job."));
     } else {
       dispatch(setErrorToast("Something went wrong"));
     }
