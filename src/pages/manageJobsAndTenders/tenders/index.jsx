@@ -80,6 +80,13 @@ function ManageTendersComponent() {
       },
       {
         id: "6",
+        field: "postedBy",
+        headerName: "PostedBy",
+        width: "220",
+        sortable: true,
+      },
+      {
+        id: "7",
         field: "city",
         headerName: "City",
         width: "220",
@@ -87,7 +94,7 @@ function ManageTendersComponent() {
       },
 
       {
-        id: "7",
+        id: "9",
         field: "country",
         headerName: "Country",
         width: "220",

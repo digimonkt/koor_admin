@@ -44,7 +44,7 @@ const ManageCategoryComponent = () => {
   const [editing, setEditing] = useState("");
   const [addSubCategory, setAddSubCategory] = useState("");
   const [editCategoryValue, setEditCategoryValue] = useState("");
-  const [editCategoryId, setEditCategoryId] = useState("");
+  const [eidtCategoryId, setEditCategoryId] = useState("");
   async function addItems() {
     const payload = {
       title: addCategory,
@@ -167,8 +167,8 @@ const ManageCategoryComponent = () => {
     setSubCategoryDeleting(category);
   };
 
-  const handleEditSub = async (subcategory) => {
-    setEditCategoryId(subcategory.categoryId);
+  const handleEditSub = async (subcategory, id) => {
+    setEditCategoryId(id);
     setSubCategoryEdit(subcategory.id);
     setSubCategoryEditValue(subcategory.title);
   };
@@ -176,7 +176,7 @@ const ManageCategoryComponent = () => {
   const handleUpdateSub = async () => {
     const payload = {
       title: subCategoryEditValue,
-      category: editCategoryId,
+      category: eidtCategoryId,
     };
 
     const response = await editSubCategoryApi(subCategoryEdit, payload);
