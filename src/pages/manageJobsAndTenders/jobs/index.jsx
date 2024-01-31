@@ -62,6 +62,12 @@ function ManageJobsComponent() {
         sortable: true,
       },
       {
+        field: "postedBy",
+        headerName: "PostedBy",
+        width: "220",
+        sortable: true,
+      },
+      {
         field: "location",
         headerName: "Location",
         width: "220",

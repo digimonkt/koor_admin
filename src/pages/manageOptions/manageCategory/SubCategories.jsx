@@ -19,7 +19,9 @@ const SubCategories = ({ countryId, handleDeleteSub, handleEditSub }) => {
         name: newSubCategory.title,
         action: (
           <>
-            <IconButton onClick={() => handleEditSub(newSubCategory)}>
+            <IconButton
+              onClick={() => handleEditSub(newSubCategory, countryId)}
+            >
               <SVG.EditIcon />
             </IconButton>
             <IconButton onClick={() => handleDeleteSub(newSubCategory)}>

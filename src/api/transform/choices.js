@@ -4,12 +4,14 @@ import {
 } from "@components/financialtools/table/data";
 import { SVG } from "@assets/svg";
 export const transformJobAPIResponse = (data) => {
+  console.log(data);
   return data.map((data, index) => ({
     id: data.id,
     no: index + 1,
     jobId: data.job_id,
     jobTitle: data.title,
     company: data.user || data.company,
+    postedBy: data.post_by_admin ? "Admin" : data.user || data.company,
     location: `${data.city.title ? data.city.title + ", " : ""}${
       data.country.title
     }`,
@@ -50,6 +52,7 @@ export const transformOptionsResponse = (data) => {
     title: data.title,
     tender_type: data.tender_type.title,
     sector: data.sector.title,
+    postedBy: data.posted_by_admin ? "Admin" : data.user || data.company,
     city: data.city.title,
     country: data.country.title,
     status: data.status,
