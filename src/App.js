@@ -16,7 +16,7 @@ function App() {
   const dispatch = useDispatch();
   const {
     toast: { message: toastMessage, type: toastType },
-  } = useSelector(state => state);
+  } = useSelector((state) => state);
   const checkLoginStatus = () => {
     const accessToken = globalLocalStorage.getAccessToken();
     const refreshToken = globalLocalStorage.getRefreshToken();
@@ -32,7 +32,7 @@ function App() {
   return (
     <div className="App">
       <Routes>
-        {PUBLIC_ROUTE.map(route => {
+        {PUBLIC_ROUTE.map((route) => {
           return (
             <Route
               path={route.path}
@@ -45,8 +45,7 @@ function App() {
             />
           );
         })}
-
-        {UNAUTHENTICATED_ROUTE.map(route => {
+        {UNAUTHENTICATED_ROUTE.map((route) => {
           return (
             <Route
               path={route.path}
