@@ -152,6 +152,8 @@ function ManageFQL() {
     } else {
       if (response.error.errors.title === "This field may not be blank.") {
         dispatch(setErrorToast("Field can not be blank"));
+      } else if (response.error.errors.role === '"" is not a valid choice.') {
+        dispatch(setErrorToast("Please select role"));
       } else {
         dispatch(setErrorToast("Something went wrong"));
       }
