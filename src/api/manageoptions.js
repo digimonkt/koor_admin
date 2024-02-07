@@ -30,7 +30,7 @@ export const skillDeleteApi = async (skillId) => {
   return response;
 };
 
-export const manageCategoryApi = async ({ search, limit, page }) => {
+export const manageCategoryApi = async ({ search, limit = 500, page }) => {
   const response = await api.request({
     url: urlcat("/v1/admin/job-category", { search, limit, page }),
     method: "GET",
