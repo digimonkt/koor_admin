@@ -28,7 +28,7 @@ export const deleteCountriesApi = async (countryId) => {
 
 export const getCityApi = async (data) => {
   const response = await api.request({
-    url: urlcat("/v1/admin/city", data),
+    url: urlcat("/v1/admin/city", { ...data, limit: 500 }),
     method: "GET",
   });
   return response;
