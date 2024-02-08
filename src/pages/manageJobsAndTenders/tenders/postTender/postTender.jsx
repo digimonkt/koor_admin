@@ -320,7 +320,11 @@ const PostNewJob = () => {
   };
   useEffect(() => {
     if (formik.values.country && !cities.data[formik.values.country]?.length) {
-      dispatch(getCitiesByCountry({ countryId: formik.values.country?.value }));
+      dispatch(
+        getCitiesByCountry({
+          countryId: formik.values.country?.value,
+        }),
+      );
     }
   }, [formik.values.country]);
 
