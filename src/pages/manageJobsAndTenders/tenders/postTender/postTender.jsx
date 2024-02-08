@@ -1132,10 +1132,7 @@ const PostNewJob = () => {
                   </Grid>
                 </Grid>
                 <Grid item xl={12} lg={12} xs={12} className="mt-3">
-                  <label>
-                    Application Instructions
-                    <span className="required-field">*</span>
-                  </label>
+                  <label>Application Instructions</label>
                   <QuillInput
                     className="form-control-area"
                     type="textarea"
