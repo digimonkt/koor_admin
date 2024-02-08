@@ -296,7 +296,7 @@ const PostNewJob = () => {
       setInstructions(data.applicationInstruction || "");
       formik.setFieldValue(
         "applicationInstruction",
-        data.applicationInstruction || ""
+        data.applicationInstruction || "",
       );
 
       formik.setFieldValue("company", data.company || "");
@@ -308,7 +308,7 @@ const PostNewJob = () => {
       formik.setFieldValue("budgetCurrency", data.budgetCurrency);
       formik.setFieldValue(
         "budgetAmount",
-        parseInt(data.budgetAmount.replace(/,/g, ""), 10) || 0
+        parseInt(data.budgetAmount.replace(/,/g, ""), 10) || 0,
       );
       formik.setFieldValue("budgetPayPeriod", data.budgetPayPeriod);
       formik.setFieldValue("country", {
@@ -334,7 +334,7 @@ const PostNewJob = () => {
       });
       formik.setFieldValue(
         "isApplyThroughEmail",
-        Boolean(data.isApplyThroughEmail) || false
+        Boolean(data.isApplyThroughEmail) || false,
       );
       formik.setFieldValue("isFullTime", data.isFullTime || false);
       formik.setFieldValue("isPartTime", data.isPartTime || false);
@@ -343,23 +343,23 @@ const PostNewJob = () => {
       formik.setFieldValue("startDate", dayjs(data.startDate));
       formik.setFieldValue(
         "isContactEmail",
-        Boolean(data.contactEmail) || false
+        Boolean(data.contactEmail) || false,
       );
       formik.setFieldValue(
         "isApplyThroughKoor",
-        Boolean(data.isApplyThroughKoor) || false
+        Boolean(data.isApplyThroughKoor) || false,
       );
       formik.setFieldValue("contactEmail", data.contactEmail || "");
       formik.setFieldValue("cc1", data.cc1 || "");
       formik.setFieldValue("cc2", data.cc2 || "");
       formik.setFieldValue(
         "isContactWhatsapp",
-        Boolean(data.contactWhatsapp) || false
+        Boolean(data.contactWhatsapp) || false,
       );
       formik.setFieldValue("contactWhatsapp", data.contactWhatsapp || "");
       formik.setFieldValue(
         "isApplyThroughWebsite",
-        Boolean(data.isApplyThroughWebsite) || false
+        Boolean(data.isApplyThroughWebsite) || false,
       );
       formik.setFieldValue(
         "languages",
@@ -377,7 +377,7 @@ const PostNewJob = () => {
             ]
           : [1, 2, 3].map(() => ({
               language: "",
-            }))
+            })),
       );
       formik.setFieldValue("highestEducation", {
         value: data.highestEducation.id || "",
@@ -385,7 +385,7 @@ const PostNewJob = () => {
       });
       formik.setFieldValue(
         "skills",
-        data.skills.map ? data.skills.map((skill) => skill.id) : []
+        data.skills.map ? data.skills.map((skill) => skill.id) : [],
       );
       // formik.setFieldValue("attachments", data.attachments);
     }
@@ -445,7 +445,7 @@ const PostNewJob = () => {
       !subCategories.data[formik.values.jobCategories]?.length
     ) {
       dispatch(
-        getSubCategories({ categoryId: formik.values.jobCategories.value })
+        getSubCategories({ categoryId: formik.values.jobCategories.value }),
       );
     }
   }, [formik.values.jobCategories]);
@@ -655,18 +655,19 @@ const PostNewJob = () => {
                 <Grid container spacing={2} className="mt-0">
                   <Grid item xl={5} lg={5}>
                     <LabeledInput
-                      title="Title of your job"
+                      title="Title of your job*"
                       className="add-form-control"
                       placeholder="Online Research Participant (Work From Home/Part Time/Casual)…"
                       {...formik.getFieldProps("title")}
                     />
+
                     {formik.touched.title && formik.errors.title ? (
                       <ErrorMessage>{formik.errors.title}</ErrorMessage>
                     ) : null}
                   </Grid>
                   <Grid item xl={3} lg={3}>
                     <LabeledInput
-                      title="Experience in Years"
+                      title="Experience in Years*"
                       className="add-form-control"
                       placeholder="Experience in Years"
                       type="number"
@@ -680,7 +681,7 @@ const PostNewJob = () => {
                     <CurrencyInput
                       currency="USD"
                       type="number"
-                      title="Budget"
+                      title="Budget*"
                       optionsValues={{
                         currency: formik.getFieldProps("budgetCurrency"),
                         input: formik.getFieldProps("budgetAmount"),
@@ -875,10 +876,10 @@ const PostNewJob = () => {
                                   onClick={() => {
                                     formik.setFieldValue(
                                       "address",
-                                      address.description
+                                      address.description,
                                     );
                                     setSuggestedAddressValue(
-                                      address.description
+                                      address.description,
                                     );
                                   }}
                                 >
@@ -1084,6 +1085,7 @@ const PostNewJob = () => {
                       >
                         <label className="mb-1 d-inline-block">
                           Start Date
+                          <span className="required-field">*</span>{" "}
                         </label>
                       </Stack>
                       <DateInput
@@ -1218,10 +1220,7 @@ const PostNewJob = () => {
                     ) : null}{" "}
                   </Grid>
                   <Grid item xl={12} lg={12} xs={12}>
-                    <label>
-                      Application Instructions
-                      <span className="required-field">*</span>
-                    </label>
+                    <label>Application Instructions</label>
                     <QuillInput
                       className="form-control-area"
                       placeholder="Write a brief text overview of your application process. You can also include links, emails, etc."
@@ -1440,20 +1439,20 @@ const PostNewJob = () => {
                         formik.setFieldValue(
                           "attachments",
                           formik.values.attachments.filter(
-                            (attachment) => attachment.id !== file.id
-                          )
+                            (attachment) => attachment.id !== file.id,
+                          ),
                         );
                         setCompanyAttachments(
                           companyAttachments.filter(
-                            (attachment) => attachment.id !== file.id
-                          )
+                            (attachment) => attachment.id !== file.id,
+                          ),
                         );
                       } else {
                         formik.setFieldValue(
                           "attachments",
                           formik.values.attachments.filter(
-                            (attachment) => attachment.path !== file.path
-                          )
+                            (attachment) => attachment.path !== file.path,
+                          ),
                         );
                       }
                     }}
@@ -1513,8 +1512,8 @@ const PostNewJob = () => {
                               ? "Updating..."
                               : "Posting..."
                             : jobId
-                            ? "UPDATE THE JOB"
-                            : "POST THE JOB"
+                              ? "UPDATE THE JOB"
+                              : "POST THE JOB"
                         }
                         type="submit"
                         className="mt-2 resetButton"
