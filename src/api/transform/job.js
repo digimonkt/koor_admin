@@ -49,7 +49,7 @@ export const transformFullJobDetails = (data) => {
     expiredInDays: dayjs(data.deadline).diff(
       dayjs(new Date().toISOString().split("T")[0]),
       "day",
-      true
+      true,
     ),
     user: {
       id: data.user.id,
