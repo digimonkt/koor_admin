@@ -722,6 +722,7 @@ const PostNewJob = () => {
                           title={
                             formik.values.city ? "city" : "Select country first"
                           }
+                          disabled={!formik.values.country.value}
                           onChange={(_, value) => {
                             if (value) {
                               formik.setFieldValue("city", value);
