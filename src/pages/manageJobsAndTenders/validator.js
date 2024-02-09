@@ -71,7 +71,6 @@ export const validateCreateJobInput = Yup.object()
           .notRequired()
           .matches(REGEX.website, "website link not valid"),
     }),
-
     contactEmail: Yup.string()
       .email("Contact email must be a valid")
       .test(
