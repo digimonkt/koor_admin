@@ -1098,7 +1098,6 @@ const PostNewJob = () => {
                         onChange={(e) => formik.setFieldValue("startDate", e)}
                         value={formik.values.startDate}
                         onBlur={formik.getFieldProps("startDate").onBlur}
-                        minDate={dayjs().subtract(1, "month")}
                       />
                       {formik.touched.startDate && formik.errors.startDate ? (
                         <ErrorMessage>{formik.errors.startDate}</ErrorMessage>

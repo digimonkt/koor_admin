@@ -5,6 +5,17 @@ import "react-quill/dist/quill.snow.css";
 const QuillInputComponent = ({ value = "", placeholder = "", onChange }) => {
   const [editorValue, setEditorValue] = useState("");
 
+  const Link = ReactQuill.Quill.import("formats/link");
+  const builtInFunc = Link.sanitize;
+  Link.sanitize = function customSanitizeLinkInput(linkValueInput) {
+    let val = linkValueInput;
+
+    // do nothing, since this implies user's already using a custom protocol
+    if (/^\w+:/.test(val));
+    else if (!/^https?:/.test(val)) val = "http://" + val;
+
+    return builtInFunc.call(this, val); // retain the built-in logic
+  };
   useEffect(() => {
     setEditorValue(value || "");
   }, [value]);
