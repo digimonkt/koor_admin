@@ -1021,7 +1021,6 @@ const PostNewJob = () => {
                             }
                             type="date"
                             value={formik.values.startDate}
-                            minDate={dayjs().subtract(1, "month")}
                             onBlur={formik.getFieldProps("startDate").onBlur}
                           />
                           {formik.touched.startDate &&
