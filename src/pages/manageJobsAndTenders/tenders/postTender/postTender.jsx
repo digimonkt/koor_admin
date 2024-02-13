@@ -78,11 +78,6 @@ const PostNewJob = () => {
   const [countriesData, setCountriesData] = useState(countries.data);
   const [companyLogo, setCompanyLogo] = useState("");
   const [editorValue, setEditorValue] = useState("");
-  const [selectedValue, setSelectedValue] = React.useState("exist");
-  const handleChange = (event) => {
-    setSelectedValue(event.target.value);
-    formik.setFieldValue("companyType", selectedValue);
-  };
 
   const formik = useFormik({
     initialValues: {
@@ -121,7 +116,7 @@ const PostNewJob = () => {
     validationSchema: validateCreateTenderInput,
     onSubmit: async (values, { resetForm }) => {
       const payload = {
-        company_type: selectedValue,
+        company_type: values.companyType,
         company: values.company,
         company_logo_item: values.companyLogo,
         employer_id: values.existCompany.value,
@@ -198,7 +193,6 @@ const PostNewJob = () => {
       }
     },
   });
-
   const getEmployerList = async () => {
     const limitParam = 10;
     const response = await manageEmployer({
@@ -221,10 +215,8 @@ const PostNewJob = () => {
         setCompanyLogo(data.companyLogo);
       }
       if (!data.user?.id) {
-        setSelectedValue("new");
         formik.setFieldValue("companyType", "new");
       } else {
-        setSelectedValue("exist");
         formik.setFieldValue("companyType", "exist");
       }
       formik.setFieldValue("description", data.description || "");
@@ -378,6 +370,7 @@ const PostNewJob = () => {
     const newTenderId = searchParams.get("tenderId");
     if (newTenderId && tenderId !== newTenderId) setTenderId(newTenderId);
   }, [searchParams.get("tenderId")]);
+  console.log({ formik });
   return (
     <div className="job-application">
       <Card
@@ -407,27 +400,30 @@ const PostNewJob = () => {
             </h2>
             <div className="form-content">
               <form onSubmit={formik.handleSubmit}>
-                <RadioGroup value={selectedValue} onChange={handleChange}>
+                <RadioGroup
+                  value={formik.values.companyType}
+                  onChange={(e) =>
+                    formik.setFieldValue("companyType", e.target.value)
+                  }
+                >
                   <FormControlLabel
+                    required
                     sx={{ width: "180px" }}
                     value="exist"
                     control={<Radio />}
                     label="Select Company"
-                    onChange={formik.handleChange}
-                    onBlur={() => formik.setFieldValue("companyType", "exist")}
-                    checked={selectedValue === "exist"}
+                    checked={formik.values.companyType === "exist"}
                   />
                   <FormControlLabel
+                    required
                     sx={{ width: "180px" }}
                     value="new"
                     control={<Radio />}
                     label="Create Company"
-                    onBlur={() => formik.setFieldValue("companyType", "new")}
-                    onChange={formik.handleChange}
-                    checked={selectedValue === "new"}
+                    checked={formik.values.companyType === "new"}
                   />
                 </RadioGroup>
-                {selectedValue === "exist" && (
+                {formik.values.companyType === "exist" && (
                   <>
                     <Grid xl={12} lg={12} xs={12}>
                       <h2 className="mt-3">Select company</h2>
@@ -440,6 +436,7 @@ const PostNewJob = () => {
                             <span className="required-field">*</span>
                           </label>
                           <SelectWithSearch
+                            name="existCompany"
                             sx={{
                               borderRadius: "10px",
                               background: "#F0F0F0",
@@ -486,10 +483,10 @@ const PostNewJob = () => {
                             value={formik.values.existCompany}
                             onKeyUp={(e) => setSearchTerm(e.target.value)}
                           />
-                          {formik.errors.existCompany &&
-                          formik.errors.existCompany ? (
+                          {formik.errors?.existCompany?.value &&
+                          formik.errors.existCompany?.value ? (
                             <ErrorMessage>
-                              {formik.errors.existCompany.value}
+                              {formik.errors.existCompany?.value}
                             </ErrorMessage>
                           ) : null}
                         </Grid>
@@ -500,7 +497,7 @@ const PostNewJob = () => {
                     </Grid>
                   </>
                 )}
-                {selectedValue === "new" && (
+                {formik.values.companyType === "new" && (
                   <>
                     <Grid xl={12} lg={12} xs={12}>
                       <h2 className="mt-3"> New Company</h2>
@@ -516,13 +513,15 @@ const PostNewJob = () => {
                             type="text"
                             placeholder="Company Name"
                             className="add-form-control"
+                            onChange={(e) =>
+                              formik.setFieldValue("company", e.target.value)
+                            }
                             {...formik.getFieldProps("company")}
                           />
                           {formik.touched.company && formik.errors.company ? (
                             <ErrorMessage>{formik.errors.company}</ErrorMessage>
                           ) : null}
                         </Grid>
-
                         <Grid item xl={12} lg={12} xs={12}>
                           <label className="mb-2">
                             Add Company Logo
@@ -580,7 +579,6 @@ const PostNewJob = () => {
                       title="Title of your tender*"
                       className="add-form-control"
                       placeholder="Bed And Breakfast Temporary Accommodation"
-                      required
                       {...formik.getFieldProps("title")}
                     />
                     {formik.touched.title && formik.errors.title ? (
@@ -755,7 +753,7 @@ const PostNewJob = () => {
                         placeholder="Address"
                         className="add-form-control"
                         name={formik.getFieldProps("address").name}
-                        onBlur={(e) => formik.getFieldProps("address").onBlur}
+                        onBlur={() => formik.getFieldProps("address").onBlur}
                         onChange={(e) => setSearchValue(e.target.value)}
                         value={searchValue}
                       />
