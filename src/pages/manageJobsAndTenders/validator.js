@@ -21,16 +21,8 @@ export const validateCreateJobInput = Yup.object()
     }),
     existCompany: Yup.string().when("companyType", {
       is: (e) => e === "exist",
-      then: () =>
-        Yup.object().shape({
-          label: Yup.string().required("Company is required"),
-          value: Yup.string().required("Company is required"),
-        }),
-      otherwise: () =>
-        Yup.object().shape({
-          label: Yup.string().notRequired(),
-          value: Yup.string().notRequired(),
-        }),
+      then: () => Yup.object().required("Company is required"),
+      otherwise: () => Yup.object().notRequired(),
     }),
     company: Yup.string().when("companyType", {
       is: (e) => e === "new",
