@@ -2,7 +2,7 @@ import api from ".";
 import urlcat from "urlcat";
 
 export const getJobSubCategoryApi = async ({
-  limit,
+  limit = 500,
   page,
   search,
   ...rest
