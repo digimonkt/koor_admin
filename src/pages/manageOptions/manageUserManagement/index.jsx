@@ -9,12 +9,28 @@ import {
   Stack,
 } from "@mui/material";
 import { JobFormControl } from "@pages/manageJobsAndTenders/tenders/postTender/style";
-import React from "react";
-import { userManageData } from "./helper";
+import React, { useEffect, useState } from "react";
+// import { userManageData } from "./helper";
 import { OutlinedButton } from "@components/button";
 import { SVG } from "@assets/svg";
+import { getUsersManageRigthAPI } from "@api/manageUserManagement";
 
 export default function UserManagement() {
+  const [userManageData, setUserManageData] = useState([]);
+
+  const getUsersManageRigth = async () => {
+    const response = await getUsersManageRigthAPI(
+      "b6b74588-8fa8-47ff-8839-3d59ef7aad7f",
+    );
+    if (response.remote === "success") {
+      console.log(response.data);
+      setUserManageData(response.data);
+    }
+  };
+
+  useEffect(() => {
+    getUsersManageRigth();
+  }, []);
   return (
     <>
       <Card
@@ -70,23 +86,21 @@ export default function UserManagement() {
                   />
                   <Box>
                     <Grid container spacing={2}>
-                      {item.childern.map((subitem) => (
+                      {item.sub_rights.map((subitem) => (
                         <Grid xs={6} lg={4} md={6} sm={6} key={subitem.id} item>
                           <FormGroup>
-                            {subitem.childern.map((items) => (
-                              <JobFormControl
-                                key={items.id}
-                                sx={{
-                                  "& .MuiFormControlLabel-label": {
-                                    fontSize: "14px",
-                                    fontWeight: "400",
-                                    display: "block",
-                                  },
-                                }}
-                                label={items.label}
-                                control={<CheckboxInput />}
-                              />
-                            ))}
+                            <JobFormControl
+                              key={subitem.id}
+                              sx={{
+                                "& .MuiFormControlLabel-label": {
+                                  fontSize: "14px",
+                                  fontWeight: "400",
+                                  display: "block",
+                                },
+                              }}
+                              label={subitem.title}
+                              control={<CheckboxInput />}
+                            />
                           </FormGroup>
                         </Grid>
                       ))}
