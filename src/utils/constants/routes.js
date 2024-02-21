@@ -33,6 +33,7 @@ import {
   // addFAQ,
 } from "@pages/manageOptions";
 import ManageCountry from "@pages/manageOptions/manageCountry";
+import ManageUserManagement from "@pages/manageOptions/manageUserManagement";
 import ViewInvoices from "@pages/manageOptions/manageFinancialTools/view-invoices";
 import ManageTenderCategory from "@pages/manageOptions/manageTenderCategory";
 
@@ -211,6 +212,11 @@ export const AUTHENTICATED_ROUTE = [
     id: "manage-adsense",
     path: "/manage-adsense",
     element: ManageAdSense,
+  },
+  {
+    id: "user-management",
+    path: "/user-management",
+    element: ManageUserManagement,
   },
 ];
 

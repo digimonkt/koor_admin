@@ -1198,7 +1198,7 @@ const PostNewJob = () => {
                         ]);
                       }
                     }}
-                    deleteFile={(file, index) => {
+                    deleteFile={(file) => {
                       if (file.id) {
                         formik.setFieldValue("attachmentsRemove", [
                           ...formik.values.attachmentsRemove,
@@ -1214,7 +1214,7 @@ const PostNewJob = () => {
                         formik.setFieldValue(
                           "attachments",
                           formik.values.attachments.filter(
-                            (_, i) => i !== index,
+                            (i) => i.path !== file.path,
                           ),
                         );
                       }

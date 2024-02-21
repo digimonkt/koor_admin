@@ -45,6 +45,7 @@ function App() {
             />
           );
         })}
+
         {UNAUTHENTICATED_ROUTE.map((route) => {
           return (
             <Route
