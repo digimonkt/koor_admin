@@ -33,7 +33,7 @@ import {
   // addFAQ,
 } from "@pages/manageOptions";
 import ManageCountry from "@pages/manageOptions/manageCountry";
-import UserManagement from "@pages/manageOptions/user-management";
+import ManageUserManagement from "@pages/manageOptions/manageUserManagement";
 import ViewInvoices from "@pages/manageOptions/manageFinancialTools/view-invoices";
 import ManageTenderCategory from "@pages/manageOptions/manageTenderCategory";
 
@@ -216,7 +216,7 @@ export const AUTHENTICATED_ROUTE = [
   {
     id: "user-management",
     path: "/user-management",
-    element: UserManagement,
+    element: ManageUserManagement,
   },
 ];
 
