@@ -2,6 +2,8 @@ import { Grid, IconButton } from "@mui/material";
 import React from "react";
 import { useDropzone } from "react-dropzone";
 import { SVG } from "@assets/svg";
+import { setErrorToast } from "@redux/slice/toast";
+import { useDispatch } from "react-redux";
 
 function AttachmentDragNDropInputComponent({
   files,
@@ -9,10 +11,19 @@ function AttachmentDragNDropInputComponent({
   deleteFile,
   single,
 }) {
+  const dispatch = useDispatch();
   const { getRootProps, getInputProps } = useDropzone({
-    onDrop: handleDrop || (() => { }),
+    onDrop: (e, error) => {
+      if (error.length && error[0]?.errors) {
+        dispatch(setErrorToast("File must be less then 5 MB"));
+      } else if (e.length && handleDrop) {
+        handleDrop(e);
+      }
+    },
     multiple: !single,
     maxFiles: single ? 1 : 10,
+    maxSize: 5 * 1024 * 1024,
+    onError: (e) => console.log({ e }),
   });
   const acceptedFileItems = (files || []).map((file) => {
     return (
