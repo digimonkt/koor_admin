@@ -17,7 +17,15 @@ function AttachmentDragNDropInputComponent({
       if (error.length && error[0]?.errors) {
         dispatch(setErrorToast("File must be less then 5 MB"));
       } else if (e.length && handleDrop) {
-        handleDrop(e);
+        const renamedFiles = e.map((file) => {
+          const renamedFile = new File([file], file.name.slice(0, 40), {
+            type: file.type,
+          });
+
+          return renamedFile;
+        });
+
+        handleDrop(renamedFiles);
       }
     },
     multiple: !single,
@@ -41,7 +49,7 @@ function AttachmentDragNDropInputComponent({
           >
             <SVG.AttachIcon />
           </IconButton>
-          {file.title ? file.title : file.path}
+          {file.name || file.title || file.path || "Untitled File"}
         </div>
         <IconButton
           onClick={() => deleteFile(file)}
@@ -64,7 +72,12 @@ function AttachmentDragNDropInputComponent({
                 Drag here or{" "}
                 <span style={{ color: "#274593" }}>upload an attachment</span>
               </p>
-              {!single && <small>Max 10 files, each one under 5MB</small>}
+              {!single && (
+                <small>
+                  Max 10 files, each one under 5MB, File name should be 40
+                  character
+                </small>
+              )}
             </div>
           </div>
         </Grid>
