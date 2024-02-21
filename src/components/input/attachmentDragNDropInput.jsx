@@ -74,8 +74,8 @@ function AttachmentDragNDropInputComponent({
               </p>
               {!single && (
                 <small>
-                  Max 10 files, each one under 5MB, File name should be 40
-                  character
+                  Max 10 files, each one under 5MB, File name could be 40
+                  character long
                 </small>
               )}
             </div>
