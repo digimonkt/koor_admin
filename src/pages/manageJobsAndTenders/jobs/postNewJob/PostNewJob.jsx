@@ -78,7 +78,7 @@ const PostNewJob = () => {
   };
   const [searchTerm, setSearchTerm] = useState("");
   const [companyLogo, setCompanyLogo] = useState("");
-  const [companyAttachments, setCompanyAttachments] = useState("");
+  // const [companyAttachments, setCompanyAttachments] = useState("");
   const [searchCountry, setSearchCountry] = useState("");
   const [employersData, setEmployersData] = useState(employers.data);
   const [editorValue, setEditorValue] = useState("");
@@ -250,7 +250,7 @@ const PostNewJob = () => {
           setSuggestedAddressValue("");
           setSuggestedAddress([]);
           setCompanyLogo();
-          setCompanyAttachments("");
+          // setCompanyAttachments("");
           navigate("/manage-jobs");
         } else {
           dispatch(setErrorToast("Something went wrong"));
@@ -292,7 +292,6 @@ const PostNewJob = () => {
       setCompanyLogo(data?.companyLogo);
       formik.setFieldValue("description", data.description || "");
       setEditorValue(data.description || "");
-      setCompanyAttachments(data.attachments || []);
       setInstructions(data.applicationInstruction || "");
       formik.setFieldValue(
         "applicationInstruction",
@@ -387,7 +386,7 @@ const PostNewJob = () => {
         "skills",
         data.skills.map ? data.skills.map((skill) => skill.id) : [],
       );
-      // formik.setFieldValue("attachments", data.attachments);
+      formik.setFieldValue("attachments", data.attachments);
     }
   }, []);
   const handleProfilePicSave = async (file) => {
@@ -1421,10 +1420,7 @@ const PostNewJob = () => {
                 <Grid item xl={12} lg={12} xs={12}>
                   <h2 className="mt-3 mb-3">Attach files</h2>
                   <AttachmentDragNDropInput
-                    files={
-                      companyAttachments ||
-                      formik.getFieldProps("attachments").value
-                    }
+                    files={formik.getFieldProps("attachments").value}
                     handleDrop={(file) => {
                       formik.setValues({
                         ...formik.values,
@@ -1443,11 +1439,6 @@ const PostNewJob = () => {
                         formik.setFieldValue(
                           "attachments",
                           formik.values.attachments.filter(
-                            (attachment) => attachment.id !== file.id,
-                          ),
-                        );
-                        setCompanyAttachments(
-                          companyAttachments.filter(
                             (attachment) => attachment.id !== file.id,
                           ),
                         );
