@@ -63,7 +63,7 @@ function ManageJobsComponent() {
       },
       {
         field: "postedBy",
-        headerName: "PostedBy",
+        headerName: "Posted By",
         width: "220",
         sortable: true,
       },

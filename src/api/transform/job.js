@@ -6,6 +6,8 @@ export const transformFullJobDetails = (data) => {
   return {
     id: data.id,
     company: data.company,
+    companyEmail: data.company_email,
+    companyDescription: data.company_about,
     companyLogo: data.company_logo?.path
       ? generateFileUrl(data.company_logo.path)
       : "",
@@ -73,6 +75,8 @@ export const transformFullJobDetails = (data) => {
 export const transformFullTenderDetails = (data) => {
   return {
     company: data.company,
+    companyEmail: data.company_email,
+    companyAbout: data.company_about,
     companyLogo: data.company_logo?.path
       ? generateFileUrl(data.company_logo.path)
       : "",

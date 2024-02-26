@@ -28,6 +28,7 @@ export const transformEmployerAPIResponse = (data) => {
     email: data.email,
     mobileNumber: data.mobile_number,
     action: data.is_active,
+    createBy: data.is_company ? "Admin" : "Employer",
     verify: data.verify,
   }));
 };
