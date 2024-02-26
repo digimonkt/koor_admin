@@ -29,6 +29,12 @@ export const validateCreateJobInput = Yup.object()
       then: () => Yup.string().required("Company details is required"),
       otherwise: () => Yup.string().notRequired(),
     }),
+    companyEmail: Yup.string().when("companyType", {
+      is: (e) => e === "new",
+      then: () => Yup.string().required("Company Email is required"),
+      otherwise: () => Yup.string().notRequired(),
+    }),
+    companyAbout: Yup.string(),
     address: Yup.string().required("Address is required"),
     jobCategories: Yup.object().shape({
       label: Yup.string().required("job Categories is required"),
@@ -63,19 +69,14 @@ export const validateCreateJobInput = Yup.object()
           .notRequired()
           .matches(REGEX.website, "website link not valid"),
     }),
-    contactEmail: Yup.string()
-      .email("Contact email must be a valid")
-      .test(
-        "atLeastOneContactMethod",
-        "At least one email is required",
-        function (value) {
-          const { isApplyThroughEmail } = this.parent;
-          if (isApplyThroughEmail) {
-            return value || this.parent.cc1 || this.parent.cc2;
-          }
-          return true;
-        },
-      ),
+    contactEmail: Yup.string().when("isApplyThroughEmail", {
+      is: true,
+      then: () =>
+        Yup.string()
+          .email("Contact email must be a valid")
+          .required("Contact email is required"),
+      otherwise: () => Yup.string().notRequired(),
+    }),
     cc1: Yup.string().email("CC1 email must be a valid"),
     cc2: Yup.string().email("CC2 email must be a valid"),
     isContactWhatsapp: Yup.boolean(),
@@ -160,6 +161,13 @@ export const validateCreateTenderInput = Yup.object()
       then: () => Yup.string().required("Company details is required"),
       otherwise: () => Yup.string().notRequired(),
     }),
+    companyEmail: Yup.string().when("companyType", {
+      is: (e) => e === "new",
+      then: () => Yup.string().required("Company Email is required"),
+      otherwise: () => Yup.string().notRequired(),
+    }),
+    companyAbout: Yup.string(),
+
     sectors: Yup.object(),
     tag: Yup.object(),
     address: Yup.string().required("Address is required"),
@@ -186,19 +194,14 @@ export const validateCreateTenderInput = Yup.object()
           .notRequired()
           .matches(REGEX.website, "website link not valid"),
     }),
-    contactEmail: Yup.string()
-      .email("Contact email must be a valid")
-      .test(
-        "atLeastOneContactMethod",
-        "At least one email is required",
-        function (value) {
-          const { isApplyThroughEmail } = this.parent;
-          if (isApplyThroughEmail) {
-            return value || this.parent.cc1 || this.parent.cc2;
-          }
-          return true;
-        },
-      ),
+    contactEmail: Yup.string().when("isApplyThroughEmail", {
+      is: true,
+      then: () =>
+        Yup.string()
+          .email("Contact email must be a valid")
+          .required("Contact email is required"),
+      otherwise: () => Yup.string().notRequired(),
+    }),
     cc1: Yup.string().email("CC1 email must be a valid"),
     cc2: Yup.string().email("CC2 email must be a valid"),
     isContactWhatsapp: Yup.boolean(),

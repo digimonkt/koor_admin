@@ -61,6 +61,12 @@ function ManageEmployerComponent() {
         width: "220",
       },
       {
+        field: "createBy",
+        headerName: "Create By",
+        sortable: true,
+        width: "220",
+      },
+      {
         field: "action",
         headerName: "Action",
         sortable: false,
@@ -155,6 +161,7 @@ function ManageEmployerComponent() {
     });
     if (response.remote === "success") {
       const formateData = transformEmployerAPIResponse(response.data.results);
+      console.log(formateData, "formateData");
       if (!formateData.length) {
         dispatch(setLoading(false));
       }
