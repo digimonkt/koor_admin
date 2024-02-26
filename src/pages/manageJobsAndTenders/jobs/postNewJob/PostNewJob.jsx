@@ -126,6 +126,8 @@ const PostNewJob = () => {
       companyType: "exist",
       existCompany: { label: "", value: "" },
       company: "",
+      companyEmail: "",
+      companyAbout: "",
       companyLogo: [],
       companyLogoRemove: [],
       title: "",
@@ -169,6 +171,8 @@ const PostNewJob = () => {
       const payload = {
         company_type: selectedValue,
         company: values.company,
+        company_email: values.companyEmail,
+        company_about: values.companyAbout,
         company_logo_item: values.companyLogo,
         employer_id: values.existCompany.value,
         title: values.title,
@@ -299,6 +303,8 @@ const PostNewJob = () => {
       );
 
       formik.setFieldValue("company", data.company || "");
+      formik.setFieldValue("companyEmail", data.companyEmail || "");
+      formik.setFieldValue("companyAbout", data.companyAbout || "");
       formik.setFieldValue("existCompany", {
         value: data.user?.id || "",
         label: data.user?.name || data.user?.email || "",
@@ -583,7 +589,7 @@ const PostNewJob = () => {
                 {selectedValue === "new" && (
                   <>
                     <Grid xl={12} lg={12} xs={12}>
-                      <h2 className="mt-3"> New Company</h2>
+                      <h2 className="mt-3">New Company</h2>
                     </Grid>
                     <Grid item xl={12} lg={12} xs={12}>
                       <Grid container spacing={2}>
@@ -604,7 +610,43 @@ const PostNewJob = () => {
                             <ErrorMessage>{formik.errors.company}</ErrorMessage>
                           ) : null}
                         </Grid>
-
+                        <Grid item xl={4} lg={4} xs={12}>
+                          <label className="mb-2">
+                            Company Email
+                            <span className="required-field">*</span>
+                          </label>
+                          <input
+                            type="text"
+                            placeholder="Company Email"
+                            className="add-form-control"
+                            onBlur={formik.handleBlur}
+                            onChange={formik.handleChange}
+                            {...formik.getFieldProps("companyEmail")}
+                          />
+                          {formik.touched.companyEmail &&
+                          formik.errors.companyEmail ? (
+                            <ErrorMessage>
+                              {formik.errors.companyEmail}{" "}
+                            </ErrorMessage>
+                          ) : null}
+                        </Grid>
+                        <Grid item xl={4} lg={4} xs={12}>
+                          <label className="mb-2">Company About</label>
+                          <input
+                            type="text"
+                            placeholder="Company About"
+                            className="add-form-control"
+                            onBlur={formik.handleBlur}
+                            onChange={formik.handleChange}
+                            {...formik.getFieldProps("companyAbout")}
+                          />
+                          {formik.touched.companyAbout &&
+                          formik.errors.companyAbout ? (
+                            <ErrorMessage>
+                              {formik.errors.companyAbout}
+                            </ErrorMessage>
+                          ) : null}
+                        </Grid>
                         <Grid item xl={12} lg={12} xs={12}>
                           <label className="mb-2">
                             Add Company Logo

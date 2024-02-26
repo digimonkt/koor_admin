@@ -10,7 +10,6 @@ import {
 } from "@components/input";
 import CurrencyInput from "./currencyInput";
 import { useFormik } from "formik";
-
 import {
   Card,
   CardContent,
@@ -84,6 +83,8 @@ const PostNewJob = () => {
       companyType: "exist",
       existCompany: { label: "", value: "" },
       company: "",
+      companyEmail: "",
+      companyAbout: "",
       companyLogo: [],
       companyLogoRemove: [],
       title: "",
@@ -118,6 +119,8 @@ const PostNewJob = () => {
       const payload = {
         company_type: values.companyType,
         company: values.company,
+        company_about: values.companyAbout,
+        company_email: values.companyEmail,
         company_logo_item: values.companyLogo,
         employer_id: values.existCompany.value,
         title: values.title,
@@ -520,6 +523,54 @@ const PostNewJob = () => {
                           />
                           {formik.touched.company && formik.errors.company ? (
                             <ErrorMessage>{formik.errors.company}</ErrorMessage>
+                          ) : null}
+                        </Grid>
+                        <Grid item xl={4} lg={4} xs={12}>
+                          <label className="mb-2">
+                            Company Email
+                            <span className="required-field">*</span>
+                          </label>
+                          <input
+                            type="text"
+                            placeholder="Company Email "
+                            className="add-form-control"
+                            onChange={(e) =>
+                              formik.setFieldValue(
+                                "companyEmail ",
+                                e.target.value,
+                              )
+                            }
+                            {...formik.getFieldProps("companyEmail")}
+                          />
+                          {formik.touched.companyEmail &&
+                          formik.errors.companyEmail ? (
+                            <ErrorMessage>
+                              {formik.errors.companyEmail}
+                            </ErrorMessage>
+                          ) : null}
+                        </Grid>
+                        <Grid item xl={4} lg={4} xs={12}>
+                          <label className="mb-2">
+                            Comapany About
+                            <span className="required-field">*</span>
+                          </label>
+                          <input
+                            type="text"
+                            placeholder="Company About"
+                            className="add-form-control"
+                            onChange={(e) =>
+                              formik.setFieldValue(
+                                "companyAbout",
+                                e.target.value,
+                              )
+                            }
+                            {...formik.getFieldProps("companyAbout")}
+                          />
+                          {formik.touched.companyAbout &&
+                          formik.errors.companyAbout ? (
+                            <ErrorMessage>
+                              {formik.errors.companyAbout}
+                            </ErrorMessage>
                           ) : null}
                         </Grid>
                         <Grid item xl={12} lg={12} xs={12}>
