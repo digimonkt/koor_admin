@@ -75,7 +75,7 @@ export const validateCreateJobInput = Yup.object()
         Yup.string()
           .email("Contact email must be a valid")
           .required("Contact email is required"),
-      otherwise: () => Yup.string().notRequired(),
+      otherwise: () => Yup.string().email().notRequired(),
     }),
     cc1: Yup.string().email("CC1 email must be a valid"),
     cc2: Yup.string().email("CC2 email must be a valid"),
@@ -200,7 +200,7 @@ export const validateCreateTenderInput = Yup.object()
         Yup.string()
           .email("Contact email must be a valid")
           .required("Contact email is required"),
-      otherwise: () => Yup.string().notRequired(),
+      otherwise: () => Yup.string().email().notRequired(),
     }),
     cc1: Yup.string().email("CC1 email must be a valid"),
     cc2: Yup.string().email("CC2 email must be a valid"),
