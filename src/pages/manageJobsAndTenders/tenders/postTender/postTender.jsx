@@ -217,11 +217,7 @@ const PostNewJob = () => {
       if (data.companyLogo) {
         setCompanyLogo(data.companyLogo);
       }
-      if (!data.user?.id) {
-        formik.setFieldValue("companyType", "new");
-      } else {
-        formik.setFieldValue("companyType", "exist");
-      }
+      formik.setFieldValue("companyType", "exist");
       formik.setFieldValue("description", data.description || "");
       setEditorValue(data.description);
       formik.setFieldValue(
@@ -373,7 +369,6 @@ const PostNewJob = () => {
     const newTenderId = searchParams.get("tenderId");
     if (newTenderId && tenderId !== newTenderId) setTenderId(newTenderId);
   }, [searchParams.get("tenderId")]);
-  console.log({ formik });
   return (
     <div className="job-application">
       <Card

@@ -134,6 +134,19 @@ function ManageEmployerComponent() {
               >
                 <SVG.DeleteIcon />
               </IconButton>
+              <IconButton
+                onClick={() => handleEdit(item.row.id)}
+                sx={{
+                  "&.MuiIconButton-root": {
+                    background: "#D5E3F7",
+                  },
+                  width: 30,
+                  height: 30,
+                  color: "#274593",
+                }}
+              >
+                <SVG.EditIcon />
+              </IconButton>
             </Stack>
           );
         },
@@ -149,6 +162,7 @@ function ManageEmployerComponent() {
     [navigate],
   );
 
+  const handleEdit = () => {};
   const employerList = useCallback(async () => {
     dispatch(setLoading(true));
     const page = pages;
@@ -161,7 +175,6 @@ function ManageEmployerComponent() {
     });
     if (response.remote === "success") {
       const formateData = transformEmployerAPIResponse(response.data.results);
-      console.log(formateData, "formateData");
       if (!formateData.length) {
         dispatch(setLoading(false));
       }

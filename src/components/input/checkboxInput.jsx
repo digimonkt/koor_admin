@@ -5,7 +5,7 @@ import { SVG } from "@assets/svg";
 function CheckboxInputComponent({ onChange, defaultChecked = false, ...rest }) {
   return (
     <Checkbox
-      defaultChecked={defaultChecked}
+      checked={defaultChecked}
       onChange={onChange}
       disableRipple
       icon={<SVG.UncheckIcon />}

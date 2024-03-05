@@ -171,7 +171,6 @@ function manageEducation() {
       response.error.errors.message[0] ||
       response.error.errors.message
     ) {
-      console.log(response);
       dispatch(
         setErrorToast(
           response.error.errors.message || response.error.errors.message[0],

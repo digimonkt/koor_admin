@@ -9,7 +9,7 @@ import {
   Stack,
 } from "@mui/material";
 import { JobFormControl } from "@pages/manageJobsAndTenders/tenders/postTender/style";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { OutlinedButton } from "@components/button";
 import { SVG } from "@assets/svg";
 import {
@@ -34,12 +34,22 @@ export default function UserManagement() {
     }
   };
 
-  const handleAdminId = async (id) => {
-    const response = await getUsersManageRightsAPI(id);
-    if (response.remote === "success") {
-      setUserManageData(response.data || []);
-    }
+  const handleAdminId = (id) => {
+    setAdminId(id);
+    handleUpdateData(id);
   };
+
+  const handleUpdateData = useCallback(
+    async (id) => {
+      const response = await getUsersManageRightsAPI(id);
+      if (response.remote === "success") {
+        setUserManageData(() => {
+          return response.data || [];
+        });
+      }
+    },
+    [setUserManageData, adminId],
+  );
 
   const handleSubmit = async () => {
     const selectedIds = userManageData.reduce((acc, item) => {
@@ -90,10 +100,7 @@ export default function UserManagement() {
     label: item.name || item.email,
   }));
 
-  useEffect(() => {
-    handleAdminId(adminId);
-  }, [adminId]);
-
+  console.log(userManageData);
   useEffect(() => {
     getAdminList();
   }, []);
@@ -163,7 +170,7 @@ export default function UserManagement() {
                   options={options}
                   title={"select the options"}
                   onChange={(_, value) => {
-                    setAdminId(value?.value);
+                    handleAdminId(value?.value);
                   }}
                   {...options}
                 />

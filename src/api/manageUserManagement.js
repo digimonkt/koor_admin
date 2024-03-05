@@ -11,6 +11,14 @@ export const getUsersManageRightsAPI = async (userId) => {
   return res;
 };
 
+export const getAllRights = async () => {
+  const res = await api.request({
+    url: urlcat("/v1/admin/manage-user-rights"),
+    method: "GET",
+  });
+  return res;
+};
+
 export const updateUserManageRightsAPI = async (userId, data) => {
   const res = await api.request({
     url: urlcat("/v1/admin/manage-user-rights", {
