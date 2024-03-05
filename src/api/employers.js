@@ -40,3 +40,23 @@ export const deleteUser = async (jobId) => {
   });
   return response;
 };
+
+export const editEmployerAPI = async (userId, data) => {
+  const response = await api.request({
+    url: urlcat("api/v1/users/employer/about-me", { userId }),
+    method: "PUT",
+    data,
+  });
+  return response;
+};
+
+export const UpdateEmployerProfileImageAPI = async (data) => {
+  return await api.request({
+    url: "/v1/users/display-image",
+    method: "PATCH",
+    data,
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+};

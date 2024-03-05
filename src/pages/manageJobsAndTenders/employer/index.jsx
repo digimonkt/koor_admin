@@ -152,17 +152,23 @@ function ManageEmployerComponent() {
         },
       },
     ],
-    [],
+    []
   );
 
   const handleRedirectDetails = useCallback(
     (id) => {
       navigate(`employer-details/${id}`);
     },
-    [navigate],
+    [navigate]
   );
 
-  const handleEdit = () => {};
+  const handleEdit = useCallback(
+    (id) => {
+      navigate(`edit-employer/${id}`);
+    },
+    [navigate]
+  );
+
   const employerList = useCallback(async () => {
     dispatch(setLoading(true));
     const page = pages;
@@ -220,14 +226,14 @@ function ManageEmployerComponent() {
       await activeInactiveUser(id);
       employerList();
     },
-    [employerTable],
+    [employerTable]
   );
 
   const handleDelete = useCallback(async () => {
     const response = await deleteUser(deleting);
     if (response.remote === "success") {
       const newEmployerTable = employerTable.filter(
-        (emp) => emp.id !== deleting,
+        (emp) => emp.id !== deleting
       );
       setEmployerTable(newEmployerTable);
       setDeleting("");
@@ -248,7 +254,7 @@ function ManageEmployerComponent() {
     if (response.remote === "success") {
       window.open(
         process.env.REACT_APP_BACKEND_URL + response.data.url,
-        "_blank",
+        "_blank"
       );
     } else {
       dispatch(setErrorToast("something went wrong"));
