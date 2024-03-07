@@ -1,4 +1,4 @@
-import { editEmployerAPI } from "@api/employers";
+import { editEmployerAPI, updateEmployerProfileImageAPI } from "@api/employers";
 import { GetSuggestedAddressAPI } from "@api/jobs";
 import { getUserDetailsApi } from "@api/manageoptions";
 import { SVG } from "@assets/svg";
@@ -32,10 +32,12 @@ const EditEmployer = () => {
   const [suggestedAddressValue, setSuggestedAddressValue] = useState("");
   const [files, setFiles] = useState([]);
   const [newImage, setNewImage] = useState("");
+
   const handleUpdateImage = (file) => {
     setNewImage(file);
     setFiles([]);
   };
+
   const { sectors, cities, countries } = useSelector((state) => state.choice);
   const debouncedSearchValue = useDebounce(suggestedAddressValue, 500);
   const formik = useFormik({
@@ -60,12 +62,11 @@ const EditEmployer = () => {
     // validationSchema: validateEmployerAboutMe,
     onSubmit: async (values) => {
       setLoading(true);
-
       const payload = {
-        organization_type: values.organizationType.label,
+        organization_type: values.organizationType.value,
         organization_name: values.organizationName,
-        country: values.country,
-        city: values.city,
+        country: values.country.value,
+        city: values.city.value,
         address: values.address,
         description: values.description,
         license_id: values.licenseId,
@@ -81,14 +82,21 @@ const EditEmployer = () => {
           if (payload[key]) formData.append(key, payload[key]);
         }
       }
-      const res = await editEmployerAPI(formData);
+
+      const imgFormData = new FormData();
+      imgFormData.append("profile_image", newImage);
+      console.log(newImage);
+      const res = await editEmployerAPI(id, formData);
       if (res.remote === "success") {
-        dispatch(setSuccessToast("Employer updated successfully"));
-        setLoading(false);
+        const imgRes = await updateEmployerProfileImageAPI(id, imgFormData);
+        if (imgRes) {
+          dispatch(setSuccessToast("Employer updated successfully"));
+          setLoading(false);
+        }
       } else {
         dispatch(
           setErrorToast(
-            res.error.errors.mobile_number || "Something went wrong"
+            "Something went wrong"
           )
         );
         setLoading(false);
@@ -105,7 +113,6 @@ const EditEmployer = () => {
 
   const setFields = async () => {
     const res = await getUserDetailsApi(id);
-    console.log(res.data);
     if (res.remote === "success") {
       formik.setFieldValue("organizationName", res.data.name);
       formik.setFieldValue("country", {
@@ -180,8 +187,15 @@ const EditEmployer = () => {
     setFields();
   }, []);
 
-  const handleFiles = (e) => {
-    setFiles(e.target.files);
+  const handleFileChange = (event) => {
+    const selectedFile = event.target.files?.[0];
+    if (selectedFile) {
+      setFiles([
+        Object.assign(selectedFile, {
+          preview: URL.createObjectURL(selectedFile),
+        }),
+      ]);
+    }
   };
 
   return (
@@ -215,7 +229,7 @@ const EditEmployer = () => {
                     {...formik.getFieldProps("organizationName")}
                   />
                   {formik.touched.organizationName &&
-                  formik.errors.organizationName ? (
+                    formik.errors.organizationName ? (
                     <ErrorMessage>
                       {formik.errors.organizationName}
                     </ErrorMessage>
@@ -476,8 +490,9 @@ const EditEmployer = () => {
                               height: "100%",
                               display: "none",
                             }}
+                            encType="multipart/form-data" // Add this line
                             accept="image/*"
-                            onChange={handleFiles}
+                            onChange={handleFileChange}
                           />
                           <p style={{ textAlign: "center", cursor: "pointer" }}>
                             Drag here or
