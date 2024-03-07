@@ -4,6 +4,7 @@ import ChoiceReducer from "./slice/choices";
 import ToastReducer from "./slice/toast";
 import JobsAndTendersReducer from "./slice/jobsAndTenders";
 import InvoiceReducer from "./slice/invoice";
+import UserRightsReducer from "./slice/userRightsManagement.js";
 import adSenseSlice from "./slice/adsense";
 export const store = configureStore({
   reducer: {
@@ -12,7 +13,8 @@ export const store = configureStore({
     toast: ToastReducer,
     jobsAndTenders: JobsAndTendersReducer,
     invoice: InvoiceReducer,
-    adSense: adSenseSlice
+    adSense: adSenseSlice,
+    userRights: UserRightsReducer,
   },
 });
 

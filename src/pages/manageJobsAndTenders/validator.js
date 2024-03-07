@@ -31,8 +31,12 @@ export const validateCreateJobInput = Yup.object()
     }),
     companyEmail: Yup.string().when("companyType", {
       is: (e) => e === "new",
-      then: () => Yup.string().required("Company Email is required"),
-      otherwise: () => Yup.string().notRequired(),
+      then: () =>
+        Yup.string()
+          .email("Email must be a valid")
+          .required("Company Email is required"),
+      otherwise: () =>
+        Yup.string().email("Email must be a valid").notRequired(),
     }),
     companyAbout: Yup.string(),
     address: Yup.string().required("Address is required"),
@@ -75,7 +79,7 @@ export const validateCreateJobInput = Yup.object()
         Yup.string()
           .email("Contact email must be a valid")
           .required("Contact email is required"),
-      otherwise: () => Yup.string().notRequired(),
+      otherwise: () => Yup.string().email().notRequired(),
     }),
     cc1: Yup.string().email("CC1 email must be a valid"),
     cc2: Yup.string().email("CC2 email must be a valid"),
@@ -163,8 +167,12 @@ export const validateCreateTenderInput = Yup.object()
     }),
     companyEmail: Yup.string().when("companyType", {
       is: (e) => e === "new",
-      then: () => Yup.string().required("Company Email is required"),
-      otherwise: () => Yup.string().notRequired(),
+      then: () =>
+        Yup.string()
+          .email("Email must be a valid")
+          .required("Company Email is required"),
+      otherwise: () =>
+        Yup.string().email("Email must be a valid").notRequired(),
     }),
     companyAbout: Yup.string(),
 
@@ -200,7 +208,7 @@ export const validateCreateTenderInput = Yup.object()
         Yup.string()
           .email("Contact email must be a valid")
           .required("Contact email is required"),
-      otherwise: () => Yup.string().notRequired(),
+      otherwise: () => Yup.string().email().notRequired(),
     }),
     cc1: Yup.string().email("CC1 email must be a valid"),
     cc2: Yup.string().email("CC2 email must be a valid"),

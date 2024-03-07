@@ -2,9 +2,11 @@ import { Checkbox } from "@mui/material";
 import React from "react";
 import { SVG } from "@assets/svg";
 
-function CheckboxInputComponent({ ...rest }) {
+function CheckboxInputComponent({ onChange, defaultChecked = false, ...rest }) {
   return (
     <Checkbox
+      checked={defaultChecked}
+      onChange={onChange}
       disableRipple
       icon={<SVG.UncheckIcon />}
       checkedIcon={<SVG.CheckBoxIcon />}

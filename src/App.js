@@ -11,6 +11,7 @@ import { resetToast } from "@redux/slice/toast";
 import { setIsLoggedIn } from "@redux/slice/user";
 import { globalLocalStorage } from "@utils/localStorage";
 import "react-perfect-scrollbar/dist/css/styles.css";
+// import { getAllRights } from "@api/manageUserManagement";
 
 function App() {
   const dispatch = useDispatch();
@@ -27,6 +28,8 @@ function App() {
     }
   };
   useEffect(() => {
+    // const res = getAllRights();
+    // console.log(res);
     checkLoginStatus();
   }, []);
   return (

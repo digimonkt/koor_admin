@@ -4,7 +4,6 @@ import {
 } from "@components/financialtools/table/data";
 import { SVG } from "@assets/svg";
 export const transformJobAPIResponse = (data) => {
-  console.log(data);
   return data.map((data, index) => ({
     id: data.id,
     no: index + 1,
