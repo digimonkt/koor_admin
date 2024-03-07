@@ -286,13 +286,8 @@ const PostNewJob = () => {
     const response = await getJobDetailsByIdAPI({ jobId });
     if (response.remote === "success") {
       const { data } = response;
-      if (!data.user?.id) {
-        setSelectedValue("new");
-        formik.setFieldValue("companyType", "new");
-      } else {
-        setSelectedValue("exist");
-        formik.setFieldValue("companyType", "exist");
-      }
+      setSelectedValue("exist");
+      formik.setFieldValue("companyType", "exist");
       setCompanyLogo(data?.companyLogo);
       formik.setFieldValue("description", data.description || "");
       setEditorValue(data.description || "");
@@ -616,7 +611,7 @@ const PostNewJob = () => {
                             <span className="required-field">*</span>
                           </label>
                           <input
-                            type="text"
+                            type="email"
                             placeholder="Company Email"
                             className="add-form-control"
                             onBlur={formik.handleBlur}
@@ -1209,6 +1204,7 @@ const PostNewJob = () => {
                       ) : null}
                     </FormGroup>
                     <input
+                      type="email"
                       className="add-form-control"
                       placeholder="Your email address"
                       {...formik.getFieldProps("contactEmail")}
@@ -1292,6 +1288,7 @@ const PostNewJob = () => {
                       />
                     </FormGroup>
                     <LabeledInput
+                      type="url"
                       title=""
                       className="add-form-control"
                       placeholder="Paste a link to your website’s application form"

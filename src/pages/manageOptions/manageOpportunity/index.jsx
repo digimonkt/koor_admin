@@ -149,7 +149,6 @@ function ManageOpportunity() {
       dispatch(setSuccessToast("Delete Opportunity SuccessFully"));
     } else {
       dispatch(setErrorToast("Something went wrong"));
-      console.log(response.error);
     }
   };
 

@@ -8,20 +8,25 @@ import MenuOpenIcon from "@mui/icons-material/MenuOpen";
 import styles from "./sidebar.module.css";
 import { AUTHENTICATED_ROUTE } from "@utils/constants/routes";
 import { AuthenticatedRoute } from "@utils/routes";
+import { useSelector } from "react-redux";
 
 const drawerWidth = 300;
 function Sidebar() {
+  const userRights = useSelector((state) => state.userRights.rights);
+
   const location = useLocation();
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
+
+  const filteredMenu = MENU_ITEM.filter((item) => !userRights[item.slug]);
   const drawer = (
     <>
       <div className="sidebar-scroll">
         <PerfectScrollbar component="div">
           <ul className={`${styles.sidebarMenu}`}>
-            {MENU_ITEM.map((item, index) => (
+            {filteredMenu.map((item) => (
               <React.Fragment key={item.id}>
                 <li className={`${item.menuBorder}`}>
                   <Link

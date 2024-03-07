@@ -7,8 +7,6 @@ import {
   ManageTenders,
   employerDetails,
 } from "@pages/manageJobsAndTenders";
-import PostNewJob from "@pages/manageJobsAndTenders/jobs/postNewJob/PostNewJob";
-import PostTender from "@pages/manageJobsAndTenders/tenders/postTender/postTender";
 import {
   ManageSkills,
   ManageSettings,
@@ -36,6 +34,9 @@ import ManageCountry from "@pages/manageOptions/manageCountry";
 import ManageUserManagement from "@pages/manageOptions/manageUserManagement";
 import ViewInvoices from "@pages/manageOptions/manageFinancialTools/view-invoices";
 import ManageTenderCategory from "@pages/manageOptions/manageTenderCategory";
+import PostNewJob from "@pages/manageJobsAndTenders/jobs/postNewJob/PostNewJob";
+import PostTender from "@pages/manageJobsAndTenders/tenders/postTender/postTender";
+import EditEmployer from "@pages/manageJobsAndTenders/employer/editEmployer";
 
 export const PUBLIC_ROUTE = [];
 
@@ -49,6 +50,11 @@ export const AUTHENTICATED_ROUTE = [
     id: "manage-jobs",
     path: "/manage-jobs",
     element: ManageJobs,
+  },
+  {
+    id: "edit-employer",
+    path: "/manage-employers/edit-employer/:id",
+    element: EditEmployer,
   },
   {
     id: "post-new-job",

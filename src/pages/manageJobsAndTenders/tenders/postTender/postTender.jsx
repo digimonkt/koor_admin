@@ -217,11 +217,7 @@ const PostNewJob = () => {
       if (data.companyLogo) {
         setCompanyLogo(data.companyLogo);
       }
-      if (!data.user?.id) {
-        formik.setFieldValue("companyType", "new");
-      } else {
-        formik.setFieldValue("companyType", "exist");
-      }
+      formik.setFieldValue("companyType", "exist");
       formik.setFieldValue("description", data.description || "");
       setEditorValue(data.description);
       formik.setFieldValue(
@@ -373,7 +369,6 @@ const PostNewJob = () => {
     const newTenderId = searchParams.get("tenderId");
     if (newTenderId && tenderId !== newTenderId) setTenderId(newTenderId);
   }, [searchParams.get("tenderId")]);
-  console.log({ formik });
   return (
     <div className="job-application">
       <Card
@@ -531,7 +526,7 @@ const PostNewJob = () => {
                             <span className="required-field">*</span>
                           </label>
                           <input
-                            type="text"
+                            type="email"
                             placeholder="Company Email "
                             className="add-form-control"
                             onChange={(e) =>
@@ -1152,6 +1147,7 @@ const PostNewJob = () => {
                 <Grid container spacing={2}>
                   <Grid item xl={4} lg={4} sm={4} xs={12}>
                     <input
+                      type="email"
                       className="add-form-control"
                       placeholder="Your email address"
                       {...formik.getFieldProps("contactEmail")}
@@ -1213,6 +1209,7 @@ const PostNewJob = () => {
                     />
                   </FormGroup>
                   <LabeledInput
+                    type="url"
                     title=""
                     className="add-form-control"
                     placeholder="Paste a link to your website’s application form"

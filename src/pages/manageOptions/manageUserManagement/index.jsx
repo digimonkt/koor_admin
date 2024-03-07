@@ -9,27 +9,100 @@ import {
   Stack,
 } from "@mui/material";
 import { JobFormControl } from "@pages/manageJobsAndTenders/tenders/postTender/style";
-import React, { useEffect, useState } from "react";
-// import { userManageData } from "./helper";
+import React, { useCallback, useEffect, useState } from "react";
 import { OutlinedButton } from "@components/button";
 import { SVG } from "@assets/svg";
-import { getUsersManageRigthAPI } from "@api/manageUserManagement";
+import {
+  getAdminListAPI,
+  getUsersManageRightsAPI,
+  updateUserManageRightsAPI,
+} from "@api/manageUserManagement";
+import SelectWithSearch from "@components/input/selectWithsearch";
+import { setSuccessToast } from "@redux/slice/toast";
+import { useDispatch } from "react-redux";
 
 export default function UserManagement() {
+  const dispatch = useDispatch();
   const [userManageData, setUserManageData] = useState([]);
+  const [adminList, setAdminList] = useState([]);
+  const [adminId, setAdminId] = useState("");
 
-  const getUsersManageRigth = async () => {
-    const response = await getUsersManageRigthAPI(
-      "b6b74588-8fa8-47ff-8839-3d59ef7aad7f",
-    );
+  const getAdminList = async () => {
+    const response = await getAdminListAPI();
     if (response.remote === "success") {
-      console.log(response.data);
-      setUserManageData(response.data);
+      setAdminList(response.data);
     }
   };
 
+  const handleAdminId = (id) => {
+    setAdminId(id);
+    handleUpdateData(id);
+  };
+
+  const handleUpdateData = useCallback(
+    async (id) => {
+      const response = await getUsersManageRightsAPI(id);
+      if (response.remote === "success") {
+        setUserManageData(() => {
+          return response.data || [];
+        });
+      }
+    },
+    [setUserManageData, adminId],
+  );
+
+  const handleSubmit = async () => {
+    const selectedIds = userManageData.reduce((acc, item) => {
+      item.sub_rights.forEach((subitem) => {
+        if (subitem.status) {
+          acc.push(subitem.id);
+        }
+      });
+      return acc;
+    }, []);
+
+    const formData = new FormData();
+
+    selectedIds.forEach((id) => {
+      formData.append("rights", id);
+    });
+
+    const res = await updateUserManageRightsAPI(adminId, formData);
+    if (res.remote === "success") {
+      dispatch(setSuccessToast("Rights updated successfully"));
+    }
+  };
+
+  const handleSubRights = (e, RightsId, SubRightsId) => {
+    setUserManageData((prev) =>
+      prev.map((item) => {
+        if (item.id === RightsId) {
+          return {
+            ...item,
+            sub_rights: item.sub_rights.map((subitem) => {
+              if (subitem.id === SubRightsId) {
+                return {
+                  ...subitem,
+                  status: e,
+                };
+              }
+              return subitem;
+            }),
+          };
+        }
+        return item;
+      }),
+    );
+  };
+
+  const options = adminList.map((item) => ({
+    value: item.id,
+    label: item.name || item.email,
+  }));
+
+  console.log(userManageData);
   useEffect(() => {
-    getUsersManageRigth();
+    getAdminList();
   }, []);
   return (
     <>
@@ -60,19 +133,58 @@ export default function UserManagement() {
             >
               <Box sx={{ width: "300px" }}>
                 <label className="mb-1 d-inline-block">User ID</label>
-                <input className="add-form-control" placeholder="RSadmin05" />
+                <SelectWithSearch
+                  sx={{
+                    borderRadius: "10px",
+                    background: "#F0F0F0",
+                    fontFamily: "Poppins !important",
+
+                    "& fieldset": {
+                      border: "1px solid #cacaca",
+                      borderRadius: "93px",
+                      display: "none",
+                      "&:hover": { borderColor: "#cacaca" },
+                    },
+                    "& .MuiOutlinedInput-root": {
+                      color: "#121212",
+                      fontFamily: "Poppins !important",
+                      padding: "4px 9px !important",
+                      fontWeight: "500 !important",
+                      "@media (max-width: 992px)": {
+                        fontSize: "14px !important",
+                      },
+                      "@media (max-width: 480px)": {
+                        fontSize: "12px !important",
+                      },
+                    },
+                    "& .MuiFormLabel-root": {
+                      fontSize: "16px",
+                      color: "#848484",
+                      fontFamily: "Poppins !important",
+                      transform: "translate(14px, 12px) scale(1)",
+                    },
+                    "& .MuiInputLabel-shrink": {
+                      transform: "translate(14px, -9px) scale(0.75)",
+                    },
+                  }}
+                  options={options}
+                  title={"select the options"}
+                  onChange={(_, value) => {
+                    handleAdminId(value?.value);
+                  }}
+                  {...options}
+                />
               </Box>
-              <JobFormControl
-                sx={{ "& .MuiFormControlLabel-label": { fontSize: "16px" } }}
-                className="update_checkbox"
-                control={<CheckboxInput sx={{ padding: "9px 5px" }} />}
-                label="Select all user rights"
-              />
+              {/* <JobFormControl */}
+              {/*   sx={{ "& .MuiFormControlLabel-label": { fontSize: "16px" } }} */}
+              {/*   className="update_checkbox" */}
+              {/*   control={<CheckboxInput sx={{ padding: "9px 5px" }} />} */}
+              {/*   label="Select all user rights" */}
+              {/* /> */}
             </Stack>
             {userManageData.map((item) => (
               <>
-                {" "}
-                <Box key={item.id}>
+                <Box key={item.id} sx={{ display: adminId ? "block" : "none" }}>
                   <JobFormControl
                     sx={{
                       "& .MuiFormControlLabel-label": {
@@ -82,7 +194,7 @@ export default function UserManagement() {
                       },
                     }}
                     label={item.title}
-                    control={<CheckboxInput />}
+                    control={<CheckboxInput sx={{ display: "none" }} />}
                   />
                   <Box>
                     <Grid container spacing={2}>
@@ -99,7 +211,18 @@ export default function UserManagement() {
                                 },
                               }}
                               label={subitem.title}
-                              control={<CheckboxInput />}
+                              control={
+                                <CheckboxInput
+                                  defaultChecked={subitem.status}
+                                  onChange={(e) =>
+                                    handleSubRights(
+                                      e?.target?.checked,
+                                      item.id,
+                                      subitem.id,
+                                    )
+                                  }
+                                />
+                              }
                             />
                           </FormGroup>
                         </Grid>
@@ -112,6 +235,8 @@ export default function UserManagement() {
             ))}
             <Box sx={{ display: "flex", justifyContent: "center", mt: 3 }}>
               <OutlinedButton
+                disabled={!adminId}
+                onClick={handleSubmit}
                 title={
                   <>
                     <div style={{ marginTop: "6px", marginRight: "8px" }}>
