@@ -158,13 +158,13 @@ export const MENU_ITEM = [
     url: "/privacy-policy",
     menuBorder: styles.borderBottom,
   },
-  // {
-  //   id: "18",
-  //   icon: <SVG.UserManagement />,
-  //   slug: "UserManagement",
-  //   page: "User management",
-  //   url: "/user-management",
-  // },
+  {
+    id: "18",
+    icon: <SVG.UserManagement />,
+    slug: "UserManagement",
+    page: "User management",
+    url: "/user-management",
+  },
   {
     id: "18a",
     icon: <SVG.Settings />,
