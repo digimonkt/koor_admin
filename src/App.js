@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import Layout from "@components/layout";
-import { Route, Routes } from "react-router-dom";
+import { Route, Routes, useNavigate } from "react-router-dom";
 import "./App.css";
 import { PUBLIC_ROUTE, UNAUTHENTICATED_ROUTE } from "./utils/constants/routes";
 import { PublicRoute, UnauthenticatedRoute } from "./utils/routes";
@@ -11,13 +11,17 @@ import { resetToast } from "@redux/slice/toast";
 import { setIsLoggedIn } from "@redux/slice/user";
 import { globalLocalStorage } from "@utils/localStorage";
 import "react-perfect-scrollbar/dist/css/styles.css";
-// import { getAllRights } from "@api/manageUserManagement";
+import { getUserMangeRigths } from "@redux/slice/userRightsManagement";
+import { MENU_ITEM } from "@utils/constants/navigation";
 
 function App() {
   const dispatch = useDispatch();
   const {
     toast: { message: toastMessage, type: toastType },
+    auth: { isLoggedIn },
+    userRights: { pageManageRights },
   } = useSelector((state) => state);
+  const navigation = useNavigate();
   const checkLoginStatus = () => {
     const accessToken = globalLocalStorage.getAccessToken();
     const refreshToken = globalLocalStorage.getRefreshToken();
@@ -27,11 +31,27 @@ function App() {
       dispatch(setIsLoggedIn(false));
     }
   };
+
   useEffect(() => {
-    // const res = getAllRights();
-    // console.log(res);
+    MENU_ITEM.filter((item) => {
+      const hasSubright = pageManageRights.some(
+        (right) => right.subrights_value === item.url.substring(1),
+      );
+
+      if (!hasSubright && !item.url.includes(hasSubright)) {
+        navigation("/");
+      }
+
+      return hasSubright;
+    });
+  }, [pageManageRights]);
+
+  useEffect(() => {
     checkLoginStatus();
   }, []);
+  useEffect(() => {
+    dispatch(getUserMangeRigths());
+  }, [isLoggedIn]);
   return (
     <div className="App">
       <Routes>
