@@ -11,7 +11,7 @@ export const getUsersManageRightsAPI = async (userId) => {
   return res;
 };
 
-export const getAllRights = async () => {
+export const getAllRightsAPI = async () => {
   const res = await api.request({
     url: urlcat("/v1/admin/manage-user-rights"),
     method: "GET",

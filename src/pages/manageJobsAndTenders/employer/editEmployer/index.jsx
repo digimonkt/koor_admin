@@ -1,4 +1,4 @@
-import { editEmployerAPI, updateEmployerProfileImageAPI } from "@api/employers";
+import { updateEmployerProfileImageAPI, editEmployerAPI } from "@api/employers";
 import { GetSuggestedAddressAPI } from "@api/jobs";
 import { getUserDetailsApi } from "@api/manageoptions";
 import { SVG } from "@assets/svg";
@@ -94,11 +94,7 @@ const EditEmployer = () => {
           setLoading(false);
         }
       } else {
-        dispatch(
-          setErrorToast(
-            "Something went wrong"
-          )
-        );
+        dispatch(setErrorToast("Something went wrong"));
         setLoading(false);
       }
     },
@@ -229,7 +225,7 @@ const EditEmployer = () => {
                     {...formik.getFieldProps("organizationName")}
                   />
                   {formik.touched.organizationName &&
-                    formik.errors.organizationName ? (
+                  formik.errors.organizationName ? (
                     <ErrorMessage>
                       {formik.errors.organizationName}
                     </ErrorMessage>
