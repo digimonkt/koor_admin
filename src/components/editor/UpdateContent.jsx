@@ -1,5 +1,5 @@
 import React from "react";
-import ReactQuill from "react-quill";
+import { QuillInput } from "@components/input";
 import { SolidButton } from "@components/button";
 import "react-quill/dist/quill.snow.css";
 
@@ -11,11 +11,9 @@ const UpdateContent = ({
 }) => {
   return (
     <>
-      <ReactQuill
-        theme="snow"
+      <QuillInput
         value={value}
         onChange={handleEditValue}
-        style={{ height: "400px" }}
       />
       <div className="textEditor">
         <div onClick={() => handleUpdate()}>

@@ -11,9 +11,8 @@ import {
   IconButton,
   Stack,
 } from "@mui/material";
-import ReactQuill, { Quill } from "react-quill";
 import ImageCropper from "@components/imageCropper";
-import { LabeledInput } from "@components/input";
+import { LabeledInput, QuillInput } from "@components/input";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import {
   createTestimonialApi,
@@ -166,22 +165,7 @@ const PostTestimonials = () => {
       getFetchData();
     }
   }, [testimonialId]);
-  const Size = Quill.import("formats/size");
-  Size.whitelist = ["extra-small", "small", "medium", "large"];
-  Quill.register(Size, true);
 
-  // Add fonts to whitelist and register them
-  const Font = Quill.import("formats/font");
-  Font.whitelist = [
-    "Poppins",
-    "arial",
-    "comic-sans",
-    "courier-new",
-    "georgia",
-    "helvetica",
-    "lucida",
-  ];
-  Quill.register(Font, true);
   return (
     <Card
       sx={{
@@ -296,8 +280,7 @@ const PostTestimonials = () => {
           </Grid>
           <Grid item xs={12} lg={12}>
             <Box className="react_editor">
-              <ReactQuill
-                theme="snow"
+              <QuillInput
                 value={paragraph}
                 sx={{
                   width: "100%",
