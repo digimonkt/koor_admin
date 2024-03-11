@@ -26,11 +26,16 @@ export const userRights = createSlice({
       const managePages = action.payload.find(
         (item) => item.rights_value === "managePages",
       );
+
+      const managePagesSubRights = managePages.sub_rights.filter(
+        (item) => item.status === true,
+      );
+
       const managePageFeature = action.payload.filter(
         (item) => item.rights_value === "managePageFeature",
       );
 
-      state.pageManageRights = managePages.sub_rights;
+      state.pageManageRights = managePagesSubRights;
       state.pageFeatureManageRigths = managePageFeature;
     });
   },
