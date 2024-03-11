@@ -50,7 +50,7 @@ export const editEmployerAPI = async (userId, data) => {
   return response;
 };
 
-export const UpdateEmployerProfileImageAPI = async (data) => {
+export const updateEmployerProfileImageAPI = async (data) => {
   return await api.request({
     url: "/v1/users/display-image",
     method: "PATCH",

@@ -2,25 +2,26 @@ import React from "react";
 import PerfectScrollbar from "react-perfect-scrollbar";
 import { Box, Drawer, IconButton, Stack } from "@mui/material";
 import { Link, Route, Routes, useLocation } from "react-router-dom";
-import { MENU_ITEM } from "./navigation";
 import { SVG } from "@assets/svg";
 import MenuOpenIcon from "@mui/icons-material/MenuOpen";
 import styles from "./sidebar.module.css";
 import { AUTHENTICATED_ROUTE } from "@utils/constants/routes";
+import { MENU_ITEM } from "@utils/constants/navigation";
 import { AuthenticatedRoute } from "@utils/routes";
 import { useSelector } from "react-redux";
 
 const drawerWidth = 300;
 function Sidebar() {
-  const userRights = useSelector((state) => state.userRights.rights);
-
+  const userRights = useSelector((state) => state.userRights.pageManageRights);
   const location = useLocation();
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const handleDrawerToggle = () => {
     setMobileOpen(!mobileOpen);
   };
+  const filteredMenu = MENU_ITEM.filter((item) =>
+    userRights.some((right) => right.subrights_value === item.url.substring(1)),
+  );
 
-  const filteredMenu = MENU_ITEM.filter((item) => !userRights[item.slug]);
   const drawer = (
     <>
       <div className="sidebar-scroll">

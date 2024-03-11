@@ -1,4 +1,4 @@
-import { editEmployerAPI } from "@api/employers";
+import { updateEmployerProfileImageAPI, editEmployerAPI } from "@api/employers";
 import { GetSuggestedAddressAPI } from "@api/jobs";
 import { getUserDetailsApi } from "@api/manageoptions";
 import { SVG } from "@assets/svg";
@@ -62,10 +62,10 @@ const EditEmployer = () => {
       setLoading(true);
 
       const payload = {
-        organization_type: values.organizationType.label,
+        organization_type: values.organizationType.value,
         organization_name: values.organizationName,
-        country: values.country,
-        city: values.city,
+        country: values.country.value,
+        city: values.city.value,
         address: values.address,
         description: values.description,
         license_id: values.licenseId,
@@ -83,8 +83,11 @@ const EditEmployer = () => {
       }
       const res = await editEmployerAPI(formData);
       if (res.remote === "success") {
-        dispatch(setSuccessToast("Employer updated successfully"));
-        setLoading(false);
+        const response = await updateEmployerProfileImageAPI(newImage);
+        if (response.remote === "success") {
+          dispatch(setSuccessToast("Employer updated successfully"));
+          setLoading(false);
+        }
       } else {
         dispatch(
           setErrorToast(
