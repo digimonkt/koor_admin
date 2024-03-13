@@ -49,6 +49,7 @@ function App() {
   useEffect(() => {
     checkLoginStatus();
   }, []);
+
   useEffect(() => {
     dispatch(getUserMangeRigths());
   }, [isLoggedIn]);
