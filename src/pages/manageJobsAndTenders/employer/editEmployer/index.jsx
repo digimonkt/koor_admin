@@ -156,7 +156,7 @@ const EditEmployer = () => {
       !cities.data[formik.values?.country?.value]?.length
     ) {
       dispatch(
-        getCitiesByCountry({ countryId: formik.values?.country?.value })
+        getCitiesByCountry({ countryId: formik.values?.country?.value }),
       );
     }
   }, [formik.values.country]);
@@ -212,7 +212,7 @@ const EditEmployer = () => {
         }}
       >
         <div className="add-content">
-          <h2 className="mb-4">About</h2>
+          <h2 className="mb-4">Edit employer details</h2>
           <form onSubmit={formik.handleSubmit}>
             <Grid item xs={12}>
               <Grid container spacing={2}>
@@ -306,7 +306,7 @@ const EditEmployer = () => {
                                 onClick={() => {
                                   formik.setFieldValue(
                                     "address",
-                                    address.description
+                                    address.description,
                                   );
                                   setSuggestedAddressValue(address.description);
                                 }}

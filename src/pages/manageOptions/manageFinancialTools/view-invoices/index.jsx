@@ -65,7 +65,7 @@ const ViewInvoices = () => {
       //     path: data.user.image.path,
       // },
     },
-    detail: []
+    detail: [],
   });
   // const [invoiceId, setInvoiceId] = useState([]);
   const getInvoiceDetail = async (id) => {
@@ -74,7 +74,7 @@ const ViewInvoices = () => {
       setInvoiceDetails(response.data);
     } else {
       dispatch(setErrorToast("Something went wrong"));
-    };
+    }
   };
   const handleSendMail = async (id) => {
     dispatch(setSuccessToast("Email Sent Successfully"));
@@ -154,7 +154,6 @@ const ViewInvoices = () => {
                 hoverBgColor="#b4d2fe"
                 hoverborderColor="#b4d2fe"
                 padding="7px 30px 7px 20px"
-
               >
                 <span className="d-inline-flex me-2">
                   <SVG.ForwardIcon />
@@ -172,13 +171,16 @@ const ViewInvoices = () => {
               <Grid item lg={6} xs={12}>
                 <div className={`${styles.address}`}>
                   <Box sx={{ mb: 1.875 }}>
-                    <b>Client name: </b> {invoiceDetails.user.name || invoiceDetails.user.email}
+                    <b>Client name: </b>{" "}
+                    {invoiceDetails.user.name || invoiceDetails.user.email}
                   </Box>
                   <Box sx={{ mb: 1.875 }}>
-                    <b>Mobile Number: </b>{invoiceDetails.user.mobileNumber}
+                    <b>Mobile Number: </b>
+                    {invoiceDetails.user.mobileNumber}
                   </Box>
                   <Box sx={{ mb: 1.875 }}>
-                    <b>Email: </b>{invoiceDetails.user.email}
+                    <b>Email: </b>
+                    {invoiceDetails.user.email}
                   </Box>
                 </div>
               </Grid>
@@ -203,7 +205,7 @@ const ViewInvoices = () => {
             <Box sx={{ mt: 1.875 }}>
               <Grid container spacing={2} justifyContent="space-between">
                 <Grid item lg={6} xs={6}>
-                  {/* <ul className={`${styles.bankDetails}`}>
+                  <ul className={`${styles.bankDetails}`}>
                     <li>
                       <span>Please deposit to through</span>
                       <b>xxx</b>
@@ -220,7 +222,7 @@ const ViewInvoices = () => {
                       <span>Account No:</span>
                       <b>0971881</b>
                     </li>
-                  </ul> */}
+                  </ul>
                 </Grid>
                 <Grid item lg={3} xs="auto">
                   <Box className={`${styles.topBorder}`}>

@@ -26,6 +26,7 @@ export default function UserManagement() {
   const [userManageData, setUserManageData] = useState([]);
   const [adminList, setAdminList] = useState([]);
   const [adminId, setAdminId] = useState("");
+  const [selectedAllRights, setSelectedAllRights] = useState(false);
 
   const getAdminList = async () => {
     const response = await getAdminListAPI();
@@ -43,9 +44,9 @@ export default function UserManagement() {
     async (id) => {
       const response = await getUsersManageRightsAPI(id);
       if (response.remote === "success") {
-        setUserManageData(() => {
-          return response.data || [];
-        });
+        setUserManageData(() =>
+          response.data.map((item) => ({ ...item, status: false })),
+        );
       }
     },
     [setUserManageData, adminId],
@@ -62,7 +63,6 @@ export default function UserManagement() {
     }, []);
 
     const formData = new FormData();
-
     selectedIds.forEach((id) => {
       formData.append("rights", id);
     });
@@ -73,25 +73,52 @@ export default function UserManagement() {
     }
   };
 
-  const handleSubRights = (e, RightsId, SubRightsId) => {
+  const handleSubRights = (isChecked, RightsId, SubRightsId) => {
     setUserManageData((prev) =>
       prev.map((item) => {
         if (item.id === RightsId) {
           return {
             ...item,
-            sub_rights: item.sub_rights.map((subitem) => {
-              if (subitem.id === SubRightsId) {
-                return {
-                  ...subitem,
-                  status: e,
-                };
-              }
-              return subitem;
-            }),
+            sub_rights: item.sub_rights.map((subitem) =>
+              subitem.id === SubRightsId
+                ? { ...subitem, status: isChecked }
+                : subitem,
+            ),
           };
         }
         return item;
       }),
+    );
+  };
+
+  const handleCheckAllSubRights = (mainRightId, isChecked) => {
+    setUserManageData((prev) =>
+      prev.map((item) => {
+        if (item.id === mainRightId) {
+          return {
+            ...item,
+            status: isChecked,
+            sub_rights: item.sub_rights.map((subitem) => ({
+              ...subitem,
+              status: isChecked,
+            })),
+          };
+        }
+        return item;
+      }),
+    );
+  };
+
+  const handleCheckAllRightsAndSubRights = (isChecked) => {
+    setUserManageData((prev) =>
+      prev.map((item) => ({
+        ...item,
+        status: isChecked,
+        sub_rights: item.sub_rights.map((subitem) => ({
+          ...subitem,
+          status: isChecked,
+        })),
+      })),
     );
   };
 
@@ -100,7 +127,6 @@ export default function UserManagement() {
     label: item.name || item.email,
   }));
 
-  console.log(userManageData);
   useEffect(() => {
     getAdminList();
   }, []);
@@ -175,12 +201,23 @@ export default function UserManagement() {
                   {...options}
                 />
               </Box>
-              {/* <JobFormControl */}
-              {/*   sx={{ "& .MuiFormControlLabel-label": { fontSize: "16px" } }} */}
-              {/*   className="update_checkbox" */}
-              {/*   control={<CheckboxInput sx={{ padding: "9px 5px" }} />} */}
-              {/*   label="Select all user rights" */}
-              {/* /> */}
+              {adminId && (
+                <JobFormControl
+                  sx={{ "& .MuiFormControlLabel-label": { fontSize: "16px" } }}
+                  className="update_checkbox"
+                  control={
+                    <CheckboxInput
+                      defaultChecked={selectedAllRights}
+                      onChange={(e) => {
+                        setSelectedAllRights(e.target.checked);
+                        handleCheckAllRightsAndSubRights(e.target.checked);
+                      }}
+                      sx={{ padding: "9px 5px" }}
+                    />
+                  }
+                  label="Select all user rights"
+                />
+              )}
             </Stack>
             {userManageData.map((item) => (
               <>
@@ -194,7 +231,14 @@ export default function UserManagement() {
                       },
                     }}
                     label={item.title}
-                    control={<CheckboxInput sx={{ display: "none" }} />}
+                    control={
+                      <CheckboxInput
+                        defaultChecked={item.status}
+                        onChange={(e) => {
+                          handleCheckAllSubRights(item.id, e.target.checked);
+                        }}
+                      />
+                    }
                   />
                   <Box>
                     <Grid container spacing={2}>
@@ -230,7 +274,7 @@ export default function UserManagement() {
                     </Grid>
                   </Box>
                 </Box>
-                <Divider sx={{ my: 2 }} />
+                {adminId && <Divider sx={{ my: 2 }} />}
               </>
             ))}
             <Box sx={{ display: "flex", justifyContent: "center", mt: 3 }}>
