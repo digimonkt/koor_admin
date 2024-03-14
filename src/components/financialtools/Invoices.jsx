@@ -49,7 +49,7 @@ const Invoices = () => {
     (id) => {
       navigate(`view-invoice/${id}`);
     },
-    [navigate],
+    [navigate]
   );
 
   const handleDownload = useCallback((id) => {
@@ -62,11 +62,12 @@ const Invoices = () => {
         field: "date",
         headerName: "Date",
         sortable: true,
+        width: "120",
       },
       {
         field: "invoiceId",
         headerName: "Number / ID",
-        width: "220",
+        width: "170",
         sortable: true,
         renderCell: (item) => {
           return (
@@ -144,19 +145,19 @@ const Invoices = () => {
         },
       },
     ],
-    [],
+    []
   );
   const [listInvoice, setListInvoice] = useState([]);
   const today = new Date();
   const lastMonth = new Date(
     today.getFullYear(),
     today.getMonth() - 1,
-    today.getDate(),
+    today.getDate()
   );
   const currMonth = new Date(
     today.getFullYear(),
     today.getMonth(),
-    today.getDate(),
+    today.getDate()
   );
   const [employerId, setEmployerId] = useState("");
   const [employerData, setEmployerData] = useState([]);

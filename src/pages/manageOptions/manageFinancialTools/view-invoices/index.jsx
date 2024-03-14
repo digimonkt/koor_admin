@@ -1,5 +1,6 @@
 import { Card, CardContent, Grid, IconButton, Stack } from "@mui/material";
 import { Box } from "@mui/system";
+import { DownloadOutlined } from "@mui/icons-material";
 import React, { useCallback, useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import { SVG } from "@assets/svg";
@@ -25,18 +26,24 @@ const ViewInvoices = () => {
   const USER_COLUMN_DATA = [
     {
       id: 1,
+      name: "S/N",
+      key: "Serialnumber",
+      tableCellClass: "text-center",
+    },
+    {
+      id: 2,
       name: "Date",
       key: "created",
       tableCellClass: "text-center",
     },
     {
-      id: 2,
+      id: 3,
       name: "Description",
       key: "note",
       tableCellClass: "text-center",
     },
     {
-      id: 3,
+      id: 4,
       name: "Amount",
       key: "amount",
       width: 115,
@@ -72,6 +79,7 @@ const ViewInvoices = () => {
     const response = await getInvoiceDetailsAPI({ id });
     if (response.remote === "success") {
       setInvoiceDetails(response.data);
+      console.log(response.data);
     } else {
       dispatch(setErrorToast("Something went wrong"));
     }
@@ -143,7 +151,7 @@ const ViewInvoices = () => {
                 onClick={() => handleDownload(invoiceId)}
               >
                 <span className="d-inline-flex me-2">
-                  <SVG.EditIcon />
+                  <DownloadOutlined />
                 </span>
                 Download
               </Cbutton>
