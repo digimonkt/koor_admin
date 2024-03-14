@@ -75,7 +75,7 @@ const Invoices = () => {
               <Stack
                 direction="row"
                 spacing={1}
-                style={{ cursor: "pointer" }}
+                style={{ cursor: "pointer", color: "#274593" }}
                 alignItems="center"
                 onClick={() => {
                   handleRedirectDetails(item.row.invoiceId);

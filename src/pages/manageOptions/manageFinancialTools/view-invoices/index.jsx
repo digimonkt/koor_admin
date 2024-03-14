@@ -79,7 +79,6 @@ const ViewInvoices = () => {
     const response = await getInvoiceDetailsAPI({ id });
     if (response.remote === "success") {
       setInvoiceDetails(response.data);
-      console.log(response.data);
     } else {
       dispatch(setErrorToast("Something went wrong"));
     }
