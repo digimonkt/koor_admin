@@ -38,7 +38,7 @@ const ViewInvoices = () => {
     },
     {
       id: 3,
-      name: "Description",
+      name: "Job Title",
       key: "note",
       tableCellClass: "text-center",
     },
