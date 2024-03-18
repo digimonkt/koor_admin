@@ -1455,7 +1455,6 @@ const PostNewJob = () => {
                 <Grid item xl={12} lg={12} xs={12}>
                   <Divider sx={{ borderColor: "#CACACA", opacity: "1" }} />
                 </Grid>
-
                 <Grid item xl={12} lg={12} xs={12}>
                   <h2 className="mt-3 mb-3">Attach files</h2>
                   <AttachmentDragNDropInput
