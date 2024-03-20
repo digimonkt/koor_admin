@@ -56,6 +56,7 @@ import { validateCreateJobInput } from "@pages/manageJobsAndTenders/validator";
 import dayjs from "dayjs";
 import { DATABASE_DATE_FORMAT } from "@utils/constants/constants";
 import { setErrorToast, setSuccessToast } from "@redux/slice/toast";
+import { capitalizeFirst } from "@utils/common";
 
 const PostNewJob = () => {
   const {
@@ -189,8 +190,12 @@ const PostNewJob = () => {
         job_sub_category: values.jobSubCategory.value,
         is_full_time: values.isFullTime,
         is_part_time: values.isPartTime,
-        send_email_automatically: values.sendEmailAutomatically.toString(),
-        send_invoice_automatically: values.sendEmailAutomatically.toString(),
+        send_email_automatically: capitalizeFirst(
+          `${values.sendEmailAutomatically}`,
+        ),
+        send_invoice_automatically: capitalizeFirst(
+          `${values.sendEmailAutomatically}`,
+        ),
         has_contract: values.hasContract,
         deadline: dayjs(values.deadline).format(DATABASE_DATE_FORMAT),
         start_date: values.startDate
@@ -342,11 +347,11 @@ const PostNewJob = () => {
       );
       formik.setFieldValue(
         "sendEmailAutomatically",
-        data.sendEmailAutomatically === "true" || false,
+        data.sendEmailAutomatically === "True" || false,
       );
       formik.setFieldValue(
         "sendInvoiceAutomatically",
-        data.sendInvoiceAutomatically === "true" || false,
+        data.sendInvoiceAutomatically === "True" || false,
       );
       formik.setFieldValue("isFullTime", data.isFullTime || false);
       formik.setFieldValue("isPartTime", data.isPartTime || false);
@@ -1313,27 +1318,33 @@ const PostNewJob = () => {
                   <Grid item xl={12} lg={12} xs={12}>
                     <Divider sx={{ borderColor: "#CACACA", opacity: "1" }} />
                   </Grid>
-                  <Grid item xl={12} lg={12} xs={12}>
-                    <h2 className="mt-2">Notification preferences</h2>
-                  </Grid>
-                  <Grid item xs={12}>
-                    <FormGroup>
-                      <FormControlLabel
-                        sx={{ width: "290px" }}
-                        control={<Switch />}
-                        label="Send mail by automatically"
-                        checked={formik.values.sendEmailAutomatically}
-                        {...formik.getFieldProps("sendEmailAutomatically")}
-                      />
-                      <FormControlLabel
-                        sx={{ width: "290px" }}
-                        control={<Switch />}
-                        label="Send invoice by automatically"
-                        checked={formik.values.sendInvoiceAutomatically}
-                        {...formik.getFieldProps("sendInvoiceAutomatically")}
-                      />
-                    </FormGroup>
-                  </Grid>
+                  {!jobId && (
+                    <>
+                      <Grid item xl={12} lg={12} xs={12}>
+                        <h2 className="mt-2">Notification preferences</h2>
+                      </Grid>
+                      <Grid item xs={12}>
+                        <FormGroup>
+                          <FormControlLabel
+                            sx={{ width: "290px" }}
+                            control={<Switch />}
+                            label="Send mail by automatically"
+                            checked={formik.values.sendEmailAutomatically}
+                            {...formik.getFieldProps("sendEmailAutomatically")}
+                          />
+                          <FormControlLabel
+                            sx={{ width: "290px" }}
+                            control={<Switch />}
+                            label="Send invoice by automatically"
+                            checked={formik.values.sendInvoiceAutomatically}
+                            {...formik.getFieldProps(
+                              "sendInvoiceAutomatically",
+                            )}
+                          />
+                        </FormGroup>
+                      </Grid>
+                    </>
+                  )}
                   <Grid item xl={12} lg={12} xs={12}>
                     <h2 className="mt-2">Preferences</h2>
                   </Grid>

@@ -50,6 +50,7 @@ import { DATABASE_DATE_FORMAT } from "@utils/constants/constants";
 import { setErrorToast, setSuccessToast } from "@redux/slice/toast";
 import SelectWithSearch from "@components/input/selectWithsearch";
 import { manageEmployer } from "@api/employers";
+import { capitalizeFirst } from "@utils/common";
 
 const PostNewJob = () => {
   const {
@@ -150,7 +151,7 @@ const PostNewJob = () => {
           : "",
         apply_through_koor: values.isApplyThroughKoor || "false",
         send_email_automatically:
-          values.sendEmailAutomatically.toString() || "false",
+          capitalizeFirst(`${values.sendEmailAutomatically}`) || "false",
         apply_through_email: values.isApplyThroughEmail || "false",
         apply_through_website: values.isApplyThroughWebsite || "false",
         website_link: values.websiteLink,
@@ -238,7 +239,7 @@ const PostNewJob = () => {
       formik.setFieldValue("budgetCurrency", data.budgetCurrency);
       formik.setFieldValue(
         "sendEmailAutomatically",
-        data.sendEmailAutomatically === "true" || false,
+        data.sendEmailAutomatically === "True" || false,
       );
       formik.setFieldValue(
         "budgetAmount",
@@ -1226,20 +1227,24 @@ const PostNewJob = () => {
                     <ErrorMessage>{formik.errors.websiteLink}</ErrorMessage>
                   ) : null}
                 </Grid>
-                <Grid item xl={12} lg={12} xs={12}>
-                  <h2 className="mt-2">Notification preferences</h2>
-                </Grid>
-                <Grid item xs={12}>
-                  <FormGroup>
-                    <FormControlLabel
-                      sx={{ width: "290px" }}
-                      control={<Switch />}
-                      label="Send mail by automatically"
-                      checked={formik.values.sendEmailAutomatically}
-                      {...formik.getFieldProps("sendEmailAutomatically")}
-                    />
-                  </FormGroup>
-                </Grid>
+                {!tenderId && (
+                  <>
+                    <Grid item xl={12} lg={12} xs={12}>
+                      <h2 className="mt-2">Notification preferences</h2>
+                    </Grid>
+                    <Grid item xs={12}>
+                      <FormGroup>
+                        <FormControlLabel
+                          sx={{ width: "290px" }}
+                          control={<Switch />}
+                          label="Send mail by automatically"
+                          checked={formik.values.sendEmailAutomatically}
+                          {...formik.getFieldProps("sendEmailAutomatically")}
+                        />
+                      </FormGroup>
+                    </Grid>
+                  </>
+                )}
                 <Grid item xl={12} lg={12} xs={12}>
                   <h2 className="mt-2 mb-3">Attach files</h2>
                   {formik.errors?.attachments ? (

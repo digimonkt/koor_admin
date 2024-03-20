@@ -27,6 +27,10 @@ export const showRole = (role) => {
   }
 };
 
+export const capitalizeFirst = (str) => {
+  return str.charAt(0).toUpperCase() + str.slice(1);
+};
+
 export const mimeTypes = {
   ".txt": "text/plain",
   ".html": "text/html",
