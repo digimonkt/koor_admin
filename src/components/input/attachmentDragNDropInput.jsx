@@ -3,8 +3,8 @@ import React from "react";
 import { useDropzone } from "react-dropzone";
 import { SVG } from "@assets/svg";
 import { getKeysByValue, mimeTypes } from "@utils/common";
-// import { setErrorToast } from "@redux/slice/toast";
-// import { useDispatch } from "react-redux";
+import { setErrorToast } from "@redux/slice/toast";
+import { useDispatch } from "react-redux";
 
 function AttachmentDragNDropInputComponent({
   files,
@@ -12,18 +12,14 @@ function AttachmentDragNDropInputComponent({
   deleteFile,
   single,
 }) {
-  // const dispatch = useDispatch();
+  const dispatch = useDispatch();
   const { getRootProps, getInputProps } = useDropzone({
-    onDrop: (e) => {
-      // if (error.length && error[0]?.errors) {
-      //   dispatch(setErrorToast("File must be less then 5 MB"));
-      // }
+    onDrop: (e, error) => {
+      if (error.length && error[0]?.errors) {
+        dispatch(setErrorToast("File is too large"));
+      }
       if (e.length && handleDrop) {
         const renamedFiles = e.map((file) => {
-          console.log(
-            file.name.replace(/\.[^/.]+$/, "").slice(0, 40) +
-              getKeysByValue(mimeTypes, file.type)
-          );
           const renamedFile = new File(
             [file],
             file.name.replace(/\.[^/.]+$/, "").slice(0, 40) +
