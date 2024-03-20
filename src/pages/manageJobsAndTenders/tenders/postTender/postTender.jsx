@@ -109,6 +109,7 @@ const PostNewJob = () => {
       cc2: "",
       isContactWhatsapp: false,
       applicationInstruction: "",
+      sendEmailAutomatically: false,
       isApplyThroughEmail: false,
       isApplyThroughKoor: false,
       isApplyThroughWebsite: false,
@@ -145,6 +146,8 @@ const PostNewJob = () => {
           ? values.contactWhatsapp
           : "",
         apply_through_koor: values.isApplyThroughKoor || "false",
+        send_email_automatically:
+          values.sendEmailAutomatically.toString() || "false",
         apply_through_email: values.isApplyThroughEmail || "false",
         apply_through_website: values.isApplyThroughWebsite || "false",
         website_link: values.websiteLink,
@@ -234,6 +237,10 @@ const PostNewJob = () => {
       formik.setFieldValue("address", data.address || "");
       formik.setFieldValue("title", data.title || "");
       formik.setFieldValue("budgetCurrency", data.budgetCurrency);
+      formik.setFieldValue(
+        "sendEmailAutomatically",
+        data.sendEmailAutomatically === "true" || false,
+      );
       formik.setFieldValue(
         "budgetAmount",
         parseInt(data.budgetAmount.replace(/,/g, ""), 10),
@@ -1170,6 +1177,20 @@ const PostNewJob = () => {
                   {formik.touched.websiteLink && formik.errors.websiteLink ? (
                     <ErrorMessage>{formik.errors.websiteLink}</ErrorMessage>
                   ) : null}
+                </Grid>
+                <Grid item xl={12} lg={12} xs={12}>
+                  <h2 className="mt-2">Notification preferences</h2>
+                </Grid>
+                <Grid item xs={12}>
+                  <FormGroup>
+                    <FormControlLabel
+                      sx={{ width: "290px" }}
+                      control={<Switch />}
+                      label="Send mail by automatically"
+                      checked={formik.values.sendEmailAutomatically}
+                      {...formik.getFieldProps("sendEmailAutomatically")}
+                    />
+                  </FormGroup>
                 </Grid>
                 <Grid item xl={12} lg={12} xs={12}>
                   <h2 className="mt-2 mb-3">Attach files</h2>
