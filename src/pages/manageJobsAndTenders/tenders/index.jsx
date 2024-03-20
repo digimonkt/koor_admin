@@ -81,7 +81,7 @@ function ManageTendersComponent() {
       {
         id: "6",
         field: "postedBy",
-        headerName: "PostedBy",
+        headerName: "Posted By",
         width: "220",
         sortable: true,
       },

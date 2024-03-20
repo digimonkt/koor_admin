@@ -26,3 +26,42 @@ export const showRole = (role) => {
     return "NA";
   }
 };
+
+export const mimeTypes = {
+  ".txt": "text/plain",
+  ".html": "text/html",
+  ".css": "text/css",
+  ".js": "text/javascript",
+  ".jpg": "image/jpg",
+  ".jpeg": "image/jpeg",
+  ".png": "image/png",
+  ".gif": "image/gif",
+  ".bmp": "image/bmp",
+  ".webp": "image/webp",
+  ".svg": "image/svg+xml",
+  ".mp3": "audio/mpeg",
+  ".wav": "audio/wav",
+  ".midi": "audio/midi",
+  ".mid": "audio/midi",
+  ".ogg": "audio/ogg",
+  ".mp4": "video/mp4",
+  ".mpeg": "video/mpeg",
+  ".mpg": "video/mpeg",
+  ".mov": "video/quicktime",
+  ".webm": "video/webm",
+  ".pdf": "application/pdf",
+  ".doc": "application/msword",
+  ".xls": "application/vnd.ms-excel",
+  ".ppt": "application/vnd.ms-powerpoint",
+  ".json": "application/json",
+  ".xml": "application/xml",
+  ".zip": "application/zip",
+  ".rar": "application/x-rar-compressed",
+  ".tar": "application/x-tar",
+  ".gz": "application/gzip",
+  ".7z": "application/x-7z-compressed",
+};
+
+export function getKeysByValue(object, value) {
+  return Object.keys(object).filter((key) => object[key] === value);
+}

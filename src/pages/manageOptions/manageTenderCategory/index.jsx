@@ -239,7 +239,7 @@ function ManageTender() {
         handleClose={() => setEditTenderCategory("")}
       >
         <EditCard
-          title="Edit Skill"
+          title="Edit Tender Category"
           handleCancel={() => setEditTenderCategory("")}
           setEditValue={setEditTenderValue}
           editValue={editTenderValue}

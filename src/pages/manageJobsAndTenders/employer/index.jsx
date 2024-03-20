@@ -61,6 +61,12 @@ function ManageEmployerComponent() {
         width: "220",
       },
       {
+        field: "createBy",
+        headerName: "Create By",
+        sortable: true,
+        width: "220",
+      },
+      {
         field: "action",
         headerName: "Action",
         sortable: false,
@@ -128,19 +134,39 @@ function ManageEmployerComponent() {
               >
                 <SVG.DeleteIcon />
               </IconButton>
+              <IconButton
+                onClick={() => handleEdit(item.row.id)}
+                sx={{
+                  "&.MuiIconButton-root": {
+                    background: "#D5E3F7",
+                  },
+                  width: 30,
+                  height: 30,
+                  color: "#274593",
+                }}
+              >
+                <SVG.EditIcon />
+              </IconButton>
             </Stack>
           );
         },
       },
     ],
-    [],
+    []
   );
 
   const handleRedirectDetails = useCallback(
     (id) => {
       navigate(`employer-details/${id}`);
     },
-    [navigate],
+    [navigate]
+  );
+
+  const handleEdit = useCallback(
+    (id) => {
+      navigate(`edit-employer/${id}`);
+    },
+    [navigate]
   );
 
   const employerList = useCallback(async () => {
@@ -200,14 +226,14 @@ function ManageEmployerComponent() {
       await activeInactiveUser(id);
       employerList();
     },
-    [employerTable],
+    [employerTable]
   );
 
   const handleDelete = useCallback(async () => {
     const response = await deleteUser(deleting);
     if (response.remote === "success") {
       const newEmployerTable = employerTable.filter(
-        (emp) => emp.id !== deleting,
+        (emp) => emp.id !== deleting
       );
       setEmployerTable(newEmployerTable);
       setDeleting("");
@@ -228,7 +254,7 @@ function ManageEmployerComponent() {
     if (response.remote === "success") {
       window.open(
         process.env.REACT_APP_BACKEND_URL + response.data.url,
-        "_blank",
+        "_blank"
       );
     } else {
       dispatch(setErrorToast("something went wrong"));

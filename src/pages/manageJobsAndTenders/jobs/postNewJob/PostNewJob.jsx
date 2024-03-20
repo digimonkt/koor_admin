@@ -78,7 +78,7 @@ const PostNewJob = () => {
   };
   const [searchTerm, setSearchTerm] = useState("");
   const [companyLogo, setCompanyLogo] = useState("");
-  const [companyAttachments, setCompanyAttachments] = useState("");
+  // const [companyAttachments, setCompanyAttachments] = useState("");
   const [searchCountry, setSearchCountry] = useState("");
   const [employersData, setEmployersData] = useState(employers.data);
   const [editorValue, setEditorValue] = useState("");
@@ -126,6 +126,8 @@ const PostNewJob = () => {
       companyType: "exist",
       existCompany: { label: "", value: "" },
       company: "",
+      companyEmail: "",
+      companyAbout: "",
       companyLogo: [],
       companyLogoRemove: [],
       title: "",
@@ -171,6 +173,8 @@ const PostNewJob = () => {
       const payload = {
         company_type: selectedValue,
         company: values.company,
+        company_email: values.companyEmail,
+        company_about: values.companyAbout,
         company_logo_item: values.companyLogo,
         employer_id: values.existCompany.value,
         title: values.title,
@@ -254,7 +258,7 @@ const PostNewJob = () => {
           setSuggestedAddressValue("");
           setSuggestedAddress([]);
           setCompanyLogo();
-          setCompanyAttachments("");
+          // setCompanyAttachments("");
           navigate("/manage-jobs");
         } else {
           dispatch(setErrorToast("Something went wrong"));
@@ -286,17 +290,11 @@ const PostNewJob = () => {
     const response = await getJobDetailsByIdAPI({ jobId });
     if (response.remote === "success") {
       const { data } = response;
-      if (!data.user?.id) {
-        setSelectedValue("new");
-        formik.setFieldValue("companyType", "new");
-      } else {
-        setSelectedValue("exist");
-        formik.setFieldValue("companyType", "exist");
-      }
+      setSelectedValue("exist");
+      formik.setFieldValue("companyType", "exist");
       setCompanyLogo(data?.companyLogo);
       formik.setFieldValue("description", data.description || "");
       setEditorValue(data.description || "");
-      setCompanyAttachments(data.attachments || []);
       setInstructions(data.applicationInstruction || "");
       formik.setFieldValue(
         "applicationInstruction",
@@ -304,6 +302,8 @@ const PostNewJob = () => {
       );
 
       formik.setFieldValue("company", data.company || "");
+      formik.setFieldValue("companyEmail", data.companyEmail || "");
+      formik.setFieldValue("companyAbout", data.companyAbout || "");
       formik.setFieldValue("existCompany", {
         value: data.user?.id || "",
         label: data.user?.name || data.user?.email || "",
@@ -399,7 +399,7 @@ const PostNewJob = () => {
         "skills",
         data.skills.map ? data.skills.map((skill) => skill.id) : [],
       );
-      // formik.setFieldValue("attachments", data.attachments);
+      formik.setFieldValue("attachments", data.attachments);
     }
   }, []);
   const handleProfilePicSave = async (file) => {
@@ -596,7 +596,7 @@ const PostNewJob = () => {
                 {selectedValue === "new" && (
                   <>
                     <Grid xl={12} lg={12} xs={12}>
-                      <h2 className="mt-3"> New Company</h2>
+                      <h2 className="mt-3">New Company</h2>
                     </Grid>
                     <Grid item xl={12} lg={12} xs={12}>
                       <Grid container spacing={2}>
@@ -617,7 +617,43 @@ const PostNewJob = () => {
                             <ErrorMessage>{formik.errors.company}</ErrorMessage>
                           ) : null}
                         </Grid>
-
+                        <Grid item xl={4} lg={4} xs={12}>
+                          <label className="mb-2">
+                            Company Email
+                            <span className="required-field">*</span>
+                          </label>
+                          <input
+                            type="email"
+                            placeholder="Company Email"
+                            className="add-form-control"
+                            onBlur={formik.handleBlur}
+                            onChange={formik.handleChange}
+                            {...formik.getFieldProps("companyEmail")}
+                          />
+                          {formik.touched.companyEmail &&
+                          formik.errors.companyEmail ? (
+                            <ErrorMessage>
+                              {formik.errors.companyEmail}{" "}
+                            </ErrorMessage>
+                          ) : null}
+                        </Grid>
+                        <Grid item xl={4} lg={4} xs={12}>
+                          <label className="mb-2">Company About</label>
+                          <input
+                            type="text"
+                            placeholder="Company About"
+                            className="add-form-control"
+                            onBlur={formik.handleBlur}
+                            onChange={formik.handleChange}
+                            {...formik.getFieldProps("companyAbout")}
+                          />
+                          {formik.touched.companyAbout &&
+                          formik.errors.companyAbout ? (
+                            <ErrorMessage>
+                              {formik.errors.companyAbout}
+                            </ErrorMessage>
+                          ) : null}
+                        </Grid>
                         <Grid item xl={12} lg={12} xs={12}>
                           <label className="mb-2">
                             Add Company Logo
@@ -1180,6 +1216,7 @@ const PostNewJob = () => {
                       ) : null}
                     </FormGroup>
                     <input
+                      type="email"
                       className="add-form-control"
                       placeholder="Your email address"
                       {...formik.getFieldProps("contactEmail")}
@@ -1263,6 +1300,7 @@ const PostNewJob = () => {
                       />
                     </FormGroup>
                     <LabeledInput
+                      type="url"
                       title=""
                       className="add-form-control"
                       placeholder="Paste a link to your website’s application form"
@@ -1451,14 +1489,10 @@ const PostNewJob = () => {
                 <Grid item xl={12} lg={12} xs={12}>
                   <Divider sx={{ borderColor: "#CACACA", opacity: "1" }} />
                 </Grid>
-
                 <Grid item xl={12} lg={12} xs={12}>
                   <h2 className="mt-3 mb-3">Attach files</h2>
                   <AttachmentDragNDropInput
-                    files={
-                      companyAttachments ||
-                      formik.getFieldProps("attachments").value
-                    }
+                    files={formik.getFieldProps("attachments").value}
                     handleDrop={(file) => {
                       formik.setValues({
                         ...formik.values,
@@ -1477,11 +1511,6 @@ const PostNewJob = () => {
                         formik.setFieldValue(
                           "attachments",
                           formik.values.attachments.filter(
-                            (attachment) => attachment.id !== file.id,
-                          ),
-                        );
-                        setCompanyAttachments(
-                          companyAttachments.filter(
                             (attachment) => attachment.id !== file.id,
                           ),
                         );

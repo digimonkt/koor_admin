@@ -50,7 +50,7 @@ export const activeInactiveJob = async (jobId) => {
 };
 
 // CountriesName
-export const getCountriesName = async ({ search, limit, page }) => {
+export const getCountriesName = async ({ search, limit = 500, page }) => {
   const response = await api.request({
     url: urlcat("/v1/admin/country", { search, limit, page }),
     method: "GET",

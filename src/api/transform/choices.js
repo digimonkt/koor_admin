@@ -4,7 +4,6 @@ import {
 } from "@components/financialtools/table/data";
 import { SVG } from "@assets/svg";
 export const transformJobAPIResponse = (data) => {
-  console.log(data);
   return data.map((data, index) => ({
     id: data.id,
     no: index + 1,
@@ -28,6 +27,7 @@ export const transformEmployerAPIResponse = (data) => {
     email: data.email,
     mobileNumber: data.mobile_number,
     action: data.is_active,
+    createBy: data.is_company ? "Admin" : "Employer",
     verify: data.verify,
   }));
 };

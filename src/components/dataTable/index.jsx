@@ -5,7 +5,6 @@ import { useEffect } from "react";
 import { incrementPage } from "@utils/common";
 
 function DataTable({ rows, columns, limitProps, loader, page, NoFoundText }) {
-  console.log("rows", columns);
   useEffect(() => {
     if (rows.length) {
       const startIndex = (page - 1) * limitProps.value + 1;

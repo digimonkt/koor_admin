@@ -62,11 +62,12 @@ const Invoices = () => {
         field: "date",
         headerName: "Date",
         sortable: true,
+        width: "120",
       },
       {
         field: "invoiceId",
         headerName: "Number / ID",
-        width: "220",
+        width: "170",
         sortable: true,
         renderCell: (item) => {
           return (
@@ -74,7 +75,7 @@ const Invoices = () => {
               <Stack
                 direction="row"
                 spacing={1}
-                style={{ cursor: "pointer" }}
+                style={{ cursor: "pointer", color: "#274593" }}
                 alignItems="center"
                 onClick={() => {
                   handleRedirectDetails(item.row.invoiceId);
