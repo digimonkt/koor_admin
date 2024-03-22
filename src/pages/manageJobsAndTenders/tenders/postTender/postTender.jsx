@@ -50,6 +50,7 @@ import { DATABASE_DATE_FORMAT } from "@utils/constants/constants";
 import { setErrorToast, setSuccessToast } from "@redux/slice/toast";
 import SelectWithSearch from "@components/input/selectWithsearch";
 import { manageEmployer } from "@api/employers";
+import { capitalizeFirst } from "@utils/common";
 
 const PostNewJob = () => {
   const {
@@ -110,19 +111,27 @@ const PostNewJob = () => {
       cc2: "",
       isContactWhatsapp: false,
       applicationInstruction: "",
+      sendEmailAutomatically: false,
       isApplyThroughEmail: false,
       isApplyThroughKoor: false,
       isApplyThroughWebsite: false,
     },
     validationSchema: validateCreateTenderInput,
     onSubmit: async (values, { resetForm }) => {
+      const currentCompany =
+        values.companyType === "exist"
+          ? {
+              employer_id: values.existCompany.value,
+            }
+          : {
+              company: values.company,
+              company_email: values.companyEmail,
+              company_logo_item: values.companyLogo,
+            };
       const payload = {
         company_type: values.companyType,
-        company: values.company,
+        ...currentCompany,
         company_about: values.companyAbout,
-        company_email: values.companyEmail,
-        company_logo_item: values.companyLogo,
-        employer_id: values.existCompany.value,
         title: values.title,
         budget_currency: values.budgetCurrency,
         budget_amount: values.budgetAmount,
@@ -148,6 +157,8 @@ const PostNewJob = () => {
           ? values.contactWhatsapp
           : "",
         apply_through_koor: values.isApplyThroughKoor || "false",
+        send_email_automatically:
+          capitalizeFirst(`${values.sendEmailAutomatically}`) || "false",
         apply_through_email: values.isApplyThroughEmail || "false",
         apply_through_website: values.isApplyThroughWebsite || "false",
         website_link: values.websiteLink,
@@ -222,7 +233,7 @@ const PostNewJob = () => {
       setEditorValue(data.description);
       formik.setFieldValue(
         "applicationInstruction",
-        data.applicationInstruction || "",
+        data.applicationInstruction || ""
       );
       formik.setFieldValue("company", data.company || "");
       setInstructions(data.applicationInstruction || "");
@@ -234,8 +245,12 @@ const PostNewJob = () => {
       formik.setFieldValue("title", data.title || "");
       formik.setFieldValue("budgetCurrency", data.budgetCurrency);
       formik.setFieldValue(
+        "sendEmailAutomatically",
+        data.sendEmailAutomatically === "True" || false
+      );
+      formik.setFieldValue(
         "budgetAmount",
-        parseInt(data.budgetAmount.replace(/,/g, ""), 10),
+        parseInt(data.budgetAmount.replace(/,/g, ""), 10)
       );
       formik.setFieldValue("country", {
         value: data.country.id || "",
@@ -250,7 +265,7 @@ const PostNewJob = () => {
         data.categories.map((category) => ({
           value: category.id || "",
           label: category.title || "",
-        })),
+        }))
       );
       formik.setFieldValue("sectors", {
         value: data.sectors.id || "",
@@ -269,15 +284,15 @@ const PostNewJob = () => {
       formik.setFieldValue("attachments", data?.attachments);
       formik.setFieldValue(
         "isApplyThroughEmail",
-        Boolean(data.isApplyThroughEmail) || false,
+        Boolean(data.isApplyThroughEmail) || false
       );
       formik.setFieldValue(
         "isContactEmail",
-        Boolean(data.contactEmail) || false,
+        Boolean(data.contactEmail) || false
       );
       formik.setFieldValue(
         "isApplyThroughKoor",
-        Boolean(data.isApplyThroughKoor) || false,
+        Boolean(data.isApplyThroughKoor) || false
       );
       formik.setFieldValue("contactEmail", data?.contactEmail || "");
       formik.setFieldValue("cc1", data?.cc1 || "");
@@ -286,7 +301,7 @@ const PostNewJob = () => {
       formik.setFieldValue("websiteLink", data?.website || "");
       formik.setFieldValue(
         "isApplyThroughWebsite",
-        Boolean(data.isApplyThroughWebsite || false),
+        Boolean(data.isApplyThroughWebsite || false)
       );
     }
   }, []);
@@ -314,7 +329,7 @@ const PostNewJob = () => {
       dispatch(
         getCitiesByCountry({
           countryId: formik.values.country?.value,
-        }),
+        })
       );
     }
   }, [formik.values.country]);
@@ -532,7 +547,7 @@ const PostNewJob = () => {
                             onChange={(e) =>
                               formik.setFieldValue(
                                 "companyEmail ",
-                                e.target.value,
+                                e.target.value
                               )
                             }
                             {...formik.getFieldProps("companyEmail")}
@@ -556,7 +571,7 @@ const PostNewJob = () => {
                             onChange={(e) =>
                               formik.setFieldValue(
                                 "companyAbout",
-                                e.target.value,
+                                e.target.value
                               )
                             }
                             {...formik.getFieldProps("companyAbout")}
@@ -814,7 +829,7 @@ const PostNewJob = () => {
                                   onClick={() => {
                                     formik.setFieldValue(
                                       "address",
-                                      address.description,
+                                      address.description
                                     );
                                     setSearchValue(address.description);
                                   }}
@@ -973,7 +988,7 @@ const PostNewJob = () => {
                             (opportunityType) => ({
                               value: opportunityType.id,
                               label: opportunityType.title,
-                            }),
+                            })
                           )}
                           onChange={(_, value) => {
                             if (value) {
@@ -1220,6 +1235,21 @@ const PostNewJob = () => {
                   ) : null}
                 </Grid>
                 <Grid item xl={12} lg={12} xs={12}>
+                  <h2 className="mt-2">Notification preferences</h2>
+                </Grid>
+                <Grid item xs={12}>
+                  <FormGroup>
+                    <FormControlLabel
+                      sx={{ width: "290px" }}
+                      defaultChecked={true}
+                      control={<Switch />}
+                      label="Don't send any mail"
+                      checked={formik.values.sendEmailAutomatically}
+                      {...formik.getFieldProps("sendEmailAutomatically")}
+                    />
+                  </FormGroup>
+                </Grid>
+                <Grid item xl={12} lg={12} xs={12}>
                   <h2 className="mt-2 mb-3">Attach files</h2>
                   {formik.errors?.attachments ? (
                     <ErrorMessage>{formik.errors?.attachments}</ErrorMessage>
@@ -1233,12 +1263,12 @@ const PostNewJob = () => {
                           "attachments",
                           `Maximum 10 files allowed. you can upload only ${
                             10 - currentAttachments.length
-                          } remaining`,
+                          } remaining`
                         );
                       } else {
                         const filesTaken = file.slice(
                           0,
-                          10 - currentAttachments.length,
+                          10 - currentAttachments.length
                         );
                         formik.setFieldValue("attachments", [
                           ...currentAttachments,
@@ -1255,15 +1285,15 @@ const PostNewJob = () => {
                         formik.setFieldValue(
                           "attachments",
                           formik.values.attachments.filter(
-                            (attachment) => attachment.path !== file.path,
-                          ),
+                            (attachment) => attachment.path !== file.path
+                          )
                         );
                       } else {
                         formik.setFieldValue(
                           "attachments",
                           formik.values.attachments.filter(
-                            (i) => i.path !== file.path,
-                          ),
+                            (i) => i.path !== file.path
+                          )
                         );
                       }
                     }}
@@ -1325,8 +1355,8 @@ const PostNewJob = () => {
                             ? "Updating..."
                             : "Posting..."
                           : tenderId
-                            ? "Update the tender"
-                            : "POST THE TENDER"
+                          ? "Update the tender"
+                          : "POST THE TENDER"
                       }
                       type="submit"
                       className="resetButton"

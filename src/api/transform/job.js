@@ -36,6 +36,8 @@ export const transformFullJobDetails = (data) => {
     cc1: data.cc1 || "",
     cc2: data.cc2 || "",
     isApplyThroughKoor: data.apply_through_koor,
+    sendEmailAutomatically: data.send_email_automatically,
+    sendInvoiceAutomatically: data.send_invoice_automatically,
     isApplyThroughEmail: data.apply_through_email,
     isApplyThroughWebsite: data.apply_through_website,
     applicationInstruction: data.application_instruction,
@@ -102,6 +104,7 @@ export const transformFullTenderDetails = (data) => {
     applicationInstruction: data.application_instruction,
     isApplyThroughEmail: data.apply_through_email,
     isApplyThroughKoor: data.apply_through_koor,
+    sendEmailAutomatically: data.send_email_automatically,
     isApplyThroughWebsite: data.apply_through_website,
     user: {
       id: data.user.id,
