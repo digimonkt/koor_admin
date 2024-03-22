@@ -171,13 +171,21 @@ const PostNewJob = () => {
     validationSchema: validateCreateJobInput,
     onSubmit: async (values, { resetForm }) => {
       setSubmitting(SUBMITTING_STATUS_ENUM.loading);
+      const currentCompany =
+        values.companyType === "exist"
+          ? {
+              employer_id: values.existCompany.value,
+            }
+          : {
+              company: values.company,
+              company_email: values.companyEmail,
+              company_logo_item: values.companyLogo,
+            };
       const payload = {
         company_type: selectedValue,
-        company: values.company,
-        company_email: values.companyEmail,
+        ...currentCompany,
         company_about: values.companyAbout,
         company_logo_item: values.companyLogo,
-        employer_id: values.existCompany.value,
         title: values.title,
         budget_currency: values.budgetCurrency,
         budget_amount: values.budgetAmount,
@@ -191,10 +199,10 @@ const PostNewJob = () => {
         is_full_time: values.isFullTime,
         is_part_time: values.isPartTime,
         send_email_automatically: capitalizeFirst(
-          `${values.sendEmailAutomatically}`,
+          `${values.sendEmailAutomatically}`
         ),
         send_invoice_automatically: capitalizeFirst(
-          `${values.sendEmailAutomatically}`,
+          `${values.sendEmailAutomatically}`
         ),
         has_contract: values.hasContract,
         deadline: dayjs(values.deadline).format(DATABASE_DATE_FORMAT),
@@ -303,7 +311,7 @@ const PostNewJob = () => {
       setInstructions(data.applicationInstruction || "");
       formik.setFieldValue(
         "applicationInstruction",
-        data.applicationInstruction || "",
+        data.applicationInstruction || ""
       );
 
       formik.setFieldValue("company", data.company || "");
@@ -317,7 +325,7 @@ const PostNewJob = () => {
       formik.setFieldValue("budgetCurrency", data.budgetCurrency);
       formik.setFieldValue(
         "budgetAmount",
-        parseInt(data.budgetAmount.replace(/,/g, ""), 10) || 0,
+        parseInt(data.budgetAmount.replace(/,/g, ""), 10) || 0
       );
       formik.setFieldValue("budgetPayPeriod", data.budgetPayPeriod);
       formik.setFieldValue("country", {
@@ -343,15 +351,15 @@ const PostNewJob = () => {
       });
       formik.setFieldValue(
         "isApplyThroughEmail",
-        Boolean(data.isApplyThroughEmail) || false,
+        Boolean(data.isApplyThroughEmail) || false
       );
       formik.setFieldValue(
         "sendEmailAutomatically",
-        data.sendEmailAutomatically === "True" || false,
+        data.sendEmailAutomatically === "True" || false
       );
       formik.setFieldValue(
         "sendInvoiceAutomatically",
-        data.sendInvoiceAutomatically === "True" || false,
+        data.sendInvoiceAutomatically === "True" || false
       );
       formik.setFieldValue("isFullTime", data.isFullTime || false);
       formik.setFieldValue("isPartTime", data.isPartTime || false);
@@ -360,23 +368,23 @@ const PostNewJob = () => {
       formik.setFieldValue("startDate", dayjs(data.startDate));
       formik.setFieldValue(
         "isContactEmail",
-        Boolean(data.contactEmail) || false,
+        Boolean(data.contactEmail) || false
       );
       formik.setFieldValue(
         "isApplyThroughKoor",
-        Boolean(data.isApplyThroughKoor) || false,
+        Boolean(data.isApplyThroughKoor) || false
       );
       formik.setFieldValue("contactEmail", data.contactEmail || "");
       formik.setFieldValue("cc1", data.cc1 || "");
       formik.setFieldValue("cc2", data.cc2 || "");
       formik.setFieldValue(
         "isContactWhatsapp",
-        Boolean(data.contactWhatsapp) || false,
+        Boolean(data.contactWhatsapp) || false
       );
       formik.setFieldValue("contactWhatsapp", data.contactWhatsapp || "");
       formik.setFieldValue(
         "isApplyThroughWebsite",
-        Boolean(data.isApplyThroughWebsite) || false,
+        Boolean(data.isApplyThroughWebsite) || false
       );
       formik.setFieldValue(
         "languages",
@@ -394,7 +402,7 @@ const PostNewJob = () => {
             ]
           : [1, 2, 3].map(() => ({
               language: "",
-            })),
+            }))
       );
       formik.setFieldValue("highestEducation", {
         value: data.highestEducation.id || "",
@@ -402,7 +410,7 @@ const PostNewJob = () => {
       });
       formik.setFieldValue(
         "skills",
-        data.skills.map ? data.skills.map((skill) => skill.id) : [],
+        data.skills.map ? data.skills.map((skill) => skill.id) : []
       );
       formik.setFieldValue("attachments", data.attachments);
     }
@@ -416,7 +424,7 @@ const PostNewJob = () => {
         getCitiesByCountry({
           countryId: formik.values.country?.value,
           limit: 500,
-        }),
+        })
       );
     }
   }, [formik.values.country]);
@@ -467,7 +475,7 @@ const PostNewJob = () => {
       !subCategories.data[formik.values.jobCategories]?.length
     ) {
       dispatch(
-        getSubCategories({ categoryId: formik.values.jobCategories.value }),
+        getSubCategories({ categoryId: formik.values.jobCategories.value })
       );
     }
   }, [formik.values.jobCategories]);
@@ -934,10 +942,10 @@ const PostNewJob = () => {
                                   onClick={() => {
                                     formik.setFieldValue(
                                       "address",
-                                      address.description,
+                                      address.description
                                     );
                                     setSuggestedAddressValue(
-                                      address.description,
+                                      address.description
                                     );
                                   }}
                                 >
@@ -1318,33 +1326,28 @@ const PostNewJob = () => {
                   <Grid item xl={12} lg={12} xs={12}>
                     <Divider sx={{ borderColor: "#CACACA", opacity: "1" }} />
                   </Grid>
-                  {!jobId && (
-                    <>
-                      <Grid item xl={12} lg={12} xs={12}>
-                        <h2 className="mt-2">Notification preferences</h2>
-                      </Grid>
-                      <Grid item xs={12}>
-                        <FormGroup>
-                          <FormControlLabel
-                            sx={{ width: "290px" }}
-                            control={<Switch />}
-                            label="Send mail by automatically"
-                            checked={formik.values.sendEmailAutomatically}
-                            {...formik.getFieldProps("sendEmailAutomatically")}
-                          />
-                          <FormControlLabel
-                            sx={{ width: "290px" }}
-                            control={<Switch />}
-                            label="Send invoice by automatically"
-                            checked={formik.values.sendInvoiceAutomatically}
-                            {...formik.getFieldProps(
-                              "sendInvoiceAutomatically",
-                            )}
-                          />
-                        </FormGroup>
-                      </Grid>
-                    </>
-                  )}
+                  <Grid item xl={12} lg={12} xs={12}>
+                    <h2 className="mt-2">Notification preferences</h2>
+                  </Grid>
+                  <Grid item xs={12}>
+                    <FormGroup>
+                      <FormControlLabel
+                        sx={{ width: "290px" }}
+                        defaultChecked={true}
+                        control={<Switch />}
+                        label="Don't send any mail"
+                        checked={formik.values.sendEmailAutomatically}
+                        {...formik.getFieldProps("sendEmailAutomatically")}
+                      />
+                      <FormControlLabel
+                        sx={{ width: "290px" }}
+                        control={<Switch />}
+                        label="Send invoice"
+                        checked={formik.values.sendInvoiceAutomatically}
+                        {...formik.getFieldProps("sendInvoiceAutomatically")}
+                      />
+                    </FormGroup>
+                  </Grid>
                   <Grid item xl={12} lg={12} xs={12}>
                     <h2 className="mt-2">Preferences</h2>
                   </Grid>
@@ -1522,15 +1525,15 @@ const PostNewJob = () => {
                         formik.setFieldValue(
                           "attachments",
                           formik.values.attachments.filter(
-                            (attachment) => attachment.id !== file.id,
-                          ),
+                            (attachment) => attachment.id !== file.id
+                          )
                         );
                       } else {
                         formik.setFieldValue(
                           "attachments",
                           formik.values.attachments.filter(
-                            (attachment) => attachment.path !== file.path,
-                          ),
+                            (attachment) => attachment.path !== file.path
+                          )
                         );
                       }
                     }}
@@ -1590,8 +1593,8 @@ const PostNewJob = () => {
                               ? "Updating..."
                               : "Posting..."
                             : jobId
-                              ? "UPDATE THE JOB"
-                              : "POST THE JOB"
+                            ? "UPDATE THE JOB"
+                            : "POST THE JOB"
                         }
                         type="submit"
                         className="mt-2 resetButton"

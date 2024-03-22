@@ -45,15 +45,26 @@ export const transformInvoiceDetailsAPI = (data) => {
       //     path: data.user.image.path,
       // },
     },
-    detail: data.detail.map((details, idx) => {
-      return {
-        id: details.id,
-        Serialnumber: idx + 1,
-        points: details.points,
-        amount: "$" + details.amount,
-        created: dayjs(details.created).format("MMMM D, YYYY h:mm A"),
-        note: details.note || `Point updated by koor admin (${details.points})`,
-      };
-    }),
+    detail: [
+      {
+        id: data.id,
+        Serialnumber: 1,
+        points: data.points,
+        amount: "$" + data.points,
+        created: dayjs(data.created).format("MMMM D, YYYY h:mm A"),
+        note: data.job_title || "",
+      },
+    ],
+
+    // detail: data.detail.map((details, idx) => {
+    //   return {
+    //     id: details.id,
+    //     Serialnumber: idx + 1,
+    //     points: details.points,
+    //     amount: "$" + details.amount,
+    //     created: dayjs(details.created).format("MMMM D, YYYY h:mm A"),
+    //     note: details.note || `Point updated by koor admin (${details.points})`,
+    //   };
+    // }),
   };
 };
