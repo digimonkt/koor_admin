@@ -204,7 +204,7 @@ const ViewInvoices = () => {
             </Grid>
             <Box>
               <CustomTable
-                rows={invoiceDetails.detail || []}
+                rows={invoiceDetails?.detail || []}
                 columns={USER_COLUMN_DATA || []}
                 radius="7px 7px 0px 0px"
               />
