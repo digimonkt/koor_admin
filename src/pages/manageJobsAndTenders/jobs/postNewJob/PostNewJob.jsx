@@ -202,7 +202,7 @@ const PostNewJob = () => {
           `${values.sendEmailAutomatically}`
         ),
         send_invoice_automatically: capitalizeFirst(
-          `${values.sendEmailAutomatically}`
+          `${values.sendInvoiceAutomatically}`
         ),
         has_contract: values.hasContract,
         deadline: dayjs(values.deadline).format(DATABASE_DATE_FORMAT),
@@ -1342,6 +1342,7 @@ const PostNewJob = () => {
                       <FormControlLabel
                         sx={{ width: "290px" }}
                         control={<Switch />}
+                        disabled={jobId}
                         label="Send invoice"
                         checked={formik.values.sendInvoiceAutomatically}
                         {...formik.getFieldProps("sendInvoiceAutomatically")}
