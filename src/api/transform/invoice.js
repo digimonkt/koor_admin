@@ -40,10 +40,6 @@ export const transformInvoiceDetailsAPI = (data) => {
       email: data.user.email,
       country_code: data.user.country_code,
       mobileNumber: data.user.country_code + "-" + data.user.mobile_number,
-      // image: {
-      //     title: data.user.image.title,
-      //     path: data.user.image.path,
-      // },
     },
     detail: [
       {
