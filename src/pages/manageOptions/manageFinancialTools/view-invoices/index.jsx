@@ -330,7 +330,7 @@ const ViewInvoices = () => {
                       <SVG.FacebookIcon />
                     </StyledIconButton>
                   </Stack>
-                  <span className={`${styles.emailId}`}>@koor_com</span>
+                  <span className={`${styles.emailId}`}>@koorjobs</span>
                 </Stack>
               </Grid>
             </Grid>
