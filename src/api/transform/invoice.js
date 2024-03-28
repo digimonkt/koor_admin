@@ -39,9 +39,7 @@ export const transformInvoiceDetailsAPI = (data) => {
       name: data.user.name,
       email: data.user.email,
       country_code: data.user.country_code,
-      mobileNumber: !data.user.mobile_number
-        ? ""
-        : data.user.country_code + "-" + data.user.mobile_number,
+      mobileNumber: data.user.country_code + "-" + data.user.mobile_number,
     },
     detail: [
       {

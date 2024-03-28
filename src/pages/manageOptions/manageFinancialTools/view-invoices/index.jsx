@@ -181,14 +181,19 @@ const ViewInvoices = () => {
                     <b>Client name: </b>{" "}
                     {invoiceDetails.user.name || invoiceDetails.user.email}
                   </Box>
-                  <Box sx={{ mb: 1.875 }}>
-                    <b>Mobile Number: </b>
-                    {invoiceDetails.user.mobileNumber}
-                  </Box>
-                  <Box sx={{ mb: 1.875 }}>
-                    <b>Email: </b>
-                    {invoiceDetails.user.email}
-                  </Box>
+                  {invoiceDetails.user.country_code &&
+                    invoiceDetails.user.mobileNumber && (
+                      <Box sx={{ mb: 1.875 }}>
+                        <b>Mobile Number: </b>
+                        {invoiceDetails.user.mobileNumber}
+                      </Box>
+                    )}
+                  {invoiceDetails.user.email && (
+                    <Box sx={{ mb: 1.875 }}>
+                      <b>Email: </b>
+                      {invoiceDetails.user.email}
+                    </Box>
+                  )}
                 </div>
               </Grid>
               <Grid item lg={6} xs={12}>
