@@ -215,7 +215,7 @@ const ViewInvoices = () => {
                   <ul className={`${styles.bankDetails}`}>
                     <li>
                       <span>Please deposit to through</span>
-                      <b>xxx</b>
+                      <b>IBS</b>
                     </li>
                     <li>
                       <span>Bank name:</span>
@@ -223,11 +223,15 @@ const ViewInvoices = () => {
                     </li>
                     <li>
                       <span>Account name:</span>
-                      <b>Koor LTD</b>
+                      <b>Koor Tech</b>
                     </li>
                     <li>
                       <span>Account No:</span>
-                      <b>0971881</b>
+                      <b>0160412301840010</b>
+                    </li>
+                    <li>
+                      <span>IBAN No:</span>
+                      <b>SO930004004016041200001</b>
                     </li>
                   </ul>
                 </Grid>
@@ -294,11 +298,11 @@ const ViewInvoices = () => {
             >
               <Grid item lg={6} xs={12}>
                 <div className={`${styles.bottomAddres}`}>
-                  <h5>Koor.com</h5>
+                  <h5>Koorjobs.com</h5>
                   <ul>
-                    <li>contact@koor.com</li>
-                    <li>+27 97 87 878 83</li>
-                    <li>Mogadishu, Kenya</li>
+                    <li>admin@koorjobs.com</li>
+                    <li>+25261611459000</li>
+                    <li>Mogadishu - Somalia.</li>
                   </ul>
                 </div>
               </Grid>
