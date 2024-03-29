@@ -306,8 +306,8 @@ const ViewInvoices = () => {
                   <h5>Koorjobs.com</h5>
                   <ul>
                     <li>admin@koorjobs.com</li>
-                    <li>+25261611459000</li>
-                    <li>Mogadishu - Somalia.</li>
+                    <li>+25261611459000 or +25261611450002</li>
+                    <li>Trepiano, Maka Almukarma road, Mogadishu - Somalia.</li>
                   </ul>
                 </div>
               </Grid>
