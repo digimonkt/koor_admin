@@ -16,6 +16,7 @@ export const transformInvoiceListAPI = (data) => {
         points: result.points,
         startDate: result.start_date,
         total: "$" + result.total,
+        employerId: result.user.id,
         employer: result.user.name,
       };
     }),

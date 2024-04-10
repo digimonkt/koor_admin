@@ -11,6 +11,7 @@ const Cbutton = ({
   children,
   hoverborderColor,
   padding,
+  disabled = false,
   url,
   bordercolor,
   onClick,
@@ -23,6 +24,7 @@ const Cbutton = ({
         LinkComponent={Link}
         to={url}
         fullWidth
+        disabled={disabled}
         variant="outlined"
         {...props}
         sx={{
