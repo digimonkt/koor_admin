@@ -12,10 +12,15 @@ import {
   Stack,
   IconButton,
   Tooltip,
+  Checkbox,
   Box,
 } from "@mui/material";
 import SelectDropDown from "./SelectDropDown";
-import { getInvoiceListApi, mailSendInvoiceAPI } from "@api/manageoptions";
+import {
+  getInvoiceListApi,
+  mailSendInvoiceAPI,
+  sendSelectedInvoiceAPI,
+} from "@api/manageoptions";
 import { transformEmployerData } from "@api/transform/choices";
 import { manageEmployer } from "@api/employers";
 import DataTable from "@components/dataTable";
@@ -27,6 +32,8 @@ import dayjs from "dayjs";
 import { useDebounce } from "usehooks-ts";
 import { useNavigate } from "react-router-dom";
 import Cbutton from "@components/button/cButton";
+import { CheckCircle, CheckCircleOutline } from "@mui/icons-material";
+
 const StyledFormLabel = styled(FormLabel)(() => ({
   fontFamily: "Poppins",
   color: "#121212",
@@ -39,6 +46,7 @@ const StyledFormLabel = styled(FormLabel)(() => ({
 const Invoices = () => {
   const dispatch = useDispatch();
   const [invoiceId, setInvoiceId] = useState("");
+  const [sendInvoiceId, setSendInvoiceId] = useState([]);
   const handleSendMail = async (id) => {
     dispatch(setSuccessToast("Email Sent Successfully"));
     await mailSendInvoiceAPI(id);
@@ -56,6 +64,15 @@ const Invoices = () => {
     const url = `${env.REACT_APP_BACKEND_URL}/api/v1/admin/invoice/download?invoice-id=${id}`;
     window.open(url, "_blank");
   }, []);
+
+  const handleCheckedInvoice = (id, checked) => {
+    if (checked) {
+      setSendInvoiceId((prev) => [...prev, { invoiceId: id }]);
+    } else {
+      setSendInvoiceId((prev) => prev.filter((item) => item.invoiceId !== id));
+    }
+  };
+
   const columns = useMemo(
     () => [
       {
@@ -98,6 +115,43 @@ const Invoices = () => {
         headerName: "Total Amount",
         width: 220,
         sortable: true,
+      },
+      {
+        field: "send",
+        headerName: "Send?",
+        width: 110,
+        sortable: true,
+        renderCell: (item) => {
+          return (
+            <Stack direction="row" spacing={1} alignItems="center">
+              <Tooltip title="Send Invoice">
+                <IconButton
+                  onClick={() => {}}
+                  sx={{
+                    "&.MuiIconButton-root": {
+                      background: "#D5E3F7",
+                    },
+
+                    width: 30,
+                    height: 30,
+                    color: "#274593",
+                  }}
+                >
+                  <Checkbox
+                    icon={<CheckCircleOutline />}
+                    checkedIcon={<CheckCircle />}
+                    onClick={(event) =>
+                      handleCheckedInvoice(
+                        item.row.invoiceId,
+                        event.target.checked
+                      )
+                    }
+                  />
+                </IconButton>
+              </Tooltip>
+            </Stack>
+          );
+        },
       },
       {
         field: "action",
@@ -165,14 +219,17 @@ const Invoices = () => {
   const [dateFrom, setDateFrom] = useState(lastMonth);
   const [limit, setLimit] = useState(10);
   const [pages, setPages] = useState(1);
-  const [loading, setLoading] = useState(false);
+  const [state, setState] = useState({
+    loading: false,
+    invoiceSendLoading: false,
+  });
   const page = pages;
   const getPage = useCallback((_, page) => {
     setPages(page);
   }, []);
   const [totalCount, setTotalCount] = useState(0);
   const invoiceList = async () => {
-    setLoading(true);
+    setState((prev) => ({ ...prev, loading: true }));
     const fromDate = dayjs(dateFrom).format("YYYY-MM-DD");
     const toDate = dayjs(dateTo).format("YYYY-MM-DD");
     const response = await getInvoiceListApi({
@@ -192,7 +249,7 @@ const Invoices = () => {
       dispatch(setErrorToast("Something went wrong"));
       return false;
     }
-    setLoading(false);
+    setState((prev) => ({ ...prev, loading: false }));
   };
   const getEmployerList = async () => {
     const limit = 1000000;
@@ -222,6 +279,27 @@ const Invoices = () => {
   const handleFormReset = () => {
     setEmployerId("");
     setInvoiceId("");
+  };
+
+  const handleSelectedInvoice = async () => {
+    if (!sendInvoiceId.length) {
+      dispatch(setErrorToast("Please select invoice"));
+    } else {
+      setState((prev) => ({ ...prev, invoiceSendLoading: true }));
+      const formData = new FormData();
+      sendInvoiceId.forEach((invoice) => {
+        formData.append("invoiceId", invoice.invoiceId);
+      });
+      const res = await sendSelectedInvoiceAPI(formData);
+      if (res.remote === "success") {
+        setState((prev) => ({ ...prev, invoiceSendLoading: false }));
+
+        dispatch(setSuccessToast("Email Sent Successfully"));
+      } else {
+        setState((prev) => ({ ...prev, invoiceSendLoading: false }));
+        dispatch(setErrorToast("Something went wrong"));
+      }
+    }
   };
   useEffect(() => {
     getEmployerList();
@@ -289,6 +367,25 @@ const Invoices = () => {
             </Box>
           </Grid>
           <Grid item lg={4} sm={4} xs={12}>
+            <Box className="employer_client_input">
+              <StyledFormLabel>Send Selected InvoiceSent?</StyledFormLabel>
+              <Cbutton
+                type="button"
+                bgcolor="#D5E3F7"
+                color="#274593"
+                bordercolor="#D5E3F7"
+                hoverBgColor="#b4d2fe"
+                hoverborderColor="#b4d2fe"
+                disabled={state.invoiceSendLoading}
+                padding="7px 30px"
+                marginTop="10px"
+                onClick={handleSelectedInvoice}
+              >
+                {state.invoiceSendLoading ? "Send..." : "Send"}
+              </Cbutton>
+            </Box>
+          </Grid>
+          <Grid item lg={4} sm={4} xs={12}>
             <div style={{ marginTop: "30px" }}>
               <Cbutton
                 type="button"
@@ -311,7 +408,6 @@ const Invoices = () => {
               columns={USER_COLUMN_DATA}
               radius="7px"
             /> */}
-
             <DataTable
               rows={listInvoice || []}
               columns={columns || []}
@@ -325,7 +421,7 @@ const Invoices = () => {
                 onChange: (e) => setLimit(e.target.value),
               }}
               page={page}
-              loader={loading}
+              loader={state.loading}
             />
             <div className="pagination-custom">
               <TablePagination
