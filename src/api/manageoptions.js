@@ -525,7 +525,7 @@ export const getPlansAPI = async () => {
 };
 export const updatePlansAPI = async (data) => {
   const resp = await api.request({
-    url: urlcat("v1/admin/package"),
+    url: "v1/admin/package",
     method: "PATCH",
     data,
   });
@@ -563,6 +563,18 @@ export const activeInactiveTenderAPI = async (id) => {
       tenderId: id,
     }),
     method: "PATCH",
+  });
+  return response;
+};
+
+export const sendSelectedInvoiceAPI = async (data) => {
+  const response = await api.request({
+    url: "/v1/admin/merge-invoice",
+    method: "POST",
+    data,
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
   });
   return response;
 };
