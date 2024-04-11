@@ -2,7 +2,7 @@ import { Card, CardContent, Grid, IconButton, Stack } from "@mui/material";
 import { Box } from "@mui/system";
 import { DownloadOutlined } from "@mui/icons-material";
 import React, { useCallback, useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { SVG } from "@assets/svg";
 import styles from "@components/financialtools/styles.module.css";
 import Cbutton from "@components/button/cButton";
@@ -22,6 +22,7 @@ const StyledIconButton = styled(IconButton)(() => ({
 
 const ViewInvoices = () => {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const { invoiceId } = useParams();
   const USER_COLUMN_DATA = [
     {
@@ -135,7 +136,7 @@ const ViewInvoices = () => {
             }}
           >
             <Stack direction="row" spacing={2}>
-              <IconButton LinkComponent={Link} to="/financial-tools">
+              <IconButton onClick={() => navigate(-1)}>
                 <SVG.ArrowLeftIcon />
               </IconButton>{" "}
               <h2>Invoice – ID {invoiceId}</h2>
@@ -170,7 +171,7 @@ const ViewInvoices = () => {
             </Stack>
           </Stack>
           <Box sx={{ textAlign: "center", mb: "54px" }}>
-            <SVG.KoorLogo />
+            <SVG.KoorNewLogo />
           </Box>
           <div className={` ${styles.invoiceTitle}`}>
             <h3 className="text-lg-end">Invoice</h3>
