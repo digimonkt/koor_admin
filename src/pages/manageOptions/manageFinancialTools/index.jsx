@@ -15,6 +15,7 @@ import { styled } from "@mui/material/styles";
 import PackageManagement from "@components/financialtools/PackageManagement";
 // import Cbutton from "@components/button/cButton";
 // import { SVG } from "@assets/svg";
+import { useSearchParams } from "react-router-dom";
 import Recharge from "@components/financialtools/Recharge";
 // import GenenateInvoices from "@components/financialtools/GenerateInvoices";
 import Invoices from "@components/financialtools/Invoices";
@@ -89,6 +90,7 @@ const AntTab = styled((props) => <Tab disableRipple {...props} />)(
 // }));
 
 const FinancialTools = () => {
+  const [searchParams] = useSearchParams();
   function TabPanel(props) {
     const { children, value, index, ...other } = props;
 
@@ -110,9 +112,11 @@ const FinancialTools = () => {
       "aria-controls": `simple-tabpanel-${index}`,
     };
   }
-  const [value, setValue] = React.useState(0);
+  const [value, setValue] = React.useState(
+    parseInt(searchParams.get("tabId")) || 0
+  );
 
-  const handleChange = (event, newValue) => {
+  const handleChange = (_, newValue) => {
     setValue(newValue);
   };
   const [packageList, setPackageList] = useState([
