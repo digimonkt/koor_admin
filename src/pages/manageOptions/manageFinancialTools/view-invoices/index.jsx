@@ -27,24 +27,24 @@ const ViewInvoices = () => {
   const USER_COLUMN_DATA = [
     {
       id: 1,
-      name: "S/N",
-      key: "Serialnumber",
-      tableCellClass: "text-center",
-    },
-    {
-      id: 2,
       name: "Date",
       key: "created",
       tableCellClass: "text-center",
     },
     {
-      id: 3,
+      id: 2,
+      name: "Job Id",
+      key: "jobId",
+      tableCellClass: "text-center",
+    },
+    {
+      id: 2,
       name: "Job Title",
       key: "note",
       tableCellClass: "text-center",
     },
     {
-      id: 4,
+      id: 3,
       name: "Amount",
       key: "amount",
       width: 115,
@@ -136,7 +136,7 @@ const ViewInvoices = () => {
             }}
           >
             <Stack direction="row" spacing={2}>
-              <IconButton onClick={() => navigate(-1)}>
+              <IconButton onClick={() => navigate("Invoices")}>
                 <SVG.ArrowLeftIcon />
               </IconButton>{" "}
               <h2>Invoice – ID {invoiceId}</h2>
@@ -177,6 +177,9 @@ const ViewInvoices = () => {
             <h3 className="text-lg-end">Invoice</h3>
             <Grid container spacing={2}>
               <Grid item lg={6} xs={12}>
+                <Box sx={{ mb: 1.875 }}>
+                  <h2>Bill To</h2>
+                </Box>
                 <div className={`${styles.address}`}>
                   <Box sx={{ mb: 1.875 }}>
                     <b>Client name: </b>{" "}

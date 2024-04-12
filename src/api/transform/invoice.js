@@ -45,7 +45,7 @@ export const transformInvoiceDetailsAPI = (data) => {
     detail: [
       {
         id: data.id,
-        Serialnumber: 1,
+        jobId: data.job_id?.substring(0, 8) || "",
         points: data.points,
         amount: "$" + data.points,
         created: dayjs(data.created).format("MMMM D, YYYY h:mm A"),
