@@ -136,7 +136,7 @@ const ViewInvoices = () => {
             }}
           >
             <Stack direction="row" spacing={2}>
-              <IconButton onClick={() => navigate("Invoices")}>
+              <IconButton onClick={() => navigate("/financial-tools?tabId=2")}>
                 <SVG.ArrowLeftIcon />
               </IconButton>{" "}
               <h2>Invoice – ID {invoiceId}</h2>
