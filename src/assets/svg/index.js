@@ -64,6 +64,7 @@ import { ReactComponent as UserIcon } from "./user.svg";
 import { ReactComponent as KoorLogo } from "./logo.svg";
 import { ReactComponent as WhiteFile } from "./white-file.svg";
 import { ReactComponent as RightBox } from "./right_box.svg";
+import { ReactComponent as KoorNewLogo } from "./logo-new.svg";
 export const SVG = {
   RightBox,
   WhiteFile,
@@ -127,6 +128,7 @@ export const SVG = {
   DownlodingIcon,
   ProfileIcon,
   ReceiptIcon,
+  KoorNewLogo,
   ArrowForward,
   UserIcon,
   KoorLogo,

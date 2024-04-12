@@ -123,7 +123,12 @@ const Invoices = () => {
         sortable: true,
         renderCell: (item) => {
           return (
-            <Stack direction="row" spacing={1} alignItems="center">
+            <Stack
+              direction="row"
+              spacing={1}
+              alignItems="center"
+              id="Invoices"
+            >
               <Tooltip title="Send Invoice">
                 <IconButton
                   onClick={() => {}}
