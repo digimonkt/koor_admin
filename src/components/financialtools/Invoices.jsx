@@ -17,6 +17,7 @@ import {
 } from "@mui/material";
 import SelectDropDown from "./SelectDropDown";
 import {
+  DownloadSelectedInvoiceAPI,
   getInvoiceListApi,
   mailSendInvoiceAPI,
   sendSelectedInvoiceAPI,
@@ -227,6 +228,7 @@ const Invoices = () => {
   const [state, setState] = useState({
     loading: false,
     invoiceSendLoading: false,
+    downloadInvoiceLoading: false,
   });
   const page = pages;
   const getPage = useCallback((_, page) => {
@@ -306,9 +308,33 @@ const Invoices = () => {
       }
     }
   };
+
+  const downloadSelectedInvoice = async () => {
+    if (!sendInvoiceId.length) {
+      dispatch(setErrorToast("Please select invoice"));
+    } else {
+      setState((prev) => ({ ...prev, downloadInvoiceLoading: true }));
+      const formData = new FormData();
+      sendInvoiceId.forEach((invoice) => {
+        formData.append("invoiceId", invoice.invoiceId);
+      });
+      const res = await DownloadSelectedInvoiceAPI(formData);
+      if (res.remote === "success") {
+        setState((prev) => ({ ...prev, downloadInvoiceLoading: false }));
+        Object.values(res.data).forEach((link) => {
+          window.open(link, "_blank");
+        });
+      } else {
+        setState((prev) => ({ ...prev, downloadInvoiceLoading: false }));
+        dispatch(setErrorToast("Something went wrong"));
+      }
+    }
+  };
+
   useEffect(() => {
     getEmployerList();
   }, []);
+
   useEffect(() => {
     invoiceList();
   }, [dateTo, dateFrom, employerId, debouncedSearchCountryValue, limit, page]);
@@ -387,6 +413,25 @@ const Invoices = () => {
                 onClick={handleSelectedInvoice}
               >
                 {state.invoiceSendLoading ? "Sending..." : "Send"}
+              </Cbutton>
+            </Box>
+          </Grid>
+          <Grid item lg={4} sm={4} xs={12}>
+            <Box className="employer_client_input">
+              <StyledFormLabel>Download Selected Invoice?</StyledFormLabel>
+              <Cbutton
+                type="button"
+                bgcolor="#D5E3F7"
+                color="#274593"
+                bordercolor="#D5E3F7"
+                hoverBgColor="#b4d2fe"
+                hoverborderColor="#b4d2fe"
+                disabled={state.downloadInvoiceLoading}
+                padding="7px 30px"
+                marginTop="10px"
+                onClick={downloadSelectedInvoice}
+              >
+                {state.downloadInvoiceLoading ? "Downloading..." : "Download"}
               </Cbutton>
             </Box>
           </Grid>
