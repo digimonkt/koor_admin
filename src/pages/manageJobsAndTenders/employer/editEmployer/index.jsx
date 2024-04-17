@@ -11,6 +11,7 @@ import {
 import SelectWithSearch from "@components/input/selectWithsearch";
 import Loader from "@components/loader";
 import { Avatar, Card, CardContent, Grid } from "@mui/material";
+// import { validateEmployerAboutMe } from "@pages/manageJobsAndTenders/validator";
 import {
   getCitiesByCountry,
   // getCitiesByCountry,
@@ -47,7 +48,7 @@ const EditEmployer = () => {
         label: "",
         value: "",
       },
-      licenseId: "",
+      licenseId: null,
       country: {
         label: "",
         value: "",
@@ -57,6 +58,7 @@ const EditEmployer = () => {
         value: "",
       },
       address: "",
+      email: "",
       description: "",
     },
     // validationSchema: validateEmployerAboutMe,
@@ -67,6 +69,7 @@ const EditEmployer = () => {
         organization_name: values.organizationName,
         country: values.country.value,
         city: values.city.value,
+        email: values.email,
         address: values.address,
         description: values.description,
         license_id: values.licenseId,
@@ -91,15 +94,16 @@ const EditEmployer = () => {
         const imgRes = await updateEmployerProfileImageAPI(id, imgFormData);
         if (imgRes) {
           dispatch(setSuccessToast("Employer updated successfully"));
-          setLoading(false);
         }
+      } else if (res.error.errors.email === "email already in use.") {
+        dispatch(setErrorToast(res.error.errors.email));
       } else {
         dispatch(setErrorToast("Something went wrong"));
-        setLoading(false);
+        console.log(res);
       }
+      setLoading(false);
     },
   });
-
   const getSuggestedAddress = async (search) => {
     const res = await GetSuggestedAddressAPI(search);
     if (res.remote === "success") {
@@ -115,6 +119,7 @@ const EditEmployer = () => {
         label: res.data.profile.country.title || "",
         value: res.data.profile.country.id || "",
       });
+      formik.setFieldValue("email", res.data.email);
       formik.setFieldValue("city", {
         label: res.data.profile.city.title || "",
         value: res.data.profile.city.id || "",
@@ -130,7 +135,7 @@ const EditEmployer = () => {
       formik.setFieldValue("licenseId", res.data.profile.license_id);
     }
   };
-
+  console.log(formik);
   const thumbs = (
     <Avatar
       sx={{
@@ -156,7 +161,7 @@ const EditEmployer = () => {
       !cities.data[formik.values?.country?.value]?.length
     ) {
       dispatch(
-        getCitiesByCountry({ countryId: formik.values?.country?.value }),
+        getCitiesByCountry({ countryId: formik.values?.country?.value })
       );
     }
   }, [formik.values.country]);
@@ -224,12 +229,15 @@ const EditEmployer = () => {
                     label="Organization Name"
                     {...formik.getFieldProps("organizationName")}
                   />
-                  {formik.touched.organizationName &&
-                  formik.errors.organizationName ? (
-                    <ErrorMessage>
-                      {formik.errors.organizationName}
-                    </ErrorMessage>
-                  ) : null}
+                </Grid>
+                <Grid item xs={12} className="mb-2">
+                  <LabeledInput
+                    title="Email"
+                    className="add-form-control"
+                    placeholder="Email"
+                    label="Email"
+                    {...formik.getFieldProps("email")}
+                  />
                 </Grid>
                 <Grid item xs={12}>
                   <label>
@@ -306,7 +314,7 @@ const EditEmployer = () => {
                                 onClick={() => {
                                   formik.setFieldValue(
                                     "address",
-                                    address.description,
+                                    address.description
                                   );
                                   setSuggestedAddressValue(address.description);
                                 }}
@@ -318,7 +326,7 @@ const EditEmployer = () => {
                         </div>
                       )}
                   </div>
-                  {formik.touched.address && formik.errors.address ? (
+                  {formik?.touched?.address && formik.errors.address ? (
                     <ErrorMessage>{formik.errors.address}</ErrorMessage>
                   ) : null}
                 </Grid>
@@ -441,24 +449,6 @@ const EditEmployer = () => {
                     {...formik.getFieldProps("licenseId")}
                   />
                 </Grid>
-                {/* <Grid item xs={12}>
-                  <Stack
-                    direction="row"
-                    spacing={2}
-                    alignItems="center"
-                    className="dashedborder mb-3"
-                  >
-                    <AttachmentDragNDropInput
-                      handleDrop={(e) => formik.setFieldValue("license", e)}
-                      single
-                      files={formik.values.license}
-                      deleteFile={(e) => formik.setFieldValue("license", [])}
-                    />
-                  </Stack>
-                  {formik.touched.license && formik.errors.license ? (
-                    <ErrorMessage>{formik.errors.license}</ErrorMessage>
-                  ) : null}
-                  </Grid> */}
                 <Grid item xs={12}>
                   <label>Your Organization Logo </label>
                   <Card
