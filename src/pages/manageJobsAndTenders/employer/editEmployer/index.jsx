@@ -57,6 +57,7 @@ const EditEmployer = () => {
         value: "",
       },
       address: "",
+      email: "",
       description: "",
     },
     // validationSchema: validateEmployerAboutMe,
@@ -67,6 +68,7 @@ const EditEmployer = () => {
         organization_name: values.organizationName,
         country: values.country.value,
         city: values.city.value,
+        email: values.email,
         address: values.address,
         description: values.description,
         license_id: values.licenseId,
@@ -115,6 +117,7 @@ const EditEmployer = () => {
         label: res.data.profile.country.title || "",
         value: res.data.profile.country.id || "",
       });
+      formik.setFieldValue("email", res.data.email);
       formik.setFieldValue("city", {
         label: res.data.profile.city.title || "",
         value: res.data.profile.city.id || "",
@@ -156,7 +159,7 @@ const EditEmployer = () => {
       !cities.data[formik.values?.country?.value]?.length
     ) {
       dispatch(
-        getCitiesByCountry({ countryId: formik.values?.country?.value }),
+        getCitiesByCountry({ countryId: formik.values?.country?.value })
       );
     }
   }, [formik.values.country]);
@@ -229,6 +232,18 @@ const EditEmployer = () => {
                     <ErrorMessage>
                       {formik.errors.organizationName}
                     </ErrorMessage>
+                  ) : null}
+                </Grid>
+                <Grid item xs={12} className="mb-2">
+                  <LabeledInput
+                    title="Email"
+                    className="add-form-control"
+                    placeholder="Email"
+                    label="Email"
+                    {...formik.getFieldProps("email")}
+                  />
+                  {formik.touched.email && formik.errors.email ? (
+                    <ErrorMessage>{formik.errors.email}</ErrorMessage>
                   ) : null}
                 </Grid>
                 <Grid item xs={12}>
@@ -306,7 +321,7 @@ const EditEmployer = () => {
                                 onClick={() => {
                                   formik.setFieldValue(
                                     "address",
-                                    address.description,
+                                    address.description
                                   );
                                   setSuggestedAddressValue(address.description);
                                 }}
