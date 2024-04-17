@@ -578,3 +578,15 @@ export const sendSelectedInvoiceAPI = async (data) => {
   });
   return response;
 };
+
+export const DownloadSelectedInvoiceAPI = async (data) => {
+  const response = await api.request({
+    url: "/v1/admin/download-merge-invoice",
+    method: "POST",
+    data,
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
+  return response;
+};
