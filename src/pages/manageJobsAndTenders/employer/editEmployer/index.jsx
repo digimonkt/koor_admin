@@ -11,7 +11,7 @@ import {
 import SelectWithSearch from "@components/input/selectWithsearch";
 import Loader from "@components/loader";
 import { Avatar, Card, CardContent, Grid } from "@mui/material";
-import { validateEmployerAboutMe } from "@pages/manageJobsAndTenders/validator";
+// import { validateEmployerAboutMe } from "@pages/manageJobsAndTenders/validator";
 import {
   getCitiesByCountry,
   // getCitiesByCountry,
@@ -61,7 +61,7 @@ const EditEmployer = () => {
       email: "",
       description: "",
     },
-    validationSchema: validateEmployerAboutMe,
+    // validationSchema: validateEmployerAboutMe,
     onSubmit: async (values) => {
       setLoading(true);
       const payload = {
@@ -135,7 +135,7 @@ const EditEmployer = () => {
       formik.setFieldValue("licenseId", res.data.profile.license_id);
     }
   };
-
+  console.log(formik);
   const thumbs = (
     <Avatar
       sx={{
@@ -229,12 +229,6 @@ const EditEmployer = () => {
                     label="Organization Name"
                     {...formik.getFieldProps("organizationName")}
                   />
-                  {formik?.touched?.organizationName &&
-                  formik.errors.organizationName ? (
-                    <ErrorMessage>
-                      {formik.errors.organizationName}
-                    </ErrorMessage>
-                  ) : null}
                 </Grid>
                 <Grid item xs={12} className="mb-2">
                   <LabeledInput
@@ -244,9 +238,6 @@ const EditEmployer = () => {
                     label="Email"
                     {...formik.getFieldProps("email")}
                   />
-                  {formik?.touched?.email && formik.errors.email ? (
-                    <ErrorMessage>{formik.errors.email}</ErrorMessage>
-                  ) : null}
                 </Grid>
                 <Grid item xs={12}>
                   <label>
