@@ -11,6 +11,7 @@ import {
 import SelectWithSearch from "@components/input/selectWithsearch";
 import Loader from "@components/loader";
 import { Avatar, Card, CardContent, Grid } from "@mui/material";
+import { validateEmployerAboutMe } from "@pages/manageJobsAndTenders/validator";
 import {
   getCitiesByCountry,
   // getCitiesByCountry,
@@ -47,7 +48,7 @@ const EditEmployer = () => {
         label: "",
         value: "",
       },
-      licenseId: "",
+      licenseId: null,
       country: {
         label: "",
         value: "",
@@ -60,7 +61,7 @@ const EditEmployer = () => {
       email: "",
       description: "",
     },
-    // validationSchema: validateEmployerAboutMe,
+    validationSchema: validateEmployerAboutMe,
     onSubmit: async (values) => {
       setLoading(true);
       const payload = {
@@ -93,15 +94,16 @@ const EditEmployer = () => {
         const imgRes = await updateEmployerProfileImageAPI(id, imgFormData);
         if (imgRes) {
           dispatch(setSuccessToast("Employer updated successfully"));
-          setLoading(false);
         }
+      } else if (res.error.errors.email === "email already in use.") {
+        dispatch(setErrorToast(res.error.errors.email));
       } else {
         dispatch(setErrorToast("Something went wrong"));
-        setLoading(false);
+        console.log(res);
       }
+      setLoading(false);
     },
   });
-
   const getSuggestedAddress = async (search) => {
     const res = await GetSuggestedAddressAPI(search);
     if (res.remote === "success") {
@@ -227,7 +229,7 @@ const EditEmployer = () => {
                     label="Organization Name"
                     {...formik.getFieldProps("organizationName")}
                   />
-                  {formik.touched.organizationName &&
+                  {formik?.touched?.organizationName &&
                   formik.errors.organizationName ? (
                     <ErrorMessage>
                       {formik.errors.organizationName}
@@ -242,7 +244,7 @@ const EditEmployer = () => {
                     label="Email"
                     {...formik.getFieldProps("email")}
                   />
-                  {formik.touched.email && formik.errors.email ? (
+                  {formik?.touched?.email && formik.errors.email ? (
                     <ErrorMessage>{formik.errors.email}</ErrorMessage>
                   ) : null}
                 </Grid>
@@ -333,7 +335,7 @@ const EditEmployer = () => {
                         </div>
                       )}
                   </div>
-                  {formik.touched.address && formik.errors.address ? (
+                  {formik?.touched?.address && formik.errors.address ? (
                     <ErrorMessage>{formik.errors.address}</ErrorMessage>
                   ) : null}
                 </Grid>
@@ -456,24 +458,6 @@ const EditEmployer = () => {
                     {...formik.getFieldProps("licenseId")}
                   />
                 </Grid>
-                {/* <Grid item xs={12}>
-                  <Stack
-                    direction="row"
-                    spacing={2}
-                    alignItems="center"
-                    className="dashedborder mb-3"
-                  >
-                    <AttachmentDragNDropInput
-                      handleDrop={(e) => formik.setFieldValue("license", e)}
-                      single
-                      files={formik.values.license}
-                      deleteFile={(e) => formik.setFieldValue("license", [])}
-                    />
-                  </Stack>
-                  {formik.touched.license && formik.errors.license ? (
-                    <ErrorMessage>{formik.errors.license}</ErrorMessage>
-                  ) : null}
-                  </Grid> */}
                 <Grid item xs={12}>
                   <label>Your Organization Logo </label>
                   <Card
