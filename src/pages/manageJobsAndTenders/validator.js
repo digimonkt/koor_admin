@@ -94,13 +94,13 @@ export const validateCreateJobInput = Yup.object()
         } else {
           return true;
         }
-      },
+      }
     ),
 
     languages: Yup.array().of(
       Yup.object().shape({
         id: Yup.string(),
-      }),
+      })
     ),
     skills: Yup.array().of(Yup.string()),
   })
@@ -125,7 +125,7 @@ export const validateCreateJobInput = Yup.object()
       }
 
       return true;
-    },
+    }
   );
 
 export const validateCreateTenderInput = Yup.object()
@@ -223,7 +223,7 @@ export const validateCreateTenderInput = Yup.object()
         } else {
           return true;
         }
-      },
+      }
     ),
   })
   .test(
@@ -247,5 +247,13 @@ export const validateCreateTenderInput = Yup.object()
       }
 
       return true;
-    },
+    }
   );
+
+export const validateEmployerAboutMe = Yup.object().shape({
+  organizationName: Yup.string().nullable(),
+  licenseId: Yup.number().typeError("License ID must be a number").nullable(),
+  address: Yup.string().nullable(),
+  email: Yup.string().email("Email must be a valid").nullable(),
+  description: Yup.string().nullable(),
+});

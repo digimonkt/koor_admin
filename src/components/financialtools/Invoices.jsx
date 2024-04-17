@@ -373,7 +373,7 @@ const Invoices = () => {
           </Grid>
           <Grid item lg={4} sm={4} xs={12}>
             <Box className="employer_client_input">
-              <StyledFormLabel>Send Selected InvoiceSent?</StyledFormLabel>
+              <StyledFormLabel>Send Selected Invoice?</StyledFormLabel>
               <Cbutton
                 type="button"
                 bgcolor="#D5E3F7"
@@ -386,7 +386,7 @@ const Invoices = () => {
                 marginTop="10px"
                 onClick={handleSelectedInvoice}
               >
-                {state.invoiceSendLoading ? "Send..." : "Send"}
+                {state.invoiceSendLoading ? "Sending..." : "Send"}
               </Cbutton>
             </Box>
           </Grid>
