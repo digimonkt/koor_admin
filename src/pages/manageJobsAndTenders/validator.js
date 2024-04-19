@@ -254,6 +254,6 @@ export const validateEmployerAboutMe = Yup.object().shape({
   organizationName: Yup.string().nullable(),
   licenseId: Yup.number().typeError("License ID must be a number").nullable(),
   address: Yup.string().nullable(),
-  email: Yup.string().email("Email must be a valid").nullable(),
+  email: Yup.string().matches(REGEX.email, "Email must be a valid").nullable(),
   description: Yup.string().nullable(),
 });
