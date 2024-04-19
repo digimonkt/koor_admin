@@ -15,7 +15,6 @@ import {
   Checkbox,
   Box,
 } from "@mui/material";
-import SelectDropDown from "./SelectDropDown";
 import {
   DownloadSelectedInvoiceAPI,
   getInvoiceListApi,
@@ -34,6 +33,7 @@ import { useDebounce } from "usehooks-ts";
 import { useNavigate } from "react-router-dom";
 import Cbutton from "@components/button/cButton";
 import { CheckCircle, CheckCircleOutline } from "@mui/icons-material";
+import SelectWithSearch from "@components/input/selectWithsearch";
 
 const StyledFormLabel = styled(FormLabel)(() => ({
   fontFamily: "Poppins",
@@ -219,7 +219,7 @@ const Invoices = () => {
     today.getMonth(),
     today.getDate()
   );
-  const [employerId, setEmployerId] = useState("");
+  const [employerVal, setEmployerVal] = useState({ label: "", value: "" });
   const [employerData, setEmployerData] = useState([]);
   const [dateTo, setDateTo] = useState(currMonth);
   const [dateFrom, setDateFrom] = useState(lastMonth);
@@ -240,7 +240,7 @@ const Invoices = () => {
     const fromDate = dayjs(dateFrom).format("YYYY-MM-DD");
     const toDate = dayjs(dateTo).format("YYYY-MM-DD");
     const response = await getInvoiceListApi({
-      employerId,
+      employerId: employerVal.value,
       limit,
       fromDate,
       toDate,
@@ -284,7 +284,7 @@ const Invoices = () => {
     },
   }));
   const handleFormReset = () => {
-    setEmployerId("");
+    setEmployerVal("");
     setInvoiceId("");
   };
 
@@ -330,6 +330,7 @@ const Invoices = () => {
       }
     }
   };
+  console.log(employerData);
 
   useEffect(() => {
     getEmployerList();
@@ -337,7 +338,14 @@ const Invoices = () => {
 
   useEffect(() => {
     invoiceList();
-  }, [dateTo, dateFrom, employerId, debouncedSearchCountryValue, limit, page]);
+  }, [
+    dateTo,
+    dateFrom,
+    employerVal.value,
+    debouncedSearchCountryValue,
+    limit,
+    page,
+  ]);
   return (
     <>
       <div className={`${styles.packageManagement}`}>
@@ -386,14 +394,48 @@ const Invoices = () => {
           <Grid item lg={4} sm={4} xs={12}>
             <Box className="employer_client_input">
               <StyledFormLabel>Employer / Client </StyledFormLabel>
-              <SelectDropDown
-                padding="11px 15px"
-                content={employerData}
-                setContentId={setEmployerId}
-                onChange={(e) => setEmployerId(e.target.value)}
-                action="isBlank"
-                value={employerId}
-                sx={{ width: "100%" }}
+              <SelectWithSearch
+                sx={{
+                  borderRadius: "10px",
+                  background: "#F0F0F0",
+                  fontFamily: "Poppins",
+                  marginTop: "10px",
+                  "& fieldset": {
+                    border: "1px solid #cacaca",
+                    borderRadius: "93px",
+                    display: "none",
+                    "&:hover": { borderColor: "#cacaca" },
+                  },
+                  "& .MuiOutlinedInput-root": {
+                    fontFamily: "Poppins",
+                    padding: "4px 9px",
+                  },
+                  "& .MuiFormLabel-root": {
+                    fontSize: "16px",
+                    color: "#848484",
+                    fontFamily: "Poppins !important",
+                    transform: "translate(14px, 12px) scale(1)",
+                  },
+                  "& .MuiInputLabel-shrink": {
+                    transform: "translate(14px, -9px) scale(0.75)",
+                  },
+                }}
+                options={(employerData || []).map((employer) => ({
+                  value: employer.id,
+                  label: employer.title,
+                }))}
+                title={"select the options"}
+                onChange={(_, value) => {
+                  if (value) {
+                    setEmployerVal(value);
+                  } else {
+                    setEmployerVal({
+                      value: "",
+                      label: "",
+                    });
+                  }
+                }}
+                value={employerVal}
               />
             </Box>
           </Grid>

@@ -11,7 +11,7 @@ import {
 import SelectWithSearch from "@components/input/selectWithsearch";
 import Loader from "@components/loader";
 import { Avatar, Card, CardContent, Grid } from "@mui/material";
-// import { validateEmployerAboutMe } from "@pages/manageJobsAndTenders/validator";
+import { validateEmployerAboutMe } from "@pages/manageJobsAndTenders/validator";
 import {
   getCitiesByCountry,
   // getCitiesByCountry,
@@ -61,7 +61,7 @@ const EditEmployer = () => {
       email: "",
       description: "",
     },
-    // validationSchema: validateEmployerAboutMe,
+    validationSchema: validateEmployerAboutMe,
     onSubmit: async (values) => {
       setLoading(true);
       const payload = {
@@ -238,6 +238,11 @@ const EditEmployer = () => {
                     label="Email"
                     {...formik.getFieldProps("email")}
                   />
+                  {formik?.touched?.email && formik.errors.email ? (
+                    <strong style={{ color: "red" }}>
+                      {formik.errors.email}
+                    </strong>
+                  ) : null}
                 </Grid>
                 <Grid item xs={12}>
                   <label>
@@ -448,6 +453,11 @@ const EditEmployer = () => {
                     className="add-form-control"
                     {...formik.getFieldProps("licenseId")}
                   />
+                  {formik?.touched?.licenseId && formik.errors.licenseId ? (
+                    <strong style={{ color: "red" }}>
+                      {formik.errors.licenseId}
+                    </strong>
+                  ) : null}
                 </Grid>
                 <Grid item xs={12}>
                   <label>Your Organization Logo </label>
@@ -476,7 +486,7 @@ const EditEmployer = () => {
                               height: "100%",
                               display: "none",
                             }}
-                            encType="multipart/form-data" // Add this line
+                            encType="multipart/form-data"
                             accept="image/*"
                             onChange={handleFileChange}
                           />
