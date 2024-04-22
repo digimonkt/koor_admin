@@ -18,6 +18,8 @@ import ResourceTwo from "./resources2.png";
 import ResourceThree from "./resources3.png";
 import ResourceFour from "./resources4.png";
 import Doc from "./doc.png";
+import KoorStamp from "./koor-stamp.png";
+import KoorSignature from "./koor-signature.jpeg";
 import GoogleStroe from "./google-store.png";
 import appleStroe from "./apple-store.png";
 import Banner from "./banner.png";
@@ -42,6 +44,8 @@ import Article3 from "./article3.png";
 import Logo from "./logo.png";
 
 export const IMAGES = {
+  KoorSignature,
+  KoorStamp,
   Logo,
   Article1,
   Article2,

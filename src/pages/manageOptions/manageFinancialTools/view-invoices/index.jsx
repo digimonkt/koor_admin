@@ -6,14 +6,13 @@ import { useNavigate, useParams } from "react-router-dom";
 import { SVG } from "@assets/svg";
 import styles from "@components/financialtools/styles.module.css";
 import Cbutton from "@components/button/cButton";
-// import logo from "@assets/images/logo.png";
 import CustomTable from "@components/financialtools/table";
-
 import { styled } from "@mui/material/styles";
 import { getInvoiceDetailsAPI, mailSendInvoiceAPI } from "@api/manageoptions";
 import { useDispatch } from "react-redux";
 import { setErrorToast, setSuccessToast } from "@redux/slice/toast";
 import env from "@utils/validateEnv";
+import { IMAGES } from "@assets/images/index";
 
 const StyledIconButton = styled(IconButton)(() => ({
   color: "#121212",
@@ -281,22 +280,32 @@ const ViewInvoices = () => {
                 alignItems="center"
                 justifyContent="center"
               >
-                {/* <Grid item lg={3} xs={12}>
+                <Grid item lg={3} xs={12} sm={4}>
                   <div className="text-center">
-                    <img alt="" src={Verified} />
+                    <img
+                      alt=""
+                      height={150}
+                      width={150}
+                      src={IMAGES.KoorStamp}
+                    />
                   </div>
-                </Grid> */}
-                <Grid item lg={6} xs={12}>
+                </Grid>
+                <Grid item lg={6} xs={12} sm={4}>
                   <div className={`text-center ${styles.thanksMessage}`}>
                     {" "}
                     Thank you for using Koor!
                   </div>
                 </Grid>
-                {/* <Grid item lg={3} xs={12}>
+                <Grid item lg={3} xs={12} sm={4}>
                   <div className="text-center">
-                    <img alt="" src={autograp} />
+                    <img
+                      alt=""
+                      height={150}
+                      width={150}
+                      src={IMAGES.KoorSignature}
+                    />
                   </div>
-                </Grid> */}
+                </Grid>
               </Grid>
             </Box>
             <Grid
