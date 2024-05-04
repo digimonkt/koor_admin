@@ -46,7 +46,17 @@ const StyledFormLabel = styled(FormLabel)(() => ({
 
 const Invoices = () => {
   const dispatch = useDispatch();
+  const [state, setState] = useState({
+    loading: false,
+    invoiceSendLoading: false,
+    downloadInvoiceLoading: false,
+    checkSendAllFields: {
+      id: 0,
+      checked: false,
+    },
+  });
   const [invoiceId, setInvoiceId] = useState("");
+  const [listInvoice, setListInvoice] = useState([]);
   const [sendInvoiceId, setSendInvoiceId] = useState([]);
   const handleSendMail = async (id) => {
     dispatch(setSuccessToast("Email Sent Successfully"));
@@ -69,11 +79,34 @@ const Invoices = () => {
   const handleCheckedInvoice = (id, checked) => {
     if (checked) {
       setSendInvoiceId((prev) => [...prev, { invoiceId: id }]);
+      setState((prev) => ({
+        ...prev,
+        checkSendAllFields: { ...prev.checkSendAllFields, id },
+      }));
     } else {
       setSendInvoiceId((prev) => prev.filter((item) => item.invoiceId !== id));
+      setState((prev) => ({
+        ...prev,
+        checkSendAllFields: { ...prev.checkSendAllFields, id: 0 },
+      }));
     }
   };
+  const handleSendAllCheck = (checked) => {
+    const filteredArray = listInvoice.map((obj) => {
+      return { invoiceId: obj.invoiceId };
+    });
 
+    if (checked) {
+      setSendInvoiceId(filteredArray);
+    } else {
+      setSendInvoiceId([]);
+    }
+    setState((prev) => ({
+      ...prev,
+      checkSendAllFields: { ...prev.checkSendAllFields, checked, id: 0 },
+    }));
+  };
+  console.log(sendInvoiceId, "sendInvoiceId");
   const columns = useMemo(
     () => [
       {
@@ -114,13 +147,24 @@ const Invoices = () => {
       {
         field: "total",
         headerName: "Total Amount",
-        width: 220,
+        width: 200,
         sortable: true,
       },
       {
         field: "send",
-        headerName: "Send?",
-        width: 110,
+        headerName: (
+          <Stack direction="row" spacing={1} alignItems="center" id="Invoices">
+            Send?
+            <Tooltip title="Send All">
+              <Checkbox
+                icon={<CheckCircleOutline />}
+                checkedIcon={<CheckCircle />}
+                onClick={(e) => handleSendAllCheck(e.target.checked)}
+              />
+            </Tooltip>
+          </Stack>
+        ),
+        width: 210,
         sortable: true,
         renderCell: (item) => {
           return (
@@ -144,6 +188,10 @@ const Invoices = () => {
                   }}
                 >
                   <Checkbox
+                    checked={
+                      state.checkSendAllFields.id === item.row.invoiceId ||
+                      state.checkSendAllFields.checked
+                    }
                     icon={<CheckCircleOutline />}
                     checkedIcon={<CheckCircle />}
                     onClick={(event) =>
@@ -205,9 +253,9 @@ const Invoices = () => {
         },
       },
     ],
-    []
+    [state.checkSendAllFields.checked, state.checkSendAllFields.id]
   );
-  const [listInvoice, setListInvoice] = useState([]);
+
   const today = new Date();
   const lastMonth = new Date(
     today.getFullYear(),
@@ -225,11 +273,7 @@ const Invoices = () => {
   const [dateFrom, setDateFrom] = useState(lastMonth);
   const [limit, setLimit] = useState(10);
   const [pages, setPages] = useState(1);
-  const [state, setState] = useState({
-    loading: false,
-    invoiceSendLoading: false,
-    downloadInvoiceLoading: false,
-  });
+
   const page = pages;
   const getPage = useCallback((_, page) => {
     setPages(page);
@@ -249,8 +293,7 @@ const Invoices = () => {
     });
     if (response.remote === "success") {
       setListInvoice(response.data.results);
-      const startIndex = (page - 1) * 10;
-      console.log(startIndex);
+      // const startIndex = (page - 1) * 10;
       setTotalCount(Math.ceil(response.data.count / limit));
     } else {
       dispatch(setErrorToast("Something went wrong"));
@@ -330,7 +373,6 @@ const Invoices = () => {
       }
     }
   };
-  console.log(employerData);
 
   useEffect(() => {
     getEmployerList();

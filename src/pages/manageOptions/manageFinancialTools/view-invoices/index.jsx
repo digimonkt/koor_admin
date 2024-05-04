@@ -1,4 +1,11 @@
-import { Card, CardContent, Grid, IconButton, Stack } from "@mui/material";
+import {
+  Card,
+  CardContent,
+  Grid,
+  IconButton,
+  Stack,
+  useMediaQuery,
+} from "@mui/material";
 import { Box } from "@mui/system";
 import { DownloadOutlined } from "@mui/icons-material";
 import React, { useCallback, useEffect, useState } from "react";
@@ -22,6 +29,7 @@ const StyledIconButton = styled(IconButton)(() => ({
 const ViewInvoices = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const isMoblie = useMediaQuery("(max-width:600px)");
   const { invoiceId } = useParams();
   const USER_COLUMN_DATA = [
     {
@@ -273,41 +281,79 @@ const ViewInvoices = () => {
                 </Grid>
               </Grid>
             </Box>
-            <Box sx={{ my: 6.25 }}>
-              <Grid
-                container
-                spacing={2}
-                alignItems="center"
-                justifyContent="center"
-              >
-                <Grid item lg={3} xs={12} sm={4}>
-                  <div className="text-center">
-                    <img
-                      alt=""
-                      height={150}
-                      width={150}
-                      src={IMAGES.KoorStamp}
-                    />
-                  </div>
-                </Grid>
-                <Grid item lg={6} xs={12} sm={4}>
+            {isMoblie ? (
+              <Box sx={{ my: 6.25 }}>
+                <Grid item lg={6} xs={12} sm={12}>
                   <div className={`text-center ${styles.thanksMessage}`}>
                     {" "}
                     Thank you for using Koor!
                   </div>
                 </Grid>
-                <Grid item lg={3} xs={12} sm={4}>
-                  <div className="text-center">
-                    <img
-                      alt=""
-                      height={150}
-                      width={150}
-                      src={IMAGES.KoorSignature}
-                    />
-                  </div>
+                <Grid
+                  container
+                  spacing={2}
+                  alignItems="center"
+                  justifyContent="center"
+                >
+                  <Grid item lg={3} xs={6} sm={6}>
+                    <div className="text-center">
+                      <img
+                        alt=""
+                        height={100}
+                        width={100}
+                        src={IMAGES.KoorStamp}
+                      />
+                    </div>
+                  </Grid>
+                  <Grid item lg={3} xs={6} sm={6}>
+                    <div className="text-center">
+                      <img
+                        alt=""
+                        height={150}
+                        width={150}
+                        src={IMAGES.KoorSignature}
+                      />
+                    </div>
+                  </Grid>
                 </Grid>
-              </Grid>
-            </Box>
+              </Box>
+            ) : (
+              <Box sx={{ my: 6.25 }}>
+                <Grid
+                  container
+                  spacing={2}
+                  alignItems="center"
+                  justifyContent="center"
+                >
+                  <Grid item lg={3} xs={12} sm={4}>
+                    <div className="text-center">
+                      <img
+                        alt=""
+                        height={150}
+                        width={150}
+                        src={IMAGES.KoorStamp}
+                      />
+                    </div>
+                  </Grid>
+                  <Grid item lg={6} xs={12} sm={4}>
+                    <div className={`text-center ${styles.thanksMessage}`}>
+                      {" "}
+                      Thank you for using Koor!
+                    </div>
+                  </Grid>
+                  <Grid item lg={3} xs={12} sm={4}>
+                    <div className="text-center">
+                      <img
+                        alt=""
+                        height={150}
+                        width={150}
+                        src={IMAGES.KoorSignature}
+                      />
+                    </div>
+                  </Grid>
+                </Grid>
+              </Box>
+            )}
             <Grid
               container
               spacing={2}
