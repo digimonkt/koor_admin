@@ -50,10 +50,7 @@ const Invoices = () => {
     loading: false,
     invoiceSendLoading: false,
     downloadInvoiceLoading: false,
-    checkSendAllFields: {
-      id: 0,
-      checked: false,
-    },
+    checkSendAllFields: [],
   });
   const [invoiceId, setInvoiceId] = useState("");
   const [listInvoice, setListInvoice] = useState([]);
@@ -77,36 +74,57 @@ const Invoices = () => {
   }, []);
 
   const handleCheckedInvoice = (id, checked) => {
+    setListInvoice((prev) =>
+      prev.map((item) => {
+        if (item.invoiceId === id) {
+          return {
+            ...item,
+            defaultChecked: checked,
+          };
+        }
+        return item;
+      })
+    );
+
     if (checked) {
       setSendInvoiceId((prev) => [...prev, { invoiceId: id }]);
-      setState((prev) => ({
-        ...prev,
-        checkSendAllFields: { ...prev.checkSendAllFields, id },
-      }));
     } else {
       setSendInvoiceId((prev) => prev.filter((item) => item.invoiceId !== id));
-      setState((prev) => ({
-        ...prev,
-        checkSendAllFields: { ...prev.checkSendAllFields, id: 0 },
-      }));
     }
   };
+
+  // const checkAllInvoiceIds = (id) => {
+  //   const idExists = state.checkSendAllFields.some((field) => field.id === id);
+  //   if (idExists) {
+  //     setState((prev) => ({
+  //       ...prev,
+  //       checkSendAllFields: prev.checkSendAllFields.map((field) =>
+  //         field.id === id ? { ...field, checked: true } : field
+  //       ),
+  //     }));
+  //   }
+  // };
+
   const handleSendAllCheck = (checked) => {
+    setListInvoice((prev) =>
+      prev.map((item) => ({
+        ...item,
+        defaultChecked: checked,
+      }))
+    );
     const filteredArray = listInvoice.map((obj) => {
       return { invoiceId: obj.invoiceId };
     });
-
     if (checked) {
       setSendInvoiceId(filteredArray);
     } else {
       setSendInvoiceId([]);
+      setState((prev) => ({
+        ...prev,
+        checkSendAllFields: [],
+      }));
     }
-    setState((prev) => ({
-      ...prev,
-      checkSendAllFields: { ...prev.checkSendAllFields, checked, id: 0 },
-    }));
   };
-  console.log(sendInvoiceId, "sendInvoiceId");
   const columns = useMemo(
     () => [
       {
@@ -167,12 +185,14 @@ const Invoices = () => {
         width: 210,
         sortable: true,
         renderCell: (item) => {
+          console.log(item, "item");
           return (
             <Stack
               direction="row"
               spacing={1}
               alignItems="center"
               id="Invoices"
+              key={item.row.invoiceId}
             >
               <Tooltip title="Send Invoice">
                 <IconButton
@@ -188,18 +208,15 @@ const Invoices = () => {
                   }}
                 >
                   <Checkbox
-                    checked={
-                      state.checkSendAllFields.id === item.row.invoiceId ||
-                      state.checkSendAllFields.checked
-                    }
+                    checked={item.row.defaultChecked}
                     icon={<CheckCircleOutline />}
                     checkedIcon={<CheckCircle />}
-                    onClick={(event) =>
+                    onClick={(event) => {
                       handleCheckedInvoice(
                         item.row.invoiceId,
                         event.target.checked
-                      )
-                    }
+                      );
+                    }}
                   />
                 </IconButton>
               </Tooltip>
@@ -253,9 +270,9 @@ const Invoices = () => {
         },
       },
     ],
-    [state.checkSendAllFields.checked, state.checkSendAllFields.id]
+    [listInvoice]
   );
-
+  console.log(sendInvoiceId, "list1");
   const today = new Date();
   const lastMonth = new Date(
     today.getFullYear(),
@@ -293,7 +310,6 @@ const Invoices = () => {
     });
     if (response.remote === "success") {
       setListInvoice(response.data.results);
-      // const startIndex = (page - 1) * 10;
       setTotalCount(Math.ceil(response.data.count / limit));
     } else {
       dispatch(setErrorToast("Something went wrong"));
@@ -421,7 +437,6 @@ const Invoices = () => {
               </LocalizationProvider>
             </Box>
           </Grid>
-
           <Grid item lg={4} sm={4} xs={12}>
             <StyledFormLabel>Number / ID</StyledFormLabel>
             <input
