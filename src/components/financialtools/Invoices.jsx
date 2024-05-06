@@ -46,7 +46,14 @@ const StyledFormLabel = styled(FormLabel)(() => ({
 
 const Invoices = () => {
   const dispatch = useDispatch();
+  const [state, setState] = useState({
+    loading: false,
+    invoiceSendLoading: false,
+    downloadInvoiceLoading: false,
+    checkSendAllFields: [],
+  });
   const [invoiceId, setInvoiceId] = useState("");
+  const [listInvoice, setListInvoice] = useState([]);
   const [sendInvoiceId, setSendInvoiceId] = useState([]);
   const handleSendMail = async (id) => {
     dispatch(setSuccessToast("Email Sent Successfully"));
@@ -67,6 +74,18 @@ const Invoices = () => {
   }, []);
 
   const handleCheckedInvoice = (id, checked) => {
+    setListInvoice((prev) =>
+      prev.map((item) => {
+        if (item.invoiceId === id) {
+          return {
+            ...item,
+            defaultChecked: checked,
+          };
+        }
+        return item;
+      })
+    );
+
     if (checked) {
       setSendInvoiceId((prev) => [...prev, { invoiceId: id }]);
     } else {
@@ -74,6 +93,38 @@ const Invoices = () => {
     }
   };
 
+  // const checkAllInvoiceIds = (id) => {
+  //   const idExists = state.checkSendAllFields.some((field) => field.id === id);
+  //   if (idExists) {
+  //     setState((prev) => ({
+  //       ...prev,
+  //       checkSendAllFields: prev.checkSendAllFields.map((field) =>
+  //         field.id === id ? { ...field, checked: true } : field
+  //       ),
+  //     }));
+  //   }
+  // };
+
+  const handleSendAllCheck = (checked) => {
+    setListInvoice((prev) =>
+      prev.map((item) => ({
+        ...item,
+        defaultChecked: checked,
+      }))
+    );
+    const filteredArray = listInvoice.map((obj) => {
+      return { invoiceId: obj.invoiceId };
+    });
+    if (checked) {
+      setSendInvoiceId(filteredArray);
+    } else {
+      setSendInvoiceId([]);
+      setState((prev) => ({
+        ...prev,
+        checkSendAllFields: [],
+      }));
+    }
+  };
   const columns = useMemo(
     () => [
       {
@@ -114,21 +165,34 @@ const Invoices = () => {
       {
         field: "total",
         headerName: "Total Amount",
-        width: 220,
+        width: 200,
         sortable: true,
       },
       {
         field: "send",
-        headerName: "Send?",
-        width: 110,
+        headerName: (
+          <Stack direction="row" spacing={1} alignItems="center" id="Invoices">
+            Send?
+            <Tooltip title="Send All">
+              <Checkbox
+                icon={<CheckCircleOutline />}
+                checkedIcon={<CheckCircle />}
+                onClick={(e) => handleSendAllCheck(e.target.checked)}
+              />
+            </Tooltip>
+          </Stack>
+        ),
+        width: 210,
         sortable: true,
         renderCell: (item) => {
+          console.log(item, "item");
           return (
             <Stack
               direction="row"
               spacing={1}
               alignItems="center"
               id="Invoices"
+              key={item.row.invoiceId}
             >
               <Tooltip title="Send Invoice">
                 <IconButton
@@ -144,14 +208,15 @@ const Invoices = () => {
                   }}
                 >
                   <Checkbox
+                    checked={item.row.defaultChecked}
                     icon={<CheckCircleOutline />}
                     checkedIcon={<CheckCircle />}
-                    onClick={(event) =>
+                    onClick={(event) => {
                       handleCheckedInvoice(
                         item.row.invoiceId,
                         event.target.checked
-                      )
-                    }
+                      );
+                    }}
                   />
                 </IconButton>
               </Tooltip>
@@ -205,9 +270,9 @@ const Invoices = () => {
         },
       },
     ],
-    []
+    [listInvoice]
   );
-  const [listInvoice, setListInvoice] = useState([]);
+  console.log(sendInvoiceId, "list1");
   const today = new Date();
   const lastMonth = new Date(
     today.getFullYear(),
@@ -225,11 +290,7 @@ const Invoices = () => {
   const [dateFrom, setDateFrom] = useState(lastMonth);
   const [limit, setLimit] = useState(10);
   const [pages, setPages] = useState(1);
-  const [state, setState] = useState({
-    loading: false,
-    invoiceSendLoading: false,
-    downloadInvoiceLoading: false,
-  });
+
   const page = pages;
   const getPage = useCallback((_, page) => {
     setPages(page);
@@ -249,8 +310,6 @@ const Invoices = () => {
     });
     if (response.remote === "success") {
       setListInvoice(response.data.results);
-      const startIndex = (page - 1) * 10;
-      console.log(startIndex);
       setTotalCount(Math.ceil(response.data.count / limit));
     } else {
       dispatch(setErrorToast("Something went wrong"));
@@ -330,7 +389,6 @@ const Invoices = () => {
       }
     }
   };
-  console.log(employerData);
 
   useEffect(() => {
     getEmployerList();
@@ -379,7 +437,6 @@ const Invoices = () => {
               </LocalizationProvider>
             </Box>
           </Grid>
-
           <Grid item lg={4} sm={4} xs={12}>
             <StyledFormLabel>Number / ID</StyledFormLabel>
             <input

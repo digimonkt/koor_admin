@@ -18,6 +18,7 @@ export const transformInvoiceListAPI = (data) => {
         total: "$" + result.total,
         employerId: result.user.id,
         employer: result.user.name,
+        defaultChecked: false,
       };
     }),
   };
