@@ -9,7 +9,7 @@ import {
 import { Box } from "@mui/system";
 import { DownloadOutlined } from "@mui/icons-material";
 import React, { useCallback, useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { SVG } from "@assets/svg";
 import styles from "@components/financialtools/styles.module.css";
 import Cbutton from "@components/button/cButton";
@@ -20,6 +20,7 @@ import { useDispatch } from "react-redux";
 import { setErrorToast, setSuccessToast } from "@redux/slice/toast";
 import env from "@utils/validateEnv";
 import { IMAGES } from "@assets/images/index";
+import { SOCIAL_LINKS } from "@utils/enum";
 
 const StyledIconButton = styled(IconButton)(() => ({
   color: "#121212",
@@ -373,19 +374,39 @@ const ViewInvoices = () => {
               <Grid item xs="auto">
                 <Stack direction="row" spacing={2}>
                   <Stack direction="row" spacing={1.875}>
-                    <StyledIconButton disableRipple={true}>
+                    <StyledIconButton
+                      LinkComponent={Link}
+                      to={SOCIAL_LINKS.x}
+                      disableRipple={true}
+                    >
                       <SVG.TwitterIcon />
                     </StyledIconButton>
-                    <StyledIconButton disableRipple={true}>
+                    <StyledIconButton
+                      LinkComponent={Link}
+                      to={SOCIAL_LINKS.youtube}
+                      disableRipple={true}
+                    >
                       <SVG.YouTubeIcon />
                     </StyledIconButton>
-                    <StyledIconButton disableRipple={true}>
+                    <StyledIconButton
+                      LinkComponent={Link}
+                      to={SOCIAL_LINKS.instagram}
+                      disableRipple={true}
+                    >
                       <SVG.InstagramIcon />
                     </StyledIconButton>
-                    <StyledIconButton disableRipple={true}>
+                    <StyledIconButton
+                      LinkComponent={Link}
+                      to={SOCIAL_LINKS.linkedin}
+                      disableRipple={true}
+                    >
                       <SVG.LinkedinIcon />
                     </StyledIconButton>
-                    <StyledIconButton disableRipple={true}>
+                    <StyledIconButton
+                      LinkComponent={Link}
+                      to={SOCIAL_LINKS.facebook}
+                      disableRipple={true}
+                    >
                       <SVG.FacebookIcon />
                     </StyledIconButton>
                   </Stack>

@@ -30,3 +30,11 @@ export const REGEX = Object.freeze({
   email: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
   website: /^(http:\/\/|https:\/\/|www\.)\S+$/,
 });
+
+export const SOCIAL_LINKS = Object.freeze({
+  facebook: "https://www.facebook.com/koorjobs",
+  x: "#",
+  linkedin: "https://www.linkedin.com/in/koorjobs",
+  instagram: "https://www.instagram.com/koorjobs?igsh=enY5Z2N6MGhjeDBx",
+  youtube: "https://www.youtube.com/@Koorjobs",
+});
