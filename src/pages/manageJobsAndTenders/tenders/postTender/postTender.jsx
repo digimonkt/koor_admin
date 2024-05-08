@@ -185,7 +185,7 @@ const PostNewJob = () => {
         // createTender
         res = await createTenderAPI(newFormData);
         if (res.remote === "success") {
-          dispatch(setSuccessToast("Job Post Successfully"));
+          dispatch(setSuccessToast("Tender Post Successfully"));
           setSuggestedAddress([]);
           setSearchValue("");
           setSuggestedAddress([]);
