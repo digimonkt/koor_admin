@@ -111,10 +111,10 @@ const PostNewJob = () => {
       cc2: "",
       isContactWhatsapp: false,
       applicationInstruction: "",
-      sendEmailAutomatically: false,
-      isApplyThroughEmail: false,
       isApplyThroughKoor: false,
       isApplyThroughWebsite: false,
+      sendEmailAutomatically: false,
+      sendInvoiceAutomatically: false,
     },
     validationSchema: validateCreateTenderInput,
     onSubmit: async (values, { resetForm }) => {
@@ -156,11 +156,14 @@ const PostNewJob = () => {
         contact_whatsapp: values.isContactWhatsapp
           ? values.contactWhatsapp
           : "",
-        apply_through_koor: values.isApplyThroughKoor || "false",
+        apply_through_koor: values.isApplyThroughKoor || false,
         send_email_automatically:
           capitalizeFirst(`${values.sendEmailAutomatically}`) || "false",
-        apply_through_email: values.isApplyThroughEmail || "false",
-        apply_through_website: values.isApplyThroughWebsite || "false",
+        send_invoice_automatically: capitalizeFirst(
+          `${values.sendInvoiceAutomatically}`
+        ),
+        apply_through_email: values.isApplyThroughEmail || false,
+        apply_through_website: values.isApplyThroughWebsite || false,
         website_link: values.websiteLink,
       };
       const newFormData = new FormData();
@@ -247,6 +250,10 @@ const PostNewJob = () => {
       formik.setFieldValue(
         "sendEmailAutomatically",
         data.sendEmailAutomatically === "True" || false
+      );
+      formik.setFieldValue(
+        "sendInvoiceAutomatically",
+        data.sendInvoiceAutomatically === "True" || false
       );
       formik.setFieldValue(
         "budgetAmount",
@@ -1246,6 +1253,14 @@ const PostNewJob = () => {
                       label="Don't send any mail"
                       checked={formik.values.sendEmailAutomatically}
                       {...formik.getFieldProps("sendEmailAutomatically")}
+                    />
+                    <FormControlLabel
+                      sx={{ width: "290px" }}
+                      control={<Switch />}
+                      disabled={tenderId}
+                      label="Send invoice"
+                      checked={formik.values.sendInvoiceAutomatically}
+                      {...formik.getFieldProps("sendInvoiceAutomatically")}
                     />
                   </FormGroup>
                 </Grid>

@@ -163,6 +163,12 @@ const Invoices = () => {
         sortable: true,
       },
       {
+        field: "type",
+        headerName: "Type Of Post",
+        width: "200",
+        sortable: true,
+      },
+      {
         field: "total",
         headerName: "Total Amount",
         width: 200,
@@ -359,7 +365,6 @@ const Invoices = () => {
       const res = await sendSelectedInvoiceAPI(formData);
       if (res.remote === "success") {
         setState((prev) => ({ ...prev, invoiceSendLoading: false }));
-
         dispatch(setSuccessToast("Email Sent Successfully"));
       } else {
         setState((prev) => ({ ...prev, invoiceSendLoading: false }));
