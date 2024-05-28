@@ -8,7 +8,7 @@ import {
 } from "@mui/material";
 import { Box } from "@mui/system";
 import { DownloadOutlined } from "@mui/icons-material";
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import { SVG } from "@assets/svg";
 import styles from "@components/financialtools/styles.module.css";
@@ -32,33 +32,6 @@ const ViewInvoices = () => {
   const navigate = useNavigate();
   const isMoblie = useMediaQuery("(max-width:600px)");
   const { invoiceId } = useParams();
-  const USER_COLUMN_DATA = [
-    {
-      id: 1,
-      name: "Date",
-      key: "created",
-      tableCellClass: "text-center",
-    },
-    {
-      id: 2,
-      name: "Job Id",
-      key: "jobId",
-      tableCellClass: "text-center",
-    },
-    {
-      id: 2,
-      name: "Job Title",
-      key: "note",
-      tableCellClass: "text-center",
-    },
-    {
-      id: 3,
-      name: "Amount",
-      key: "amount",
-      width: 115,
-      tableCellClass: "text-center",
-    },
-  ];
   const [invoiceDetails, setInvoiceDetails] = useState({
     id: "",
     startDate: "",
@@ -83,6 +56,44 @@ const ViewInvoices = () => {
     },
     detail: [],
   });
+
+  const USER_COLUMN_DATA = useMemo(
+    () => [
+      {
+        id: 1,
+        name: "Date",
+        key: "created",
+        tableCellClass: "text-center",
+      },
+      {
+        id: 2,
+        name: invoiceDetails.detail.some((detail) => detail.jobId)
+          ? "Job Id"
+          : "Tender Id",
+        key: invoiceDetails.detail.some((detail) => detail.jobId)
+          ? "jobId"
+          : "tenderId",
+        tableCellClass: "text-center",
+      },
+      {
+        id: 3,
+        name: invoiceDetails.detail.some((detail) => detail.jobId)
+          ? "Job Title"
+          : "Tender Title",
+        key: "note",
+        tableCellClass: "text-center",
+      },
+      {
+        id: 4,
+        name: "Amount",
+        key: "amount",
+        width: 115,
+        tableCellClass: "text-center",
+      },
+    ],
+    [invoiceDetails.detail]
+  );
+
   // const [invoiceId, setInvoiceId] = useState([]);
   const getInvoiceDetail = async (id) => {
     const response = await getInvoiceDetailsAPI({ id });
