@@ -19,6 +19,7 @@ export const transformInvoiceListAPI = (data) => {
         employerId: result.user.id,
         employer: result.user.name,
         defaultChecked: false,
+        type: result.type,
       };
     }),
   };
@@ -47,10 +48,11 @@ export const transformInvoiceDetailsAPI = (data) => {
       {
         id: data.id,
         jobId: data.job_id?.substring(0, 8) || "",
+        tenderId: data.tender_id || "",
         points: data.points,
         amount: "$" + data.points,
         created: dayjs(data.created).format("MMMM D, YYYY h:mm A"),
-        note: data.job_title || "",
+        note: data.job_title || data.tender_id || "",
       },
     ],
 

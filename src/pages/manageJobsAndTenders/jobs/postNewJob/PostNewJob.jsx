@@ -215,9 +215,9 @@ const PostNewJob = () => {
         contact_whatsapp: values.isContactWhatsapp
           ? values.contactWhatsapp
           : "",
-        apply_through_koor: values.isApplyThroughKoor || "false",
-        apply_through_email: values.isApplyThroughEmail || "false",
-        apply_through_website: values.isApplyThroughWebsite || "false",
+        apply_through_koor: values.isApplyThroughKoor || false,
+        apply_through_email: values.isApplyThroughEmail || false,
+        apply_through_website: values.isApplyThroughWebsite || false,
         website_link: values.websiteLink,
         highest_education: values.highestEducation.value || "",
         language: values.languages,
