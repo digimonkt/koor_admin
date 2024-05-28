@@ -113,6 +113,7 @@ const PostNewJob = () => {
       applicationInstruction: "",
       isApplyThroughKoor: false,
       isApplyThroughWebsite: false,
+      isApplyThroughEmail: false,
       sendEmailAutomatically: false,
       sendInvoiceAutomatically: false,
     },
@@ -220,6 +221,7 @@ const PostNewJob = () => {
       setEmployersData(response.data.results);
     }
   };
+  console.log({ formik });
 
   const getTenderDetailsById = useCallback(async (tenderId) => {
     const response = await getTenderDetailsByIdAPI({ tenderId });
